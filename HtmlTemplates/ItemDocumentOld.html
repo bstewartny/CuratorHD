@@ -1,0 +1,74 @@
+<html>
+<style>
+	body
+	{
+		max-width:708px;
+		overflow:hidden;
+		font-family:"trebuchet ms" !important;
+		font-size:20px !important;
+		padding:20px;
+		text-align: justify;
+	}
+	div
+	{
+		font-family:"trebuchet ms" !important;
+		font-size:20px !important;
+		text-align: justify;
+	}
+	pre
+	{
+		float:left !important;
+		max-width:650px !important;
+		overflow:hidden !important;
+	}
+	
+	p
+	{
+		text-align: justify;
+	}
+	
+	a { color:#336699; color:#336699; color:#336699; max-width:600px; overflow:hidden;text-overflow:ellipsis;}
+	.headline{font-family:Arial !important;font-size:24px !important;font-weight:bold;color:#336699;}
+	.dateline{margin-top:2px;font-family:Arial !important;font-size:20px !important;font-style:italic;color:#666666;}
+	.synopsis{font-family:"trebuchet ms" !important;font-size:20px !important;color:#666666;line-height:150%;}
+	.comments{font-family:"trebuchet ms" !important;font-size:20px !important;line-height:150%;color:#666666;padding-left:7.5pt;}
+	
+	img
+	{
+		margin:5;
+		/*float:left;
+		clear:both;*/
+		/*-webkit-box-shadow: 4px 4px 5px #888;*/
+		max-width:650px;
+		overflow:hidden;
+	}
+	
+</style>
+<body>
+	<div class='headline'><a style="text-decoration:none" href="{{item.url}}">{{item.headline}}</a></div>
+	<span class='dateline'>{{item.date}}</span>
+	<p>
+		{{item.image}}
+		<div class='synopsis'>
+			{{item.synopsis}}
+		</div>
+	</p>
+	<p>
+		{{item.comments.section}}
+		<table width="100%">
+			<tr>
+				<td width="100%" valign="top" align="left">
+					<table style="padding-left:20pt;padding-right:25pt">
+						<tr>
+							<td><img src="CommentQuoteImage.jpg"></td>
+							<td width=".1pt" bgcolor="#666666"></td>
+							<td><div class='comments'>{{item.comments}}</div></td>
+						</tr>
+					</table>	
+				</td>
+			</tr>
+		<table>
+		{{/item.comments.section}}
+	</p>
+</body>
+</html>

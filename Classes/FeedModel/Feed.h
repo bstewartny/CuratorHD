@@ -1,0 +1,62 @@
+//
+//  Feed.h
+//  Untitled
+//
+//  Created by Robert Stewart on 5/20/10.
+//  Copyright 2010 InfoNgen. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
+@class ItemFetcher;
+
+@interface TempFeed : NSObject {
+	NSString * name;
+	NSString * feedType;
+	NSString * url;
+	NSString * htmlUrl;
+	NSString * feedId;
+	UIImage	 * image;
+	NSString * feedCategory;
+}
+@property(nonatomic,retain) NSString * name;
+@property(nonatomic,retain) NSString * feedType;
+@property(nonatomic,retain) NSString * url;
+@property(nonatomic,retain) UIImage * image;
+@property(nonatomic,retain) NSString * feedCategory;
+@property(nonatomic,retain) NSString * htmlUrl;
+@property(nonatomic,retain) NSString * feedId;
+
+- (void) save;
+- (void) delete;
+- (void) markAllAsRead;
+- (void) deleteOlderThan:(int)days;
+- (void) deleteReadItems;
+@end
+
+@interface Feed : NSManagedObject {
+}
+@property(nonatomic,retain) NSString * name;
+@property(nonatomic,retain) NSDate * lastUpdated;
+@property(nonatomic,retain) UIImage * image;
+@property(nonatomic,retain) NSString * summary;
+@property(nonatomic,retain) NSString * feedType;
+@property(nonatomic,retain) NSString * feedCategory;
+
+@property(nonatomic,retain) NSString * url;
+@property(nonatomic,retain) NSString * htmlUrl;
+@property(nonatomic,retain) NSString * feedId;
+@property(nonatomic,retain) NSNumber * unreadCount;
+
+- (void) save;
+- (void) delete;
+- (BOOL) editable;
+- (void) markAllAsRead;
+- (void) deleteOlderThan:(int)days;
+- (void) deleteReadItems;
+- (NSNumber*) currentUnreadCount;
+- (ItemFetcher*) itemFetcher;
+- (void) updateUnreadCount;
+- (int) entityCount:(NSString*)entityName predicate:(NSPredicate*)predicate;
+
+@end

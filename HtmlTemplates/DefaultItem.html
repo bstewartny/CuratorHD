@@ -1,0 +1,30 @@
+<table width="100%" cellpadding="4" cellspacing="0" bgcolor="#FFFFFF">
+	<tr>
+		<td bgcolor="#FFFFFF" valign="top" style="{{bodyStyle}}">
+			<a style="text-decoration: none;{{headlineStyle}}" href="{{item.url}}">
+				<span style="{{headlineStyle}}">{{item.headline}}</span>
+			</a>
+			<br>
+			<span style="font-size:16px;font-weight:normal;color:#666666;font-family:arial;">{{item.date}}</span>
+			<br>
+			<p style="text-align:justify">
+			{{item.image}}{{item.synopsis}}
+			</p>
+		</td>
+	</tr>
+</table>
+{{item.comments.section}}
+	<table width="100%" cellpadding="0" cellspacing="4" bgcolor="#FFFFFF">
+		<tr>
+			<td bgcolor="#FFFFFF" width="60">
+				<img src="http://ipad.infongen.com/Services/ipad/fs/$/ipadimages/newsletter/images/CommentQuoteImage.jpg">
+			</td>
+			<td width="1" bgcolor="#CCCCCC">&nbsp;</td>
+			<td bgcolor="#FFFFFF" width="90%" valign="top" style="{{commentsStyle}}" >
+				{{item.comments}}
+				<br>
+			</td>
+		</tr>
+	</table>		
+{{/item.comments.section}}
+<br>

@@ -1,0 +1,65 @@
+<html>
+<style>
+	body
+	{
+		max-width:708px;
+		overflow:hidden;
+		font-family:"arial" !important;
+		font-size:18px !important;
+		padding:20px;
+		text-align: justify;
+		color:#000000 !important;
+	}
+	
+	div
+	{
+		font-family:"arial" !important;
+		font-size:18px !important;
+		text-align: justify;
+		color:#000000 !important;
+	}
+	
+	pre
+	{
+		float:left !important;
+		max-width:650px !important;
+		overflow:hidden !important;
+		font-size:12px !important;
+	}
+	
+	p
+	{
+		font-family:"arial" !important;
+		text-align: justify;
+		font-size:18px !important;
+		color:#000000 !important;
+	}
+	
+	a {max-width:600px; overflow:hidden;text-overflow:ellipsis;}
+	
+	img
+	{
+		margin:5;
+		max-width:650px;
+		overflow:hidden;
+	}
+	
+</style>
+<body>
+	<table width="100%" cellpadding="4" cellspacing="0" bgcolor="#FFFFFF">
+		<tr>
+			<td bgcolor="#FFFFFF" valign="top">
+				<a style="text-decoration: none;color:black;font-family:Helvetica;font-weight:bold;font-size:22px" href="{{item.url}}">
+					<span style="color:black;font-family:Helvetica;font-weight:bold;font-size:22px">{{item.headline}}</span>
+				</a>
+				<br>
+				<span style="font-size:16px;font-weight:normal;color:#666666;font-family:arial;">{{item.date}}</span>
+				<br>
+				<p style="text-align:justify">
+					{{item.synopsis}}
+				</p>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

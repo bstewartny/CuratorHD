@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>{{newsletter.name}}</title>
+	</head>
+	<body style="margin:0;background-color:#fff;">
+		<a name="TopSpace" LocalDestination="TopSpace"> </a>
+		<table align="center" cellpadding="0" cellspacing="0" border="0" width="95%">
+			<tr>
+				<td width="100%">
+					<table cellpadding="0" cellspacing="0" border="0" width="100%">
+						<tr>
+							<td width="100%" id="cellForSite">
+								
+							</td>
+							<td width="160pt" style="width:160pt;text-align: center;white-space:nowrap;padding-left:8px;padding-right: 8px;" align="center" bgcolor="#62a34f" nowrap="true">
+								<span style="font-family:Arial, Helvetica, sans-serif;font-size: 11pt;line-height: 12pt;color:#ffffff;">{{newsletter.lastUpdated}}</span>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td width="100%" height="1.5pt" style="height:1.5pt;" bgcolor="#336699" />
+			</tr>
+			<tr>
+				<td width="100%">
+					<table cellpadding="0" cellspacing="0" border="0" width="100%">
+						<tr>
+							<td width="60%" height="103.5pt" style="height:103.5pt;" align="left" valign="top">{{newsletter.logoImage}}</td>
+							<td width="16pt" style="width:16pt;white-space:nowrap;">      </td>
+							<td align="right" width="100%" style="text-align: right;" valign="top">
+								<br />
+								<div align="left" style="text-align:left;font-family:Arial, Helvetica, sans-serif;font-size: 24pt;line-height: 30pt;font-weight:bold;color:#336699;">
+									<font face="Arial, Helvetica, sans-serif">{{newsletter.name}}</font>
+								</div>
+								<div align="left" style="text-align:left;font-family:Arial, Helvetica, sans-serif;font-size: 10pt;line-height: 11pt;color:#b00027;">
+									<font face="Arial, Helvetica, sans-serif">
+									{{newsletter.summary}}
+									<br/>
+									<br/>
+									</font>
+								</div>
+							</td>
+							<td width="7pt" style="width:7pt;white-space:nowrap;">  </td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td width="100%">
+					<table width="100%" cellpadding="0" cellspacing="0" border="0">
+						<tr>
+							<td pdfwidth="100pt" width="185pt" height="2.2pt" style="width:197pt;height:2.2pt;" bgcolor="#336699" />
+							<td pdfwidth="20pt" width="1.5pt" height="2.2pt" style="height:2.2pt;" bgcolor="#336699" />
+							<td height="2.2pt" style="height:2.2pt;" bgcolor="#336699" />
+						</tr>
+						<!-- <tr>
+							<td pdfwidth="100pt" width="185pt" style="width:197pt;white-space:nowrap;" valign="middle">
+								<img src="ico-1.gif" width="299" height="35" />
+							</td>
+							<td pdfwidth="20pt" width="1.5pt" height="28pt" style="height:28pt;" nowrap="true" />
+							<td valign="middle">
+								<img src="ico-2.gif" width="299" height="35" />
+							</td>
+						</tr>-->
+						<tr>
+							<td pdfwidth="100pt" width="185pt" height="0.7pt" style="width:197pt;height:0.7pt;" bgcolor="#666666" />
+							<td pdfwidth="20pt" width="1.5pt" height="0.7pt" style="height:0.7pt;" bgcolor="#666666" />
+							<td height="0.7pt" style="height:0.7pt;" bgcolor="#666666" />
+						</tr>
+						<tr>
+							<td pdfwidth="100pt" width="185pt" height="7.5pt" style="width:197pt;height:7.5pt;" />
+							<td pdfwidth="20pt" width="1.5pt" height="7.5pt" style="height:7.5pt;" />
+							<td height="7.5pt" style="height:7.5pt;" />
+						</tr>
+						<tr>
+							<td valign="top">
+								<span style="font-family:Arial, Helvetica, sans-serif;font-size: 10pt;line-height: 12pt;color:#666666;">
+									
+									{{newsletter.sections.right}}
+									<div style="position:relative;top:-2pt;">
+										<a name="Topic_{{section.ordinal}}" LocalDestination="Topic_{{section.ordinal}}" Chapter="{{section.name}}" style="color:#339933;">
+											<span style="font-family:font-family:Arial, Helvetica, sans-serif;font-size: 11pt;color:#339933;">
+												<strong>
+													<font face="Arial, Helvetica, sans-serif">{{section.name}}</font>
+												</strong>
+											</span>
+										</a>
+										<br/>
+										<div align="left" style="text-align:left;font-family:Arial, Helvetica, sans-serif;font-size: 10pt;line-height: 11pt;color:#b00027;">
+									<font face="Arial, Helvetica, sans-serif">
+									{{section.comments}}
+									</font>
+									</div>
+										<br/>
+									</div>
+									<table width="100%" cellpadding="0" cellspacing="0" border="0">
+										
+										
+										{{section.items}}
+										<tr>
+											<td width="100%" valign="top" align="left">
+												<span style="font-family:Arial, Helvetica, sans-serif;font-size: 10pt;line-height: 12pt;color:#666666;">
+													<span style="font-family:font-family:Arial, Helvetica, sans-serif;font-size: 10pt;line-height: 12pt;color:#336699;">
+														<a style="text-decoration: none;color:#336699;" href="{{item.url}}">
+															<span style="font-family:font-family:Arial, Helvetica, sans-serif;color:#336699;font-size: 10pt;">
+																<strong>
+																	<font face="Arial, Helvetica, sans-serif">{{item.headline}}</font>
+																</strong>
+															</span>
+														</a>
+														
+														<a style="text-decoration: none;color:#339933;" href="" target="_blank">
+															<span style="font-family:font-family:Arial, Helvetica, sans-serif;font-size: 9pt;line-height: 12pt;color:#339933;">
+																<strong>
+																		
+																</strong>
+															</span>
+														</a>
+														<br />
+														<span style="font-family:font-family:Arial, Helvetica, sans-serif;font-size: 8pt;line-height: 12pt;color:#666666;">
+															<strong>{{item.date}}</strong>
+														</span>
+														<br />
+														{{item.image}}
+														<span style="font-size: 10pt; line-height: 12pt;font-family:Arial, Helvetica, sans-serif;color:#666666;"><font face="Arial, Helvetica, sans-serif">{{item.synopsis}}</font></span>
+													</span>
+												</span>
+											</td>
+										</tr>
+										 {{item.comments.section}}
+										<tr>
+										
+										<td width="100%" valign="top" align="left">
+											 <table style="padding-left:20pt;padding-right:25pt">
+												<tr>
+													<td><img src="http://ipad.infongen.com/Services/ipad/fs/$/ipadimages/newsletter/images/CommentQuoteImage.jpg"></td>
+													<td width=".1pt" bgcolor="#666666"></td>
+													<td><div style="clear:both;font-family:Arial, Helvetica, sans-serif;font-size: 10pt;line-height: 12pt;color:#b00027;padding-left:7.5pt;"><font face="Arial, Helvetica, sans-serif">{{item.comments}}</font></div></td>
+												</tr>
+											</table>	
+										</td>
+										</tr>
+										{{/item.comments.section}}
+										<tr>
+											<td width="100%" height="7.5pt" style="height:7.5pt;font-size: 0;line-height: 0" colspan="2">
+												<br />
+											</td>
+										</tr>
+										{{/section.items}}
+									
+									</table> 
+									<table width="100%" cellpadding="0" cellspacing="0" border="0"> 
+										<tr> 
+											<td> 
+												<a style="text-decoration: none;color:#339933;" href="#TopSpace" LocalGoTo="TopSpace"> 
+													<span style="font-family:Arial, Helvetica, sans-serif;font-size: 8pt;line-height: 12pt;color:#339933;">^ Top</span> 
+												</a> 
+												<br /> 
+												<br /> 
+											</td> 
+										</tr> 
+									</table> 
+									{{/newsletter.sections.right}}
+									
+								</span>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr pdfexclude="1">
+				<td width="100%">
+					<table width="100%" cellpadding="0" cellspacing="0" border="0">
+						<tr>
+							<td width="50%">
+								<a style="text-decoration: none;color:#336699;" href="http://www.InfoNgen.com">
+									<span style="font-family:Arial, Helvetica, sans-serif;font-size: 8pt;line-height: 15pt;color:#336699;">www.InfoNgen.com</span>
+								</a>
+							</td>
+							<td width="50%" align="right" style="text-align: right;" pdfwidth="40%">
+								<!--<a href="#">
+									<img border="0" src="logo2.gif" width="204" height="25" />
+								</a>-->
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

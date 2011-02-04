@@ -1,0 +1,29 @@
+<table width="100%" cellpadding="4" cellspacing="0" bgcolor="#FFFFFF">
+	<tr>
+		<td bgcolor="#FFFFFF" valign="top" width="1%">
+			<span style="border-radius: 10px;-webkit-border-radius:10px">
+				{{item.image}}
+			</span>
+		</td>
+		<td width="99%" align="left" bgcolor="#FFFFFF" valign="top">
+			<span style="font-size:20px;color:#333333;line-height:100%;font-family:arial;">{{item.headline}}</span>
+			<br>
+			<span style="font-size:16px;font-weight:normal;color:#666666;font-family:arial;line-height:150%;">{{item.date}}</span>
+			<br>
+		</td>
+	</tr>
+</table>
+{{item.comments.section}}
+<table width="100%" cellpadding="0" cellspacing="4" bgcolor="#FFFFFF">
+	<tr>
+		<td bgcolor="#FFFFFF" width="60">
+			<img src="http://ipad.infongen.com/Services/ipad/fs/$/ipadimages/newsletter/images/CommentQuoteImage.jpg">
+		</td>
+		<td width="1" bgcolor="#CCCCCC">&nbsp;</td>
+		<td bgcolor="#FFFFFF" width="90%" valign="top" style="font-size:16px;color:#b00027;line-height:150%;font-family:arial;" >
+			{{item.comments}}
+			<br>
+		</td>
+	</tr>
+</table>		
+{{/item.comments.section}}

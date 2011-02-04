@@ -1,0 +1,55 @@
+8
+
+dir
+19491
+svn://builder02/ii3/trunk/src/Mobile/iPad/InfoNgen-iPad/Settings.bundle
+svn://builder02/ii3
+
+
+
+2010-06-01T13:21:44.995113Z
+19302
+Bob_Stewart
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+12957e40-f0f9-2542-b2bb-fae15225be28
+
+en.lproj
+dir
+
+Root.plist.old
+file
+
+
+
+
+2010-05-18T15:56:44.000000Z
+c6b7fa960a5d9c4b449a05e9e6e8017a
+2010-05-18T15:56:43.544894Z
+19047
+Bob_Stewart
+
+Root.plist
+file
+
+
+
+
+2010-06-01T13:21:44.000000Z
+2b7edf3a647b3d411d832754beaa570e
+2010-06-01T13:21:44.995113Z
+19302
+Bob_Stewart
+

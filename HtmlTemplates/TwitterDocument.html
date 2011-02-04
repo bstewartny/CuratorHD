@@ -1,0 +1,83 @@
+<html>
+<head>
+<title></title>
+</head>
+<style>
+
+	body
+	{
+		font-family:"arial" !important;
+		font-size:24px !important;
+		/*padding:20px;*/
+		padding:0;
+		margin:0;
+		/*width:730px;*/
+	}
+	 
+	a { color:#336699; color:#336699; color:#336699; }
+	
+	.bbpBox 
+	{
+		background:#336699;
+		padding:20px;
+		margin:20px;
+		-moz-border-radius:5px;
+		-webkit-border-radius:5px;
+		/*width:100%;*/
+	} 
+	
+	p.bbpTweet
+	{
+		background:#fff;
+		padding:10px 12px 10px 12px;
+		margin:0;
+		min-height:48px;
+		color:#000;
+		font-size:24px !important;
+		line-height:28px;
+		-moz-border-radius:5px;
+		-webkit-border-radius:5px
+	}
+
+	p.bbpTweet span.metadata
+	{
+		display:block;
+		width:100%;
+		clear:both;
+		margin-top:8px;
+		padding-top:12px;
+		height:45px;
+		border-top:1px solid #fff;
+		border-top:1px solid #e6e6e6
+	}
+
+	p.bbpTweet span.metadata span.author
+	{
+		line-height:22px
+	}
+
+	p.bbpTweet span.metadata span.author img
+	{
+		float:left;
+		margin:0 7px 0 0px;
+		width:45px;
+		height:45px;
+	}
+	p.bbpTweet span.timestamp
+	{
+		display:block;
+		font-family:arial !important;
+		font-size:20px !important;
+		font-style:italic;
+		color:#666666;
+	}
+	
+	</style>
+	<body>
+		<div class='bbpBox'>
+			<p class='bbpTweet'>
+				{{item.synopsis}}<span class='timestamp'>{{item.date}}</span><span class='metadata'><span class='author'><a href='http://twitter.com/{{item.screenname}}'><img src='{{item.profile_pic_url}}' /></a><strong><a href='http://twitter.com/{{item.screenname}}'>{{item.origin}}</a></strong><br/>{{item.screenname}}</span></span>
+			</p>
+		</div>
+	</body>
+</html>

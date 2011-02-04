@@ -1,0 +1,117 @@
+<html>
+	<head>
+		<title>{{newsletter.name}}</title>
+	</head>
+	<body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" bgcolor='#FFFFFF' >
+
+		<STYLE>
+		 a { color:#336699; color:#336699; color:#336699; }
+		</STYLE>
+
+		<table width="100%" cellpadding="10" cellspacing="0" bgcolor='#FFFFFF' >
+			<tr>
+				<td valign="top" align="center">
+					<table width="660" cellpadding="0" cellspacing="0" bgcolor='#FFFFFF' >
+						<tr>
+							<td valign="top" align="left">
+								<table width="100%" cellpadding="0" cellspacing="0">
+									<tr>
+										<td width="85%" style="background-color:#FFFFFF;border-bottom:1px solid #336699;" >
+											&nbsp;
+										</td>
+										<td width="15%" style="background-color:#62a34f;border-bottom:1px solid #336699;text-align:center;white-space:nowrap;padding-left:8px;padding-right: 8px;" align="center" nowrap="true" >
+											<span style=" font-family:Arial, Helvetica, sans-serif;font-size: 11pt;line-height: 12pt;color:#ffffff;">
+												{{newsletter.lastUpdated}}
+											</span>
+											
+										</td>
+									</tr>
+								</table>
+								<table width="100%" cellpadding="10" cellspacing="0">
+									<tr>
+										<td width="55%" style="background-color:#FFFFFF;" valign="top" >
+											{{newsletter.logoImage}}&nbsp;
+										</td>
+										<td width="45%" style="background-color:#FFFFFF;font-size:12px;color:#666666;line-height:150%;font-family:trebuchet ms;"  valign="top">
+											<p>
+												<span style="font-size:20px;font-weight:bold;color:#336699;font-family:arial;line-height:110%;">{{newsletter.name}}</span>
+												<br>
+												{{newsletter.summary}}
+											</p>
+										</td>
+									</tr>
+								</table>
+								<table width="100%" cellpadding="0" cellspacing="0">
+									<tr>
+										<td width="100%" style="background-color:#FFFFFF;border-bottom:1px solid #336699;" >
+											&nbsp;
+										</td>
+									</tr>
+								</table>
+								
+								<table width="100%" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF">
+									<tr>
+										<td bgcolor="#FFFFFF" valign="top" style="font-size:12px;color:#666666;line-height:150%;font-family:trebuchet ms;">
+											{{newsletter.sections.right}}
+												<table width="100%" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF">
+													<tr>
+														<td bgcolor="#FFFFFF" valign="top" style="font-size:12px;color:#666666;line-height:150%;font-family:trebuchet ms;">
+															<p>
+																<span style="font-size:22px;font-weight:bold;color:#339933;font-family:arial;line-height:110%;">{{section.name}}</span>
+																<br>
+																{{section.comments}}
+															</p>
+														</td>
+													</tr>
+												</table>
+												{{section.items}}
+													<table width="100%" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF">
+														<tr>
+															<td bgcolor="#FFFFFF" valign="top" style="font-size:12px;color:#666666;line-height:150%;font-family:trebuchet ms;">
+																<p>
+																<a style="text-decoration: none;color:#336699;" href="{{item.url}}">
+																	<span style="font-size:20px;font-weight:bold;color:#336699;font-family:arial;line-height:110%;">{{item.headline}}</span>
+																</a>
+																<br>
+																<span style="font-size:11px;font-weight:normal;color:#666666;font-style:italic;font-family:arial;">{{item.date}}</span>
+																<br>
+																{{item.image}}{{item.synopsis}}
+																</p>
+															</td>
+														</tr>
+													</table>
+													{{item.comments.section}}
+														<table width="100%" cellpadding="0" cellspacing="10" bgcolor="#FFFFFF">
+															<tr>
+																<td bgcolor="#FFFFFF" width="60">
+																	<img src="http://ipad.infongen.com/Services/ipad/fs/$/ipadimages/newsletter/images/CommentQuoteImage.jpg">
+																</td>
+																<td width="1" bgcolor="#CCCCCC">&nbsp;</td>
+																<td bgcolor="#FFFFFF" width="90%" valign="top" style="font-size:12px;color:#b00027;line-height:150%;font-family:trebuchet ms;" >
+																	{{item.comments}}
+																</td>
+															</tr>
+														</table>		
+													{{/item.comments.section}}
+												{{/section.items}}
+											{{/newsletter.sections.right}}
+										</td>
+									</tr>
+								</table>
+								<table width="100%" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF">
+									<tr>
+										<td bgcolor="#FFFFFF"  valign="top">
+											<span style="font-size:10px;line-height:100%;font-family:verdana;color:#b00027;">
+												<a href="http://www.InfoNgen.com">www.InfoNgen.com</a>
+											</span>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>
