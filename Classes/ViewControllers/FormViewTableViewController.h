@@ -7,6 +7,7 @@
 	NSArray * names;
 	NSMutableArray * valueFields;
 	NSInteger tag;
+	 
 }
 @property(nonatomic,retain) NSArray * names;
 @property(nonatomic,retain) NSString * title;

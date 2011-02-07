@@ -34,8 +34,10 @@
 	BOOL twitter;
 	UIPopoverController * navPopoverController;
 	NSString * origTitle;
+	BOOL folderMode;
 	
 }
+@property(nonatomic) BOOL folderMode;
 @property(nonatomic) BOOL twitter;
 @property(nonatomic,retain) NSString * origTitle;
 @property(nonatomic,retain) ItemFetcher	* fetcher;

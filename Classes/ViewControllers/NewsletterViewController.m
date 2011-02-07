@@ -1,21 +1,17 @@
 #import "NewsletterViewController.h"
 #import "FeedItem.h"
 #import "Newsletter.h"
-//#import "DocumentWebViewController.h"
 #import "NewsletterHTMLPreviewViewController.h"
 #import "AppDelegate.h"
 #import "NewsletterSection.h"
 #import "Feed.h"
 #import <QuartzCore/QuartzCore.h>
 #import "NewsletterItemContentView.h"
-//#import "NewsletterAddSectionViewController.h"
 #import "BlankToolbar.h"
-//#import "NewsletterUpdateFormViewController.h"
 #import "ActivityStatusViewController.h"
 #import "ImageResizer.h"
 #import "ItemFilter.h"
 #import "GradientButton.h"
-#import "SectionEditFormViewController.h"
 #import "DocumentEditFormViewController.h"
 #import "AccountSettingsFormViewController.h"
 #import "UserSettings.h"
@@ -24,6 +20,10 @@
 #import "NewsletterItem.h"
 #import "NewsletterHTMLRenderer.h"
 #import "BadgedTableViewCell.h"
+#import "FormViewController.h"
+
+#define kEditSectionTag 1001
+#define kAddSectionTag 1002
 
 @implementation NewsletterViewController
 @synthesize newsletterTableView,navPopoverController,editActionToolbar,editMoveButton,addImageButton,addSectionPopover,imagePickerPopover,updateFormViewController,activityStatusViewController,activityIndicatorView,activityView,activityTitleLabel,activityStatusLabel,activityProgressView;
@@ -98,6 +98,9 @@
 	[segmentedControl addTarget:self
 						 action:@selector(toggleViewMode:)
 			   forControlEvents:UIControlEventValueChanged];
+	[segmentedControl sizeToFit];
+	segmentedControl.autoresizingMask=UIViewAutoresizingFlexibleWidth;
+	
 	self.navigationItem.titleView=segmentedControl;
 	
 	[segmentedControl release];
@@ -720,6 +723,19 @@
 	}
 	else 
 	{
+		if(viewMode!=kViewModeSections)
+		{
+			if(section<=[self.newsletter.sections count])
+			{
+				NewsletterSection * newsletterSection=[self sectionForSectionIndex:section];
+			
+				if([newsletterSection.items count]==0)
+				{
+					return @"No items in this section. Add items from sources or folders.";
+				}
+			}
+		}
+
 		return nil;
 	}
 }
@@ -743,25 +759,68 @@
 	}
 	else 
 	{
-		return @"Add new section...";
+		return nil;
+		//return @"Add new section...";
+	}
+}
+
+- (void) formViewDidCancel:(NSInteger)tag
+{
+	
+}
+
+- (void) formViewDidFinish:(NSInteger)tag withValues:(NSArray*)values
+{
+	if(tag==kEditSectionTag)
+	{
+		NSString * sectionName=[values objectAtIndex:0];
+		NSString * sectionDesc=[values objectAtIndex:1];
+		
+		if([sectionName length]>0)
+		{
+			tmpEditSection.name=sectionName;
+			tmpEditSection.summary=sectionDesc;
+			[tmpEditSection save];
+			
+			[self.newsletterTableView reloadData];
+			
+			[[NSNotificationCenter defaultCenter] 
+			 postNotificationName:@"ReloadData"
+			 object:nil];
+		}
+		return;
+	}
+	
+	if(tag==kAddSectionTag)
+	{
+		NSString * sectionName=[values objectAtIndex:0];
+		NSString * sectionDesc=[values objectAtIndex:1];
+		
+		if([sectionName length]>0)
+		{
+			NewsletterSection * newSection=[self.newsletter addSection];
+			
+			newSection.name=sectionName;
+			newSection.summary=sectionDesc;
+			
+			[self.newsletter save];
+			
+			[self.newsletterTableView reloadData];
+			
+			[[NSNotificationCenter defaultCenter] 
+			 postNotificationName:@"ReloadData"
+			 object:nil];
+		}
 	}
 }
 
 - (void) addSection:(id)sender
 {
-	NewsletterSection * newSection=[self.newsletter addSection];
+	FormViewController * formView=[[FormViewController alloc] initWithTitle:@"Add section" tag:kAddSectionTag delegate:self names:[NSArray arrayWithObjects:@"Section name",@"text:Description",nil] andValues:nil];
 	
-	newSection.name=@"Untitled Section";
+	[self presentModalViewController:formView animated:YES];
 	
-	[self.newsletter save];
-	
-	[self.newsletterTableView reloadData];
-	
-	[[NSNotificationCenter defaultCenter] 
-	 postNotificationName:@"ReloadData"
-	 object:nil];
-	
-	[self editSection:newSection];
+	[formView release];
 }
 
 - (UILabel *)newLabelWithPrimaryColor:(UIColor *)primaryColor selectedColor:(UIColor *)selectedColor fontSize:(CGFloat)fontSize bold:(BOOL)bold
@@ -1467,18 +1526,14 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 
 - (void) editSection:(NewsletterSection*)section
 {
-	SectionEditFormViewController *controller = [[SectionEditFormViewController alloc] initWithNibName:@"SectionEditFormView" bundle:nil];
+	[tmpEditSection release];
+	tmpEditSection=[section retain];
 	
-	controller.section=section;
+	FormViewController * formView=[[FormViewController alloc] initWithTitle:@"Edit section" tag:kEditSectionTag delegate:self names:[NSArray arrayWithObjects:@"Section name",@"text:Description",nil] andValues:[NSArray arrayWithObjects:section.name,section.summary,nil]];
 	
-	controller.delegate=self;
+	[self presentModalViewController:formView animated:YES];
 	
-	[controller setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-	[controller setModalPresentationStyle:UIModalPresentationFormSheet];
-	
-	[self presentModalViewController:controller animated:YES];
-	
-	[controller release];
+	[formView release];
 }
 
 - (void) insertSelectedItemsToSection:(NewsletterSection*)section atIndexPath:(NSIndexPath*)indexPath inTableView:(UITableView*)tableView
@@ -1809,6 +1864,8 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 
 - (void)dealloc 
 {
+	[tmpEditSection release];
+	tmpEditSection=nil;
 	[newsletterTableView release];
 	[editMoveButton release];
 	[addImageButton release];

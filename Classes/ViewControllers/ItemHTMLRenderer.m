@@ -91,6 +91,8 @@
 
 - (NSString*) getTwitterItemHTML:(FeedItem*)item
 {
+	NSLog(@"getTwitterItemHTML");
+	
 	if(item==nil) return @"";
 	
 	NSString   *html = [self getTemplateContents:@"TwitterItem"];
@@ -124,6 +126,8 @@
 	
 	if(embedImageData && item.image)
 	{
+		NSLog(@"encoding image data...");
+		
 		NSData *imageData = UIImagePNGRepresentation(item.image);
 			
 		NSString * encoded=[Base64 encode:imageData];

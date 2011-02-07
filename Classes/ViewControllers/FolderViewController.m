@@ -23,6 +23,7 @@
 
 - (void) viewDidLoad
 {
+	self.folderMode=YES;
 	[super viewDidLoad];
 }
 

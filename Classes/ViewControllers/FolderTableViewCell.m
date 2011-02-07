@@ -36,7 +36,7 @@
 		
 		[self.contentView addSubview:itemView];
 		
-		itemImageView=[[UIImageView alloc] initWithFrame:CGRectMake(8, 8, 72, 72)];
+		/*itemImageView=[[UIImageView alloc] initWithFrame:CGRectMake(8, 8, 72, 72)];
 		itemImageView.layer.cornerRadius=10;
 		itemImageView.clipsToBounds=YES;
 		itemImageView.contentMode=UIViewContentModeScaleAspectFill;
@@ -44,8 +44,8 @@
 		itemImageView.backgroundColor=[UIColor lightGrayColor];
 		
 		[itemView addSubview:itemImageView];
-		
-		sourceLabel=[[UILabel alloc] initWithFrame:CGRectMake(84,8, 300, 16)];
+		*/
+		sourceLabel=[[UILabel alloc] initWithFrame:CGRectMake(8,8, 300, 16)];
 		sourceLabel.autoresizingMask=UIViewAutoresizingFlexibleRightMargin;
 		sourceLabel.backgroundColor=[UIColor clearColor];
 		sourceLabel.textColor=[UIColor grayColor];
@@ -64,7 +64,7 @@
 		
 		[itemView addSubview:dateLabel];
 		
-		headlineLabel=[[UILabel alloc] initWithFrame:CGRectMake(84, 24, itemView.frame.size.width-(84+10), 20)];
+		headlineLabel=[[UILabel alloc] initWithFrame:CGRectMake(8, 24, itemView.frame.size.width-(8+10), 20)];
 		headlineLabel.autoresizingMask=UIViewAutoresizingFlexibleWidth;
 		headlineLabel.backgroundColor=[UIColor clearColor];
 		headlineLabel.opaque=NO;
@@ -72,7 +72,7 @@
 		
 		[itemView addSubview:headlineLabel];
 		
-		synopsisLabel=[[UILabel alloc] initWithFrame:CGRectMake(84, 46, itemView.frame.size.width-(84+10), 30)];
+		synopsisLabel=[[UILabel alloc] initWithFrame:CGRectMake(8, 46, itemView.frame.size.width-(8+10), 30)];
 		synopsisLabel.autoresizingMask=UIViewAutoresizingFlexibleWidth;
 		synopsisLabel.backgroundColor=[UIColor clearColor];
 		synopsisLabel.numberOfLines=2;
@@ -105,7 +105,7 @@
     // Configure the view for the selected state.
 }
 
-- (void) layoutSubviews
+/*- (void) layoutSubviews
 {
 	[super layoutSubviews];
 	
@@ -128,12 +128,7 @@
 			synopsisLabel.frame=f;
 		}
 	}
-}
-
-
-
-
-
+}*/
 
 - (void)dealloc 
 {

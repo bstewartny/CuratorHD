@@ -28,7 +28,6 @@
 #import "RssFeedItem.h"
 #import "ImageListViewController.h"
 #import "NewsletterItem.h"
-//#import "InAppSettings.h"
 #import "SHKTumblr.h"
 #import "SHKTwitter.h"
 #import "TwitterClient.h"
@@ -41,7 +40,7 @@
 #import "SHK.h"
 
 @implementation FeedItemHTMLViewController
-@synthesize item,fetcher,commentTextField,shareText,webViewContainer,imageListPopover,prevWebView,nextWebView,tmpWebView,showPublishView,appendSynopsisItem,shareSelectedTextItem,replaceSynopsisItem,selectedImageSource,selectedImageLink,navPopoverController,publishButton,favoritesButton,itemIndex,webView,backButton,forwardButton,upButton,downButton,actionButton,activityView;
+@synthesize item,fetcher,shareText,webViewContainer,imageListPopover,prevWebView,nextWebView,tmpWebView,showPublishView,appendSynopsisItem,shareSelectedTextItem,replaceSynopsisItem,selectedImageSource,selectedImageLink,navPopoverController,publishButton,favoritesButton,itemIndex,webView,backButton,forwardButton,upButton,downButton,actionButton,activityView;
 
 -(NSString*) getString:(NSString*)javascript
 {
@@ -54,46 +53,17 @@
 		return nil;
 	}
 }	
-/*
--(NSInteger) getInt:(NSString*)javascript
-{
-	NSString * s=[self getString:javascript];
-	if(s && [s length]>0)
-	{
-		return [s intValue];
-	}
-	else {
-		return 0;
-	}
-}*/
 
 - (void) renderItem
 {
+	NSLog(@"renderItem");
 	[self renderItemAnimated:NO swipeDirection:nil];
-}
-/*
-- (NSString*) getHelpHTML
-{
-	NSString   *html = [NSString stringWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"help" ofType:@"html"] 
-												 encoding: NSUTF8StringEncoding 
-													error: nil];
-
-	return html;
-}
-*/
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-	FeedItem * c=[self currentItem];
-	
-	if(c)
-	{
-		c.notes=textField.text;
-		[c save];
-	}
 }
 
 - (void) renderItemAnimated:(BOOL)animated swipeDirection:(NSString*)transitionDirection;
 {
+	NSLog(@"renderItemAnimated");
+	
 	int count=[fetcher count];
 	
 	sharingText=NO;
@@ -168,7 +138,7 @@
 		animation.subtype=transitionDirection;
 		animation.duration = 0.25;
 	
-		commentTextField.text=item.notes;
+		//commentTextField.text=item.notes;
 		
 		if([transitionDirection isEqualToString:kCATransitionFromRight])
 		{
@@ -217,30 +187,16 @@
 	}
 	else 
 	{
-		NSString   *html=nil;
-		
-		if(item)
-		{
-			commentTextField.text=item.notes;
-			
-			html = [self getHtml:item]; 
-		}
-		/*else 
-		{
-			commentTextField.text=nil;
-			html = [self getHelpHTML];
-			self.webView.scalesPageToFit=YES;
-		}*/
-
-		[self.webView loadHTMLString:html baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
+		[self.webView loadHTMLString:[self getHtml:item] baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
 		[self.webView setNeedsDisplay];	
 		
-		[prevWebView loadHTMLString:@"<html><body></body></html>" baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
 		
-		[nextWebView loadHTMLString:@"<html><body></body></html>" baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
+		//[prevWebView loadHTMLString:@"<html><body></body></html>" baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
+		
+		//[nextWebView loadHTMLString:@"<html><body></body></html>" baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
 
-		[prevWebView setNeedsDisplay];
-		[nextWebView setNeedsDisplay];
+		//[prevWebView setNeedsDisplay];
+		//[nextWebView setNeedsDisplay];
 	}
 }
 
@@ -437,9 +393,6 @@
 
 - (void)viewDidLoad
 {
-	commentTextField.font=[UIFont italicSystemFontOfSize:17];
-	commentTextField.textColor=[UIColor redColor];
-	
 	webView.layer.cornerRadius=10;
 	prevWebView.layer.cornerRadius=10;
 	nextWebView.layer.cornerRadius=10;
@@ -585,74 +538,12 @@
 		[self attacheSwipeGesturesToWebView:nextWebView];
 		[self attacheLongPressGestureToWebView:nextWebView];
 	}
-	
-	// Observe keyboard hide and show notifications to resize the text view appropriately.
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-	
 }
 
 - (void) done:(id)sender
 {
 	[self.parentViewController dismissModalViewControllerAnimated:YES];
 }
-/*
-- (void) showHelp:(id)sender
-{
-	NSLog(@"showHelp");
-	[[[UIApplication sharedApplication] delegate] showHelp];
-}*/
-/*
-- (void) appSettingsDone:(id)sender
-{
-	[settingsPopover dismissPopoverAnimated:YES];
-	[[[UIApplication sharedApplication] delegate] reconfigure];
-	[[[UIApplication sharedApplication] delegate] validateAccounts];
-	[[[UIApplication sharedApplication] delegate] setUpSourcesView];
-}
-*/
-/*
-- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
-{
-	if([popoverController isEqual:settingsPopover])
-	{
-		[[[UIApplication sharedApplication] delegate] reconfigure];
-		[[[UIApplication sharedApplication] delegate] validateAccounts];
-		[[[UIApplication sharedApplication] delegate] setUpSourcesView];
-	}
-}*/
-/*
-- (void) appSettings:(id)sender
-{
-	// show app settings
-	if(settingsPopover==nil)
-	{
-		InAppSettingsViewController *settings = [[InAppSettingsViewController alloc] init];
-		
-		UINavigationController * navController = [[UINavigationController alloc] initWithRootViewController:settings];
-		
-		navController.contentSizeForViewInPopover=CGSizeMake(200, 600);
-		
-		UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] 
-									   initWithBarButtonSystemItem:UIBarButtonSystemItemDone 
-									   target:self 
-									   action:@selector(appSettingsDone:)];
-		
-		settings.navigationItem.rightBarButtonItem = doneButton;
-		
-		[doneButton release];
-		
-		[settings release];
-		
-		settingsPopover=[[UIPopoverController alloc] initWithContentViewController:navController];
-		
-		settingsPopover.delegate=self;
-		
-		[navController release];
-	}
-	
-	[settingsPopover presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
-}*/
 
 - (void) attacheSwipeGesturesToWebView:(UIWebView*)wv
 {
@@ -671,27 +562,19 @@
 
 - (void) attacheLongPressGestureToWebView:(UIWebView*)wv
 {
-	NSLog(@"attacheLongPressGestureToWebView");
 	UILongPressGestureRecognizer *tap=[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction:)];
 	tap.delegate=self;
 	[wv addGestureRecognizer:tap];
 	[tap release];
-	
 }
 
 - (void) tapAction:(UILongPressGestureRecognizer*)recognizer
 {
 	if(recognizer.state==UIGestureRecognizerStateBegan)
 	{	   
-		NSLog(@"tapAction: UIGestureRecognizerStateBegan");
 		@try 
 		{
 			UIWebView * wv=recognizer.view;
-			
-			if(wv==nil)
-			{
-				NSLog(@"recognizer.view is null!");
-			}
 			
 			CGPoint windowPoint=[recognizer locationInView:nil];
 			
@@ -742,8 +625,6 @@
 					UIActionSheet * actionSheet=[[UIActionSheet alloc] initWithTitle:@"Share or Select Image" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Set Item Image",@"Email",@"Facebook",@"Twitter",@"Tumblr",nil];
 					
 					actionSheet.tag=kSetItemImageActionSheet;
-					
-					//[actionSheet addButtonWithTitle:@"Set Item Image"];
 					
 					[actionSheet showFromRect:CGRectMake(webViewPoint.x, webViewPoint.y, 10, 10) inView:wv animated:YES];
 					 
@@ -856,8 +737,6 @@
 {
 	if(item==nil) return;
 	
-	//FeedItem * current=[self currentItem];
-	
 	// Create the item to share (in this example, a url)
 	SHKItem *item = [SHKItem URL:[self currentURL] title:[self currentTitle]];
 	
@@ -866,18 +745,6 @@
 	
 	// Display the action sheet
 	[actionSheet showFromBarButtonItem:sender animated:YES];
-	//[actionSheet showFromToolbar:navigationController.toolbar];
-	
-	
-	
-	
-	
-	
-	//UIActionSheet * actionSheet=[[UIActionSheet alloc] initWithTitle:@"Item Actions" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Open in Safari",nil];
-	
-	//[actionSheet showFromBarButtonItem:sender animated:YES];
-	
-	//[actionSheet release];
 }
 
 - (UIWebView*) currentWebView
@@ -1504,40 +1371,22 @@
 		}
 	}
 }
-						  						  
-- (void)viewWillAppear:(BOOL)animated
-{
-	[self setTextViewFrames];
-	//[self createActionButtons];
-	//[self renderItem];
-	[super viewWillAppear:animated];
-}
 
 - (void) viewDidAppear:(BOOL)animated
 {
+	NSLog(@"viewDidAppear");
 	[super viewDidAppear:animated];
 	[self renderItem];
 }
 
 - (NSString*) getHtml:(FeedItem*)item 
 {
+	NSLog(@"getHtml");
+	
 	if(item==nil) return @"";
 	
 	FeedItemHTMLRenderer * renderer=[[[FeedItemHTMLRenderer alloc ]init] autorelease];
 	return [renderer getItemHTML:item];
-	/*
-	
-	if([item isKindOfClass:[NewsletterItem class]])
-	{
-		// use newsletter item renderer...
-		DocumentHTMLRenderer * renderer=[[[DocumentHTMLRenderer alloc ]initWithMaxSynopsisSize:0 includeSynopsis:YES useOriginalSynopsis:NO embedImageData:YES] autorelease];
-		return [renderer getItemHTML:item];
-	}
-	else 
-	{
-		DocumentHTMLRenderer * renderer=[[[DocumentHTMLRenderer alloc ]initWithMaxSynopsisSize:0 includeSynopsis:YES useOriginalSynopsis:YES embedImageData:YES] autorelease];
-		return [renderer getItemHTML:item];
-	}*/
 }
  
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
@@ -1691,15 +1540,10 @@
 
 - (void)viewDidUnload 
 {
-	NSLog(@"viewDidUnload");
-	
-    [super viewDidUnload];
+	[super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 	self.navPopoverController=nil;
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 	
 	self.webView.delegate=nil;
 	self.tmpWebView.delegate=nil;
@@ -1713,110 +1557,6 @@
 	
 }
 
-- (void)keyboardWillShow:(NSNotification *)notification {
-    NSLog(@"keyboardWillShow");
-	/*
-     Reduce the size of the text view so that it's not obscured by the keyboard.
-     Animate the resize so that it's in sync with the appearance of the keyboard.
-	 */
-	
-    NSDictionary *userInfo = [notification userInfo];
-    NSLog(@"%@",[userInfo description]);
-						 
-    // Get the origin of the keyboard when it's displayed.
-    NSValue* aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-	
-    // Get the top of the keyboard as the y coordinate of its origin in self's view's coordinate system. The bottom of the text view's frame should align with the top of the keyboard's final position.
-    CGRect keyboardRect = [aValue CGRectValue];
-	NSLog(@"keyboardRect=%@",NSStringFromCGRect(keyboardRect));
-	
-	// depending on what orientation we are, we need either height or width of keyboard
-	CGFloat keyboardHeight = keyboardRect.size.height;
-	
-	// assume we are in other orientation
-	if(keyboardHeight >= 768.0)
-	{
-		keyboardHeight=keyboardRect.size.width;
-	}
-	_keyboardHeight=keyboardHeight;
-	
-	NSLog(@"keyboardHeight=%f",keyboardHeight);
-	
-	
-	// Get the duration of the animation.
-    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSTimeInterval animationDuration;
-    [animationDurationValue getValue:&animationDuration];
-    
-	[self doKeyboardWillShow:keyboardHeight animationDuration:animationDuration];
-	
-	_keyboardVisible=YES;
-	
-}
-
-- (void) doKeyboardWillShow:(CGFloat)keyboardHeight animationDuration:(NSTimeInterval)animationDuration
-{
-	NSLog(@"doKeyboardWillShow: %f",keyboardHeight);
-	// animate in sync with keyboard animation
-	[UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:animationDuration];
-    
-	[self moveTextBoxesAboveKeyboard:keyboardHeight];
-	
-    [UIView commitAnimations];
-}
-
-- (void) moveTextBoxesAboveKeyboard:(CGFloat)keyboardHeight
-{
-	NSLog(@"moveTextBoxesAboveKeyboard: %f",keyboardHeight);
-	
-	CGRect newWebViewContainerFrame = self.webViewContainer.frame;
-    newWebViewContainerFrame.size.height = newWebViewContainerFrame.size.height - keyboardHeight;
-    
-	CGRect newCommentsFrame=self.commentTextField.frame;
-	newCommentsFrame.origin.y=newCommentsFrame.origin.y - keyboardHeight;
-	
-	self.webViewContainer.frame=newWebViewContainerFrame;
-	self.commentTextField.frame=newCommentsFrame;
-}
-
-- (void)keyboardWillHide:(NSNotification *)notification 
-{
-	NSDictionary* userInfo = [notification userInfo];
-    
-	// animate in sync with keyboard animation
-	NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSTimeInterval animationDuration;
-    [animationDurationValue getValue:&animationDuration];
-    
-	[self doKeyboardWillHide:animationDuration];
-	
-	_keyboardVisible=NO;
-}
-
-- (void) doKeyboardWillHide:(NSTimeInterval)animationDuration
-{
-	[UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:animationDuration];
-	
-    [self setTextViewFrames];
-	
-	[UIView commitAnimations];
-}
-
-- (void) setTextViewFrames
-{
-	CGRect bounds=self.view.bounds;
-	
-	CGRect commentsTextFieldFrame=self.commentTextField.frame;
-	commentsTextFieldFrame.origin.y=bounds.size.height-41;
-	self.commentTextField.frame=commentsTextFieldFrame;
-	
-	CGRect containerViewFrame=self.webViewContainer.frame;
-	containerViewFrame.size.height=bounds.size.height-(46+50);
-	self.webViewContainer.frame=containerViewFrame;
-}
-
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
 {
@@ -1824,30 +1564,9 @@
     return YES;
 }
 
-- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-	if(_keyboardVisible)
-	{
-		[self setTextViewFrames];
-		
-		[UIView beginAnimations:nil context:NULL];
-		
-		[self moveTextBoxesAboveKeyboard:_keyboardHeight];
-		
-		[UIView commitAnimations];
-	}
-	else 
-	{
-		[self setTextViewFrames];
-	}
-}
-
 - (void)dealloc 
 {
 	NSLog(@"dealloc");
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 	
 	self.webView.delegate=nil;
 	self.tmpWebView.delegate=nil;
@@ -1881,9 +1600,7 @@
 	[nextWebView release];
 	[imageListPopover release];
 	[tmpWebView release];
-	//[settingsPopover release];
 	[shareText release];
-	[commentTextField release];
     [super dealloc];
 }
 

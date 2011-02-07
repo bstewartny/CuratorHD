@@ -432,7 +432,6 @@
 		C4A9814411AC23D200AB75AF /* GradientButton.m in Sources */ = {isa = PBXBuildFile; fileRef = C4A9814311AC23D200AB75AF /* GradientButton.m */; };
 		C4A981B411AC433600AB75AF /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C4A981B311AC433600AB75AF /* Reachability.m */; };
 		C4A981D811AC44F200AB75AF /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4A981D711AC44F200AB75AF /* SystemConfiguration.framework */; };
-		C4A9825011AC5E3600AB75AF /* SectionEditFormViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4A9824F11AC5E3600AB75AF /* SectionEditFormViewController.m */; };
 		C4A9825311AC5F9800AB75AF /* SectionEditFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4A9825211AC5F9800AB75AF /* SectionEditFormView.xib */; };
 		C4B2EB15121DD7C10061283D /* TwitterPublishAction.m in Sources */ = {isa = PBXBuildFile; fileRef = C4B2EB14121DD7C10061283D /* TwitterPublishAction.m */; };
 		C4B92FE61134347100AF9B7C /* SegmentedTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C4B92FE51134347100AF9B7C /* SegmentedTableCell.m */; };
@@ -1103,8 +1102,6 @@
 		C4A981B211AC433600AB75AF /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		C4A981B311AC433600AB75AF /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		C4A981D711AC44F200AB75AF /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		C4A9824E11AC5E3600AB75AF /* SectionEditFormViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SectionEditFormViewController.h; sourceTree = "<group>"; };
-		C4A9824F11AC5E3600AB75AF /* SectionEditFormViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SectionEditFormViewController.m; sourceTree = "<group>"; };
 		C4A9825211AC5F9800AB75AF /* SectionEditFormView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SectionEditFormView.xib; sourceTree = "<group>"; };
 		C4B2EB13121DD7C10061283D /* TwitterPublishAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterPublishAction.h; sourceTree = "<group>"; };
 		C4B2EB14121DD7C10061283D /* TwitterPublishAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterPublishAction.m; sourceTree = "<group>"; };
@@ -1884,8 +1881,6 @@
 				B0B2CAD01178C6F600AE089A /* AppNavigationController.m */,
 				C465B484117C9AE40006806F /* ActivityStatusViewController.h */,
 				C465B485117C9AE40006806F /* ActivityStatusViewController.m */,
-				C4A9824E11AC5E3600AB75AF /* SectionEditFormViewController.h */,
-				C4A9824F11AC5E3600AB75AF /* SectionEditFormViewController.m */,
 				C444ACDE11C17883007C96F0 /* FeedsViewController.h */,
 				C444ACDF11C17883007C96F0 /* FeedsViewController.m */,
 				B0C6F70311C2B6E3003F6288 /* FeedViewController.h */,
@@ -2766,7 +2761,6 @@
 				C42FD35311A57F7A00A748C3 /* ItemFilter.m in Sources */,
 				C4A9814411AC23D200AB75AF /* GradientButton.m in Sources */,
 				C4A981B411AC433600AB75AF /* Reachability.m in Sources */,
-				C4A9825011AC5E3600AB75AF /* SectionEditFormViewController.m in Sources */,
 				B03890F411B1717800878DCD /* Summarizer.m in Sources */,
 				C444AC1111C12C84007C96F0 /* FeedAccount.m in Sources */,
 				C444AC2911C13C30007C96F0 /* InfoNgenAccount.m in Sources */,

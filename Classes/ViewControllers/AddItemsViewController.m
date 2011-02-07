@@ -13,9 +13,72 @@
 #import "FeedsViewController.h"
 #import "FolderViewController.h"
 #import "AddItemsToSectionViewController.h"
+#import "FormViewController.h"
+#import "Folder.h"
+#import "Newsletter.h"
+
+#define kAddFolderWithItemsTag 1001
+#define kAddNewsletterWithItemsTag 1002
 
 @implementation AddItemsViewController
 @synthesize tableView,newslettersFetcher,foldersFetcher,itemDelegate;
+
+
+- (void) formViewDidCancel:(NSInteger)tag
+{
+	
+}
+
+- (void) formViewDidFinish:(NSInteger)tag withValues:(NSArray*)values
+{
+	NSLog(@"formViewDidFinish tag: %d",tag);
+	if(tag==kAddFolderWithItemsTag)
+	{
+		NSString * folderName=[values objectAtIndex:0];
+		
+		if([folderName length]>0)
+		{
+			NSLog(@"create folder with name: %@",folderName);
+			Folder * newFolder=[[[UIApplication sharedApplication] delegate] createNewFolder:folderName];
+			
+			// add selected items to new folder...
+			FeedItemDictionary * selectedItems=[[[UIApplication sharedApplication] delegate] selectedItems];
+			
+			// add selected items to folder...
+			for(FeedItem * item in selectedItems.items)
+			{
+				[newFolder addFeedItem:item];
+				
+			}
+			[newFolder save];
+			[self.foldersFetcher performFetch];
+			[self.tableView reloadData];
+			
+			FeedViewController * feedView=[[[[UIApplication sharedApplication] delegate] detailNavController] topViewController];
+			
+			
+			[feedView cancelOrganize];
+		}
+		return;
+	}
+	
+	if(tag==kAddNewsletterWithItemsTag)
+	{
+		NSString * newsletterName=[values objectAtIndex:0];
+		NSString * sectionName=[values objectAtIndex:1];
+		
+		if ([newsletterName length]>0) 
+		{
+			Newsletter * newNewsletter=[[[UIApplication sharedApplication] delegate] createNewNewsletter:newsletterName sectionName:sectionName];
+			
+			
+			[newslettersFetcher performFetch];
+			[tableView reloadData];
+		}
+	}
+}
+
+
 
 - (void) viewWillAppear:(BOOL)animated
 {
@@ -49,30 +112,52 @@
 - (void)configureCell:(UITableViewCell*)cell 
           atIndexPath:(NSIndexPath*)indexPath
 {
-	Feed * feed=[[self fetcherForSection:indexPath.section] itemAtIndex:indexPath.row];
+	ItemFetcher * fetcher=[self fetcherForSection:indexPath.section];
 	
-	cell.accessoryType=UITableViewCellAccessoryNone;
-	
-	cell.textLabel.text=feed.name;
-	
-	if([feed isKindOfClass:[Folder class]])
+	if([fetcher count]<=indexPath.row)
 	{
-		cell.imageView.image=[UIImage imageNamed:@"32-folderopen.png"];
-		
-		[cell setBadgeString:[NSString stringWithFormat:@"%d",[[feed currentUnreadCount] intValue]]];
-		
-	}
-	if([feed isKindOfClass:[Newsletter class]])
-	{
-		cell.imageView.image=[UIImage imageNamed:@"32-newsletter.png"];
-		
-		int count=0;
-		for(NewsletterSection * section in [feed sections])
+		if(indexPath.section==0)
 		{
-			count+=[[section items] count];
+			cell.accessoryType=UITableViewCellAccessoryNone;
+			cell.textLabel.textColor=[UIColor lightGrayColor];
+			cell.textLabel.text=@"Add Folder";
 		}
-		[cell setBadgeString:[NSString stringWithFormat:@"%d",count]];
-		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+		else 
+		{
+			cell.accessoryType=UITableViewCellAccessoryNone;
+			cell.textLabel.textColor=[UIColor lightGrayColor];
+			cell.textLabel.text=@"Add Newsletter";
+		}
+	}
+	else 
+	{
+		
+		Feed * feed=[fetcher itemAtIndex:indexPath.row];
+		
+		cell.accessoryType=UITableViewCellAccessoryNone;
+		
+		cell.textLabel.text=feed.name;
+		
+		if([feed isKindOfClass:[Folder class]])
+		{
+			cell.imageView.image=[UIImage imageNamed:@"32-folderopen.png"];
+			
+			[cell setBadgeString:[NSString stringWithFormat:@"%d",[[feed items] count] ]];
+			//[cell setBadgeString:[NSString stringWithFormat:@"%d",[[feed currentUnreadCount] intValue]]];
+			
+		}
+		if([feed isKindOfClass:[Newsletter class]])
+		{
+			cell.imageView.image=[UIImage imageNamed:@"32-newsletter.png"];
+			
+			int count=0;
+			for(NewsletterSection * section in [feed sections])
+			{
+				count+=[[section items] count];
+			}
+			[cell setBadgeString:[NSString stringWithFormat:@"%d",count]];
+			cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+		}
 	}
 }
 
@@ -89,7 +174,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return [[self fetcherForSection:section] count];
+	return [[self fetcherForSection:section] count]+1;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -115,39 +200,78 @@
 	return nil;
 }
 
+- (void) addFolder
+{
+	FormViewController * formView=[[FormViewController alloc] initWithTitle:@"Add folder" tag:kAddFolderWithItemsTag delegate:self names:[NSArray arrayWithObject:@"Folder name"] andValues:nil];
+	[self presentModalViewController:formView animated:YES];
+	
+	[formView release];
+}
+
+- (void) addNewsletter
+{
+	FormViewController * formView=[[FormViewController alloc] initWithTitle:@"Add newsletter" tag:kAddNewsletterWithItemsTag delegate:self names:[NSArray arrayWithObjects:@"Newsletter name",@"Section name",nil] andValues:nil];
+	[self presentModalViewController:formView animated:YES];
+
+	[formView release];
+}
+
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	Feed * feed=[[self fetcherForSection:indexPath.section] itemAtIndex:indexPath.row];
+	ItemFetcher * fetcher=[self fetcherForSection:indexPath.section];
 	
-	if(indexPath.section==0)
+	if([fetcher count]<=indexPath.row)
 	{
-		FeedItemDictionary * selectedItems=[[[UIApplication sharedApplication] delegate] selectedItems];
-		
-		// add selected items to folder...
-		for(FeedItem * item in selectedItems.items)
+		// add folder/newsletter row
+		if(indexPath.section==0)
 		{
-			[feed addFeedItem:item];
-			 
+			// add new folder
+			[self addFolder];
+			return;
+			
 		}
-		[feed save];
-		[self.tableView reloadData];
-		
-		FeedViewController * feedView=[[[[UIApplication sharedApplication] delegate] detailNavController] topViewController];
-		
-		
-		[feedView cancelOrganize];
-		
-		return;
+		else 
+		{
+			// add new newsletter
+			[self addNewsletter];
+			return;
+		}
 	}
-	if(indexPath.section==1)
+	else 
 	{
-		AddItemsToSectionViewController * sectionsView=[[AddItemsToSectionViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
+		Feed * feed=[fetcher itemAtIndex:indexPath.row];
 		
-		sectionsView.newsletter=feed;
-		[self.navigationController pushViewController:sectionsView animated:YES];
-		
-		[sectionsView release];
-		
+		if(indexPath.section==0)
+		{
+			FeedItemDictionary * selectedItems=[[[UIApplication sharedApplication] delegate] selectedItems];
+			
+			// add selected items to folder...
+			for(FeedItem * item in selectedItems.items)
+			{
+				[feed addFeedItem:item];
+				 
+			}
+			[feed save];
+			[self.foldersFetcher performFetch];
+			[self.tableView reloadData];
+			
+			FeedViewController * feedView=[[[[UIApplication sharedApplication] delegate] detailNavController] topViewController];
+			
+			
+			[feedView cancelOrganize];
+			
+			return;
+		}
+		if(indexPath.section==1)
+		{
+			AddItemsToSectionViewController * sectionsView=[[AddItemsToSectionViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
+			
+			sectionsView.newsletter=feed;
+			[self.navigationController pushViewController:sectionsView animated:YES];
+			
+			[sectionsView release];
+			
+		}
 	}
 }
 

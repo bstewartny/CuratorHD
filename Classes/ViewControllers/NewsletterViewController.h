@@ -17,7 +17,7 @@
 @class NewsletterHTMLPreviewViewController;
 @class NewsletterUpdateFormViewController;
 @class ActivityStatusViewController;
-
+@class NewsletterSection;
 @interface NewsletterViewController : NewsletterBaseViewController< UITextFieldDelegate,UITextViewDelegate,UITableViewDelegate,UITableViewDataSource,UIActionSheetDelegate,MFMailComposeViewControllerDelegate> {
 	IBOutlet UITableView * newsletterTableView;
 	IBOutlet UIBarButtonItem * editMoveButton;
@@ -39,6 +39,7 @@
 	UIBarButtonItem * actionButton;
 	UIBarButtonItem * addButton;
 	UIBarButtonItem * refreshButton;
+	NewsletterSection * tmpEditSection;
 }
 
 @property(nonatomic,retain) UIPopoverController * navPopoverController;

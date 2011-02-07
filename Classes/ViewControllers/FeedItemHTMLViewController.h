@@ -17,7 +17,7 @@
 #define kShareImageActionSheet 1004
 #define kSetItemImageActionSheet 1005
 
-@interface FeedItemHTMLViewController : UIViewController <UITextFieldDelegate,UIActionSheetDelegate, UIPopoverControllerDelegate, UISplitViewControllerDelegate, MFMailComposeViewControllerDelegate> {
+@interface FeedItemHTMLViewController : UIViewController <UIActionSheetDelegate, UIPopoverControllerDelegate, UISplitViewControllerDelegate, MFMailComposeViewControllerDelegate> {
 	NSInteger itemIndex;
 	//NSArray	* items;
 	ItemFetcher * fetcher;
@@ -32,7 +32,7 @@
 	IBOutlet UIWebView * prevWebView;
 	IBOutlet UIWebView * nextWebView;
 	
-	IBOutlet UITextField * commentTextField;
+	//IBOutlet UITextField * commentTextField;
 	
 	
 	UIWebView * tmpWebView;
@@ -65,7 +65,7 @@
 	CGFloat _keyboardHeight;
 }
 
-@property(nonatomic,retain) IBOutlet UITextField * commentTextField;
+//@property(nonatomic,retain) IBOutlet UITextField * commentTextField;
 
 @property(nonatomic,retain) NSString * shareText;
 //@property(nonatomic,retain) UIImage * shareImage;

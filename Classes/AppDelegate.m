@@ -168,26 +168,12 @@
     //[self.navigationItem setLeftBarButtonItem:nil animated:YES];
 	self.navPopoverController = nil;
 }
-// Called when the view is shown again in the split view, invalidating the button and popover controller.
-/*- (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem 
-{
-	//[[self.detailNavController topViewController].navigationItem setLeftBarButtonItem:nil animated:YES];
-	
-	[[self.detailNavController topViewController].navigationItem setLeftBarButtonItem:[[[UIBarButtonItem alloc] initWithCustomView:[[UIView new] autorelease]] autorelease]];
-    //[self.navigationItem setLeftBarButtonItem:nil animated:YES];
-	self.navPopoverController = nil;
-}*/
-/*
-- (void)splitViewController:(UISplitViewController*)svc popoverController:(UIPopoverController*)pc willPresentViewController:(UIViewController *)aViewController
-{
-}*/
 
 - (void) showFeed:(Feed*)feed delegate:(id)itemDelegate editable:(BOOL)editable
 {
 	NSLog(@"showFeed");
 	
 	FeedViewController * feedView=[[FeedViewController alloc] initWithNibName:@"FeedView" bundle:nil];
-	
 	
 	if([detailNavController topViewController])
 	{
@@ -205,8 +191,8 @@
 	
 	[detailNavController setViewControllers:[NSArray arrayWithObject:feedView] animated:NO];
 	
-	[feedView.fetcher performFetch];
-	[feedView.tableView reloadData];
+	//[feedView.fetcher performFetch];
+	//[feedView.tableView reloadData];
 	
 	[feedView release];
 }
@@ -227,9 +213,9 @@
 	folderView.fetcher=[feed itemFetcher];
 	
 	[detailNavController setViewControllers:[NSArray arrayWithObject:folderView] animated:NO];
-	
-	[folderView.fetcher performFetch];
-	[folderView.tableView reloadData];
+
+	//[folderView.fetcher performFetch];
+	//[folderView.tableView reloadData];
 	
 	[folderView release];
 }
@@ -259,49 +245,18 @@
 	self.fetcher=itemFetcher;
 	self.itemIndex=index;
 	
-	/*if([detailNavController.topViewController isEqual:itemHtmlViewNoNav])
-	{
-		itemHtmlViewNoNav.itemIndex=index;
-		itemHtmlViewNoNav.fetcher=itemFetcher;
-		[itemHtmlViewNoNav renderItem];
-	}
-	else 
-	{
-		if(![detailNavController.topViewController isEqual:itemHtmlView])
-		{*/
-			//itemHtmlViewNoNav.itemIndex=index;
-			
-			
-			//itemHtmlViewNoNav.fetcher=itemFetcher;
-			
-			FeedItemHTMLViewController * itemHtml=[[FeedItemHTMLViewController alloc] initWithNibName:@"FeedItemHTMLView" bundle:nil];
-			itemHtml.showPublishView=NO;
-			
-			
-			//UINavigationController * nav=[[UINavigationController alloc] initWithRootViewController:itemHtml];
-			
-			itemHtml.modalPresentationStyle=UIModalPresentationPageSheet;
-			
-			itemHtml.itemIndex=index;
-			itemHtml.fetcher=itemFetcher;
-			
-			[detailNavController presentModalViewController:itemHtml animated:YES];
-			itemHtml.itemIndex=index;
-			itemHtml.fetcher=itemFetcher;
-			//[detailNavController pushViewController:itemHtmlViewNoNav animated:YES];
-			
-			[itemHtml renderItem];
-			
-			[itemHtml release];
-			//[nav release];
-		/*}
-		else 
-		{
-			itemHtmlView.itemIndex=index;
-			itemHtmlView.fetcher=itemFetcher;
-			[itemHtmlView renderItem];
-		}*/
-	//}
+	FeedItemHTMLViewController * itemHtml=[[FeedItemHTMLViewController alloc] initWithNibName:@"FeedItemHTMLView" bundle:nil];
+	
+	itemHtml.showPublishView=NO;
+	
+	itemHtml.modalPresentationStyle=UIModalPresentationPageSheet;
+	
+	itemHtml.itemIndex=index;
+	itemHtml.fetcher=itemFetcher;
+	
+	[detailNavController presentModalViewController:itemHtml animated:YES];
+	
+	[itemHtml release];
 }
 
 - (UIViewController*) controllerForFetcher:(ItemFetcher*)fetcher
@@ -613,7 +568,6 @@
 {
 	NSLog(@"Creating help newsletter and folder");
 	
-	
 	// if no newsletters exist...
 	NewsletterFetcher * newsletterFetcher=[[NewsletterFetcher alloc] init];
 	
@@ -624,16 +578,6 @@
 		[self createSampleNewsletter];
 	}
 	[newsletterFetcher release];
-	
-	// create help newsletter
-	//Newsletter * newsletter=[self createNewNewsletter:@"Help" sectionName:@"Reading and Curating Content with Curator HD"];
-	
-	
-	//newsletter.isFavorite=[NSNumber numberWithBool:YES];
-	
-	// create help folder
-	
-	// if no folders exist... create Read Later folder
 	
 	FolderFetcher * folderFetcher=[[FolderFetcher alloc] init];
 	
@@ -647,79 +591,6 @@
 		[folder save];
 	}
 	[folderFetcher release];
-	
-	/*
-	TempFeedItem * folderItem;
-	
-	NewsletterSection * section;
-	
-	section=[[newsletter sortedSections] objectAtIndex:0];
-	folderItem=[[TempFeedItem alloc] init];
-	folderItem.date=[NSDate date];
-	folderItem.origin=@"Curator HD Help";
-	folderItem.headline=@"Reading and Curating Content with Curator HD";
-	folderItem.url=@"http://infongenmobile.com/?page_id=89";
-	
-	folderItem.origSynopsis=[NSString stringWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"reading" ofType:@"html"] 
-													  encoding: NSUTF8StringEncoding 
-														 error: nil];
-	folderItem.synopsis=@"";
-	
-	[folder addFeedItem:folderItem];
-	[section addFeedItem:folderItem];
-	[folderItem release];
-	
-	section=[newsletter addSection];
-	section.name=@"Using the Curator HD Toolbar";
-	folderItem=[[TempFeedItem alloc] init];
-	folderItem.date=[NSDate date];
-	folderItem.origin=@"Curator HD Help";
-	folderItem.headline=@"Using the Curator HD Toolbar";
-	folderItem.url=@"http://infongenmobile.com/?page_id=91";
-	folderItem.origSynopsis=[NSString stringWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"toolbar" ofType:@"html"] 
-													  encoding: NSUTF8StringEncoding 
-														 error: nil];
-	folderItem.synopsis=@"";
-	
-	
-	
-	[folder addFeedItem:folderItem];
-	[section addFeedItem:folderItem];
-	[folderItem release];
-	
-	section=[newsletter addSection];
-	section.name=@"Creating and Publishing Newsletters with Curator HD";
-	folderItem=[[TempFeedItem alloc] init];
-	folderItem.date=[NSDate date];
-	folderItem.origin=@"Curator HD Help";
-	folderItem.headline=@"Creating and Publishing Newsletters with Curator HD";
-	folderItem.url=@"http://infongenmobile.com/?page_id=93";
-	
-	
-	folderItem.origSynopsis=[NSString stringWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"newsletters" ofType:@"html"] 
-													  encoding: NSUTF8StringEncoding 
-														 error: nil];
-	folderItem.synopsis=@"";
-	
-	
-	
-	
-	[folder addFeedItem:folderItem];
-	[section addFeedItem:folderItem];
-	[folderItem release];
-	
-	
-	[newsletter save];
-	
-	
-	
-	
-	
-	
-	
-	
-
-	[folder save];*/
 
 }
 
@@ -754,65 +625,10 @@
 	splitView.dividerStyle=MGSplitViewDividerStyleNone;
 	splitView.delegate=self;
 	
-	//splitView=[[SplitViewController alloc] init];
-	//splitView.delegate=self;
-	
-	
-	//splitView.view.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
-	
-	// master side is the feeds 
-	// create a navigation controller
-	// add feeds view controller to the navigation controller
-	// add the navigation controller to the split view master side
-
 	[self setUpSourcesView];
-	/*NSMutableArray * array=[NSMutableArray new];
-	
-	ArrayFetcher * arrayFetcher=[[ArrayFetcher alloc] init];
-	
-	// add accounts
-	[array addObjectsFromArray:accounts];
-	
-	// add newsletter fetcher
-	NewsletterFeedGroup * newslettersGroup=[[NewsletterFeedGroup alloc] init];
-	newslettersGroup.name=@"Newsletters";
-	newslettersGroup.image=[UIImage imageNamed:@"page.png"];
-	newslettersGroup.editable=YES;
-	
-	[array addObject:newslettersGroup];
-	
-	[newslettersGroup release];
-	
-	// add folders
-	FolderFeedGroup * foldersGroup=[[FolderFeedGroup alloc] init];
-	foldersGroup.name=@"Folders";
-	foldersGroup.image=[UIImage imageNamed:@"folder.png"];
-	foldersGroup.editable=YES;
-	
-	[array addObject:foldersGroup];
-	
-	[foldersGroup release];
-	
-	arrayFetcher.array=array;
-	[array release];
-	
-	FeedsViewController * feedsView=[[FeedsViewController alloc] initWithNibName:@"FeedsView" bundle:nil];
-	feedsView.title=@"Sources";
-	feedsView.navigationItem.title=@"Sources";
-	
-	feedsView.fetcher=arrayFetcher;
-	
-	[arrayFetcher release];
-		
-	feedsView.itemDelegate=self;
-	
-	masterNavController=[[UINavigationController alloc] initWithRootViewController:feedsView];
-	
-	[feedsView release];
-	*/
-	
+
 	// push previous navigation state to restore user to where they left off...
-	if(fetchers)
+	/*if(fetchers)
 	{
 		for(ItemFetcher * fetcher in fetchers)
 		{
@@ -825,17 +641,13 @@
 		}
 		
 		self.fetchers=nil;
-	}
+	}*/
 	
-	//itemHtmlView=[[FeedItemHTMLViewController alloc] initWithNibName:@"FeedItemHTMLView" bundle:nil];
-	//itemHtmlView.showPublishView=YES;
-
-	//itemHtmlViewNoNav=[[FeedItemHTMLViewController alloc] initWithNibName:@"FeedItemHTMLView" bundle:nil];
-	//itemHtmlViewNoNav.showPublishView=NO;
-
+	
 	FeedViewController * feedView=[[FeedViewController alloc] initWithNibName:@"FeedView" bundle:nil];
 	
 	detailNavController=[[UINavigationController alloc] initWithRootViewController:feedView];
+	
 	[feedView release];
 	
 	splitView.viewControllers=[NSArray arrayWithObjects:masterNavController,detailNavController,nil];
@@ -845,31 +657,11 @@
 	
 	[window makeKeyAndVisible];
 	
-	/*if(fetcher)
-	{
-		[fetcher performFetch];
-		itemHtmlView.fetcher=fetcher;
-		itemHtmlView.itemIndex=itemIndex;
-		[itemHtmlView renderItem];
-	}*/
-	
 	[pool drain];
 	
 	return YES;
 }
 
-- (void) hideHelp
-{
-	[splitView dismissModalViewControllerAnimated:YES];
-}
-
--(NSArray*)helpItems
-{
-	NSData * data=[NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"help" ofType:@"xml"]];
-	
-	return [self loadFeedItemsFromRssData:data];
-	
-}
 - (NSArray*) loadFeedItemsFromRssData:(NSData*)rssData
 {
 	NSMutableArray * items=[[NSMutableArray alloc] init];
@@ -946,26 +738,7 @@
 	[formatter release];
 	return [items autorelease];
 }
-
-- (void) showHelp
-{
-	HelpWizardViewController * help=[[HelpWizardViewController alloc] initWithNibName:@"HelpWizardView" bundle:nil];
-	
-	// load help items from an XML/RSS file...
-	help.items=[self helpItems];
-	
-	/*
-	help.titles=[NSArray arrayWithObjects:@"Title One",@"Title Two",nil];
-	help.descriptions=[NSArray arrayWithObjects:@"Description one",@"Description two",nil];
-	help.screenshots=[NSArray arrayWithObjects:[UIImage imageNamed:@"toolbar-1.png"],[UIImage imageNamed:@"toolbar-2.png"],nil];
-	*/
-	
-	[detailNavController pushViewController:help animated:YES];
-	
-	//[splitView presentModalViewController:help animated:YES];
-
-	[help release];
-}
+ 
 	
 - (BOOL) areAccountsValid:(NSMutableArray*)failedAccountNames
 {
@@ -1950,16 +1723,17 @@
 - (void) updateFeedWithFeed:(RssFeed*)feed updater:(AccountUpdater*)updater
 {
 	NSAutoreleasePool * pool=[[NSAutoreleasePool alloc] init];
-	
+	BOOL wasUpdated=NO;
 	@try 
 	{
 		[updater updateFeed:feed withContext:[feed managedObjectContext]];
-		//if([updater updateFeed:feed withContext:[feed managedObjectContext]])
-		//{
-			//[[NSNotificationCenter defaultCenter] 
-			// postNotificationName:@"FeedUpdated"
-			// object:[NSArray arrayWithObjects:updater.account.name,feed.url,nil]];
-		//}
+		if([updater updateFeed:feed withContext:[feed managedObjectContext]])
+		{
+			wasUpdated=YES;
+			[[NSNotificationCenter defaultCenter] 
+			 postNotificationName:@"FeedUpdated"
+			 object:[NSArray arrayWithObjects:updater.account.name,feed.url,nil]];
+		}
 	}
 	@catch (NSException * e) 
 	{
@@ -1969,10 +1743,12 @@
 	{
 		[pool drain];
 	}
-	[[NSNotificationCenter defaultCenter] 
-	 postNotificationName:@"FeedUpdated"
-	 object:[NSArray arrayWithObjects:updater.account.name,feed.url,nil]];
-	
+	if(!wasUpdated)
+	{
+		[[NSNotificationCenter defaultCenter] 
+		 postNotificationName:@"FeedUpdateFinished"
+		 object:[NSArray arrayWithObjects:updater.account.name,feed.url,nil]];
+	}
 }
 
 - (void) backFillFeed:(NSArray*)args
@@ -2506,13 +2282,7 @@
 	Folder * newFolder=[Folder createInContext:moc];
 	
 	int numFolders=[newFolder entityCount:@"Folder" predicate:nil];
-	
-	/*
-	FolderFetcher * folderFetcher=[FolderFetcher new];
-	int numFolders=[folderFetcher.items count];
-	[folderFetcher release];
-	*/
-	
+
 	newFolder.name=name;
 	newFolder.image=[UIImage imageNamed:@"32-folderclosed.png"];
 	newFolder.displayOrder=[NSNumber numberWithInt:numFolders];

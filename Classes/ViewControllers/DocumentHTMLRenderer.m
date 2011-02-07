@@ -39,7 +39,7 @@
 		return [self getDefaultItemHTML:item];
 	}
 }
-
+  
 - (NSString*) getDefaultItemHTML:(FeedItem*)item
 {
 	NSString * html=[self getTemplateContents:@"FeedItemDocument"];

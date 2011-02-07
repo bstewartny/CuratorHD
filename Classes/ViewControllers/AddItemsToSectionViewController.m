@@ -12,10 +12,46 @@
 #import "BadgedTableViewCell.h"
 #import "FeedsViewController.h"
 #import "FolderViewController.h"
+#import "FormViewController.h"
 
 @implementation AddItemsToSectionViewController
 @synthesize tableView,newsletter;
 
+- (void) formViewDidCancel:(NSInteger)tag
+{
+	
+}
+
+- (void) formViewDidFinish:(NSInteger)tag withValues:(NSArray*)values
+{
+	NSString * sectionName=[values objectAtIndex:0];
+	
+	if([sectionName length]>0)
+	{
+		NSLog(@"create folder with name: %@",sectionName);
+		NewsletterSection * newSection=[self.newsletter addSection];
+		
+		newSection.name=sectionName;
+		
+		FeedItemDictionary * selectedItems=[[[UIApplication sharedApplication] delegate] selectedItems];
+		
+		
+		// add selected items to folder...
+		for(FeedItem * item in selectedItems.items)
+		{
+			[newSection addFeedItem:item];
+		}
+		[newSection save]; 
+		
+		[self.tableView reloadData];
+		
+		FeedViewController * feedView=[[[[UIApplication sharedApplication] delegate] detailNavController] topViewController];
+		
+		[feedView cancelOrganize];
+	}
+}
+	 
+	
 - (void) viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
@@ -43,16 +79,26 @@
 - (void)configureCell:(UITableViewCell*)cell 
           atIndexPath:(NSIndexPath*)indexPath
 {
-	NewsletterSection * section=[[newsletter sortedSections] objectAtIndex:indexPath.row];
+	NSArray * sortedSections=[newsletter sortedSections];
 	
-	cell.editingAccessoryType=UITableViewCellAccessoryDetailDisclosureButton;
-	cell.accessoryType=UITableViewCellAccessoryNone;
-	
-	cell.textLabel.text=section.name;
-	
-	[cell setBadgeString:[NSString stringWithFormat:@"%d",[[section items]count]]];
-	 
-	cell.imageView.image=[UIImage imageNamed:@"32-folderopen.png"];
+	if([sortedSections count]<=indexPath.row)
+	{
+		cell.textLabel.textColor=[UIColor lightGrayColor];
+		cell.textLabel.text=@"Add Section";
+	}
+	else 
+	{
+		NewsletterSection * section=[sortedSections objectAtIndex:indexPath.row];
+		
+		cell.editingAccessoryType=UITableViewCellAccessoryDetailDisclosureButton;
+		cell.accessoryType=UITableViewCellAccessoryNone;
+		
+		cell.textLabel.text=section.name;
+		
+		[cell setBadgeString:[NSString stringWithFormat:@"%d",[[section items]count]]];
+		
+		cell.imageView.image=[UIImage imageNamed:@"32-folderopen.png"];
+	}
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -68,7 +114,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return [newsletter.sections count]; //  [[self fetcherForSection:section] count];
+	return [newsletter.sections count]+1; //  [[self fetcherForSection:section] count];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -76,24 +122,42 @@
 	return newsletter.name;
 }
 
+- (void) addSection
+{
+	FormViewController * formView=[[FormViewController alloc] initWithTitle:@"Add section" tag:0 delegate:self names:[NSArray arrayWithObject:@"Section name"] andValues:nil];
+	[self presentModalViewController:formView animated:YES];
+	
+	[formView release];
+}
+
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	NewsletterSection * section=[[newsletter sortedSections] objectAtIndex:indexPath.row];
-
-	FeedItemDictionary * selectedItems=[[[UIApplication sharedApplication] delegate] selectedItems];
+	NSArray * sortedSections=[newsletter sortedSections];
 	
-	// add selected items to folder...
-	for(FeedItem * item in selectedItems.items)
+	if([sortedSections count]<=indexPath.row)
 	{
-		[section addFeedItem:item];
+		[self addSection];
+		return;
 	}
-	[section save]; 
-	
-	[self.tableView reloadData];
-	
-	FeedViewController * feedView=[[[[UIApplication sharedApplication] delegate] detailNavController] topViewController];
-	
-	[feedView cancelOrganize];
+	else 
+	{
+		NewsletterSection * section=[[newsletter sortedSections] objectAtIndex:indexPath.row];
+
+		FeedItemDictionary * selectedItems=[[[UIApplication sharedApplication] delegate] selectedItems];
+		
+		// add selected items to folder...
+		for(FeedItem * item in selectedItems.items)
+		{
+			[section addFeedItem:item];
+		}
+		[section save]; 
+		
+		[self.tableView reloadData];
+		
+		FeedViewController * feedView=[[[[UIApplication sharedApplication] delegate] detailNavController] topViewController];
+		
+		[feedView cancelOrganize];
+	}
 }
 
 // Override to allow orientations other than the default portrait orientation.

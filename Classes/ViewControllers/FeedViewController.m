@@ -13,10 +13,13 @@
 #import "MarkupStripper.h"
 #import "TweetTableViewCell.h"
 #import "RssFeedItem.h"
+#import "CustomCellBackgroundView.h"
+#import "BlankToolbar.h"
+
 #define REFRESH_HEADER_HEIGHT 60.0f
 
 @implementation FeedViewController
-@synthesize tableView,fetcher,dateFormatter,itemDelegate,favoritesMode,editable;
+@synthesize tableView,folderMode,fetcher,dateFormatter,itemDelegate,favoritesMode,editable;
 @synthesize textPull, origTitle,textRelease, navPopoverController,textLoading, refreshHeaderView, refreshLabel, refreshArrow, refreshSpinner;
 @synthesize twitter;
 
@@ -28,19 +31,14 @@
 {
 	if([pNotification.name isEqualToString:@"ReloadData"])
 	{
-		NSLog(@"FeedViewController: Got notification: ReloadData, reload table");
 		[tableView reloadData];
 	}
 	if([pNotification.name isEqualToString:@"SelectItem"])
 	{
-		//NSLog(@"FeedViewController: Got notification: SelectItem");
-		
 		[self selectItem:pNotification.object];
 	}
 	if([pNotification.name isEqualToString:@"AccountUpdated"])
 	{
-		//NSLog(@"FeedViewController: Got notification: AccountUpdated");
-		
 		NSString * accountName=[pNotification object];
 		
 		if([self.fetcher isKindOfClass:[AccountItemFetcher class]])
@@ -51,14 +49,12 @@
 				[self stopLoading];
 				[self.fetcher performFetch];
 				[tableView reloadData];
-				//[tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone]
 			}
 		}
 	}
-	if([pNotification.name isEqualToString:@"FeedUpdated"])
+	if([pNotification.name isEqualToString:@"FeedUpdated"] ||
+	   [pNotification.name isEqualToString:@"FeedUpdateFinished"])
 	{
-		//NSLog(@"FeedViewController: Got notification: FeedUpdated");
-		 
 		NSArray * array=[pNotification object];
 		NSString * accountName=[array objectAtIndex:0];
 		NSString * url=[array objectAtIndex:1];
@@ -71,24 +67,6 @@
 				[self stopLoading];
 				[self.fetcher performFetch];
 				[tableView reloadData];
-				//[tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-			}
-		}
-		else 
-		{
-			if([self.fetcher isKindOfClass:[AccountItemFetcher class]])
-			{
-				if([[self.fetcher accountName] isEqualToString:accountName])
-				{
-					// this is an aggregate view of all feeds in the account...
-					// how can we know if this feed requires this table to reload?
-					
-					// I think this causes too much confusing/anoying updating of UI if user is currently reading items in this feed...
-					
-					//[self.fetcher performFetch];
-					//[tableView reloadData];
-					//[tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
-				}
 			}
 		}
 	}	
@@ -144,6 +122,8 @@
 
 - (void) organize:(id)sender
 {
+	if([fetcher count]==0) return;
+	
 	// enter edit mode and show message
 	self.origTitle=self.navigationItem.title;
 	
@@ -162,21 +142,22 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad 
 {
-	
 	[self.tableView setBackgroundView:nil];
 	[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
 	
-	
 	self.tableView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
 	
-	//self.view.backgroundColor=[UIColor groupTableViewBackgroundColor];
+	BlankToolbar * tools=[[BlankToolbar alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
 	
+	tools.opaque=NO;
+	tools.backgroundColor=[UIColor clearColor];
 	
+	[tools setItems:[NSArray arrayWithObjects:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease],
+												[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(organize:)] autorelease],
+					 nil]];
 	
-	
-	
-	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(organize:)] autorelease];
-	self.navigationItem.rightBarButtonItem.style=UIBarButtonItemStylePlain;
+	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithCustomView:tools] autorelease];
+	[tools release];
 	
 	stripper=[[MarkupStripper alloc] init];
 	
@@ -196,6 +177,12 @@
 	 addObserver:self
 	 selector:@selector(handleNotification:)
 	 name:@"FeedUpdated"
+	 object:nil];
+	
+	[[NSNotificationCenter defaultCenter]
+	 addObserver:self
+	 selector:@selector(handleNotification:)
+	 name:@"FeedUpdateFinished"
 	 object:nil];
 	
 	[[NSNotificationCenter defaultCenter]
@@ -269,7 +256,15 @@
 	
     [super viewDidLoad];
 	
-	[self addPullToRefreshHeader];
+	if(!folderMode)
+	{
+		if(fetcher)
+		{
+			[self addPullToRefreshHeader];
+		}
+	}
+	
+	[tableView reloadData];
 }
 
 - (void)addPullToRefreshHeader 
@@ -283,19 +278,19 @@
 	//refreshHeaderView.opaque=YES;
 	//refreshHeaderView.backgroundColor=[UIColor groupTableViewBackgroundColor];
 	
-    refreshLabel = [[UILabel alloc] initWithFrame:CGRectMake(90, 0-REFRESH_HEADER_HEIGHT, 320-80, REFRESH_HEADER_HEIGHT)];
+    refreshLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 0-REFRESH_HEADER_HEIGHT, 320-80, REFRESH_HEADER_HEIGHT)];
     refreshLabel.backgroundColor = [UIColor clearColor];
-    refreshLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    refreshLabel.font = [UIFont boldSystemFontOfSize:14.0];
 	refreshLabel.textColor=[UIColor lightGrayColor];
     refreshLabel.textAlignment = UITextAlignmentLeft;
 	
     refreshArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow_down.png"]];
-    refreshArrow.frame = CGRectMake(35,
+    refreshArrow.frame = CGRectMake(48,
                                     ((REFRESH_HEADER_HEIGHT - 48) / 2)-REFRESH_HEADER_HEIGHT,
                                     48, 48);
 	
-    refreshSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    refreshSpinner.frame = CGRectMake(30+((REFRESH_HEADER_HEIGHT - 20) / 2), ((REFRESH_HEADER_HEIGHT - 20) / 2)-REFRESH_HEADER_HEIGHT, 20, 20);
+    refreshSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    refreshSpinner.frame = CGRectMake(44+((REFRESH_HEADER_HEIGHT - 20) / 2), ((REFRESH_HEADER_HEIGHT - 20) / 2)-REFRESH_HEADER_HEIGHT, 20, 20);
     refreshSpinner.hidesWhenStopped = YES;
 	
     [tableView addSubview:refreshLabel];
@@ -397,6 +392,7 @@
 
 - (IBAction) toggleEditMode:(id)sender
 {
+	
 	UIBarButtonItem * buttonItem=(UIBarButtonItem*)sender;
 	
 	if(self.tableView.editing)
@@ -409,11 +405,14 @@
 		[self.tableView reloadData];
 	}
 	else
-	{
-		[self.tableView setEditing:YES animated:YES];
+	{	
+		if([fetcher count]>0)
+		{
+			[self.tableView setEditing:YES animated:YES];
 		
-		buttonItem.style=UIBarButtonItemStyleDone;
-		buttonItem.title=@"Done";
+			buttonItem.style=UIBarButtonItemStyleDone;
+			buttonItem.title=@"Done";
+		}
 	}
 }
 
@@ -423,6 +422,7 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 {
 	if(!editable) return;
 	if (editingStyle != UITableViewCellEditingStyleDelete) return;
+	if([fetcher count]==0) return;
 	[fetcher deleteItemAtIndex:indexPath.row];
 	[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 	
@@ -472,7 +472,10 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	}
 	else
 	{
-		[itemDelegate showItemHtml:indexPath.row itemFetcher:fetcher];
+		if([fetcher count]>0)
+		{
+			[itemDelegate showItemHtml:indexPath.row itemFetcher:fetcher];
+		}
 	}
 }
 
@@ -481,7 +484,7 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
 	if(twitter)
 	{
-		return 62;
+		return 70;
 	}
 	else 
 	{
@@ -499,20 +502,70 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// get item
-	FeedItem * item=[fetcher itemAtIndex:indexPath.row];
 	
-	// get cell for item based on item type...
-	if([item.originId isEqualToString:@"twitter"] ||
-	   [item.originId hasPrefix:@"facebook"])
+	if([fetcher count]==0)
 	{
-		// display tweet
-		return [self tweetCellForRowAtIndexPath:tableView indexPath:indexPath item:item];
+		return [self pullDownCell];
 	}
 	else 
 	{
-		// display headline
-		return [self headlineCellForRowAtIndexPath:tableView indexPath:indexPath item:item];
+		FeedItem * item=[fetcher itemAtIndex:indexPath.row];
+	
+		// get cell for item based on item type...
+		if([item.originId isEqualToString:@"twitter"] ||
+		   [item.originId hasPrefix:@"facebook"])
+		{
+			// display tweet
+			return [self tweetCellForRowAtIndexPath:tableView indexPath:indexPath item:item];
+		}
+		else 
+		{
+			// display headline
+			return [self headlineCellForRowAtIndexPath:tableView indexPath:indexPath item:item];
+		}
 	}
+}
+
+- (UITableViewCell *) pullDownCell
+{
+	UITableViewCell * cell=[[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
+	
+	cell.selectionStyle=UITableViewCellSelectionStyleNone;
+	
+	cell.backgroundColor=[UIColor clearColor];
+	
+	CustomCellBackgroundView * gbView=[[[CustomCellBackgroundView alloc] initWithFrame:CGRectZero] autorelease];
+	
+	cell.backgroundView=gbView;
+	
+	gbView.fillColor=[UIColor blackColor]; 
+	gbView.borderColor=[UIColor grayColor];
+	
+	cell.backgroundView.alpha=0.5;
+	
+	cell.textLabel.textColor=[UIColor lightGrayColor];
+	
+	cell.textLabel.textAlignment=UITextAlignmentCenter;
+
+	[cell.backgroundView setPosition:CustomCellBackgroundViewPositionSingle];
+	
+	if(fetcher)
+	{
+		if(folderMode)
+		{
+			cell.textLabel.text=@"No items in folder. Add items from source feeds.";
+		}
+		else 
+		{
+			cell.textLabel.text=@"No items loaded. Pull down to load latest feed items.";
+		}
+	}
+	else 
+	{
+		cell.textLabel.text=@"No feed selected. Select a source feed from the sources menu.";
+	}
+
+	return cell;
 }
 
 - (UITableViewCell *) tweetCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
@@ -546,6 +599,9 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView 
 {
+	if (folderMode) {
+		return;
+	}
     if (isLoading) 
 	{	
 		return;
@@ -558,6 +614,10 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 	
+	if(folderMode)
+	{
+		return;
+	}
     if (isLoading) 
 	{
         // Update the content inset, good for section headers
@@ -611,7 +671,9 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if (isLoading) 
+    if(!folderMode)
+	{
+	if (isLoading) 
 	{
 		return;
 	}
@@ -621,6 +683,7 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
         // Released above the header
         [self startLoading];
     }
+	}
 }
 
 - (void)startLoading 
@@ -838,11 +901,18 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	int count= [fetcher count];
+	
+	if(!folderMode)
+	{
+		if(count==0) return 1; //show pull down cell
+	}
+	
 	return count;
 }
 
 -(UITableViewCellEditingStyle)tableView:(UITableView*)tableView editingStyleForRowAtIndexPath:(NSIndexPath*)indexPath 
 {
+	 
 	return 3;
 }
 
@@ -875,6 +945,7 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 }
 
 - (void)dealloc {
+	//[folderMode release];
 	[tableView release];
 	[origTitle release];
 	[fetcher release];

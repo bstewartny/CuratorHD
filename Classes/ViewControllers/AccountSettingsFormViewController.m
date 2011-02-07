@@ -24,9 +24,6 @@
 	googleReaderUsername= googleReaderUsernameTextField.text;
 	googleReaderPassword= googleReaderPasswordTextField.text;
 	
-	
-	
-	
 	infoNgenUsername=infoNgenUsernameTextField.text;
 	infoNgenPassword=infoNgenPasswordTextField.text;
 	twitterUsername=twitterUsernameTextField.text;
@@ -84,7 +81,8 @@
 		// start spinner
 		[cancelButton setEnabled:NO];
 		[doneButton setEnabled:NO];
-		
+		//cancelButton.hidden=YES;
+		//doneButton.hidden=YES;
 		self.navBar.topItem.title =@"Verifying Accounts...";
 	}
 }
@@ -101,17 +99,26 @@
 			[cancelButton setEnabled:YES];
 			[doneButton setEnabled:YES];
 			
-			self.navBar.topItem.titleView=nil;
-			self.navBar.topItem.title =@"Account Settings";
-		}
-		else 
-		{
-			[cancelButton setEnabled:YES];
-			[doneButton setEnabled:YES];
-			// all succeeded, close
+			//cancelButton.hidden=NO;
+			//doneButton.hidden=NO;
 			
 			self.navBar.topItem.titleView=nil;
 			self.navBar.topItem.title =@"Account Settings";
+			
+			UIAlertView * alertView=[[UIAlertView alloc] initWithTitle:@"Login Failed" message:@"Failed to validate accounts. Please verify username and password." delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil];
+			
+			[alertView show];
+			
+			[alertView release];
+		}
+		else 
+		{
+			//[cancelButton setEnabled:YES];
+			//[doneButton setEnabled:YES];
+			// all succeeded, close
+			
+			self.navBar.topItem.titleView=nil;
+			self.navBar.topItem.title =@"Accounts Verified";
 			
 			[self performSelector:@selector(close) withObject:nil afterDelay:0.1];
 		}
@@ -316,9 +323,9 @@
 	l.backgroundColor=[UIColor clearColor];
 	[v addSubview:l];
 	
-	UILabel * s=[[UILabel alloc] initWithFrame:CGRectMake(320, 8, 80, 22)];
+	UILabel * s=[[UILabel alloc] initWithFrame:CGRectMake(tableView.frame.size.width-114, 8, 80, 22)];
 	s.font=[UIFont systemFontOfSize:18];
-	s.textAlignment=UITextAlignmentLeft;
+	s.textAlignment=UITextAlignmentRight;
 	s.backgroundColor=[UIColor clearColor];
 	
 	[v addSubview:s];

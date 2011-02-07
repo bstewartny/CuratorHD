@@ -620,10 +620,10 @@
 
 - (NSArray*) getMostRecentAtomItems:(RssFeed*)feed maxItems:(int)maxItems 
 {
-	NSLog(@"GoogleAccountUpdater.getMostRecentAtomItems: %@",feed.url);
+	//NSLog(@"GoogleAccountUpdater.getMostRecentAtomItems: %@",feed.url);
 	if(readingListFeedCache)
 	{
-		NSLog(@"Using reading list feed cache...");
+		//NSLog(@"Using reading list feed cache...");
 		NSArray * recentItems=[readingListFeedCache objectForKey:feed.feedId];
 		//NSLog(@"Got %d recent items from reading list cache for feed: %@",[recentItems count],feed.feedId);
 		return recentItems;
@@ -803,7 +803,7 @@
 		url=[feed.url stringByAppendingFormat:@"?n=%d&ck=%@&client=%@",maxItems,timestamp,kGoogleReaderClientName];
 	}	
 	//NSLog(@"url=%@",url);
-	NSLog(@"Getting most recent %d items from feed: %@",maxItems,feed.name);
+	//NSLog(@"Getting most recent %d items from feed: %@",maxItems,feed.name);
 	
 	NSData * rawData=[client getData:url];
 	

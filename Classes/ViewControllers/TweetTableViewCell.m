@@ -55,7 +55,7 @@
     
 	[super setSelected:selected animated:animated];
 }
-
+/*
 - (void) layoutSubviews
 {
 	[super layoutSubviews];
@@ -78,7 +78,7 @@
 			tweetLabel.frame=f;
 		}
 	}
-}
+}*/
 - (void)dealloc 
 {
 	[dateLabel release];

@@ -17,13 +17,26 @@
 		valueFields=[[NSMutableArray alloc] init];
 		for(int i=0;i<[names count];i++)
 		{
-			UITextField * t=[[UITextField alloc] init];
-			if(theValues)
+			if([[names objectAtIndex:i] hasPrefix:@"text:"])
 			{
-				t.text=[theValues objectAtIndex:i];
+				UITextView * t=[[UITextView alloc] init];
+				if([theValues count]>i)
+				{
+					t.text=[theValues objectAtIndex:i];
+				}
+				[valueFields addObject:t];
+				[t release];
 			}
-			[valueFields addObject:t];
-			[t release];
+			else 
+			{
+				UITextField * t=[[UITextField alloc] init];
+				if([theValues count]>i)
+				{
+					t.text=[theValues objectAtIndex:i];
+				}
+				[valueFields addObject:t];
+				[t release];
+			}
 		}
 		
 		self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)] autorelease];
@@ -31,7 +44,6 @@
 		self.navigationItem.title=theTitle;
 		
 		self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)] autorelease];
-		
 	}
 		
 	return self;
@@ -48,11 +60,11 @@
 {
 	NSMutableArray * values=[[[NSMutableArray alloc] init] autorelease];
 	
-	for(UITextField * t in valueFields)
+	for(id * t in valueFields)
 	{
-		if(t.text)
+		if([[t text] length]>0)
 		{
-			[values addObject:t.text];
+			[values addObject:[t text]];
 		}
 		else 
 		{
@@ -65,32 +77,90 @@
 	[self.parentViewController dismissModalViewControllerAnimated:YES];
 }
 
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
+{
+	id * textField=[valueFields objectAtIndex:indexPath.section];
+	[textField becomeFirstResponder];
+}
+
+- (CGFloat)tableView:(UITableView*)tableView
+heightForRowAtIndexPath:(NSIndexPath*)indexPath
+{
+	if([[valueFields objectAtIndex:indexPath.section] isKindOfClass:[UITextView class]])
+	{
+		return 132;
+	}
+	else 
+	{
+		return tableView.rowHeight;
+	}
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	UITableViewCell * cell=[[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
 	
-	UITextField * t=[valueFields objectAtIndex:indexPath.section]; // [[UITextField alloc] initWithFrame:CGRectMake(10, (tableView.rowHeight - 22)/2, 320,      22)];
-	t.frame=CGRectMake(10, (tableView.rowHeight - 22)/2, 320,      22);
-	t.backgroundColor=[UIColor clearColor];
-	t.delegate=self;
-	t.autoresizingMask=UIViewAutoresizingFlexibleWidth;//|UIViewAutoresizingFlexibleHeight;
-	t.font=[UIFont systemFontOfSize:18];
-	t.textColor=[UIColor blackColor];
-	t.tag=indexPath.section;
-	
-	[cell.contentView addSubview:t];
-	
-	//[t release];
-	
+	if([[valueFields objectAtIndex:indexPath.section] isKindOfClass:[UITextView class]])
+	{
+		UITextView * t=[valueFields objectAtIndex:indexPath.section]; 
+		
+		t.frame=CGRectMake(8, 4, 300, 122);
+		t.backgroundColor=[UIColor clearColor];
+		t.delegate=self;
+		 
+		t.autoresizingMask=UIViewAutoresizingFlexibleWidth; 
+		
+		t.font=[UIFont systemFontOfSize:18];
+		t.textColor=[UIColor blackColor];
+		t.tag=indexPath.section;
+		
+		 
+		if(indexPath.section==0)
+		{
+			[t becomeFirstResponder];
+		}
+		
+		[cell.contentView addSubview:t];
+		
+	}
+	else 
+	{
+		UITextField * t=[valueFields objectAtIndex:indexPath.section]; 
+		
+		t.frame=CGRectMake(10, (tableView.rowHeight - 22)/2, 310,      22);
+		t.backgroundColor=[UIColor clearColor];
+		t.delegate=self;
+		t.autocapitalizationType=UITextAutocapitalizationTypeWords;
+		
+		t.autoresizingMask=UIViewAutoresizingFlexibleWidth;
+		
+		t.font=[UIFont systemFontOfSize:18];
+		t.textColor=[UIColor blackColor];
+		t.tag=indexPath.section;
+		 
+		if(indexPath.section==0)
+		{
+			[t becomeFirstResponder];
+		}
+		
+		[cell.contentView addSubview:t];
+	}
+
 	cell.selectionStyle=UITableViewCellSelectionStyleNone;
 	
 	return cell;
-	
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-	return [names objectAtIndex:section];
+	if([[valueFields objectAtIndex:section] isKindOfClass:[UITextView class]])
+	{
+		return [[names objectAtIndex:section] substringFromIndex:5];
+	}
+	else 
+	{
+		return [names objectAtIndex:section];
+	}
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -111,6 +181,7 @@
 
 - (void) dealloc
 {
+	 
 	[valueFields release];
 	[title release];
 	[names release];

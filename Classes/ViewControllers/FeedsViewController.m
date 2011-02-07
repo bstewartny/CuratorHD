@@ -126,6 +126,8 @@
 	 name:@"FeedUpdated"
 	 object:nil];
 	
+	 
+	
 	[self performFetch];
 	//[fetcher performFetch];
 }
