@@ -21,6 +21,7 @@
 #import "NewsletterHTMLRenderer.h"
 #import "BadgedTableViewCell.h"
 #import "FormViewController.h"
+#import "FeedItemCell.h"
 
 #define kEditSectionTag 1001
 #define kAddSectionTag 1002
@@ -939,7 +940,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView headlineItemCellForSection:(NewsletterSection*)section row:(NSInteger)row
 {
-	static NSString *CellIdentifier = @"headlineItemCellIdentifier";
+	/*static NSString *CellIdentifier = @"headlineItemCellIdentifier";
 	
 	UITableViewCell * cell=[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	
@@ -964,6 +965,79 @@
 	cell.imageView.image=item.image;
 	
 	return cell;
+	
+	*/
+	
+	
+	static NSString * identifier=@"FeedItemCellIdentifier";
+	
+	NewsletterHeadlineItemCell * cell=[tableView dequeueReusableCellWithIdentifier:identifier];
+	
+	if(cell==nil)
+	{
+		cell=[[[NewsletterHeadlineItemCell alloc] initWithReuseIdentifier:identifier] autorelease];
+	}
+	
+	FeedItem * item=(FeedItem *)[[section sortedItems] objectAtIndex:row];
+	
+	//cell.selectionStyle=UITableViewCellSelectionStyleGray;
+	if(tableView.editing)
+	{
+		cell.selectionStyle=3;//UITableViewCellSelectionStyleGray;
+	}
+	else	
+	{
+		cell.selectionStyle=UITableViewCellSelectionStyleGray;
+	}
+	/*if([item.isRead boolValue])
+	{
+		cell.headlineLabel.textColor=[UIColor grayColor];
+		cell.readImageView.image=[UIImage imageNamed:@"dot_blank.png"];
+	}
+	else 
+	{*/
+		cell.headlineLabel.textColor=[UIColor blackColor];
+	cell.itemImageView.image=item.image;
+	
+	//	cell.readImageView.image=[UIImage imageNamed:@"dot_blank.png"];
+	//}
+	
+	/*if([[item origSynopsis] length]>0)
+	{
+		if([[item synopsis] length]==0)
+		{
+			//item.synopsis=[stripper stripMarkup:[item origSynopsis]];
+			// faster to just strip up to what we need to display...
+			item.synopsis=[stripper stripMarkupSummary:[item origSynopsis] maxLength: 300];
+		}
+	}*/
+	
+	cell.synopsisLabel.text=[item synopsis];
+	
+	cell.headlineLabel.text=item.headline;
+		
+	cell.sourceLabel.text=item.origin;
+	
+	cell.dateLabel.text=[item shortDisplayDate];
+	
+	
+	/*if([item isKindOfClass:[RssFeedItem class]])
+	{
+		UIImage * img=[[((RssFeedItem*)item) feed] image];
+		if(img)
+		{
+			cell.sourceImageView.image=img;
+		}
+	}*/
+	
+	return cell;
+	
+	
+	
+	
+	
+	
+	
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView folderItemCellForSection:(NewsletterSection*)section row:(NSInteger)row
@@ -1187,7 +1261,6 @@
 	return cell;
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	if(indexPath.section==0)
@@ -1257,7 +1330,21 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
 	{
 		if(viewMode==kViewModeHeadlines)
 		{
-			return tableView.rowHeight;
+			if(indexPath.section >[self.newsletter.sections count])
+			{
+				return tableView.rowHeight;
+			}
+			
+			NewsletterSection * newsletterSection=[self sectionForSectionIndex:indexPath.section];
+			
+			if(indexPath.row < [newsletterSection.items count])
+			{
+				return 70;//tableView.rowHeight;
+			}
+			else {
+				return tableView.rowHeight;
+			}
+
 		}
 		else 
 		{

@@ -14,12 +14,18 @@
 	NSString * fontTitle;
 	NSString * fontStyle;
 	NSArray * fontStyles;
+	NSArray * colorNames;
+	NSString * colorName;
+	
 }
 @property(nonatomic,retain) NSString * fontTitle;
 @property(nonatomic) NSInteger tag;
 @property(nonatomic,retain) NSString * fontName;
 @property(nonatomic,retain) NSString * fontSize;
 @property(nonatomic,retain) NSString * fontStyle;
+
+@property(nonatomic,retain) NSArray * colorNames;
+@property(nonatomic,retain) NSString * colorName;
 
 @property(nonatomic,assign) id delegate;
 @property(nonatomic,retain) UITableView * tableView;

@@ -3,23 +3,6 @@
 
 @class FeedItem;
 
-/*@interface WideFeedItemCell : UITableViewCell
-{
-	
-}
-
-- (id) initWithReuseIdentifier:(NSString*)reuseIdentifier;
-
-@end
-
-@interface FolderItemCell : WideFeedItemCell
-{
-	
-}
-
-@end*/
-
-
 @interface FeedItemCell : UITableViewCell {
 	IBOutlet UILabel * sourceLabel;
 	IBOutlet UILabel * dateLabel;
@@ -40,6 +23,25 @@
 
 @end
 
+@interface NewsletterHeadlineItemCell : UITableViewCell
+{
+	IBOutlet UILabel * sourceLabel;
+	IBOutlet UILabel * dateLabel;
+	IBOutlet UILabel * headlineLabel;
+	IBOutlet UILabel * synopsisLabel;
+	IBOutlet UIImageView * itemImageView;
+}
+
+@property(nonatomic,retain) IBOutlet UILabel * dateLabel;
+@property(nonatomic,retain) IBOutlet UILabel * sourceLabel;
+@property(nonatomic,retain) IBOutlet UILabel * headlineLabel;
+@property(nonatomic,retain) IBOutlet UILabel * synopsisLabel;
+@property(nonatomic,retain) IBOutlet UIImageView * itemImageView;
+
+- (id) initWithReuseIdentifier:(NSString*)reuseIdentifier;
+
+@end
+
 
 @interface TweetItemCell : UITableViewCell {
 	IBOutlet UIButton * selectButton;
@@ -47,9 +49,7 @@
 	IBOutlet UILabel * sourceLabel;
 	IBOutlet UILabel * dateLineLabel;
 	IBOutlet UILabel * headlineLabel;
-	//IBOutlet UILabel * synopsisLabel;
 	IBOutlet UIImageView * dateLineImageView;
-	//CAGradientLayer *gradient
 }
 @property(nonatomic,retain) IBOutlet UIButton * selectButton;
 @property(nonatomic,retain) IBOutlet UIButton * selectButtonOverlay;
@@ -57,6 +57,5 @@
 @property(nonatomic,retain) IBOutlet UILabel * sourceLabel;
 @property(nonatomic,retain) IBOutlet UILabel * headlineLabel;
 @property(nonatomic,retain) IBOutlet UIImageView * dateLineImageView;
-//@property(nonatomic,retain) IBOutlet UILabel * synopsisLabel;
 
 @end

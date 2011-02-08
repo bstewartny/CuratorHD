@@ -25,7 +25,7 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect,
 }
 
 - (void)drawRect:(CGRect)rect {
-	NSLog(@"drawRect: %@",NSStringFromCGRect(rect));
+	//NSLog(@"drawRect: %@",NSStringFromCGRect(rect));
 	
     // Drawing code
     CGContextRef c = UIGraphicsGetCurrentContext();

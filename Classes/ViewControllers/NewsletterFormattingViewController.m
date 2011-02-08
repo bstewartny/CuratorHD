@@ -186,23 +186,23 @@
 	
 	if(indexPath.row==0)
 	{
-		[cell.backgroundView setPosition:CustomCellBackgroundViewPositionTop];
+		[cell.backgroundView setPosition:CustomCellBackgroundViewPositionSingle];
 		cell.textLabel.text=@"Font";
 		cell.detailTextLabel.text=[self fontForSection:indexPath.section];
 	}
-	else 
+	/*else 
 	{
 		[cell.backgroundView setPosition:CustomCellBackgroundViewPositionBottom];
 		cell.textLabel.text=@"Color";
 		cell.detailTextLabel.text=[self colorForSection:indexPath.section];
-	}
+	}*/
 	
 	return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return 2;
+	return 1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -245,7 +245,8 @@
 		// show color picker
 		FontPickerViewController * fontPicker=[[FontPickerViewController alloc] initWithNibName:@"NewsletterFormattingView" bundle:nil];
 		
-		NSArray * fontNames=[NSArray arrayWithObjects:@"Helvetica",@"Trebuchet MS",@"Times New Roman",@"Courier",@"Georgia",nil];
+		//NSArray * fontNames=[NSArray arrayWithObjects:@"Helvetica",@"Trebuchet MS",@"Times New Roman",@"Courier",@"Georgia",nil];
+		NSArray * fontNames=[NSArray arrayWithObjects:@"Helvetica",@"Trebuchet MS",@"Courier",@"Georgia",nil];
 		
 		NSMutableArray * fonts=[[[NSMutableArray alloc] init]autorelease];
 		
@@ -255,8 +256,16 @@
 		}
 		fontPicker.fonts=fonts;
 		fontPicker.fontNames=fontNames;
-		fontPicker.fontSizeNames=[NSArray arrayWithObjects:@"Smaller",@"Small",@"Medium",@"Large",@"Larger",nil];
-		fontPicker.fontSizes=[NSArray arrayWithObjects:@"x-small",@"small",@"medium",@"large",@"x-large",nil];
+		
+		//fontPicker.fontSizeNames=[NSArray arrayWithObjects:@"Smaller",@"Small",@"Medium",@"Large",@"Larger",nil];
+		//fontPicker.fontSizes=[NSArray arrayWithObjects:@"x-small",@"small",@"medium",@"large",@"x-large",nil];
+		
+		fontPicker.fontSizeNames=[NSArray arrayWithObjects:@"Small",@"Medium",@"Large",nil];
+		fontPicker.fontSizes=[NSArray arrayWithObjects:@"x-small",@"medium",@"x-large",nil];
+		
+		fontPicker.colorNames=[NSArray arrayWithObjects:@"black",@"grey",@"green",@"red",@"blue",nil];
+		fontPicker.colorName=[self colorForSection:indexPath.section];
+		
 		fontPicker.fontSize=[self fontSizeForSection:indexPath.section];
 		
 		fontPicker.fontName=[self fontForSection:indexPath.section];
@@ -270,7 +279,7 @@
 		[fontPicker release];
 			
 	}
-	if(indexPath.row==1)
+	/*if(indexPath.row==1)
 	{
 		// show color picker
 		ColorPickerViewController * colorPicker=[[ColorPickerViewController alloc] initWithNibName:@"NewsletterFormattingView" bundle:nil];
@@ -287,7 +296,7 @@
 		
 		[colorPicker release];
 	
-	}
+	}*/
 }
 
 - (void) renderNewsletter
@@ -306,6 +315,13 @@
 	//[self setFontSizeForSection:fontPicker.tag fontSize:fontSize];
 	//[delegate renderNewsletter];
 }
+- (void) fontPicker:(FontPickerViewController *)fontPicker pickedFontColor:(NSString *)colorName 
+{
+	[self setColorForSection:fontPicker.tag color:colorName];
+	//[self setFontSizeForSection:fontPicker.tag fontSize:fontSize];
+	//[delegate renderNewsletter];
+}
+
 - (void) fontPicker:(FontPickerViewController*)fontPicker pickedFont:(UIFont*)font withName:(NSString*)name
 {
 	[self setFontForSection:fontPicker.tag font:name];

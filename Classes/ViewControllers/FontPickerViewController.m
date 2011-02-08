@@ -1,7 +1,8 @@
 #import "FontPickerViewController.h"
+#import "UIColorAdditions.h"
 #import "CustomCellBackgroundView.h"
 @implementation FontPickerViewController
-@synthesize tableView,fontSizeNames,fontStyle,fonts,fontNames,delegate,fontName,tag,fontTitle,fontSize,fontSizes;
+@synthesize tableView,colorName,colorNames,fontSizeNames,fontStyle,fonts,fontNames,delegate,fontName,tag,fontTitle,fontSize,fontSizes;
 
 - (void) viewDidLoad
 {
@@ -12,8 +13,8 @@
 
 	self.tableView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
 	
-	fontStyles=[[NSArray arrayWithObjects:@"normal",@"bold",nil] retain];
-	fontStyleNames=[[NSArray arrayWithObjects:@"Normal",@"Bold",nil] retain];
+	//fontStyles=[[NSArray arrayWithObjects:@"normal",@"bold",nil] retain];
+	//fontStyleNames=[[NSArray arrayWithObjects:@"Normal",@"Bold",nil] retain];
 }
 - (void) pickedFontStyle:(NSString*)style
 {
@@ -22,6 +23,10 @@
 - (void) pickedFontSize:(NSString*)size 
 {
 	[delegate fontPicker:self pickedFontSize:size];
+}
+- (void) pickedFontColor:(NSString*)colorName 
+{
+	[delegate fontPicker:self pickedFontColor:colorName];
 }
 
 - (void) pickedFont:(UIFont*)font withName:(NSString*)name
@@ -43,7 +48,7 @@
 		}
 		else 
 		{
-			return [fontStyles count];
+			return [colorNames count];
 		}
 	}
 }
@@ -76,8 +81,9 @@
 		{
 			label.text=[NSString stringWithFormat:@"%@ Size",fontTitle];
 		}
-		else {
-			label.text=[NSString stringWithFormat:@"%@ Style",fontTitle];
+		else 
+		{
+			label.text=[NSString stringWithFormat:@"%@ Color",fontTitle];
 		}
 	}
 
@@ -115,8 +121,6 @@
 	cell.backgroundView.alpha=0.5;
 	
 	cell.textLabel.textColor=[UIColor whiteColor];
-	
-	
 	
 	if(indexPath.section==0)
 	{
@@ -170,7 +174,7 @@
 			}
 			NSString * size=[fontSizes objectAtIndex:indexPath.row];
 			
-			CGFloat sz=11.0 + (2.0 * indexPath.row);
+			CGFloat sz=12.0 + (2.0 * indexPath.row);
 			
 			UIFont * currentFont=nil;
 			
@@ -206,7 +210,7 @@
 			}
 			else 
 			{
-				if(indexPath.row==[fontStyles count]-1)
+				if(indexPath.row==[colorNames count]-1)
 				{
 					[cell.backgroundView setPosition:CustomCellBackgroundViewPositionBottom];
 				}
@@ -215,16 +219,16 @@
 					[cell.backgroundView setPosition:CustomCellBackgroundViewPositionMiddle];
 				}
 			}
-			switch(indexPath.row)
-			{
-				case 0:
+			//switch(indexPath.row)
+			//{
+				//case 0:
 					cell.textLabel.font=[UIFont systemFontOfSize:18];
-					break;
-				case 1:
-					cell.textLabel.font=[UIFont boldSystemFontOfSize:18];
-					break;
-			}
-			if([[fontStyles objectAtIndex:indexPath.row] isEqualToString:fontStyle])
+				//	break;
+				//case 1:
+				//	cell.textLabel.font=[UIFont boldSystemFontOfSize:18];
+				//	break;
+			//}
+			if([[colorNames objectAtIndex:indexPath.row] isEqualToString:colorName])
 			{
 				cell.accessoryType=UITableViewCellAccessoryCheckmark;
 			}
@@ -232,7 +236,18 @@
 			{
 				cell.accessoryType=UITableViewCellAccessoryNone;
 			}
-			cell.textLabel.text=[fontStyleNames objectAtIndex:indexPath.row];
+			cell.textLabel.text=[colorNames objectAtIndex:indexPath.row];
+			
+			UIColor * color=[UIColor searchForColorByName:[colorNames objectAtIndex:indexPath.row]];
+			if(color==nil)
+			{
+				color=[UIColor lightGrayColor];
+			}
+			cell.imageView.backgroundColor=color;
+			cell.imageView.frame=CGRectMake(0, 0, 40, 40);
+			cell.imageView.image=[UIImage imageNamed:@"dot_blank.png"];
+			
+			
 		}
 	}
 	
@@ -255,8 +270,8 @@
 		}
 		else 
 		{
-			self.fontStyle=[fontStyles objectAtIndex:indexPath.row];
-			[self pickedFontStyle:self.fontStyle];
+			self.colorName=[colorNames objectAtIndex:indexPath.row];
+			[self pickedFontColor:self.colorName];
 		}
 	}
 	[tableView reloadData];
@@ -271,6 +286,8 @@
 
 - (void)dealloc 
 {
+	[colorNames release];
+	[colorName release];
 	[fontStyles release];
 	[fontStyleNames release];
 	[fontTitle release];
