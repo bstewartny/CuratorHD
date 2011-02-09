@@ -273,11 +273,6 @@
 	self.textRelease=@"Release to refresh...";
 	self.textLoading=@"Loading new items...";
 	
-	//refreshHeaderView = [[UIView alloc] initWithFrame:CGRectMake(30, 0 - REFRESH_HEADER_HEIGHT, 320, REFRESH_HEADER_HEIGHT)];
-    //refreshHeaderView.backgroundColor = [UIColor clearColor];
-	//refreshHeaderView.opaque=YES;
-	//refreshHeaderView.backgroundColor=[UIColor groupTableViewBackgroundColor];
-	
     refreshLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 0-REFRESH_HEADER_HEIGHT, 320-80, REFRESH_HEADER_HEIGHT)];
     refreshLabel.backgroundColor = [UIColor clearColor];
     refreshLabel.font = [UIFont boldSystemFontOfSize:14.0];
@@ -296,7 +291,6 @@
     [tableView addSubview:refreshLabel];
     [tableView addSubview:refreshArrow];
     [tableView addSubview:refreshSpinner];
-   // [self.tableView addSubview:refreshHeaderView];
 }
 
 - (void) actionButtonTouched:(id)sender
@@ -873,28 +867,7 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 			cell.sourceImageView.image=img;
 		}
 	}
-	/*
-	NSMutableDictionary * imageCache=[[[UIApplication sharedApplication] delegate] feedImageCache];
 	
-	
-	
-	if(imageCache)
-	{
-		@synchronized(imageCache)
-		{
-			UIImage * img=[imageCache objectForKey:item.originUrl];
-			
-			if(img)
-			{
-				cell.sourceImageView.image=img;
-			}
-			else {
-				NSLog(@"no image found for feed: %@",item.originUrl);
-			}
-
-		}
-	}
-	*/
 	return cell;
 }
 
@@ -945,7 +918,6 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 }
 
 - (void)dealloc {
-	//[folderMode release];
 	[tableView release];
 	[origTitle release];
 	[fetcher release];

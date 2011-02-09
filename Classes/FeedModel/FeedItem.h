@@ -104,11 +104,5 @@
 - (void) markAsRead;
 - (void) copyAttributes:(FeedItem*)item;
 
-
-@end
-
-
- 
-
 @end
 

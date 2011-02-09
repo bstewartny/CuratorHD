@@ -191,9 +191,6 @@
 	
 	[detailNavController setViewControllers:[NSArray arrayWithObject:feedView] animated:NO];
 	
-	//[feedView.fetcher performFetch];
-	//[feedView.tableView reloadData];
-	
 	[feedView release];
 }
 
@@ -214,9 +211,6 @@
 	
 	[detailNavController setViewControllers:[NSArray arrayWithObject:folderView] animated:NO];
 
-	//[folderView.fetcher performFetch];
-	//[folderView.tableView reloadData];
-	
 	[folderView release];
 }
 
@@ -229,7 +223,7 @@
 		newsletterView.navigationItem.leftBarButtonItem=[detailNavController topViewController].navigationItem.leftBarButtonItem;
 	}
 
-	[newsletterView setViewMode:kViewModeSynopsis];
+	//[newsletterView setViewMode:kViewModeSynopsis];
 	
 	newsletterView.newsletter=feed;
 	newsletterView.title=feed.name;

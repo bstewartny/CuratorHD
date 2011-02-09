@@ -88,7 +88,7 @@
 @end
 
 @implementation NewsletterHeadlineItemCell
-@synthesize itemImageView,synopsisLabel,sourceLabel,dateLabel,headlineLabel;
+@synthesize imageButton,item,synopsisLabel,sourceLabel,dateLabel,headlineLabel;
 
 - (id) initWithReuseIdentifier:(NSString*)reuseIdentifier
 {
@@ -96,14 +96,17 @@
 	{
 		CGRect f=self.contentView.bounds;
 		
-		itemImageView=[[UIImageView alloc] initWithFrame:CGRectMake(4, 4, 62, 62)];
-		itemImageView.clipsToBounds=YES;
-		itemImageView.opaque=YES;
-		itemImageView.layer.cornerRadius=9.5;
-		itemImageView.contentMode=UIViewContentModeScaleAspectFill;
-		itemImageView.backgroundColor=[UIColor lightGrayColor];
+		imageButton=[[UIButton buttonWithType:UIButtonTypeCustom] retain];
+		imageButton.frame=CGRectMake(4,4,62,62);
 		
-		[self.contentView addSubview:itemImageView];
+		imageButton.clipsToBounds=YES;
+		imageButton.opaque=YES;
+		imageButton.layer.cornerRadius=9.5;
+		[imageButton addTarget:self action:@selector(imageButtonTouch:) forControlEvents:UIControlEventTouchUpInside];
+		//itemImageView.contentMode=UIViewContentModeScaleAspectFill;
+		imageButton.backgroundColor=[UIColor lightGrayColor];
+		
+		[self.contentView addSubview:imageButton];
 		
 		sourceLabel=[[UILabel alloc] initWithFrame:CGRectMake(70,4, 300, 16)];
 		sourceLabel.autoresizingMask=UIViewAutoresizingFlexibleRightMargin;
@@ -144,13 +147,34 @@
     return self;
 }
 
+- (void) setItem:(FeedItem*)theItem
+{
+	if(![item isEqual:theItem])
+	{
+		[item release];
+		item=[theItem retain];
+		
+		[imageButton setImage:item.image forState:UIControlStateNormal];
+		[imageButton setNeedsDisplay];
+		[self setNeedsDisplay];
+	}
+}
+
+- (void) imageButtonTouch:(id)sender
+{
+	UIAlertView * a=[[UIAlertView alloc] initWithTitle:@"alert" message:item.headline delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+	[a show];
+	[a release];
+}
+
 - (void)dealloc 
 {
+	[item release];
 	[dateLabel release];
 	[headlineLabel release];
 	[sourceLabel release];
 	[synopsisLabel release];
-	[itemImageView release];
+	[imageButton release];
     [super dealloc];
 }
 

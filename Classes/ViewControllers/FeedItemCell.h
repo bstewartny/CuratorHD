@@ -29,14 +29,17 @@
 	IBOutlet UILabel * dateLabel;
 	IBOutlet UILabel * headlineLabel;
 	IBOutlet UILabel * synopsisLabel;
-	IBOutlet UIImageView * itemImageView;
+	//IBOutlet UIImageView * itemImageView;
+	UIButton * imageButton;
+	FeedItem * item;
 }
 
 @property(nonatomic,retain) IBOutlet UILabel * dateLabel;
 @property(nonatomic,retain) IBOutlet UILabel * sourceLabel;
 @property(nonatomic,retain) IBOutlet UILabel * headlineLabel;
 @property(nonatomic,retain) IBOutlet UILabel * synopsisLabel;
-@property(nonatomic,retain) IBOutlet UIImageView * itemImageView;
+@property(nonatomic,retain) IBOutlet UIButton * imageButton;
+@property(nonatomic,retain) FeedItem * item;
 
 - (id) initWithReuseIdentifier:(NSString*)reuseIdentifier;
 

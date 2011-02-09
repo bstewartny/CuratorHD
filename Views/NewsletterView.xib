@@ -87,11 +87,19 @@
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">newsletterTableView</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="309643492"/>
+					</object>
+					<int key="connectionID">25</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">view</string>
 						<reference key="source" ref="372490531"/>
 						<reference key="destination" ref="191373211"/>
 					</object>
-					<int key="connectionID">7</int>
+					<int key="connectionID">62</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
@@ -99,7 +107,7 @@
 						<reference key="source" ref="309643492"/>
 						<reference key="destination" ref="372490531"/>
 					</object>
-					<int key="connectionID">9</int>
+					<int key="connectionID">63</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
@@ -107,15 +115,7 @@
 						<reference key="source" ref="309643492"/>
 						<reference key="destination" ref="372490531"/>
 					</object>
-					<int key="connectionID">10</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">newsletterTableView</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="309643492"/>
-					</object>
-					<int key="connectionID">25</int>
+					<int key="connectionID">64</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -160,7 +160,6 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>-1.CustomClassName</string>
 					<string>-2.CustomClassName</string>
-					<string>1.CustomClassName</string>
 					<string>1.IBEditorWindowLastContentRect</string>
 					<string>1.IBPluginDependency</string>
 					<string>5.IBPluginDependency</string>
@@ -169,8 +168,7 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>NewsletterViewController</string>
 					<string>UIResponder</string>
-					<string>NewsletterView</string>
-					<string>{{807, 66}, {783, 970}}</string>
+					<string>{{807, 80}, {783, 956}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				</object>
@@ -191,7 +189,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">61</int>
+			<int key="maxID">64</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -200,21 +198,21 @@
 					<string key="className">NSObject</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/AutocompleteTextField.h</string>
+						<string key="minorKey">Classes/Externals/JSON/NSObject+SBJSON.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">NSObject</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/JSON/NSObject+SBJSON.h</string>
+						<string key="minorKey">Classes/Externals/JSON/SBJsonWriter.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">NSObject</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/JSON/SBJsonWriter.h</string>
+						<string key="minorKey">Classes/Utilities/AutocompleteTextField.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -222,15 +220,7 @@
 					<string key="superclassName">UIViewController</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/NewsletterBaseViewController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">NewsletterView</string>
-					<string key="superclassName">UIView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/NewsletterView.h</string>
+						<string key="minorKey">Classes/ViewControllers/NewsletterBaseViewController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -240,29 +230,13 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>actionTouch:</string>
 							<string>addImageTouch:</string>
-							<string>addTouch:</string>
-							<string>clearNewsletterItems</string>
-							<string>deleteNewsletter</string>
 							<string>imageTouched:</string>
-							<string>preview</string>
-							<string>settings</string>
-							<string>toggleCollapseNewsletterHeader:</string>
 							<string>toggleEditPage:</string>
 							<string>toggleViewMode:</string>
-							<string>update</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -273,55 +247,19 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>actionTouch:</string>
 							<string>addImageTouch:</string>
-							<string>addTouch:</string>
-							<string>clearNewsletterItems</string>
-							<string>deleteNewsletter</string>
 							<string>imageTouched:</string>
-							<string>preview</string>
-							<string>settings</string>
-							<string>toggleCollapseNewsletterHeader:</string>
 							<string>toggleEditPage:</string>
 							<string>toggleViewMode:</string>
-							<string>update</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBActionInfo">
-								<string key="name">actionTouch:</string>
-								<string key="candidateClassName">id</string>
-							</object>
 							<object class="IBActionInfo">
 								<string key="name">addImageTouch:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">addTouch:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">clearNewsletterItems</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">deleteNewsletter</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
 								<string key="name">imageTouched:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">preview</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">settings</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">toggleCollapseNewsletterHeader:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -332,10 +270,6 @@
 								<string key="name">toggleViewMode:</string>
 								<string key="candidateClassName">id</string>
 							</object>
-							<object class="IBActionInfo">
-								<string key="name">update</string>
-								<string key="candidateClassName">id</string>
-							</object>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">
@@ -343,22 +277,12 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>addImageButton</string>
-							<string>collapseHeaderButton</string>
-							<string>dateLabel</string>
-							<string>descriptionTextField</string>
-							<string>editMoveButton</string>
 							<string>newsletterTableView</string>
-							<string>titleTextField</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>UIButton</string>
-							<string>UIButton</string>
-							<string>UILabel</string>
-							<string>UITextView</string>
-							<string>UIBarButtonItem</string>
 							<string>UITableView</string>
-							<string>UITextField</string>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
@@ -366,12 +290,7 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>addImageButton</string>
-							<string>collapseHeaderButton</string>
-							<string>dateLabel</string>
-							<string>descriptionTextField</string>
-							<string>editMoveButton</string>
 							<string>newsletterTableView</string>
-							<string>titleTextField</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -380,34 +299,14 @@
 								<string key="candidateClassName">UIButton</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">collapseHeaderButton</string>
-								<string key="candidateClassName">UIButton</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">dateLabel</string>
-								<string key="candidateClassName">UILabel</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">descriptionTextField</string>
-								<string key="candidateClassName">UITextView</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">editMoveButton</string>
-								<string key="candidateClassName">UIBarButtonItem</string>
-							</object>
-							<object class="IBToOneOutletInfo">
 								<string key="name">newsletterTableView</string>
 								<string key="candidateClassName">UITableView</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">titleTextField</string>
-								<string key="candidateClassName">UITextField</string>
 							</object>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/NewsletterViewController.h</string>
+						<string key="minorKey">Classes/ViewControllers/NewsletterViewController.h</string>
 					</object>
 				</object>
 			</object>
@@ -519,22 +418,6 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
-					<string key="className">UIBarButtonItem</string>
-					<string key="superclassName">UIBarItem</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBFrameworkSource</string>
-						<string key="minorKey">UIKit.framework/Headers/UIBarButtonItem.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">UIBarItem</string>
-					<string key="superclassName">NSObject</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBFrameworkSource</string>
-						<string key="minorKey">UIKit.framework/Headers/UIBarItem.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
 					<string key="className">UIButton</string>
 					<string key="superclassName">UIControl</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -548,14 +431,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">UIKit.framework/Headers/UIControl.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">UILabel</string>
-					<string key="superclassName">UIView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBFrameworkSource</string>
-						<string key="minorKey">UIKit.framework/Headers/UILabel.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -596,22 +471,6 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
-					<string key="className">UITextField</string>
-					<string key="superclassName">UIControl</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier" id="547689294">
-						<string key="majorKey">IBFrameworkSource</string>
-						<string key="minorKey">UIKit.framework/Headers/UITextField.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">UITextView</string>
-					<string key="superclassName">UIScrollView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBFrameworkSource</string>
-						<string key="minorKey">UIKit.framework/Headers/UITextView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
 					<string key="className">UIView</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
@@ -620,7 +479,10 @@
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">UIView</string>
-					<reference key="sourceIdentifier" ref="547689294"/>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">UIKit.framework/Headers/UITextField.h</string>
+					</object>
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">UIView</string>
@@ -679,7 +541,7 @@
 			<integer value="3100" key="NS.object.0"/>
 		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
-		<string key="IBDocument.LastKnownRelativeProjectPath">Curator.xcodeproj</string>
+		<string key="IBDocument.LastKnownRelativeProjectPath">../Curator.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<string key="IBCocoaTouchPluginVersion">132</string>
 	</data>

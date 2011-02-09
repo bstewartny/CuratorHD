@@ -8,7 +8,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "NewsletterItemContentView.h"
 #import "BlankToolbar.h"
-#import "ActivityStatusViewController.h"
 #import "ImageResizer.h"
 #import "ItemFilter.h"
 #import "GradientButton.h"
@@ -27,7 +26,7 @@
 #define kAddSectionTag 1002
 
 @implementation NewsletterViewController
-@synthesize newsletterTableView,navPopoverController,editActionToolbar,editMoveButton,addImageButton,addSectionPopover,imagePickerPopover,updateFormViewController,activityStatusViewController,activityIndicatorView,activityView,activityTitleLabel,activityStatusLabel,activityProgressView;
+@synthesize newsletterTableView,editActionToolbar,addImageButton,imagePickerPopover;
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
@@ -68,24 +67,8 @@
 	return YES;
 }
 
-- (void) actionTouch:(id)sender
-{
-	if(addSectionPopover!=nil)
-	{
-		[addSectionPopover dismissPopoverAnimated:YES];
-	}
-	
-	UIActionSheet * actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Publish Newsletter",@"Show Preview",nil	];
-	actionSheet.tag=kPublishPreviewActionSheet;
-	[actionSheet showFromBarButtonItem:sender animated:YES];
-	[actionSheet release];
-}
-
 - (void)viewDidLoad
 {
-	// set header collapsed by default...
-	//newsletterTableView.frame=CGRectMake(0, 32, newsletterTableView.frame.size.width, self.view.bounds.size.height-32); //newsletterTableView.frame.size.height);
-	//[self.view bringSubviewToFront:newsletterTableView];
 	self.newsletterTableView.allowsSelectionDuringEditing=YES;
 	
 	selectedIndexPaths=[[NSMutableArray alloc] init];
@@ -119,26 +102,17 @@
 	UIBarButtonItem* bi;
 	
 	// create a spacer to push items to the right
-	bi= [[UIBarButtonItem alloc]
-						   initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+	bi= [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
 	[buttons addObject:bi];
 	[bi release];
-	
-	/*bi = [[UIBarButtonItem alloc]
-		  initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionTouch:)];
-	*/
 	
 	bi = [[UIBarButtonItem alloc] initWithTitle:@"Preview" style:UIBarButtonItemStyleDone target:self action:@selector(preview:)];
 	[buttons addObject:bi];
-	actionButton=bi;
-
 	[bi release];
 	
 	// create a spacer
-	bi = [[UIBarButtonItem alloc]
-		  initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+	bi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
 	bi.width=30;
-	
 	[buttons addObject:bi];
 	[bi release];
 	 
@@ -229,126 +203,18 @@
 {
 	if([pNotification.name isEqualToString:@"ReloadActionData"])
 	{
+		NSLog(@"handled ReloadActionData notification");
 		[newsletterTableView reloadData];
 	}
 }
 
 -(void) toggleViewMode:(id)sender
 {
-	if(addSectionPopover!=nil)
-	{
-		[addSectionPopover dismissPopoverAnimated:YES];
-	}
-	
+	NSLog(@"toggleViewMode");
 	viewMode=[sender selectedSegmentIndex];
-	
 	[newsletterTableView reloadData];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-	[newsletterTableView reloadData];
-
-	[super viewWillAppear:animated];
-}
-
-- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
-{ 
-	// did user send email? if so mark last published date of newsletter to now...
-	
-	if(result==MFMailComposeResultSent)
-	{
-		self.newsletter.lastPublished=[NSDate date]; // not sure if we need to convert timezone here...
-		
-		// if user setting is to clear newsletter after publish, then clear the newsletter of all items...
-		if([[[UIApplication sharedApplication] delegate] clearOnPublish])
-		{
-			[self.newsletter clearAllItems];
-			
-			[self.newsletterTableView reloadData];
-		}
-		[self.newsletter save];
-	}
-	
-	[self dismissModalViewControllerAnimated:YES];
-}
-
-- (void) publish
-{
-	// start publishing
-
-	if(!updating)
-	{
-		updating=YES;
-	
-		if([newsletter needsUploadImages])
-		{
-			// do asyn upload
-			[self startActivityView];
-		
-			// update all the saved searches associated with this page...
-			[self performSelectorInBackground:@selector(publishStart) withObject:nil];
-		}
-		else 
-		{
-			[self publishEnd];
-		}
-	}
-}
-
-- (void) publishStart
-{
-	// upload images if required
-	UIApplication* app = [UIApplication sharedApplication];
-	app.networkActivityIndicatorVisible = YES;
-	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-	
-	[activityTitleLabel performSelectorOnMainThread:@selector(setText:) withObject:@"" waitUntilDone:NO];
-	[activityStatusLabel performSelectorOnMainThread:@selector(setText:) withObject:@"Uploading images..." waitUntilDone:NO];
-	
-	[self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:0.5] waitUntilDone:NO];
-	
-	[newsletter uploadImages];
-	
-	[self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:1.0] waitUntilDone:NO];
-	
-	[pool drain];
-	app.networkActivityIndicatorVisible = NO;
-	[self performSelectorOnMainThread:@selector(publishEnd) withObject:nil waitUntilDone:NO];
-}
-
-- (void) publishEnd
-{
-	[self endActivityView];
-	
-	updating=NO;
-	
-	UIApplication* app = [UIApplication sharedApplication];
-	app.networkActivityIndicatorVisible = NO;
-	
-	// show email client
-	MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
-	
-	picker.mailComposeDelegate = self; // <- very important step if you want feedbacks on what the user did with your email sheet
-	
-	[picker setSubject:newsletter.name];
-		
-	// Fill out the email body text
-	int maxSynopsisSize=[[[UIApplication sharedApplication] delegate] maxNewsletterSynopsisLength];
-	
-	NewsletterHTMLRenderer * renderer=[[[NewsletterHTMLRenderer alloc] initWithTemplateName:[[[UIApplication sharedApplication] delegate] newsletterTemplateName] maxSynopsisSize:maxSynopsisSize embedImageData:NO] autorelease];
-	
-	NSString   *emailBody= [renderer getHTML:self.newsletter];
-	
-	
-	[picker setMessageBody:emailBody isHTML:YES]; // depends. Mostly YES, unless you want to send it as plain text (boring)
-	
-	picker.navigationBar.barStyle = UIBarStyleBlack; // choose your style, unfortunately, Translucent colors behave quirky.
-	
-	[self presentModalViewController:picker animated:YES];
-	
-	[picker release];
-}
 - (void) preview:(id)sender
 {
 	NewsletterHTMLPreviewViewController * previewController=[[NewsletterHTMLPreviewViewController alloc] initWithNibName:@"NewsletterHTMLPreviewView" bundle:nil];
@@ -359,22 +225,9 @@
 	
 	[previewController release];
 }
+
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-	if (actionSheet.tag==kPublishPreviewActionSheet) 
-	{
-		if(buttonIndex==0)
-		{
-			// publish - generate email...
-			[self publish];
-			
-		}
-		if(buttonIndex==1)
-		{
-			[self preview];
-		}
-	}
-	 
 	if(actionSheet.tag==kEditLogoImageActionSheet)
 	{
 		if(buttonIndex==0)
@@ -393,13 +246,6 @@
 			[self.newsletterTableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]]     withRowAnimation:UITableViewRowAnimationNone];
 		}
 	}
-}
-
-- (void) deleteSelectedRows
-{
-	NSArray* selectedRows = selectedIndexPaths; 
-	
-	[self deleteSelectedRowsUsingIndexPaths:selectedRows];
 }
 
 - (void) deleteSelectedRowsUsingIndexPaths:(NSArray*)selectedRows
@@ -447,6 +293,13 @@
 			
 		[self.newsletterTableView deleteRowsAtIndexPaths:selectedRows withRowAnimation:UITableViewRowAnimationFade];
 	}
+}
+
+- (void) deleteSelectedRows
+{
+	NSArray* selectedRows = selectedIndexPaths; 
+	
+	[self deleteSelectedRowsUsingIndexPaths:selectedRows];
 }
 
 - (void) deleteNonSelectedRows
@@ -526,12 +379,8 @@
 
 - (void)renderNewsletter
 {
+	NSLog(@"renderNewsletter");
 	[newsletterTableView reloadData];
-}
-
-- (void) updateProgress:(NSNumber*) progress
-{
-	activityProgressView.progress=[progress floatValue];
 }
 
 -(void) setViewMode:(int)mode
@@ -541,6 +390,7 @@
 
 - (void) editActionDelete:(id)sender
 {
+	NSLog(@"editActionDelete");
 	[self deleteSelectedRows];
 	
 	[selectedIndexPaths removeAllObjects];
@@ -552,6 +402,7 @@
 
 -(void) editActionKeep:(id)sender
 {
+	NSLog(@"editActionKeep");
 	[self deleteNonSelectedRows];
 	
 	// remove selected checkmark from rows (deselect rows)
@@ -590,10 +441,6 @@
 		
 		[editActionToolbar removeFromSuperview];
 		
-		[addButton setEnabled:YES];
-		[actionButton setEnabled:YES];
-		[refreshButton setEnabled:YES];
-		
 		[self.navigationItem.titleView setEnabled:YES];
 		
 		[self.newsletterTableView reloadData];
@@ -610,10 +457,6 @@
 		buttonItem.title=@"Done";
 		
 		[self setNumRowsSelected:0];
-		
-		[addButton setEnabled:NO];
-		[actionButton setEnabled:NO];
-		[refreshButton setEnabled:NO];
 		
 		[self.navigationItem.titleView setEnabled:NO];
 		
@@ -641,17 +484,14 @@
 
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-	if(!updating)
-	{
-		[self.newsletterTableView reloadData];
-	}
+	NSLog(@"didRotateFromInterfaceOrientation");
+	[self.newsletterTableView reloadData];
 }
 
 // Ensure that the view controller supports rotation and that the split view can therefore show in both portrait and landscape.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
 {   
-	if(updating) return NO;
-	[self.view setNeedsDisplay];
+	NSLog(@"shouldAutorotateToInterfaceOrientation");
 	return YES;
 }
 
@@ -708,13 +548,12 @@
 	UIBarButtonItem * deleteButton=[self.editActionToolbar.items objectAtIndex:0];
 	UIBarButtonItem * keepButton=[self.editActionToolbar.items objectAtIndex:2];
 	
-	UIButton * customDeleteButton=[deleteButton customView];
-	UIButton * customKeepButton=[keepButton customView];
+	UIButton * customDeleteButton=(UIButton*)[deleteButton customView];
+	UIButton * customKeepButton=(UIButton*)[keepButton customView];
 	
 	[customDeleteButton setTitle:[NSString stringWithFormat:@"Delete (%d)",numSelected] forState:UIControlStateNormal];
 	[customKeepButton setTitle:[NSString stringWithFormat:@"Keep (%d)",numSelected] forState:UIControlStateNormal];
 }
-
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
@@ -755,13 +594,12 @@
 	
 	if(section<=[self.newsletter.sections count])
 	{
-		NewsletterSection * newsletterSection=[self sectionForSectionIndex:section]; //   [[self.newsletter sortedSections] objectAtIndex:section];
+		NewsletterSection * newsletterSection=[self sectionForSectionIndex:section];
 		return newsletterSection.name;
 	}
 	else 
 	{
 		return nil;
-		//return @"Add new section...";
 	}
 }
 
@@ -824,25 +662,6 @@
 	[formView release];
 }
 
-- (UILabel *)newLabelWithPrimaryColor:(UIColor *)primaryColor selectedColor:(UIColor *)selectedColor fontSize:(CGFloat)fontSize bold:(BOOL)bold
-{
-    UIFont *font;
-    if (bold) 
-        font = [UIFont boldSystemFontOfSize:fontSize];
-    else 
-        font = [UIFont systemFontOfSize:fontSize];
-    
-	UILabel *newLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-	
-	newLabel.backgroundColor = [UIColor whiteColor];
-	newLabel.opaque = YES;
-	newLabel.textColor = primaryColor;
-	newLabel.highlightedTextColor = selectedColor;
-	newLabel.font = font;
-	
-	return newLabel;
-}
-
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     
@@ -859,12 +678,12 @@
 	{
 		if(section > [self.newsletter.sections count])
 		{
-			return 1; // now rows in add new section section
+			return 1; 
 		}
 		
 		NewsletterSection * newsletterSection=[self sectionForSectionIndex:section];
 		
-		return [newsletterSection.items count];//+1; // add one to insert items in that section
+		return [newsletterSection.items count];
 	}
 }
 
@@ -874,20 +693,11 @@
 	return [[self.newsletter sortedSections] objectAtIndex:section-1];
 }
 
-- (void) setWidth:(id)obj width:(CGFloat)width
-{
-	CGRect rect=[obj frame];
-	CGSize size=rect.size;
-	size.width=width;
-	rect.size=size;
-	[obj setFrame:rect];
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView sectionCellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
 	static NSString *SectionCellIdentifier = @"sectionCellIdentifier";
 	
-	BadgedTableViewCell * cell=[tableView dequeueReusableCellWithIdentifier:SectionCellIdentifier];
+	BadgedTableViewCell * cell=(BadgedTableViewCell*)[tableView dequeueReusableCellWithIdentifier:SectionCellIdentifier];
 	
 	if(cell==nil)
 	{
@@ -916,103 +726,43 @@
 	return cell;
 }
 
-- (UITableViewCell*)addButtonTableViewCell:(NSString*)text
+- (UITableViewCell *)addSectionTableViewCell 
 {
 	UITableViewCell* cell=[[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
 	cell.selectionStyle=UITableViewCellSelectionStyleNone;
 	cell.textLabel.textColor=[UIColor lightGrayColor];
-	cell.textLabel.text=text;
+	cell.textLabel.text=@"Tap here to add a new section";
 	cell.editingAccessoryType=UITableViewCellAccessoryNone;
 	cell.accessoryView=nil;
 	cell.accessoryType=UITableViewCellAccessoryNone;
 	return cell;
 }
 
-- (UITableViewCell *)addSectionTableViewCell 
-{
-	return [self addButtonTableViewCell:@"Tap here to add a new section"];
-}
-/*
-- (UITableViewCell *) addItemsToSectionTableViewCell
-{
-	return [self addButtonTableViewCell:@"Tap here to add selected items to this section"];
-}*/
-
 - (UITableViewCell *)tableView:(UITableView *)tableView headlineItemCellForSection:(NewsletterSection*)section row:(NSInteger)row
 {
-	/*static NSString *CellIdentifier = @"headlineItemCellIdentifier";
-	
-	UITableViewCell * cell=[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	
-	if(cell==nil)
-	{
-		cell=[[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-	}
-	
-	if(tableView.editing)
-	{
-		cell.selectionStyle=3;//UITableViewCellSelectionStyleGray;
-	}
-	else	
-	{
-		cell.selectionStyle=UITableViewCellSelectionStyleNone;
-	}
-	
+	static NSString * identifier=@"FeedItemCellIdentifier";
+
 	FeedItem * item=(FeedItem *)[[section sortedItems] objectAtIndex:row];
 	
-	cell.textLabel.text=item.headline;
-	cell.detailTextLabel.text=item.synopsis;
-	cell.imageView.image=item.image;
-	
-	return cell;
-	
-	*/
-	
-	
-	static NSString * identifier=@"FeedItemCellIdentifier";
-	
-	NewsletterHeadlineItemCell * cell=[tableView dequeueReusableCellWithIdentifier:identifier];
-	
+	NewsletterHeadlineItemCell * cell=(NewsletterHeadlineItemCell*)[tableView dequeueReusableCellWithIdentifier:identifier];
+
 	if(cell==nil)
 	{
 		cell=[[[NewsletterHeadlineItemCell alloc] initWithReuseIdentifier:identifier] autorelease];
 	}
 	
-	FeedItem * item=(FeedItem *)[[section sortedItems] objectAtIndex:row];
-	
-	//cell.selectionStyle=UITableViewCellSelectionStyleGray;
 	if(tableView.editing)
 	{
-		cell.selectionStyle=3;//UITableViewCellSelectionStyleGray;
+		cell.selectionStyle=3;
 	}
 	else	
 	{
 		cell.selectionStyle=UITableViewCellSelectionStyleGray;
 	}
-	/*if([item.isRead boolValue])
-	{
-		cell.headlineLabel.textColor=[UIColor grayColor];
-		cell.readImageView.image=[UIImage imageNamed:@"dot_blank.png"];
-	}
-	else 
-	{*/
-		cell.headlineLabel.textColor=[UIColor blackColor];
-	cell.itemImageView.image=item.image;
 	
-	//	cell.readImageView.image=[UIImage imageNamed:@"dot_blank.png"];
-	//}
+	cell.item=item;
 	
-	/*if([[item origSynopsis] length]>0)
-	{
-		if([[item synopsis] length]==0)
-		{
-			//item.synopsis=[stripper stripMarkup:[item origSynopsis]];
-			// faster to just strip up to what we need to display...
-			item.synopsis=[stripper stripMarkupSummary:[item origSynopsis] maxLength: 300];
-		}
-	}*/
-	
-	cell.synopsisLabel.text=[item synopsis];
+	cell.synopsisLabel.text=item.synopsis;
 	
 	cell.headlineLabel.text=item.headline;
 		
@@ -1020,87 +770,8 @@
 	
 	cell.dateLabel.text=[item shortDisplayDate];
 	
-	
-	/*if([item isKindOfClass:[RssFeedItem class]])
-	{
-		UIImage * img=[[((RssFeedItem*)item) feed] image];
-		if(img)
-		{
-			cell.sourceImageView.image=img;
-		}
-	}*/
-	
-	return cell;
-	
-	
-	
-	
-	
-	
-	
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView folderItemCellForSection:(NewsletterSection*)section row:(NSInteger)row
-{
-	static NSString *CellIdentifier = @"folderItemCellIdentifier";
-	
-	CGFloat cellWidth=self.newsletterTableView.frame.size.width - 100;
-	
-	UITableViewCell * cell=[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	
-	if(cell==nil)
-	{
-		cell=[[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-	}
-	
-	if(tableView.editing)
-	{
-		cell.selectionStyle=3;//UITableViewCellSelectionStyleGray;
-	}
-	else	
-	{
-		cell.selectionStyle=UITableViewCellSelectionStyleNone;
-	}
-	FeedItem * item=(FeedItem *)[[section sortedItems] objectAtIndex:row];
-	
-	UIImageView * imageView=[[UIImageView alloc] initWithImage:item.image];
-	imageView.frame=CGRectMake(10,10,72,72);
-	imageView.contentMode=UIViewContentModeScaleAspectFill;
-	imageView.layer.cornerRadius=8;
-	imageView.clipsToBounds=YES;
-	
-	[cell.contentView addSubview:imageView];
-	[imageView release];
-	
-	UILabel * label=[[UILabel alloc] initWithFrame:CGRectMake(92, 10, cellWidth - 110, 20)];
-	label.font=[UIFont boldSystemFontOfSize:16];
-	label.textColor=[UIColor blackColor];
-	label.backgroundColor=[UIColor clearColor];
-	label.text=item.headline;
-	
-	[cell.contentView addSubview:imageView];
-	[label release];
-	
-	label=[[UILabel alloc] initWithFrame:CGRectMake(92, 40, cellWidth - 110, 42)];
-	label.font=[UIFont systemFontOfSize:14];
-	
-	label.textColor=[UIColor grayColor];
-	label.backgroundColor=[UIColor clearColor];
-	label.text=item.synopsis;
-	
-	[cell.contentView addSubview:imageView];
-	[label release];
-
-	//cell.textLabel.text=item.headline;
-	//cell.detailTextLabel.text=item.synopsis;
-	//cell.imageView.image=item.image;
-	
 	return cell;
 }
-
-
-
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView synopsisItemCellForSection:(NewsletterSection*)section row:(NSInteger)row
 {
@@ -1127,7 +798,7 @@
 	
 	if(tableView.editing)
 	{
-		cell.selectionStyle=3;//UITableViewCellSelectionStyleGray;
+		cell.selectionStyle=3;
 	}
 	else	
 	{
@@ -1155,11 +826,6 @@
 	
 	NewsletterSection * newsletterSection=[self sectionForSectionIndex:indexPath.section];
 	
-	/*if(indexPath.row == [newsletterSection.items count])
-	{
-		return [self addItemsToSectionTableViewCell];
-	}*/
-	
 	if(viewMode==kViewModeHeadlines)
 	{
 		return [self tableView:tableView headlineItemCellForSection:newsletterSection row:indexPath.row];
@@ -1170,17 +836,15 @@
 		{
 			return [self tableView:tableView synopsisItemCellForSection:newsletterSection row:indexPath.row];
 		}
-		else 
-		{
-			// this is an error... should not get here...
-			return nil;
-		}
 	}
+	
+	return nil;
 }
 
 - (UITableViewCell*)newsletterHeaderCell
 {
 	UITableViewCell * cell=[[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
+	
 	cell.selectionStyle=UITableViewCellSelectionStyleNone;
 	
 	CGFloat cellWidth=self.newsletterTableView.frame.size.width;
@@ -1238,11 +902,8 @@
 		[cell.contentView addSubview:self.addImageButton];
 	}
 	
-	// description text view
 	UITextView * textView=[[UITextView alloc] initWithFrame:CGRectMake(12+self.addImageButton.frame.size.width+8, 35, cellWidth-(10+self.addImageButton.frame.size.width), 88)];
-	//textView.layer.cornerRadius=6;
-	///textView.layer.borderColor=[UIColor grayColor];
-	//textView.layer.borderWidth=1;
+	
 	textView.text=self.newsletter.summary;
 	textView.backgroundColor=[UIColor clearColor];
 	
@@ -1341,10 +1002,10 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
 			{
 				return 70;//tableView.rowHeight;
 			}
-			else {
+			else 
+			{
 				return tableView.rowHeight;
 			}
-
 		}
 		else 
 		{
@@ -1683,6 +1344,7 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 
 - (void) redraw
 {
+	NSLog(@"redraw");
 	[self.newsletterTableView reloadData];
 	[[NSNotificationCenter defaultCenter] 
 	 postNotificationName:@"ReloadData"
@@ -1774,43 +1436,6 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 	}
 }
 
-- (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc 
-{
-    barButtonItem.title = @"Sources";
-	[self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
-    self.navPopoverController = pc;
-}
-
-// Called when the view is shown again in the split view, invalidating the button and popover controller.
-- (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem 
-{
-    [self.navigationItem setLeftBarButtonItem:nil animated:YES];
-	self.navPopoverController = nil;
-}
-
-- (void)splitViewController:(UISplitViewController*)svc popoverController:(UIPopoverController*)pc willPresentViewController:(UIViewController *)aViewController
-{
-}
-
-- (void) scrollToSection:(NSString*)sectionName
-{
-	// get section by name
-	int section_number=0;
-	
-	for(NewsletterSection * section in [self.newsletter sortedSections])
-	{
-		if([section.name isEqualToString:sectionName])
-		{
-			break;
-		}
-		section_number++;
-	}
-	
-	NSIndexPath * indexPath=[NSIndexPath indexPathForRow:NSNotFound inSection:section_number];
-	
-	[self.newsletterTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-}
-
 - (void)imageTouched:(id)sender
 {
 	UIView * button=(UIView*)sender;
@@ -1890,87 +1515,23 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
     [imagePickerPopover dismissPopoverAnimated:YES];
 }
 
-- (void)startActivityView
-{
-	activityView = [[UIView alloc] initWithFrame:[[self view] bounds]];
-	[activityView setBackgroundColor:[UIColor blackColor]];
-	[activityView setAlpha:0.5];
-	activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-	[[self view] addSubview:activityView];
-	
-	UIView * subView=[[UIView alloc] initWithFrame:CGRectMake(activityView.center.x-300/2, activityView.center.y-150/2, 300, 150)];
-	
-	[subView setBackgroundColor:[UIColor blackColor]];
-	[subView setAlpha:2.10];
-	
-	[[subView layer] setCornerRadius:24.0f];
-	[[subView layer] setMasksToBounds:YES];
-	
-	[activityView addSubview:subView];
-	
-	activityTitleLabel=[[UILabel alloc] initWithFrame:CGRectMake(110, 40, 180, 20)];
-	activityStatusLabel=[[UILabel alloc] initWithFrame:CGRectMake(110, 65, 180, 20)];
-	
-	activityStatusLabel.textColor=[UIColor whiteColor];
-	activityTitleLabel.textColor=[UIColor whiteColor];
-	activityStatusLabel.backgroundColor=[UIColor clearColor];
-	activityTitleLabel.backgroundColor=[UIColor clearColor];
-	
-	activityProgressView=[[UIProgressView alloc] initWithFrame:CGRectMake(110,95,180,20)];
-	
-	activityProgressView.backgroundColor=[UIColor clearColor];
-	 
-	activityStatusLabel.text=@"";
-	activityTitleLabel.text=@"";
-	
-	[subView addSubview:activityIndicatorView];
-	[subView addSubview:activityTitleLabel];
-	[subView addSubview:activityStatusLabel];
-	[subView addSubview:activityProgressView];
-	[activityIndicatorView setFrame:CGRectMake (20,40, 80, 80)];
-	[activityIndicatorView startAnimating];
-	
-	[subView release];
-}
-
--(void)endActivityView
-{
-	[activityIndicatorView stopAnimating];
-	[activityView removeFromSuperview];
-}
-
-- (void) release
-{
-	[super release];
-}
-
-- (id) retain
-{
-	return [super retain];
-}
-
 - (void)dealloc 
 {
+	NSLog(@"newsletterViewController dealloc");
+	
 	[tmpEditSection release];
 	tmpEditSection=nil;
+	
+	newsletterTableView.delegate=nil;
+	newsletterTableView.dataSource=nil;
 	[newsletterTableView release];
-	[editMoveButton release];
+	newsletterTableView=nil;
+	
 	[addImageButton release];
-	//[titleTextField  release];
-	//[descriptionTextField release];
-	[addSectionPopover release];
 	[imagePickerPopover release];
-	[activityStatusViewController release];
-	//[dateLabel release];
-	[activityIndicatorView release];
-	[activityView release];
-	[activityTitleLabel release];
-	[activityStatusLabel release];
-	[activityProgressView release];
 	[editActionToolbar release];
 	[selectedIndexPaths release];
-	//[collapseHeaderButton release];
-	[navPopoverController release];
+	
 	[super dealloc];
 }
 
