@@ -864,13 +864,13 @@
 	{*/
 		[self setUpSourcesView];
 		
-		if([self hasInternetConnection])
-		{
+		//if([self hasInternetConnection])
+		//{
 			if([[self accounts] count]>0)
 			{
 				[self update];
 			}
-		}
+		//}
 	//}
 	[failedAccountNames release];
 }
@@ -985,12 +985,14 @@
 			return;
 		}
 		
-		if([self hasInternetConnection])
-		{
+		//if([self hasInternetConnection])
+		//{
 			updating=YES;
 			
 			BOOL needAuthorization=NO;
 			
+			if([self hasInternetConnection])
+			{
 			// enumerate accounts on main thread for accounts which require user input on validation (such as OAuth accounts)
 			for(FeedAccount * account in [self accounts])
 			{
@@ -999,6 +1001,7 @@
 					needAuthorization=YES;
 					break;
 				}
+			}
 			}
 			
 			if(!needAuthorization)
@@ -1023,16 +1026,16 @@
 					}
 				}
 			}
-		}
-		else 
-		{
-			[self update_end];
-			UIAlertView * alertView=[[UIAlertView alloc] initWithTitle:@"No Internet Connection" message:@"You must have an internet connection to update sources." delegate:nil cancelButtonTitle:@"Close" otherButtonTitles:nil];
-			
-			[alertView show];
-			
-			[alertView release];
-		}
+		//}
+		//else 
+		//{
+		//	[self update_end];
+		//	UIAlertView * alertView=[[UIAlertView alloc] initWithTitle:@"No Internet Connection" message:@"You must have an internet connection to update sources." delegate:nil cancelButtonTitle:@"Close" otherButtonTitles:nil];
+		//	
+		//	[alertView show];
+		//	
+		//	[alertView release];
+		//}
 	}
 }
 - (void) updateSingleAccountFromScroll:(NSString*)accountName
@@ -1436,7 +1439,10 @@
 	
 	AccountUpdater * updater=[account accountUpdater];
 	
-	if([updater isAccountValid])
+	BOOL hasConnection=[self hasInternetConnection];
+	 
+	
+	if((!hasConnection) || ([updater isAccountValid]))
 	{
 		NSManagedObjectContext * moc=[self createNewManagedObjectContext:NSMergeByPropertyObjectTrumpMergePolicy];
 		
@@ -1458,7 +1464,7 @@
 			
 			if(updating==YES)
 			{
-				if(updateFeeds)
+				if(hasConnection && updateFeeds)
 				{
 					[updater willUpdateFeeds:moc];
 					

@@ -208,6 +208,10 @@
 		B0E0774112849A5800BAF989 /* rssfavicon.png in Resources */ = {isa = PBXBuildFile; fileRef = B0E0774012849A5800BAF989 /* rssfavicon.png */; };
 		B0E80E2911D26A730093D862 /* ChooseFolderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0E80E2811D26A730093D862 /* ChooseFolderView.xib */; };
 		B0E80F2111D290560093D862 /* SelectedItemsEmail.html in Resources */ = {isa = PBXBuildFile; fileRef = B0E80F2011D290560093D862 /* SelectedItemsEmail.html */; };
+		B0F03B0913045CAB00CD2594 /* ItemImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0F03B0813045CAB00CD2594 /* ItemImageCell.m */; };
+		B0F03B0C13045CBD00CD2594 /* NewsletterSynopsisItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0F03B0B13045CBD00CD2594 /* NewsletterSynopsisItemCell.m */; };
+		B0F03B0F13045CCC00CD2594 /* NewsletterHeadlineItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0F03B0E13045CCC00CD2594 /* NewsletterHeadlineItemCell.m */; };
+		B0F03B1213045CDB00CD2594 /* TweetItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0F03B1113045CDB00CD2594 /* TweetItemCell.m */; };
 		B0F5503011D3EEB00060958E /* Tumblr-Text-Button.png in Resources */ = {isa = PBXBuildFile; fileRef = B0F5502911D3EEB00060958E /* Tumblr-Text-Button.png */; };
 		B0F5503111D3EEB00060958E /* Tumblr-Photo-Button.png in Resources */ = {isa = PBXBuildFile; fileRef = B0F5502A11D3EEB00060958E /* Tumblr-Photo-Button.png */; };
 		B0F5503211D3EEB00060958E /* Tumblr-Quote-Button.png in Resources */ = {isa = PBXBuildFile; fileRef = B0F5502B11D3EEB00060958E /* Tumblr-Quote-Button.png */; };
@@ -505,10 +509,10 @@
 		B00A17A312159115005DA09A /* ImageListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageListViewController.m; sourceTree = "<group>"; };
 		B00A17A512159E51005DA09A /* icon_comment_add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_comment_add.png; sourceTree = "<group>"; };
 		B00FDF8612FB0B44002480F4 /* FeedItemDocument.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = FeedItemDocument.html; sourceTree = "<group>"; };
-		B025DE8312F1BA71003F205A /* TweetTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TweetTableViewCell.h; sourceTree = "<group>"; };
-		B025DE8412F1BA71003F205A /* TweetTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TweetTableViewCell.m; sourceTree = "<group>"; };
-		B025DF1212F1CE9F003F205A /* FolderTweetTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderTweetTableViewCell.h; sourceTree = "<group>"; };
-		B025DF1312F1CE9F003F205A /* FolderTweetTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FolderTweetTableViewCell.m; sourceTree = "<group>"; };
+		B025DE8312F1BA71003F205A /* TweetTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TweetTableViewCell.h; path = ../TweetTableViewCell.h; sourceTree = "<group>"; };
+		B025DE8412F1BA71003F205A /* TweetTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TweetTableViewCell.m; path = ../TweetTableViewCell.m; sourceTree = "<group>"; };
+		B025DF1212F1CE9F003F205A /* FolderTweetTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FolderTweetTableViewCell.h; path = ../FolderTweetTableViewCell.h; sourceTree = "<group>"; };
+		B025DF1312F1CE9F003F205A /* FolderTweetTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FolderTweetTableViewCell.m; path = ../FolderTweetTableViewCell.m; sourceTree = "<group>"; };
 		B02837C912A4013B00D01F61 /* FacebookAccountUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookAccountUpdater.h; sourceTree = "<group>"; };
 		B02837CA12A4013B00D01F61 /* FacebookAccountUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookAccountUpdater.m; sourceTree = "<group>"; };
 		B02837CC12A4016B00D01F61 /* FacebookClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookClient.h; sourceTree = "<group>"; };
@@ -537,8 +541,8 @@
 		B0338F6B1135B36D00764C4A /* UIImage-NSCoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage-NSCoding.m"; sourceTree = "<group>"; };
 		B03890F211B1717800878DCD /* Summarizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Summarizer.h; sourceTree = "<group>"; };
 		B03890F311B1717800878DCD /* Summarizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Summarizer.m; sourceTree = "<group>"; };
-		B039DECB11C958D70055FC14 /* FeedItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedItemCell.h; sourceTree = "<group>"; };
-		B039DECC11C958D70055FC14 /* FeedItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedItemCell.m; sourceTree = "<group>"; };
+		B039DECB11C958D70055FC14 /* FeedItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeedItemCell.h; path = ../FeedItemCell.h; sourceTree = "<group>"; };
+		B039DECC11C958D70055FC14 /* FeedItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FeedItemCell.m; path = ../FeedItemCell.m; sourceTree = "<group>"; };
 		B039DECE11C95A2E0055FC14 /* FeedItemCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FeedItemCell.xib; sourceTree = "<group>"; };
 		B03AF56712E5E37800A3744F /* RootFeedsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootFeedsViewController.h; sourceTree = "<group>"; };
 		B03AF56812E5E37800A3744F /* RootFeedsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootFeedsViewController.m; sourceTree = "<group>"; };
@@ -724,11 +728,11 @@
 		B096710E12E7866800BD0B7B /* NewsletterFormattingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsletterFormattingViewController.h; sourceTree = "<group>"; };
 		B096710F12E7866800BD0B7B /* NewsletterFormattingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsletterFormattingViewController.m; sourceTree = "<group>"; };
 		B096714712E7978000BD0B7B /* NewsletterFormattingView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsletterFormattingView.xib; sourceTree = "<group>"; };
-		B096717512E7D69500BD0B7B /* FolderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderTableViewCell.h; sourceTree = "<group>"; };
-		B096717612E7D69500BD0B7B /* FolderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FolderTableViewCell.m; sourceTree = "<group>"; };
+		B096717512E7D69500BD0B7B /* FolderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FolderTableViewCell.h; path = ../FolderTableViewCell.h; sourceTree = "<group>"; };
+		B096717612E7D69500BD0B7B /* FolderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FolderTableViewCell.m; path = ../FolderTableViewCell.m; sourceTree = "<group>"; };
 		B096717812E7D8F400BD0B7B /* FolderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FolderTableViewCell.xib; sourceTree = "<group>"; };
-		B09671E912E7E8A800BD0B7B /* FolderItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderItemView.h; sourceTree = "<group>"; };
-		B09671EA12E7E8A800BD0B7B /* FolderItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FolderItemView.m; sourceTree = "<group>"; };
+		B09671E912E7E8A800BD0B7B /* FolderItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FolderItemView.h; path = ../FolderItemView.h; sourceTree = "<group>"; };
+		B09671EA12E7E8A800BD0B7B /* FolderItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FolderItemView.m; path = ../FolderItemView.m; sourceTree = "<group>"; };
 		B0A7EFAA12F0C6C0007CE971 /* FormViewTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormViewTableViewController.h; sourceTree = "<group>"; };
 		B0A7EFAB12F0C6C0007CE971 /* FormViewTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormViewTableViewController.m; sourceTree = "<group>"; };
 		B0A7F00C12F0D17F007CE971 /* FormViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormViewController.h; sourceTree = "<group>"; };
@@ -804,6 +808,14 @@
 		B0E0774012849A5800BAF989 /* rssfavicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rssfavicon.png; sourceTree = "<group>"; };
 		B0E80E2811D26A730093D862 /* ChooseFolderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChooseFolderView.xib; sourceTree = "<group>"; };
 		B0E80F2011D290560093D862 /* SelectedItemsEmail.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = SelectedItemsEmail.html; sourceTree = "<group>"; };
+		B0F03B0713045CAB00CD2594 /* ItemImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemImageCell.h; sourceTree = "<group>"; };
+		B0F03B0813045CAB00CD2594 /* ItemImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemImageCell.m; sourceTree = "<group>"; };
+		B0F03B0A13045CBD00CD2594 /* NewsletterSynopsisItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsletterSynopsisItemCell.h; sourceTree = "<group>"; };
+		B0F03B0B13045CBD00CD2594 /* NewsletterSynopsisItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsletterSynopsisItemCell.m; sourceTree = "<group>"; };
+		B0F03B0D13045CCC00CD2594 /* NewsletterHeadlineItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsletterHeadlineItemCell.h; sourceTree = "<group>"; };
+		B0F03B0E13045CCC00CD2594 /* NewsletterHeadlineItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsletterHeadlineItemCell.m; sourceTree = "<group>"; };
+		B0F03B1013045CDB00CD2594 /* TweetItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TweetItemCell.h; sourceTree = "<group>"; };
+		B0F03B1113045CDB00CD2594 /* TweetItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TweetItemCell.m; sourceTree = "<group>"; };
 		B0F5502911D3EEB00060958E /* Tumblr-Text-Button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Tumblr-Text-Button.png"; sourceTree = "<group>"; };
 		B0F5502A11D3EEB00060958E /* Tumblr-Photo-Button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Tumblr-Photo-Button.png"; sourceTree = "<group>"; };
 		B0F5502B11D3EEB00060958E /* Tumblr-Quote-Button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Tumblr-Quote-Button.png"; sourceTree = "<group>"; };
@@ -1798,6 +1810,31 @@
 			path = RegexKitLite;
 			sourceTree = "<group>";
 		};
+		B0F03B0613045C4300CD2594 /* TableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				B096717512E7D69500BD0B7B /* FolderTableViewCell.h */,
+				B096717612E7D69500BD0B7B /* FolderTableViewCell.m */,
+				B09671E912E7E8A800BD0B7B /* FolderItemView.h */,
+				B09671EA12E7E8A800BD0B7B /* FolderItemView.m */,
+				B025DE8312F1BA71003F205A /* TweetTableViewCell.h */,
+				B025DE8412F1BA71003F205A /* TweetTableViewCell.m */,
+				B025DF1212F1CE9F003F205A /* FolderTweetTableViewCell.h */,
+				B025DF1312F1CE9F003F205A /* FolderTweetTableViewCell.m */,
+				B039DECB11C958D70055FC14 /* FeedItemCell.h */,
+				B039DECC11C958D70055FC14 /* FeedItemCell.m */,
+				B0F03B0713045CAB00CD2594 /* ItemImageCell.h */,
+				B0F03B0813045CAB00CD2594 /* ItemImageCell.m */,
+				B0F03B0A13045CBD00CD2594 /* NewsletterSynopsisItemCell.h */,
+				B0F03B0B13045CBD00CD2594 /* NewsletterSynopsisItemCell.m */,
+				B0F03B0D13045CCC00CD2594 /* NewsletterHeadlineItemCell.h */,
+				B0F03B0E13045CCC00CD2594 /* NewsletterHeadlineItemCell.m */,
+				B0F03B1013045CDB00CD2594 /* TweetItemCell.h */,
+				B0F03B1113045CDB00CD2594 /* TweetItemCell.m */,
+			);
+			path = TableViewCells;
+			sourceTree = "<group>";
+		};
 		C444AC6411C16DA0007C96F0 /* GoogleReaderSourceModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -1860,6 +1897,7 @@
 		C444AC6711C17041007C96F0 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				B0F03B0613045C4300CD2594 /* TableViewCells */,
 				C49BA9AF125A5480005A79A0 /* AccountSettingsFormViewController.h */,
 				C49BA9B0125A5480005A79A0 /* AccountSettingsFormViewController.m */,
 				C4BF00DE112DBD860005AA73 /* NewsletterViewController.h */,
@@ -1884,8 +1922,6 @@
 				B0C6F70711C2B911003F6288 /* UpdatableViewController.m */,
 				B0C6F72C11C30507003F6288 /* FeedItemHTMLViewController.h */,
 				B0C6F72D11C30507003F6288 /* FeedItemHTMLViewController.m */,
-				B039DECB11C958D70055FC14 /* FeedItemCell.h */,
-				B039DECC11C958D70055FC14 /* FeedItemCell.m */,
 				C4ED8B1411CAA0EC0033128D /* CommentsEditViewController.h */,
 				C4ED8B1511CAA0EC0033128D /* CommentsEditViewController.m */,
 				C49A6CF511CFCAA900800433 /* PublishAction.h */,
@@ -1934,10 +1970,6 @@
 				B03AF5BA12E5F5C300A3744F /* FolderViewController.m */,
 				B096710E12E7866800BD0B7B /* NewsletterFormattingViewController.h */,
 				B096710F12E7866800BD0B7B /* NewsletterFormattingViewController.m */,
-				B096717512E7D69500BD0B7B /* FolderTableViewCell.h */,
-				B096717612E7D69500BD0B7B /* FolderTableViewCell.m */,
-				B09671E912E7E8A800BD0B7B /* FolderItemView.h */,
-				B09671EA12E7E8A800BD0B7B /* FolderItemView.m */,
 				B0BA46A612EE3239000F8487 /* AddItemsViewController.h */,
 				B0BA46A712EE3239000F8487 /* AddItemsViewController.m */,
 				B0BB038E12EF2F740020132A /* AddItemsToSectionViewController.h */,
@@ -1946,10 +1978,6 @@
 				B0A7EFAB12F0C6C0007CE971 /* FormViewTableViewController.m */,
 				B0A7F00C12F0D17F007CE971 /* FormViewController.h */,
 				B0A7F00D12F0D17F007CE971 /* FormViewController.m */,
-				B025DE8312F1BA71003F205A /* TweetTableViewCell.h */,
-				B025DE8412F1BA71003F205A /* TweetTableViewCell.m */,
-				B025DF1212F1CE9F003F205A /* FolderTweetTableViewCell.h */,
-				B025DF1312F1CE9F003F205A /* FolderTweetTableViewCell.m */,
 				B093288812F735C600013B15 /* ColorPickerViewController.h */,
 				B093288912F735C600013B15 /* ColorPickerViewController.m */,
 				B093288B12F735D400013B15 /* FontPickerViewController.h */,
@@ -2887,6 +2915,10 @@
 				B03B4B8612F86BAD0047D5CF /* MGSplitViewController.m in Sources */,
 				B03B4B8712F86BAD0047D5CF /* MGSplitDividerView.m in Sources */,
 				B03B4B8812F86BAD0047D5CF /* MGSplitCornersView.m in Sources */,
+				B0F03B0913045CAB00CD2594 /* ItemImageCell.m in Sources */,
+				B0F03B0C13045CBD00CD2594 /* NewsletterSynopsisItemCell.m in Sources */,
+				B0F03B0F13045CCC00CD2594 /* NewsletterHeadlineItemCell.m in Sources */,
+				B0F03B1213045CDB00CD2594 /* TweetItemCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

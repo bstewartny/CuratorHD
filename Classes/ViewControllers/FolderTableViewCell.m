@@ -3,11 +3,11 @@
 #import "FolderItemView.h"
 
 @implementation FolderTableViewCell
-@synthesize headlineLabel,dateLabel,sourceLabel,synopsisLabel,commentLabel,itemImageView,itemView;
+@synthesize headlineLabel,dateLabel,sourceLabel,synopsisLabel,commentLabel,itemView;
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+- (id)initWithReuseIdentifier:(NSString *)reuseIdentifier {
     
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    self = [super initWithReuseIdentifier:reuseIdentifier];
     if (self) 
 	{
 		UIView * bg=[[UIView alloc] init];
@@ -29,23 +29,18 @@
 		itemView.autoresizingMask=UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		itemView.opaque=YES;
 		itemView.clipsToBounds=YES;
-		itemView.layer.cornerRadius=11;
+		itemView.layer.cornerRadius=11.5;
 		itemView.layer.borderColor=[UIColor lightGrayColor].CGColor;
 		itemView.layer.borderWidth=1;
 		itemView.backgroundColor=[UIColor whiteColor];
 		
 		[self.contentView addSubview:itemView];
 		
-		/*itemImageView=[[UIImageView alloc] initWithFrame:CGRectMake(8, 8, 72, 72)];
-		itemImageView.layer.cornerRadius=10;
-		itemImageView.clipsToBounds=YES;
-		itemImageView.contentMode=UIViewContentModeScaleAspectFill;
-		itemImageView.opaque=YES;
-		itemImageView.backgroundColor=[UIColor lightGrayColor];
+		[imageButton removeFromSuperview];
+		imageButton.frame=CGRectMake(8,8,72,72); //, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)
+		[itemView addSubview:imageButton];
 		
-		[itemView addSubview:itemImageView];
-		*/
-		sourceLabel=[[UILabel alloc] initWithFrame:CGRectMake(8,8, 300, 16)];
+		sourceLabel=[[UILabel alloc] initWithFrame:CGRectMake(88,8, 300, 16)];
 		sourceLabel.autoresizingMask=UIViewAutoresizingFlexibleRightMargin;
 		sourceLabel.backgroundColor=[UIColor clearColor];
 		sourceLabel.textColor=[UIColor grayColor];
@@ -64,7 +59,7 @@
 		
 		[itemView addSubview:dateLabel];
 		
-		headlineLabel=[[UILabel alloc] initWithFrame:CGRectMake(8, 24, itemView.frame.size.width-(8+10), 20)];
+		headlineLabel=[[UILabel alloc] initWithFrame:CGRectMake(88, 24, itemView.frame.size.width-(88+10), 20)];
 		headlineLabel.autoresizingMask=UIViewAutoresizingFlexibleWidth;
 		headlineLabel.backgroundColor=[UIColor clearColor];
 		headlineLabel.opaque=NO;
@@ -72,7 +67,7 @@
 		
 		[itemView addSubview:headlineLabel];
 		
-		synopsisLabel=[[UILabel alloc] initWithFrame:CGRectMake(8, 46, itemView.frame.size.width-(8+10), 30)];
+		synopsisLabel=[[UILabel alloc] initWithFrame:CGRectMake(88, 46, itemView.frame.size.width-(88+10), 30)];
 		synopsisLabel.autoresizingMask=UIViewAutoresizingFlexibleWidth;
 		synopsisLabel.backgroundColor=[UIColor clearColor];
 		synopsisLabel.numberOfLines=2;
@@ -137,7 +132,7 @@
 	[headlineLabel release];
 	[synopsisLabel release];
 	[commentLabel release];
-	[itemImageView release];
+	//[itemImageView release];
 	[itemView release];
     [super dealloc];
 }

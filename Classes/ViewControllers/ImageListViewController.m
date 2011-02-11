@@ -10,6 +10,7 @@
 #import "Feeditem.h"
 #import "HTMLImageParser.h"
 #import "ImageResizer.h"
+#import <QuartzCore/QuartzCore.h>
 
 #define kImageButtonWidth 100
 #define kImageButtonHeight 100
@@ -263,6 +264,8 @@
 	
 	CGRect frame=CGRectMake(0, numImages * kImageButtonHeight, kImageButtonWidth, kImageButtonHeight);
 	
+	frame=CGRectInset(frame, 4, 4);
+	
 	//NSLog(@"adding button with frame: %@",NSStringFromCGRect(frame));
 	
 	//UIButton * button = [[UIButton buttonWithType:UIButtonTypeCustom] initWithFrame:frame];
@@ -270,7 +273,13 @@
 	UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
 	[button setFrame:frame];
 	[button addTarget:self action:@selector(touchImage:) forControlEvents:UIControlEventTouchUpInside];
-	[button setBackgroundImage:resizedImage forState:UIControlStateNormal];
+	button.imageView.contentMode=UIViewContentModeScaleAspectFit;
+	button.imageView.clipsToBounds=YES;
+	button.clipsToBounds=YES;
+	[button setImage:resizedImage forState:UIControlStateNormal];
+	button.layer.cornerRadius=9.5;
+	button.backgroundColor=[UIColor whiteColor];
+	//[button setBackgroundImage:resizedImage forState:UIControlStateNormal];
 	button.tag=numImages;
 	
 	[contentView addSubview:button];

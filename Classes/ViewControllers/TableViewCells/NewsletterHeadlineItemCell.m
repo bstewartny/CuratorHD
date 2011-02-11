@@ -1,32 +1,17 @@
-#import "FeedItemCell.h"
-#import "FeedItem.h"
-#import <QuartzCore/QuartzCore.h>
-#import "ImageResizer.h"
-#import "ImageListViewController.h"
+#import "NewsletterHeadlineItemCell.h"
 
-@implementation FeedItemCell
-@synthesize readImageView,synopsisLabel,sourceLabel,dateLabel,headlineLabel,sourceImageView;
+@implementation NewsletterHeadlineItemCell
+@synthesize synopsisLabel,sourceLabel,dateLabel,headlineLabel;
 
 - (id) initWithReuseIdentifier:(NSString*)reuseIdentifier
 {
-	if(self=[super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier])
+	if(self=[super initWithReuseIdentifier:reuseIdentifier])
 	{
 		CGRect f=self.contentView.bounds;
 		
-		readImageView=[[UIImageView alloc] initWithFrame:CGRectMake(4, 27, 11, 11)];
-		readImageView.clipsToBounds=YES;
-		readImageView.opaque=YES;
+		imageButton.frame=CGRectMake(4,4,62,62);
 		
-		[self.contentView addSubview:readImageView];
-		
-		sourceImageView=[[UIImageView alloc] initWithFrame:CGRectMake(20, 4, 16, 16)];
-		sourceImageView.clipsToBounds=YES;
-		sourceImageView.contentMode=UIViewContentModeScaleAspectFill;
-		sourceImageView.opaque=YES;
-		
-		[self.contentView addSubview:sourceImageView];
-		
-		sourceLabel=[[UILabel alloc] initWithFrame:CGRectMake(40,4, 300, 16)];
+		sourceLabel=[[UILabel alloc] initWithFrame:CGRectMake(70,4, 300, 16)];
 		sourceLabel.autoresizingMask=UIViewAutoresizingFlexibleRightMargin;
 		sourceLabel.backgroundColor=[UIColor clearColor];
 		sourceLabel.textColor=[UIColor grayColor];
@@ -45,7 +30,7 @@
 		
 		[self.contentView addSubview:dateLabel];
 		
-		headlineLabel=[[UILabel alloc] initWithFrame:CGRectMake(20, 22, f.size.width-30, 20)];
+		headlineLabel=[[UILabel alloc] initWithFrame:CGRectMake(70, 22, f.size.width-70, 20)];
 		headlineLabel.autoresizingMask=UIViewAutoresizingFlexibleWidth;
 		headlineLabel.backgroundColor=[UIColor clearColor];
 		headlineLabel.opaque=NO;
@@ -53,7 +38,7 @@
 		
 		[self.contentView addSubview:headlineLabel];
 		
-		synopsisLabel=[[UILabel alloc] initWithFrame:CGRectMake(20, 44, f.size.width-30, 16)];
+		synopsisLabel=[[UILabel alloc] initWithFrame:CGRectMake(70, 44, f.size.width-70, 16)];
 		synopsisLabel.autoresizingMask=UIViewAutoresizingFlexibleWidth;
 		synopsisLabel.backgroundColor=[UIColor clearColor];
 		synopsisLabel.opaque=NO;
@@ -65,28 +50,14 @@
     return self;
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-
-	[super setSelected:selected animated:animated];
-
-    if(selected)
-	{
-		self.headlineLabel.textColor=[UIColor grayColor];
-		self.readImageView.image=[UIImage imageNamed:@"dot_blank.png"];
-	}
-}
-
 - (void)dealloc 
 {
 	[dateLabel release];
 	[headlineLabel release];
 	[sourceLabel release];
-	[sourceImageView release];
 	[synopsisLabel release];
-	[readImageView release];
     [super dealloc];
 }
 
 @end
-
 

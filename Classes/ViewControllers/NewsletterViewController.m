@@ -6,7 +6,7 @@
 #import "NewsletterSection.h"
 #import "Feed.h"
 #import <QuartzCore/QuartzCore.h>
-#import "NewsletterItemContentView.h"
+//#import "NewsletterItemContentView.h"
 #import "BlankToolbar.h"
 #import "ImageResizer.h"
 #import "ItemFilter.h"
@@ -21,6 +21,8 @@
 #import "BadgedTableViewCell.h"
 #import "FormViewController.h"
 #import "FeedItemCell.h"
+#import "NewsletterHeadlineItemCell.h"
+#import "NewsletterSynopsisItemCell.h"
 
 #define kEditSectionTag 1001
 #define kAddSectionTag 1002
@@ -777,23 +779,11 @@
 {
 	static NSString *CellIdentifier = @"synopsisItemCellIdentifier";
 	
-	UITableViewCell * cell=[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	NewsletterSynopsisItemCell * cell=[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	
 	if(cell==nil)
 	{
-		cell=[[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
-		cell.contentView.autoresizesSubviews=YES;
-		NewsletterItemContentView * contentView=[[NewsletterItemContentView alloc] initWithFrame:CGRectInset(cell.contentView.bounds, 4, 4)];
-		
-		// set view mode...
-		contentView.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-		contentView.parentController=self;
-		contentView.parentTableView=tableView;
-		
-		[cell.contentView addSubview:contentView];
-		[contentView release];
-		
-		contentView.contentMode=UIViewContentModeRedraw;
+		cell=[[[NewsletterSynopsisItemCell alloc] initWithReuseIdentifier:CellIdentifier] autorelease];
 	}
 	
 	if(tableView.editing)
@@ -807,12 +797,7 @@
 	
 	FeedItem * item=(FeedItem *)[[section sortedItems] objectAtIndex:row];
 	
-	NewsletterItemContentView * contentView=(NewsletterItemContentView *)[cell.contentView.subviews objectAtIndex:[cell.contentView.subviews count]-1];
-	
-	[contentView setViewMode:YES];
-	contentView.item=item;
-	[contentView setNeedsDisplay];
-	[contentView setNeedsLayout];
+	cell.item=item;
 	
 	return cell;
 }
@@ -924,6 +909,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
+	NSLog(@"cellForRowAtIndexPath: %@",[indexPath description]);
+	
 	if(indexPath.section==0)
 	{
 		return [self newsletterHeaderCell];
@@ -978,6 +965,8 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 - (CGFloat)tableView:(UITableView*)tableView
 heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
+	NSLog(@"heightForRowAtIndexPath");
+	
 	if(indexPath.section==0)
 	{
 		return 160;
@@ -1020,9 +1009,13 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
 			{
 				FeedItem * item=(FeedItem *)[[newsletterSection sortedItems] objectAtIndex:indexPath.row];
 		
+				NewsletterSynopsisItemCellLayout layout=[NewsletterSynopsisItemCell layoutForItem:item withCellWidth:600.0]; //tableView.bounds.size.width];
+				
+				return layout.size.height;
+				/*
 				ItemSize itemSize=[NewsletterItemContentView sizeForCell:item viewMode:(viewMode==kViewModeSynopsis) rect:CGRectZero];
 		
-				return itemSize.size.height;
+				return itemSize.size.height;*/
 			}
 			else 
 			{

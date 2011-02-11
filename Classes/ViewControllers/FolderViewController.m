@@ -35,7 +35,7 @@
 	
 	if(cell==nil)
 	{
-		cell=[[[FolderTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier] autorelease];
+		cell=[[[FolderTableViewCell alloc] initWithReuseIdentifier:identifier] autorelease];
 	}
 	
 	if(tableView.editing)
@@ -47,6 +47,8 @@
 		cell.selectionStyle=UITableViewCellSelectionStyleNone;
 	}
 	
+	cell.item=item;
+	/*
 	if(item.image)
 	{
 		cell.itemImageView.image=item.image;
@@ -55,7 +57,7 @@
 	{
 		cell.itemImageView.image=[UIImage imageNamed:@"dot_blank.png"]; 
 		//cell.itemImageView.image=[UIImage imageNamed:@"samplenewsletter-1.png"]; 
-	}
+	}*/
 
 	cell.sourceLabel.text=item.origin;
 	cell.dateLabel.text=[item shortDisplayDate];
@@ -99,7 +101,7 @@
 	
 	if(cell==nil)
 	{
-		cell=[[[FolderTweetTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier] autorelease];
+		cell=[[[FolderTweetTableViewCell alloc] initWithReuseIdentifier:identifier] autorelease];
 	}
 	
 	if(tableView.editing)
@@ -111,6 +113,8 @@
 		cell.selectionStyle=UITableViewCellSelectionStyleNone;
 	}
 	
+	cell.item=item;
+	/*
 	if(item.image)
 	{
 		cell.itemImageView.image=item.image;
@@ -119,7 +123,7 @@
 	{
 		cell.itemImageView.image=[UIImage imageNamed:@"profileplaceholder.png"]; 
 	}
-	
+	*/
 	cell.sourceLabel.text=item.origin;
 	cell.dateLabel.text=[item shortDisplayDate];
 	cell.headlineLabel.text=item.headline;
