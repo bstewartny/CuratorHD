@@ -736,7 +736,13 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 {
     if([[[UIApplication sharedApplication] delegate] isUpdating])
 	{
-		[self performSelector:@selector(stopLoading) withObject:nil afterDelay:2.0];
+		[self performSelector:@selector(stopLoading) withObject:nil afterDelay:0.3];
+		return;
+	}
+	
+	if(![[[UIApplication sharedApplication] delegate] hasInternetConnection])
+	{
+		[self performSelector:@selector(stopLoading) withObject:nil afterDelay:0.3];
 		return;
 	}
 	

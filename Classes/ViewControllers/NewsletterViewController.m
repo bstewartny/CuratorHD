@@ -484,11 +484,11 @@
 	}
 }
 
-- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+/*- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
 	NSLog(@"didRotateFromInterfaceOrientation");
-	[self.newsletterTableView reloadData];
-}
+	//[self.newsletterTableView reloadData];
+}*/
 
 // Ensure that the view controller supports rotation and that the split view can therefore show in both portrait and landscape.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 

@@ -165,8 +165,8 @@ static UIFont * _commentsFont;
 		
 		synopsisBottomLabel.hidden=NO;
 		
-		synopsisTopLabel.text=[item.synopsis substringToIndex:_itemLayout.synopsis_break+1];
-		synopsisBottomLabel.text=[item.synopsis substringFromIndex:_itemLayout.synopsis_break+2];
+		synopsisTopLabel.text=[item.synopsis substringToIndex:_itemLayout.synopsis_break];//+1];
+		synopsisBottomLabel.text=[item.synopsis substringFromIndex:_itemLayout.synopsis_break+1];//+2];
 	}
 	else 
 	{
@@ -228,8 +228,16 @@ static UIFont * _commentsFont;
 	else 
 	{
 		layout.synopsis_top_frame=top_part;
-		layout.synopsis_break=[NewsletterSynopsisItemCell findBestFit:item.synopsis withFont:synopsis_font constrainedToSize:top_part.size];
-		NSString * bottom_synopsis=[item.synopsis substringFromIndex:layout.synopsis_break+2];
+		
+		//int bestFit1=[NewsletterSynopsisItemCell findBestFitOld:item.synopsis withFont:synopsis_font constrainedToSize:top_part.size];
+		int bestFit2=[NewsletterSynopsisItemCell findBestFit:item.synopsis withFont:synopsis_font constrainedToSize:top_part.size];
+		
+		//NSLog(@"bestFitOld=%d, bestFitNew=%d",bestFit1,bestFit2);
+		
+		
+		
+		layout.synopsis_break=bestFit2; //[NewsletterSynopsisItemCell findBestFit:item.synopsis withFont:synopsis_font constrainedToSize:top_part.size];
+		NSString * bottom_synopsis=[item.synopsis substringFromIndex:layout.synopsis_break+1];
 		CGSize bottom_size=[bottom_synopsis sizeWithFont:synopsis_font constrainedToSize:CGSizeMake(cellWidth-16, 20000.0) lineBreakMode:UILineBreakModeWordWrap];
 		layout.synopsis_bottom_frame=CGRectMake(8, bottom, bottom_size.width, bottom_size.height);
 		total_height+=layout.synopsis_bottom_frame.size.height+8;
@@ -263,17 +271,18 @@ static UIFont * _commentsFont;
 
 + (int) findBestFit:(NSString*)text withFont:(UIFont*)font constrainedToSize:(CGSize)constraint
 {
-	NSLog(@"findBestFit");
-	
+	//NSLog(@"findBestFit");
+	//int num_checks=0;
 	CGSize tmp_size=CGSizeMake(constraint.width, 20000.0f);
 	
 	// set up for search
-    NSMutableString * dest = [[[NSMutableString alloc] initWithCapacity:20] autorelease];
+    //NSMutableString * dest = [[[NSMutableString alloc] initWithCapacity:20] autorelease];
     
     NSInteger position=0;
 	
 	NSInteger lo = 0;
 	NSInteger hi = [text length];
+	NSInteger last_fit=0;
 	
     // binary search for the best-fitting string
     while (true)
@@ -282,46 +291,54 @@ static UIFont * _commentsFont;
         
 		if ((position == lo) && (lo != hi)) position++;
         
-		NSLog(@"Test best fit at positiong: %d",position);
+		//NSLog(@"Test best fit at positiong: %d",position);
 		
 		NSString * tmp=[text substringToIndex:position] ;
         
 		CGSize size=[tmp sizeWithFont:font constrainedToSize:tmp_size lineBreakMode:UILineBreakModeWordWrap];
-		
+		//num_checks++;
 		BOOL fits=(size.height <= constraint.height);
                 
         if (fits)
         {
+		//	NSLog(@"fits");
+			last_fit=position;
             lo = position;
         }    
         else
         {
+		//	NSLog(@"not fits");
             hi = position - 1;
         }    
 		
-        if ((lo >= hi) && fits) break;
+		if(lo>=hi) break;
+		
+        //if ((lo >= hi) && fits) break;
 		
         if ((lo <= 0) && (hi <= 0)) break;
     }
+	//NSLog(@"last_fit=%d",last_fit);
 	
 	// go back from position to find next word boundary...
-	unichar c=[text characterAtIndex:position];
+	unichar c=[text characterAtIndex:last_fit];
 	
-	while (!(c==' ' || c=='\n')) 
+	while (position>0 && (!(c==' ' || c=='\n'))) 
 	{
-		NSLog(@"backup one character...");
+		//NSLog(@"backup one character...");
 		position--;
 		c=[text characterAtIndex:position];
 	}		
 	
+	//NSLog(@"findBestFit: num_checks: %d",num_checks);
+	
 	return position;
 }
-/*
-+ (int) findBestFit:(NSString*)text withFont:(UIFont*)font constrainedToSize:(CGSize)constraint
+
++ (int) findBestFitOld:(NSString*)text withFont:(UIFont*)font constrainedToSize:(CGSize)constraint
 {
-	NSMutableString * copy=[[text mutableCopy] autorelease];
+	int num_checks=0;
 	
-	NSLog(@"findBestFit: size=%d",[text length]);
+	NSMutableString * copy=[[text mutableCopy] autorelease];
 	
 	int i=[text length] -1;
 	
@@ -342,7 +359,7 @@ static UIFont * _commentsFont;
 			//NSString * tmp=[text substringToIndex:middle];
 			
 			CGSize size = [copy sizeWithFont:font constrainedToSize:tmp_size lineBreakMode:UILineBreakModeWordWrap];
-			
+			num_checks++;
 			if(size.height <=constraint.height)
 			{
 				found_middle=YES;
@@ -361,7 +378,7 @@ static UIFont * _commentsFont;
 		{
 			if(prev==' ' || prev=='\n')
 			{
-				NSLog(@"prev was whitespace, skipping test...");
+				//NSLog(@"prev was whitespace, skipping test...");
 				continue;
 			}
 			
@@ -369,8 +386,8 @@ static UIFont * _commentsFont;
 			
 			//NSString * tmp=[text substringToIndex:i+1];
 			
-			NSLog(@"Checking size to index: %d",i);
-			
+			//NSLog(@"Checking size to index: %d",i);
+			num_checks++;
 			CGSize size = [copy sizeWithFont:font constrainedToSize:tmp_size lineBreakMode:UILineBreakModeWordWrap];
 			
 			if(size.height <= constraint.height)
@@ -381,10 +398,11 @@ static UIFont * _commentsFont;
 		
 		prev=c;
 	}
+	//NSLog(@"findBestFitOld: num_checks: %d",num_checks);
 	
-	NSLog(@"got best fit: %d",i);
+	//NSLog(@"got best fit: %d",i);
 	return i;
-}*/
+}
 
 - (void)dealloc 
 {

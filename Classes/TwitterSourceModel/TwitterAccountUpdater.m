@@ -70,7 +70,7 @@
 	feed=[TempFeed new];
 	feed.url=@"http://api.twitter.com/1/statuses/mentions.json";
 	
-	if(client.screenName)
+	if([client.screenName length]>0)
 	{
 		feed.name=[NSString stringWithFormat:@"@%@",client.screenName];
 	}
@@ -86,7 +86,6 @@
 	[feeds addObject:feed];
 	
 	[feed release];
-	
 	
 	feed=[TempFeed new];
 	feed.url=@"http://twitter.com/direct_messages.json";
@@ -138,10 +137,10 @@
 
 - (BOOL) updateFeedListWithContext:(NSManagedObjectContext*)moc
 {
-	if(![self isAccountValid])
+	/*if(![self isAccountValid])
 	{
 		return NO;
-	}
+	}*/
 	
 	BOOL updated=NO;
 	

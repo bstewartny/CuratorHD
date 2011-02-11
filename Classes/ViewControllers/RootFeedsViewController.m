@@ -296,6 +296,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		cell.textLabel.font=[UIFont boldSystemFontOfSize:16];
 	}
 	
+	cell.selectionStyle=UITableViewCellSelectionStyleGray;
 	cell.textLabel.text=feed.name;
 }
 

@@ -417,10 +417,10 @@
 				
 - (BOOL) updateFeedListWithContext:(NSManagedObjectContext*)moc
 {
-	if(![self isAccountValid])
+	/*if(![self isAccountValid])
 	{
 		return NO;
-	}
+	}*/
 	
 	BOOL updated=NO;
 	
