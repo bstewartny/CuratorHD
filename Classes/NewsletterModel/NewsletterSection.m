@@ -26,6 +26,11 @@
 	return [itemFetcher autorelease];
 }
 
+- (int) itemCount
+{
+	return [self entityCount:@"NewsletterItem" predicate:[NSPredicate predicateWithFormat:@"section==%@",self]];
+}
+
 - (BOOL) editable
 {
 	return YES;

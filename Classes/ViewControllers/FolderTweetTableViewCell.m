@@ -8,16 +8,6 @@
     self = [super initWithReuseIdentifier:reuseIdentifier];
     if (self) 
 	{
-		/*itemImageView=[[UIImageView alloc] initWithFrame:CGRectMake(8, 8, 72, 72)];
-		itemImageView.layer.cornerRadius=10;
-		itemImageView.clipsToBounds=YES;
-		itemImageView.contentMode=UIViewContentModeScaleAspectFill;
-		itemImageView.opaque=YES;
-		itemImageView.backgroundColor=[UIColor lightGrayColor];
-		 
-		[itemView addSubview:itemImageView];
-		 */
-		
 		sourceLabel.frame=CGRectMake(84,8, 300, 16);
 		sourceLabel.textColor=[UIColor blackColor];
 		sourceLabel.font=[UIFont boldSystemFontOfSize:14];

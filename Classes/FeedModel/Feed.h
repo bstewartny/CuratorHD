@@ -55,6 +55,8 @@
 - (void) deleteOlderThan:(int)days;
 - (void) deleteReadItems;
 - (NSNumber*) currentUnreadCount;
+- (int) itemCount;
+
 - (ItemFetcher*) itemFetcher;
 - (void) updateUnreadCount;
 - (int) entityCount:(NSString*)entityName predicate:(NSPredicate*)predicate;

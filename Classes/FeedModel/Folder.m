@@ -15,12 +15,14 @@
 
 + (Folder*) createInContext:(NSManagedObjectContext*)moc
 {
-	Folder * newsletter = [NSEntityDescription insertNewObjectForEntityForName:@"Folder" inManagedObjectContext:moc];
-	return newsletter;
+	Folder * folder = [NSEntityDescription insertNewObjectForEntityForName:@"Folder" inManagedObjectContext:moc];
+	return folder;
 }
 
-
-
+- (int) itemCount
+{
+	return [self entityCount:@"FolderItem" predicate:[NSPredicate predicateWithFormat:@"folder==%@",self]];
+}
 
 - (ItemFetcher*) itemFetcher
 {
@@ -30,6 +32,7 @@
 	
 	return [itemFetcher autorelease];
 }
+
 - (BOOL) editable
 {
 	return YES;

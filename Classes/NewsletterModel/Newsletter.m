@@ -15,6 +15,11 @@
 	return newsletter;
 }
 
+- (int) itemCount
+{
+	return [self entityCount:@"NewsletterItem" predicate:[NSPredicate predicateWithFormat:@"section.newsletter==%@",self]];
+}
+
 - (void) save
 {
 	NSError * error=nil;

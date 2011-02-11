@@ -58,7 +58,7 @@
 - (void) clearAllItems;
 - (BOOL) needsUploadImages;
 - (void) uploadImages;
-
+- (int) itemCount;
  
 - (int) entityCount:(NSString*)entityName predicate:(NSPredicate*)predicate;
 

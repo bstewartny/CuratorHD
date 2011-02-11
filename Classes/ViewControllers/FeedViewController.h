@@ -20,7 +20,6 @@
 	id itemDelegate;
 	BOOL favoritesMode;
 	BOOL editable;
-
 	UIView *refreshHeaderView;
     UILabel *refreshLabel;
     UIImageView *refreshArrow;

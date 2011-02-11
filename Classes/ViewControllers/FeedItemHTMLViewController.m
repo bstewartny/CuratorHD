@@ -401,6 +401,10 @@
 	prevWebView.clipsToBounds=YES;
 	nextWebView.clipsToBounds=YES;
 	
+	webView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
+	prevWebView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
+	nextWebView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
+	
 	CGRect inset=CGRectInset(webViewContainer.frame, 15, 15);
 	inset.origin.y=50;
 	inset.size.height=inset.size.height - (50-15);
@@ -1463,7 +1467,7 @@
 			tmpWebView.layer.cornerRadius=10;
 			tmpWebView.clipsToBounds=YES;
 			tmpWebView.scalesPageToFit=YES;
-			
+			tmpWebView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
 			
 			[self attacheLongPressGestureToWebView:tmpWebView];
 			
@@ -1484,7 +1488,6 @@
 	return YES;
 }
 
-
 - (void)webViewDidStartLoad:(UIWebView *)webView 
 {
 	NSLog(@"webViewDidStartLoad");
@@ -1493,7 +1496,6 @@
 	[activityView startAnimating];
 	activityView.hidden=NO;
 }
-
 
 - (void) removeHrefTargets:(UIWebView*)webView
 {
@@ -1507,7 +1509,6 @@
 	";
 
 	[webView stringByEvaluatingJavaScriptFromString:js];	
-
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView

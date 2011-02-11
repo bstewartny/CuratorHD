@@ -1,11 +1,3 @@
-//
-//  RssFeed.m
-//  Untitled
-//
-//  Created by Robert Stewart on 6/11/10.
-//  Copyright 2010 InfoNgen. All rights reserved.
-//
-
 #import "RssFeed.h"
 #import "ItemFilter.h"
 #import "FeedItem.h"
@@ -18,10 +10,28 @@
 @implementation RssFeed
 @dynamic items,account,lastUpdateHash,unreadCount;
 
+- (int) itemCount
+{
+	// naive implementation - optimize in subclasses
+	if ([self.feedCategory isEqualToString:@"_category"])
+	{
+		return [self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(feed.account.name==%@) AND (feed.feedCategory CONTAINS %@)",self.account.name,[NSString stringWithFormat:@"|%@|",self.name]]];
+	}
+	else
+	{
+		if ([self.feedCategory isEqualToString:@"_all"])
+		{
+			return [self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"feed.account.name==%@",self.account.name]];  
+		}
+		else
+		{
+			return [self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"feed==%@",self]];  
+		}
+	}
+}
+
 - (NSNumber *) currentUnreadCount
 {
-	//NSLog(@"currentUnreadCount: %@",self.name);
-		  
 	if ([self.feedCategory isEqualToString:@"_category"])
 	{
 		int count=[self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(isRead==0) AND (feed.account.name==%@) AND (feed.feedCategory CONTAINS %@)",self.account.name,[NSString stringWithFormat:@"|%@|",self.name]]];
@@ -36,23 +46,7 @@
 		}
 		else
 		{
-			/*if ([self.feedCategory isEqualToString:@"_starred"])
-			{
-				int count=[self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(isRead==0) AND (feed.account.name==%@) AND (isStarred==1)",self.account.name]];  
-				return [NSNumber numberWithInt:count];
-			}
-			else 
-			{
-				if ([self.feedCategory isEqualToString:@"_shared"])
-				{
-					int count=[self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(isRead==0) AND (feed.account.name==%@) AND (isShared==1)",self.account.name]];  
-					return [NSNumber numberWithInt:count];
-				}
-				else 
-				{*/
-					return [self unreadCount];
-			//	}
-			//}
+			return [self unreadCount];
 		}
 	}
 }
@@ -76,18 +70,14 @@
 		}	
 	}
 	
-	//if(num_marked>0)
-	//{
-		self.unreadCount=0;
-		//[self updateUnreadCount];
+	self.unreadCount=0;
 	
-		NSError * error=nil;
-	
-		if(![moc save:&error])
-		{
-			NSLog(@"Failed to save changes in RssFeed.markAllAsRead: %@",[error userInfo]);
-		}
-	//}
+	NSError * error=nil;
+
+	if(![moc save:&error])
+	{
+		NSLog(@"Failed to save changes in RssFeed.markAllAsRead: %@",[error userInfo]);
+	}
 }
 
 - (void) deleteOlderThan:(int)days
@@ -223,21 +213,6 @@
 
 - (ItemFetcher*) itemFetcher
 {
-	/*if([self.feedCategory isEqualToString:@"_shared"])
-	{
-		SharedItemFetcher * itemFetcher = [[SharedItemFetcher alloc] init];
-		itemFetcher.accountName=self.account.name;
-		
-		return [itemFetcher autorelease];
-	}
-	if([self.feedCategory isEqualToString:@"_starred"])
-	{
-		StarredItemFetcher * itemFetcher = [[StarredItemFetcher alloc] init];
-		itemFetcher.accountName=self.account.name;
-		
-		return [itemFetcher autorelease];
-	}*/
-	
 	if([self.feedCategory isEqualToString:@"_category"])
 	{
 		CategoryItemFetcher * itemFetcher = [[CategoryItemFetcher alloc] init];

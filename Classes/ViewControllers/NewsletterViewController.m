@@ -444,16 +444,12 @@
 		[editActionToolbar removeFromSuperview];
 		
 		[self.navigationItem.titleView setEnabled:YES];
-		
-		[self.newsletterTableView reloadData];
 	}
 	else
 	{
 		[selectedIndexPaths removeAllObjects];
 		
 		[self.newsletterTableView setEditing:YES animated:YES];
-		
-		[self.newsletterTableView reloadData];
 		
 		buttonItem.style=UIBarButtonItemStyleDone;
 		buttonItem.title=@"Done";
@@ -724,7 +720,7 @@
 		cell.detailTextLabel.text=newsletterSection.summary;
 		cell.badgeString=[NSString stringWithFormat:@"%d",[newsletterSection.items count]];
 	}
-	
+	cell.selectionStyle=UITableViewCellSelectionStyleGray;
 	return cell;
 }
 

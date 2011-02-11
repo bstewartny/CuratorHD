@@ -9,7 +9,7 @@
 
 - (id) initWithReuseIdentifier:(NSString*)reuseIdentifier
 {
-	if(self=[super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier])
+	if(self=[super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier])
 	{
 		CGRect f=self.contentView.bounds;
 		

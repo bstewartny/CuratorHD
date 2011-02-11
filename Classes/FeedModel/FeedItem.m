@@ -1,11 +1,3 @@
-//
-//  SearchResult.m
-//  InfoNgen-Basic
-//
-//  Created by Robert Stewart on 2/10/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
-//
-
 #import "FeedItem.h"
 #import "MarkupStripper.h"
 
@@ -86,8 +78,6 @@
 
 - (void) copyAttributes:(FeedItem*)item
 {
-	//NSLog(@"copyAttributes");
-	
 	//TODO: do we need to release/autorelease the copies here?  Not sure about copy memory semantics...
 	self.headline=[[item.headline copy] autorelease];
 	self.synopsis=[[item.synopsis copy] autorelease];
@@ -104,8 +94,6 @@
 	self.isRead=[[item.isRead copy] autorelease];
 	self.isStarred=[[item.isStarred copy] autorelease];
 	self.isShared=[[item.isShared copy] autorelease];
-	
-	//self.isSelected=item.isSelected;
 }
 
 + (NSString*) normalizeHeadline:(NSString*)s
@@ -113,90 +101,11 @@
 	if(s==nil) return s;
 	
 	return [s flattenHTML];
-	/*
-	s = [s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-	
-	NSRange range;
-	
-	while((range=[s rangeOfString:@"  "]).location!=NSNotFound)
-	{
-		s=[s stringByReplacingOccurrencesOfString:@"  " withString:@" "];
-	}
-
-	if((range=[s rangeOfString:@"&"]).location!=NSNotFound)
-	{
-	 	s=[s stringByReplacingOccurrencesOfStringIfExists:@"&lt;" withString:@"<"];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"&gt;" withString:@">"];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"&amp;" withString:@"&"];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"&nbsp;" withString:@" "];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"&apos;" withString:@"'"];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"&quot;" withString:@"\""];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"&#39;" withString:@"'"];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"&#8217;" withString:@"'"];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"&#8220;" withString:@"\""];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"&#8221;" withString:@"\""];
-	}
-	
-	return s;*/
 }
-
- 
 
 + (NSString*) normalizeSynopsis:(NSString*)s
 {
 	if(s==nil) return s;
-	
-	// TODO: if s is long unbroken string break it up (dont allow super long strings with no whitespace)
-	
-	/*s = [s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-	
-	NSRange range;
-	
-	while((range=[s rangeOfString:@"  "]).location!=NSNotFound)
-	{
-		s=[s stringByReplacingOccurrencesOfString:@"  " withString:@" "];
-	}
-	
-	if((range=[s rangeOfString:@"\n"]).location!=NSNotFound)
-	{
-		while((range=[s rangeOfString:@" \n"]).location!=NSNotFound)
-		{
-			s=[s stringByReplacingOccurrencesOfString:@" \n" withString:@"\n"];
-		}
-		
-		while((range=[s rangeOfString:@"\n\n\n"]).location!=NSNotFound)
-		{
-			s=[s stringByReplacingOccurrencesOfString:@"\n\n\n" withString:@"\n\n"];
-		}
-	}
-	
-	if((range=[s rangeOfString:@"<"]).location!=NSNotFound)
-	{
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"<b>" withString:@""];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"</b>" withString:@""];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"<p>" withString:@"\n"];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"</p>" withString:@"\n"];
-		
-	}
-	
-	if((range=[s rangeOfString:@"&"]).location!=NSNotFound)
-	{
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"&lt;" withString:@"<"];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"&gt;" withString:@">"];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"&amp;" withString:@"&"];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"&nbsp;" withString:@" "];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"&apos;" withString:@"'"];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"&quot;" withString:@"\""];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"&#39;" withString:@"'"];
-		
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"&#8217;" withString:@"'"];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"&#8220;" withString:@"\""];
-		s=[s stringByReplacingOccurrencesOfStringIfExists:@"&#8221;" withString:@"\""];
-		
-	}
-	
-	s=[s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-	*/
 	
 	s=[s flattenHTML];
 	
@@ -265,7 +174,7 @@
 	NSDateComponents * item_components=[gregorian components:(NSDayCalendarUnit|NSWeekCalendarUnit) fromDate:self.date];
 	
 	NSDateFormatter *format = [[NSDateFormatter alloc] init];
-	//[format setTimeZone:[NSTimeZone localTimeZone]];
+	
 	NSString * display;
 	
 	if([today_components day] == [item_components day] &&
@@ -326,8 +235,6 @@
 
 - (void) copyAttributes:(FeedItem*)item
 {
-	//NSLog(@"copyAttributes");
-	
 	//TODO: do we need to release/autorelease the copies here?  Not sure about copy memory semantics...
 	self.headline=[[item.headline copy] autorelease];
 	self.synopsis=[[item.synopsis copy] autorelease];
@@ -344,12 +251,7 @@
 	self.isRead=[[item.isRead copy] autorelease];
 	self.isStarred=[[item.isStarred copy] autorelease];
 	self.isShared=[[item.isShared copy] autorelease];
-	
-	//self.isSelected=item.isSelected;
 }
-
-
-
 
 - (void) dealloc
 {

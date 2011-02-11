@@ -390,7 +390,16 @@
 - (IBAction) toggleEdit:(id)sender
 {
 	// TODO: change button lable/color
-	tableView.editing=!tableView.editing;
+	if(tableView.editing)
+	{
+		[tableView setEditing:NO animated:YES];
+	}
+	else {
+		[tableView setEditing:YES animated:YES];
+	}
+
+	
+	//tableView.editing=!tableView.editing;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

@@ -22,14 +22,26 @@
 	renderer.pageWidth=640;
 	
 	NSString   *html= [renderer getHTML:self.newsletter];
+	self.webView.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.webView.layer.bounds].CGPath;
 	
-	self.webView.scalesPageToFit=NO;
+	self.webView.scalesPageToFit=YES;
 	
 	[self.webView loadHTMLString:html baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
 	
 	[self.webView setNeedsDisplay];	
 }
+- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+	self.webView.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.webView.layer.bounds].CGPath;
+	
+}
 
+- (void) viewDidAppear:(BOOL)animated
+{
+	self.webView.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.webView.layer.bounds].CGPath;
+	
+	[super viewDidAppear:animated];
+}
 - (void)viewDidLoad
 {
 	self.view.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
@@ -39,8 +51,12 @@
 	self.webView.autoresizingMask=UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	
 	self.webView.layer.shadowColor=[UIColor blackColor].CGColor;
-	self.webView.layer.shadowRadius=10;
+	self.webView.layer.shadowRadius=8;
 	self.webView.layer.shadowOpacity=0.8;
+	self.webView.layer.shadowOffset=CGSizeZero;
+	self.webView.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.webView.layer.bounds].CGPath;
+	
+	self.webView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
 	
 	self.navigationItem.title=newsletter.name; //@"Newsletter Preview";
 	
@@ -114,6 +130,7 @@
 {
 	activityProgressView.progress=[progress floatValue];
 }
+
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
 { 
 	// did user send email? if so mark last published date of newsletter to now...

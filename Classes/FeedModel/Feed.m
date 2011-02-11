@@ -1,11 +1,3 @@
-//
-//  Feed.m
-//  Untitled
-//
-//  Created by Robert Stewart on 5/20/10.
-//  Copyright 2010 InfoNgen. All rights reserved.
-//
-
 #import "Feed.h"
 #import "FeedItem.h"
 #import "ItemFilter.h"
@@ -106,63 +98,28 @@
 	return NO;
 }
 
+- (int) itemCount
+{
+	NSLog(@"Using naive implementation for itemCount, consider override in subclass...");
+	// naive implementation - optimize in subclasses
+	return [[self items] count];
+}
+
 - (NSNumber*) currentUnreadCount
 {
 	return [self unreadCount];
 }
 
-
 - (void) markAllAsRead
 {
 }
+
 - (void) deleteOlderThan:(int)days
 {
 }
+
 - (void) deleteReadItems
-{
-	
+{	
 }
 
-/*
-+ (UIImage*) getFaviconImageFromUrl:(NSString*)url
-{
-	NSURL * u=[NSURL URLWithString:url];
-	
-	NSString * faviconUrl=[NSString stringWithFormat:@"http://%@/favicon.ico"];
-	
-	return [Feed getImageFromUrl:faviconUrl];
-}
-
-+(UIImage*) getImageFromUrl:(NSString*)url
-{
-	NSLog(@"getImageFromUrl: %@",url);
-	return nil;
-}
-
-+(UIImage*) getFeedImageForItem:(FeedItem*)item
-{
-	if(item.originUrl && [item.originUrl length]>0)
-	{
-		UIImage * img=[Feed getFaviconImageFromUrl:item.originUrl];
-		
-		if(img)
-		{
-			return img;
-		}
-	}
-	if(item.url && [item.url length]>0)
-	{
-		if(![item.url isEqualToString:item.originUrl])
-		{
-			UIImage * img=[Feed getFaviconImageFromUrl:item.originUrl];
-		
-			if(img)
-			{
-				return img;
-			}
-		}
-	}
-	return nil;
-}
-*/
 @end

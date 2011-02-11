@@ -9,7 +9,9 @@
 	{
 		CGRect f=self.contentView.bounds;
 		
+		itemImageView.frame=CGRectMake(4,4,62,62);//, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)
 		imageButton.frame=CGRectMake(4,4,62,62);
+		
 		
 		sourceLabel=[[UILabel alloc] initWithFrame:CGRectMake(70,4, 300, 16)];
 		sourceLabel.autoresizingMask=UIViewAutoresizingFlexibleRightMargin;
@@ -48,6 +50,19 @@
 		[self.contentView addSubview:synopsisLabel];
 	}
     return self;
+}
+
+- (void) setEditing:(BOOL)editing animated:(BOOL)animated
+{
+	if(editing)
+	{
+		self.selectionStyle=3;
+	}
+	else 
+	{
+		self.selectionStyle=UITableViewCellSelectionStyleNone;
+	}
+	[super setEditing:editing animated:animated];
 }
 
 - (void)dealloc 

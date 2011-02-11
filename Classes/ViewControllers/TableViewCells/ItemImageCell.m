@@ -5,7 +5,7 @@
 #import "ImageListViewController.h"
 
 @implementation ItemImageCell
-@synthesize imageButton,item,imagePickerPopover;
+@synthesize imageButton,itemImageView,item,imagePickerPopover;
 
 - (id) initWithReuseIdentifier:(NSString*)reuseIdentifier
 {
@@ -13,33 +13,29 @@
 	{
 		CGRect f=self.contentView.bounds;
 		
+		itemImageView=[[UIImageView alloc] initWithFrame:CGRectMake(4,4,62,62)];
+		itemImageView.clipsToBounds=YES;
+		itemImageView.opaque=YES;
+		itemImageView.contentMode=UIViewContentModeScaleAspectFit;
+		itemImageView.layer.cornerRadius=9.5;
+		itemImageView.backgroundColor=[UIColor lightGrayColor];
+		
+		[self.contentView addSubview:itemImageView];
+		
 		imageButton=[[UIButton buttonWithType:UIButtonTypeCustom] retain];
 		imageButton.frame=CGRectMake(4,4,62,62);
 		
 		imageButton.clipsToBounds=YES;
-		imageButton.opaque=YES;
+		imageButton.opaque=NO;
 		imageButton.layer.cornerRadius=9.5;
 		[imageButton addTarget:self action:@selector(imageButtonTouch:) forControlEvents:UIControlEventTouchUpInside];
-		imageButton.backgroundColor=[UIColor lightGrayColor];
-		[imageButton setTitle:@"IMG" forState:UIControlStateNormal];
-		imageButton.adjustsImageWhenHighlighted = NO;
+		imageButton.backgroundColor=[UIColor clearColor];
+		
 		
 		[self.contentView addSubview:imageButton];
+		[self.contentMode bringSubviewToFront:imageButton];
 	}
 	return self;
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-	
-	[super setSelected:selected animated:animated];
-	
-    if(selected)
-	{
-		if(item.image==nil)
-		{
-			imageButton.backgroundColor=[UIColor lightGrayColor];
-		}
-	}
 }
 
 - (void) setItem:(FeedItem*)theItem
@@ -57,22 +53,43 @@
 {
 	if(![image isEqual:item.image])
 	{
-		item.image=image;
-		item.imageUrl=nil;
-		[item save];
+		if(item.image!=nil ||
+		   image!=nil)
+		{
+			item.image=image;
+			item.imageUrl=nil;
+			[item save];
+		}
 	}
 	if(image)
 	{
-		imageButton.imageView.contentMode=UIViewContentModeScaleAspectFit;
-		imageButton.backgroundColor=[UIColor clearColor];
+		if(image.size.width>0 && image.size.height>0)
+		{
+			if((image.size.width<imageButton.frame.size.width &&
+			   image.size.height<imageButton.frame.size.height) ||
+			   MAX(image.size.width,image.size.height)/MIN(image.size.width,image.size.height) <= 2.0 )
+			{
+				itemImageView.contentMode=UIViewContentModeScaleAspectFill;
+			}
+			else 
+			{
+				itemImageView.contentMode=UIViewContentModeScaleAspectFit;
+			}
+		}
+		else 
+		{
+			itemImageView.contentMode=UIViewContentModeScaleAspectFit;
+		}
+
+		itemImageView.backgroundColor=[UIColor clearColor];
 	}
 	else 
 	{
-		imageButton.backgroundColor=[UIColor lightGrayColor];
+		itemImageView.backgroundColor=[UIColor lightGrayColor];
 	}
 	
-	[imageButton setImage:image forState:UIControlStateNormal];
-	[imageButton setNeedsDisplay];
+	[itemImageView setImage:image];
+	[itemImageView setNeedsDisplay];
 	[self setNeedsLayout];
 }
 
@@ -80,7 +97,7 @@
 {
 	UIActionSheet * actionSheet;
 	
-	if(imageButton.imageView.image)
+	if(itemImageView.image)
 	{
 		actionSheet=[[UIActionSheet alloc] initWithTitle:@"Modify Image" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"Remove Image"	otherButtonTitles:@"From Photo Albums",@"From Web Page",nil];
 		actionSheet.tag=2;
@@ -91,7 +108,7 @@
 		actionSheet.tag=1;
 	}
 	
-	[actionSheet showFromRect:imageButton.frame	inView:imageButton.superview animated:YES];
+	[actionSheet showFromRect:itemImageView.frame	inView:itemImageView.superview animated:YES];
 	
 	[actionSheet release];
 }
@@ -174,7 +191,7 @@
 	
 	self.imagePickerPopover=popover;
 	
-	[popover presentPopoverFromRect:imageButton.frame inView:imageButton.superview permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+	[popover presentPopoverFromRect:itemImageView.frame inView:itemImageView.superview permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 	
 	[picker release];
 	
@@ -201,7 +218,7 @@
 	
 	self.imagePickerPopover=popover;
 	
-	[popover presentPopoverFromRect:imageButton.frame inView:imageButton.superview permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+	[popover presentPopoverFromRect:itemImageView.frame inView:itemImageView.superview permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 	
 	[imageList release];
 	
@@ -243,6 +260,7 @@
 	[item release];
 	[imageButton release];
 	[imagePickerPopover release];
+	[itemImageView release];
     [super dealloc];
 }
 

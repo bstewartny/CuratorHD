@@ -1055,6 +1055,7 @@
 			if(account==nil)
 			{
 				NSLog(@"Not such account found: %@",accountName);
+				[self update_end];
 			}
 			else
 			{
@@ -1062,6 +1063,10 @@
 				{
 					NSLog(@"Account %@ is not valid, calling authorize...",[account name]);
 					[account authorize];
+					[[NSNotificationCenter defaultCenter] 
+					 postNotificationName:@"AccountUpdateFailed"
+					 object:[NSArray arrayWithObjects:accountName,[NSString stringWithFormat:@"Failed to authenticate your %@ account. Please verify your username and password.",accountName],nil]];
+					[self update_end];
 				}
 				else 
 				{
@@ -1094,6 +1099,7 @@
 			if(account==nil)
 			{
 				NSLog(@"Not such account found: %@",accountName);
+				[self update_end];
 			}
 			else
 			{
@@ -1102,6 +1108,7 @@
 					[self update_end];
 					NSLog(@"Account %@ is not valid, calling authorize...",[account name]);
 					[account authorize];
+					[self update_end];
 				}
 				else 
 				{
@@ -1259,6 +1266,13 @@
 			[queue waitUntilAllOperationsAreFinished];
 		
 		}
+		else 
+		{
+			[[NSNotificationCenter defaultCenter] 
+			 postNotificationName:@"FeedUpdateFailed"
+			 object:[NSArray arrayWithObjects:updater.account.name,feed.url,[NSString stringWithFormat:@"Failed to authenticate your %@ account. Please verify your username and password.",updater.account.name]]];
+		}
+
 	}
 	@catch (NSException * e) 
 	{
@@ -2248,7 +2262,7 @@
 
 	//newNewsletter.maxSynopsisLength=self.maxNewsletterSynopsisLength;
 	newNewsletter.name=name;
-	newNewsletter.logoImage=[UIImage imageNamed:@"32-newsletter.png"];
+	//newNewsletter.logoImage=[UIImage imageNamed:@"32-newsletter.png"];
 	newNewsletter.displayOrder=[NSNumber numberWithInt:numNewsletters];
 	
 	NewsletterSection * section=[newNewsletter addSection];
@@ -2262,13 +2276,34 @@
 		section.name=@"Latest News";
 	}
 	
-	// use default logo...
-	UIImage * logo=[UIImage imageNamed:@"logo-infongen2.png"];
+	// setup default formatting...
+	newNewsletter.titleFont=@"Helvetica";
+	newNewsletter.titleSize=@"x-large";
+	newNewsletter.titleColor=@"black";
 	
-	if(logo)
-	{
-		newNewsletter.logoImage=logo;
-	}
+	newNewsletter.commentsFont=@"Georgia";
+	newNewsletter.commentsSize=@"medium";
+	newNewsletter.commentsColor=@"grey";
+	
+	newNewsletter.sectionFont=@"Helvetica";
+	newNewsletter.sectionSize=@"x-large";
+	newNewsletter.sectionColor=@"black";
+	
+	newNewsletter.headlineFont=@"Helvetica";
+	newNewsletter.headlineSize=@"x-large";
+	newNewsletter.headlineColor=@"blue";
+	
+	newNewsletter.bodyFont=@"Georgia";
+	newNewsletter.bodySize=@"medium";
+	newNewsletter.bodyColor=@"black";
+	
+	// use default logo...
+	//UIImage * logo=[UIImage imageNamed:@"logo-infongen2.png"];
+	
+	//if(logo)
+	//{
+	//	newNewsletter.logoImage=logo;
+	//}
 	
 	[newNewsletter save];
 	

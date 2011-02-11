@@ -52,6 +52,52 @@
 			}
 		}
 	}
+	
+	if([pNotification.name isEqualToString:@"AccountUpdateFailed"])
+	{
+		NSArray * array=[pNotification object];
+		NSString * accountName=[array objectAtIndex:0];
+		NSString * message=[array objectAtIndex:1];
+		
+		if([self.fetcher isKindOfClass:[AccountItemFetcher class]])
+		{
+			if([accountName isEqualToString:[self.fetcher accountName]])
+			{
+				NSLog(@"stop loading and update table...");
+				[self stopLoading];
+				
+				UIAlertView * alert=[[UIAlertView alloc] initWithTitle:@"Update Failed" message:message delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil];
+				
+				[alert show];
+				[alert release];
+				
+				//[self.fetcher performFetch];
+				//[tableView reloadData];
+			}
+		}
+	}
+	if([pNotification.name isEqualToString:@"FeedUpdateFailed"])
+	{
+		NSArray * array=[pNotification object];
+		NSString * accountName=[array objectAtIndex:0];
+		NSString * url=[array objectAtIndex:1];
+		NSString * message=[array objectAtIndex:2];
+		if([self.fetcher isKindOfClass:[FeedItemFetcher class]])
+		{
+			if([[[self.fetcher feed] url] isEqualToString:url])
+			{
+				[self stopLoading];
+				UIAlertView * alert=[[UIAlertView alloc] initWithTitle:@"Update Failed" message:message delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil];
+				
+				[alert show];
+				[alert release];
+				
+				//[self.fetcher performFetch];
+				//[tableView reloadData];
+			}
+		}
+	}
+	   
 	if([pNotification.name isEqualToString:@"FeedUpdated"] ||
 	   [pNotification.name isEqualToString:@"FeedUpdateFinished"])
 	{
@@ -111,13 +157,11 @@
 {
 	self.navigationItem.title=self.origTitle;
 	
-	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(organize:)] autorelease];
-	self.navigationItem.rightBarButtonItem.style=UIBarButtonItemStylePlain;
+	[self setOrganizeRightBarButtonItem];
+	
 	[[[UIApplication sharedApplication] delegate] hideSelectedView];
 	
-	self.tableView.editing=NO;
-	
-	[self.tableView reloadData];
+	[self.tableView setEditing:NO animated:YES];
 }
 
 - (void) organize:(id)sender
@@ -133,11 +177,24 @@
 	
 	[[[UIApplication sharedApplication] delegate] showSelectedView];
 	
-	self.tableView.editing=YES;
-	
-	[self.tableView reloadData];
+	[self.tableView setEditing:YES animated:YES];
+
 }
 
+- (void) setOrganizeRightBarButtonItem
+{
+	BlankToolbar * tools=[[BlankToolbar alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
+	
+	tools.opaque=NO;
+	tools.backgroundColor=[UIColor clearColor];
+	
+	[tools setItems:[NSArray arrayWithObjects:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease],
+					 [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(organize:)] autorelease],
+					 nil]];
+	
+	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithCustomView:tools] autorelease];
+	[tools release];
+}
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad 
@@ -147,17 +204,7 @@
 	
 	self.tableView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
 	
-	BlankToolbar * tools=[[BlankToolbar alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
-	
-	tools.opaque=NO;
-	tools.backgroundColor=[UIColor clearColor];
-	
-	[tools setItems:[NSArray arrayWithObjects:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease],
-												[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(organize:)] autorelease],
-					 nil]];
-	
-	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithCustomView:tools] autorelease];
-	[tools release];
+	[self setOrganizeRightBarButtonItem];
 	
 	stripper=[[MarkupStripper alloc] init];
 	
@@ -188,7 +235,19 @@
 	[[NSNotificationCenter defaultCenter]
 	 addObserver:self
 	 selector:@selector(handleNotification:)
+	 name:@"FeedUpdateFailed"
+	 object:nil];
+	
+	[[NSNotificationCenter defaultCenter]
+	 addObserver:self
+	 selector:@selector(handleNotification:)
 	 name:@"AccountUpdated"
+	 object:nil];
+	
+	[[NSNotificationCenter defaultCenter]
+	 addObserver:self
+	 selector:@selector(handleNotification:)
+	 name:@"AccountUpdateFailed"
 	 object:nil];
 	
 	NSDateFormatter *format = [[NSDateFormatter alloc] init];
@@ -736,12 +795,14 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 {
     if([[[UIApplication sharedApplication] delegate] isUpdating])
 	{
+		NSLog(@"delegate is already updating");
 		[self performSelector:@selector(stopLoading) withObject:nil afterDelay:0.3];
 		return;
 	}
 	
 	if(![[[UIApplication sharedApplication] delegate] hasInternetConnection])
 	{
+		NSLog(@"no internet connection");
 		[self performSelector:@selector(stopLoading) withObject:nil afterDelay:0.3];
 		return;
 	}
@@ -762,7 +823,7 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 		}
 		else 
 		{
-			[self performSelector:@selector(stopLoading) withObject:nil afterDelay:2.0];
+			[self performSelector:@selector(stopLoading) withObject:nil afterDelay:0.3];
 		}
 	}
 }

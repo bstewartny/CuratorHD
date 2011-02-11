@@ -141,8 +141,8 @@
 		if([feed isKindOfClass:[Folder class]])
 		{
 			cell.imageView.image=[UIImage imageNamed:@"32-folderopen.png"];
-			
-			[cell setBadgeString:[NSString stringWithFormat:@"%d",[[feed items] count] ]];
+			int count=[feed itemCount];
+			[cell setBadgeString:[NSString stringWithFormat:@"%d",count ]];
 			//[cell setBadgeString:[NSString stringWithFormat:@"%d",[[feed currentUnreadCount] intValue]]];
 			
 		}
@@ -150,11 +150,11 @@
 		{
 			cell.imageView.image=[UIImage imageNamed:@"32-newsletter.png"];
 			
-			int count=0;
-			for(NewsletterSection * section in [feed sections])
+			int count=[feed itemCount];
+			/*for(NewsletterSection * section in [feed sections])
 			{
 				count+=[[section items] count];
-			}
+			}*/
 			[cell setBadgeString:[NSString stringWithFormat:@"%d",count]];
 			cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 		}

@@ -21,10 +21,6 @@
 		self.contentView.backgroundColor=[UIColor clearColor];
 		self.contentView.opaque=NO;
 		
-		//self.selectedBackgroundView=nil;
-		//self.contentView.backgroundColor=[UIColor clearColor];
-		//self.backgroundColor=[UIColor clearColor];
-		 
 		itemView=[[FolderItemView alloc] initWithFrame:CGRectMake(20,10, self.contentView.bounds.size.width-40,self.contentView.bounds.size.height-20)];
 		itemView.autoresizingMask=UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		itemView.opaque=YES;
@@ -36,9 +32,14 @@
 		
 		[self.contentView addSubview:itemView];
 		
+		[itemImageView removeFromSuperview];
+		itemImageView.frame=CGRectMake(8,8,72,72); //, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)
+		[itemView addSubview:itemImageView];
+		
 		[imageButton removeFromSuperview];
 		imageButton.frame=CGRectMake(8,8,72,72); //, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)
 		[itemView addSubview:imageButton];
+		[itemView bringSubviewToFront:imageButton];
 		
 		sourceLabel=[[UILabel alloc] initWithFrame:CGRectMake(88,8, 300, 16)];
 		sourceLabel.autoresizingMask=UIViewAutoresizingFlexibleRightMargin;
@@ -89,41 +90,25 @@
     return self;
 }
 
+- (void) setEditing:(BOOL)editing animated:(BOOL)animated
+{
+	if(editing)
+	{
+		self.selectionStyle=3;
+	}
+	else 
+	{
+		self.selectionStyle=UITableViewCellSelectionStyleNone;
+	}
+	[super setEditing:editing animated:animated];
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     
 	[super setSelected:selected animated:animated];
 	
-	self.contentView.backgroundColor=[UIColor clearColor];
-	
-	//self.backgroundColor=[UIColor clearColor];
-	//self.selectedBackgroundView.backgroundColor=[UIColor clearColor];
-    // Configure the view for the selected state.
+	//self.contentView.backgroundColor=[UIColor clearColor];
 }
-
-/*- (void) layoutSubviews
-{
-	[super layoutSubviews];
-	
-	if(synopsisLabel.text)
-	{
-		CGSize size=[synopsisLabel.text sizeWithFont:synopsisLabel.font];
-		
-		if(size.width > synopsisLabel.frame.size.width)
-		{
-			CGRect f=synopsisLabel.frame;
-			f.size.height=34;
-			synopsisLabel.frame=f;
-			synopsisLabel.numberOfLines=2;
-		}
-		else 
-		{
-			synopsisLabel.numberOfLines=1;
-			CGRect f=synopsisLabel.frame;
-			f.size.height=17;
-			synopsisLabel.frame=f;
-		}
-	}
-}*/
 
 - (void)dealloc 
 {
@@ -132,10 +117,8 @@
 	[headlineLabel release];
 	[synopsisLabel release];
 	[commentLabel release];
-	//[itemImageView release];
 	[itemView release];
     [super dealloc];
 }
-
 
 @end

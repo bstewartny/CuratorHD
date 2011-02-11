@@ -95,7 +95,7 @@
 		
 		cell.textLabel.text=section.name;
 		
-		[cell setBadgeString:[NSString stringWithFormat:@"%d",[[section items]count]]];
+		[cell setBadgeString:[NSString stringWithFormat:@"%d",[section itemCount]]];
 		
 		cell.imageView.image=[UIImage imageNamed:@"32-folderopen.png"];
 	}

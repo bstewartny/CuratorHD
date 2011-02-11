@@ -105,6 +105,8 @@ static UIFont * _commentsFont;
 		
 		[self.contentView addSubview:commentLabel];
 		
+		
+		itemImageView.frame=CGRectMake(4,46,62,62);
 		imageButton.frame=CGRectMake(4,46,62,62);
 		
 	}
@@ -156,6 +158,7 @@ static UIFont * _commentsFont;
 	_itemLayout=[NewsletterSynopsisItemCell layoutForItem:self.item withCellWidth:self.contentView.frame.size.width];
 	
 	imageButton.frame=_itemLayout.image_frame;
+	itemImageView.frame=_itemLayout.image_frame;
 	
 	synopsisTopLabel.frame=_itemLayout.synopsis_top_frame;
 	
@@ -332,6 +335,19 @@ static UIFont * _commentsFont;
 	//NSLog(@"findBestFit: num_checks: %d",num_checks);
 	
 	return position;
+}
+
+- (void) setEditing:(BOOL)editing animated:(BOOL)animated
+{
+	if(editing)
+	{
+		self.selectionStyle=3;
+	}
+	else 
+	{
+		self.selectionStyle=UITableViewCellSelectionStyleNone;
+	}
+	[super setEditing:editing animated:animated];
 }
 
 + (int) findBestFitOld:(NSString*)text withFont:(UIFont*)font constrainedToSize:(CGSize)constraint

@@ -1,10 +1,3 @@
-//
-//  ItemFilter.h
-//  Untitled
-//
-//  Created by Robert Stewart on 5/20/10.
-//  Copyright 2010 InfoNgen. All rights reserved.
-//
 #define kMinFeedItemKeyLength 10
 
 #import <Foundation/Foundation.h>

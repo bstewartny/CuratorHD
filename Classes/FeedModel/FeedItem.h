@@ -1,11 +1,3 @@
-//
-//  SearchResult.h
-//  InfoNgen-Basic
-//
-//  Created by Robert Stewart on 2/10/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
-//
-
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
@@ -16,9 +8,6 @@
 - (NSString *)flattenHTML;
 
 @end;
-
-
-
 
 @interface ImageToDataTransformer : NSValueTransformer 
 {
@@ -41,7 +30,6 @@
 	NSString * originUrl;
 	NSString * uid;
 	NSNumber * isRead;
-	//BOOL isSelected;
 }
 @property(nonatomic,retain) NSString * headline;
 @property(nonatomic,retain) NSString * synopsis;
@@ -58,7 +46,7 @@
 @property(nonatomic,retain) NSNumber * isRead;
 @property(nonatomic,retain) NSNumber * isStarred;
 @property(nonatomic,retain) NSNumber * isShared;
-//@property(nonatomic) BOOL isSelected;
+
 - (NSString*) key;
 
 - (void) save;
@@ -67,10 +55,6 @@
 + (TempFeedItem*) copyItem:(FeedItem*)item;
 
 @end
-
-
-
-
 
 @interface FeedItem : NSManagedObject 
 {
@@ -90,9 +74,6 @@
 @property(nonatomic,retain) NSNumber * isRead;
 @property(nonatomic,retain) NSNumber * isStarred;
 @property(nonatomic,retain) NSNumber * isShared;
-//@property(nonatomic) BOOL isSelected;
-
-//- (id) initWithHeadline:(NSString *)theHeadline withUrl:(NSString *) theUrl withSynopsis:(NSString*)theSynopsis withDate:(NSDate*)theDate;
 
 - (NSString*) relativeDateOffset;
 + (NSString*) normalizeSynopsis:(NSString*)s;

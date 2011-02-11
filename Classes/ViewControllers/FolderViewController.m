@@ -48,17 +48,7 @@
 	}
 	
 	cell.item=item;
-	/*
-	if(item.image)
-	{
-		cell.itemImageView.image=item.image;
-	}
-	else 
-	{
-		cell.itemImageView.image=[UIImage imageNamed:@"dot_blank.png"]; 
-		//cell.itemImageView.image=[UIImage imageNamed:@"samplenewsletter-1.png"]; 
-	}*/
-
+	
 	cell.sourceLabel.text=item.origin;
 	cell.dateLabel.text=[item shortDisplayDate];
 	
@@ -114,16 +104,7 @@
 	}
 	
 	cell.item=item;
-	/*
-	if(item.image)
-	{
-		cell.itemImageView.image=item.image;
-	}
-	else 
-	{
-		cell.itemImageView.image=[UIImage imageNamed:@"profileplaceholder.png"]; 
-	}
-	*/
+	
 	cell.sourceLabel.text=item.origin;
 	cell.dateLabel.text=[item shortDisplayDate];
 	cell.headlineLabel.text=item.headline;

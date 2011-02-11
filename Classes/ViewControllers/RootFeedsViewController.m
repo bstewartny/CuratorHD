@@ -276,11 +276,11 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	{	
 		if([feed isKindOfClass:[Newsletter class]])
 		{
-			int count=0;
-			for(NewsletterSection * section in [feed sections])
+			int count=[feed itemCount];
+			/*for(NewsletterSection * section in [feed sections])
 			{
 				count+=[[section items] count];
-			}
+			}*/
 			[cell setBadgeString:[NSString stringWithFormat:@"%d",count]];
 			cell.imageView.image=[UIImage imageNamed:@"32-newsletter.png"];
 		}
@@ -288,7 +288,8 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		{
 			if([feed isKindOfClass:[Folder class]])
 			{
-				[cell setBadgeString:[NSString stringWithFormat:@"%d",[[feed items] count] ]];
+				int count=[feed itemCount];
+				[cell setBadgeString:[NSString stringWithFormat:@"%d",count ]];
 				cell.imageView.image=[UIImage imageNamed:@"32-folderclosed.png"];
 			}
 		}
