@@ -15,6 +15,7 @@
 #import "RegexKitLite.h"
 #import "UserSettings.h"
 #import "MarkupStripper.h"
+#import "UIImage+RoundedCorner.h"
 
 @implementation TwitterClient
 @synthesize userId,screenName,username,password,verifyDelegate;
@@ -329,6 +330,8 @@
 							if(data)
 							{
 								img = [[[UIImage alloc] initWithData:data] autorelease];
+								
+								img=[img roundedCornerImage:8 borderSize:0];
 							}
 						}
 					
@@ -344,6 +347,7 @@
 					}
 				}
 			}
+			
 			tmp.uid=item_id;
 			tmp.originId=@"twitter";
 			tmp.originUrl=user_screenname;

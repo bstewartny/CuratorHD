@@ -70,6 +70,7 @@
 	
 	return count;
 }
+
 - (void) save
 {
 	NSLog(@"Feed.save");

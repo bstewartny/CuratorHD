@@ -203,6 +203,11 @@
 		B0D38E3212E51C3E0025F6D6 /* BadgeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D38E3112E51C3E0025F6D6 /* BadgeLabel.m */; };
 		B0D38E3712E51CCF0025F6D6 /* BadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D38E3612E51CCF0025F6D6 /* BadgeView.m */; };
 		B0D38E3A12E51D2F0025F6D6 /* BadgedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D38E3912E51D2F0025F6D6 /* BadgedTableViewCell.m */; };
+		B0D65C1C130866E100BA5684 /* FastTweetTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D65C1B130866E100BA5684 /* FastTweetTableViewCell.m */; };
+		B0D65CB713097F8F00BA5684 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D65CB313097F8F00BA5684 /* UIImage+RoundedCorner.m */; };
+		B0D65CB813097F8F00BA5684 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D65CB513097F8F00BA5684 /* UIImage+Alpha.m */; };
+		B0D65D2B13098AEA00BA5684 /* FastFolderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D65D2A13098AEA00BA5684 /* FastFolderTableViewCell.m */; };
+		B0D65DDE1309B8D900BA5684 /* FastTweetFolderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D65DDD1309B8D900BA5684 /* FastTweetFolderTableViewCell.m */; };
 		B0D6F254114A9B05008CC24D /* NewsletterItemContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D6F253114A9B05008CC24D /* NewsletterItemContentView.m */; };
 		B0D9AD4711AEFFDF00716732 /* AccountSettingsFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0D9AD4611AEFFDF00716732 /* AccountSettingsFormView.xib */; };
 		B0E0774112849A5800BAF989 /* rssfavicon.png in Resources */ = {isa = PBXBuildFile; fileRef = B0E0774012849A5800BAF989 /* rssfavicon.png */; };
@@ -212,6 +217,8 @@
 		B0F03B0C13045CBD00CD2594 /* NewsletterSynopsisItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0F03B0B13045CBD00CD2594 /* NewsletterSynopsisItemCell.m */; };
 		B0F03B0F13045CCC00CD2594 /* NewsletterHeadlineItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0F03B0E13045CCC00CD2594 /* NewsletterHeadlineItemCell.m */; };
 		B0F03B1213045CDB00CD2594 /* TweetItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0F03B1113045CDB00CD2594 /* TweetItemCell.m */; };
+		B0F4D1FC13070F800035CF89 /* FastFeedItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0F4D1FB13070F800035CF89 /* FastFeedItemCell.m */; };
+		B0F4D1FF13070FCD0035CF89 /* ABTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0F4D1FE13070FCD0035CF89 /* ABTableViewCell.m */; };
 		B0F5503011D3EEB00060958E /* Tumblr-Text-Button.png in Resources */ = {isa = PBXBuildFile; fileRef = B0F5502911D3EEB00060958E /* Tumblr-Text-Button.png */; };
 		B0F5503111D3EEB00060958E /* Tumblr-Photo-Button.png in Resources */ = {isa = PBXBuildFile; fileRef = B0F5502A11D3EEB00060958E /* Tumblr-Photo-Button.png */; };
 		B0F5503211D3EEB00060958E /* Tumblr-Quote-Button.png in Resources */ = {isa = PBXBuildFile; fileRef = B0F5502B11D3EEB00060958E /* Tumblr-Quote-Button.png */; };
@@ -802,6 +809,16 @@
 		B0D38E3612E51CCF0025F6D6 /* BadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BadgeView.m; sourceTree = "<group>"; };
 		B0D38E3812E51D2F0025F6D6 /* BadgedTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BadgedTableViewCell.h; sourceTree = "<group>"; };
 		B0D38E3912E51D2F0025F6D6 /* BadgedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BadgedTableViewCell.m; sourceTree = "<group>"; };
+		B0D65C1A130866E100BA5684 /* FastTweetTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FastTweetTableViewCell.h; sourceTree = "<group>"; };
+		B0D65C1B130866E100BA5684 /* FastTweetTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FastTweetTableViewCell.m; sourceTree = "<group>"; };
+		B0D65CB313097F8F00BA5684 /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
+		B0D65CB413097F8F00BA5684 /* UIImage+RoundedCorner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+RoundedCorner.h"; sourceTree = "<group>"; };
+		B0D65CB513097F8F00BA5684 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
+		B0D65CB613097F8F00BA5684 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
+		B0D65D2913098AEA00BA5684 /* FastFolderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FastFolderTableViewCell.h; sourceTree = "<group>"; };
+		B0D65D2A13098AEA00BA5684 /* FastFolderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FastFolderTableViewCell.m; sourceTree = "<group>"; };
+		B0D65DDC1309B8D900BA5684 /* FastTweetFolderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FastTweetFolderTableViewCell.h; sourceTree = "<group>"; };
+		B0D65DDD1309B8D900BA5684 /* FastTweetFolderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FastTweetFolderTableViewCell.m; sourceTree = "<group>"; };
 		B0D6F252114A9B05008CC24D /* NewsletterItemContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsletterItemContentView.h; sourceTree = "<group>"; };
 		B0D6F253114A9B05008CC24D /* NewsletterItemContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsletterItemContentView.m; sourceTree = "<group>"; };
 		B0D9AD4611AEFFDF00716732 /* AccountSettingsFormView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AccountSettingsFormView.xib; sourceTree = "<group>"; };
@@ -816,6 +833,10 @@
 		B0F03B0E13045CCC00CD2594 /* NewsletterHeadlineItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsletterHeadlineItemCell.m; sourceTree = "<group>"; };
 		B0F03B1013045CDB00CD2594 /* TweetItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TweetItemCell.h; sourceTree = "<group>"; };
 		B0F03B1113045CDB00CD2594 /* TweetItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TweetItemCell.m; sourceTree = "<group>"; };
+		B0F4D1FA13070F800035CF89 /* FastFeedItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FastFeedItemCell.h; sourceTree = "<group>"; };
+		B0F4D1FB13070F800035CF89 /* FastFeedItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FastFeedItemCell.m; sourceTree = "<group>"; };
+		B0F4D1FD13070FCD0035CF89 /* ABTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABTableViewCell.h; sourceTree = "<group>"; };
+		B0F4D1FE13070FCD0035CF89 /* ABTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABTableViewCell.m; sourceTree = "<group>"; };
 		B0F5502911D3EEB00060958E /* Tumblr-Text-Button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Tumblr-Text-Button.png"; sourceTree = "<group>"; };
 		B0F5502A11D3EEB00060958E /* Tumblr-Photo-Button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Tumblr-Photo-Button.png"; sourceTree = "<group>"; };
 		B0F5502B11D3EEB00060958E /* Tumblr-Quote-Button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Tumblr-Quote-Button.png"; sourceTree = "<group>"; };
@@ -1295,6 +1316,10 @@
 		B023D4341138578100C15747 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				B0D65CB313097F8F00BA5684 /* UIImage+RoundedCorner.m */,
+				B0D65CB413097F8F00BA5684 /* UIImage+RoundedCorner.h */,
+				B0D65CB513097F8F00BA5684 /* UIImage+Alpha.m */,
+				B0D65CB613097F8F00BA5684 /* UIImage+Alpha.h */,
 				C4A74ED011C6CC80008664DE /* UICustomSwitch.h */,
 				C4A74ED111C6CC80008664DE /* UICustomSwitch.m */,
 				B08BC365112C4CDC00851E7A /* UserSettings.h */,
@@ -1813,6 +1838,8 @@
 		B0F03B0613045C4300CD2594 /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
+				B0F4D1FD13070FCD0035CF89 /* ABTableViewCell.h */,
+				B0F4D1FE13070FCD0035CF89 /* ABTableViewCell.m */,
 				B096717512E7D69500BD0B7B /* FolderTableViewCell.h */,
 				B096717612E7D69500BD0B7B /* FolderTableViewCell.m */,
 				B09671E912E7E8A800BD0B7B /* FolderItemView.h */,
@@ -1831,6 +1858,14 @@
 				B0F03B0E13045CCC00CD2594 /* NewsletterHeadlineItemCell.m */,
 				B0F03B1013045CDB00CD2594 /* TweetItemCell.h */,
 				B0F03B1113045CDB00CD2594 /* TweetItemCell.m */,
+				B0F4D1FA13070F800035CF89 /* FastFeedItemCell.h */,
+				B0F4D1FB13070F800035CF89 /* FastFeedItemCell.m */,
+				B0D65C1A130866E100BA5684 /* FastTweetTableViewCell.h */,
+				B0D65C1B130866E100BA5684 /* FastTweetTableViewCell.m */,
+				B0D65D2913098AEA00BA5684 /* FastFolderTableViewCell.h */,
+				B0D65D2A13098AEA00BA5684 /* FastFolderTableViewCell.m */,
+				B0D65DDC1309B8D900BA5684 /* FastTweetFolderTableViewCell.h */,
+				B0D65DDD1309B8D900BA5684 /* FastTweetFolderTableViewCell.m */,
 			);
 			path = TableViewCells;
 			sourceTree = "<group>";
@@ -2919,6 +2954,13 @@
 				B0F03B0C13045CBD00CD2594 /* NewsletterSynopsisItemCell.m in Sources */,
 				B0F03B0F13045CCC00CD2594 /* NewsletterHeadlineItemCell.m in Sources */,
 				B0F03B1213045CDB00CD2594 /* TweetItemCell.m in Sources */,
+				B0F4D1FC13070F800035CF89 /* FastFeedItemCell.m in Sources */,
+				B0F4D1FF13070FCD0035CF89 /* ABTableViewCell.m in Sources */,
+				B0D65C1C130866E100BA5684 /* FastTweetTableViewCell.m in Sources */,
+				B0D65CB713097F8F00BA5684 /* UIImage+RoundedCorner.m in Sources */,
+				B0D65CB813097F8F00BA5684 /* UIImage+Alpha.m in Sources */,
+				B0D65D2B13098AEA00BA5684 /* FastFolderTableViewCell.m in Sources */,
+				B0D65DDE1309B8D900BA5684 /* FastTweetFolderTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

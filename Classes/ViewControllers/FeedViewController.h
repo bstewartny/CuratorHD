@@ -34,6 +34,7 @@
 	UIPopoverController * navPopoverController;
 	NSString * origTitle;
 	BOOL folderMode;
+	 
 	
 }
 @property(nonatomic) BOOL folderMode;

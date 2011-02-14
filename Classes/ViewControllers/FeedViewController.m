@@ -15,6 +15,8 @@
 #import "RssFeedItem.h"
 #import "CustomCellBackgroundView.h"
 #import "BlankToolbar.h"
+#import "FastFeedItemCell.h"
+#import "FastTweetTableViewCell.h"
 
 #define REFRESH_HEADER_HEIGHT 60.0f
 
@@ -161,7 +163,7 @@
 	
 	[[[UIApplication sharedApplication] delegate] hideSelectedView];
 	
-	[self.tableView setEditing:NO animated:YES];
+	[self.tableView setEditing:NO animated:NO];
 }
 
 - (void) organize:(id)sender
@@ -199,10 +201,26 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad 
 {
-	[self.tableView setBackgroundView:nil];
-	[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
+	self.view.backgroundColor=[UIColor lightGrayColor];
 	
-	self.tableView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
+	//[self.tableView setBackgroundView:nil];
+	//[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
+	
+	//self.tableView.backgroundColor=[UIColor groupTableViewBackgroundColor];
+	
+	CGRect f=self.tableView.frame;
+	f.origin.x+=1;
+	f.size.width-=1;
+	self.tableView.frame=f;
+	
+	//self.parentViewController.view.clipsToBounds=NO;
+	//self.view.clipsToBounds=NO;
+	//self.tableView.clipsToBounds=NO;
+	//self.tableView.layer.shadowColor=[UIColor blackColor].CGColor;
+	//self.tableView.layer.shadowOpacity=0.8;
+	//self.tableView.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.tableView.bounds].CGPath;
+	//self.tableView.layer.borderColor=[UIColor grayColor].CGColor;
+	//self.tableView.layer.borderWidth=1;
 	
 	[self setOrganizeRightBarButtonItem];
 	
@@ -332,19 +350,19 @@
 	self.textRelease=@"Release to refresh...";
 	self.textLoading=@"Loading new items...";
 	
-    refreshLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 0-REFRESH_HEADER_HEIGHT, 320-80, REFRESH_HEADER_HEIGHT)];
+    refreshLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 0-REFRESH_HEADER_HEIGHT, 320-80, REFRESH_HEADER_HEIGHT)];
     refreshLabel.backgroundColor = [UIColor clearColor];
     refreshLabel.font = [UIFont boldSystemFontOfSize:14.0];
 	refreshLabel.textColor=[UIColor lightGrayColor];
     refreshLabel.textAlignment = UITextAlignmentLeft;
 	
     refreshArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow_down.png"]];
-    refreshArrow.frame = CGRectMake(48,
+    refreshArrow.frame = CGRectMake(2,
                                     ((REFRESH_HEADER_HEIGHT - 48) / 2)-REFRESH_HEADER_HEIGHT,
                                     48, 48);
 	
-    refreshSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    refreshSpinner.frame = CGRectMake(44+((REFRESH_HEADER_HEIGHT - 20) / 2), ((REFRESH_HEADER_HEIGHT - 20) / 2)-REFRESH_HEADER_HEIGHT, 20, 20);
+    refreshSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    refreshSpinner.frame = CGRectMake(16, ((REFRESH_HEADER_HEIGHT - 20) / 2)-REFRESH_HEADER_HEIGHT, 20, 20);
     refreshSpinner.hidesWhenStopped = YES;
 	
     [tableView addSubview:refreshLabel];
@@ -587,20 +605,20 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 	
 	cell.backgroundColor=[UIColor clearColor];
 	
-	CustomCellBackgroundView * gbView=[[[CustomCellBackgroundView alloc] initWithFrame:CGRectZero] autorelease];
+	//CustomCellBackgroundView * gbView=[[[CustomCellBackgroundView alloc] initWithFrame:CGRectZero] autorelease];
 	
-	cell.backgroundView=gbView;
+	//cell.backgroundView=gbView;
 	
-	gbView.fillColor=[UIColor blackColor]; 
-	gbView.borderColor=[UIColor grayColor];
+	//gbView.fillColor=[UIColor blackColor]; 
+	//gbView.borderColor=[UIColor grayColor];
 	
-	cell.backgroundView.alpha=0.5;
+	//cell.backgroundView.alpha=0.5;
 	
 	cell.textLabel.textColor=[UIColor lightGrayColor];
 	
 	cell.textLabel.textAlignment=UITextAlignmentCenter;
 
-	[cell.backgroundView setPosition:CustomCellBackgroundViewPositionSingle];
+	//[cell.backgroundView setPosition:CustomCellBackgroundViewPositionSingle];
 	
 	if(fetcher)
 	{
@@ -620,7 +638,7 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 
 	return cell;
 }
-
+/*
 - (UITableViewCell *) tweetCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
 {
 	static NSString * identifier=@"TweetItemCellIdentifier";
@@ -648,7 +666,7 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 	cell.sourceLabel.text=item.origin;
 	
 	return cell;
-}
+}*/
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView 
 {
@@ -663,6 +681,33 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 	{
 		isDragging = YES;
 	}
+}
+- (UITableViewCell *) tweetCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
+{
+	static NSString * identifier=@"TweetItemCellIdentifier";
+	
+	FastTweetTableViewCell * cell=[tableView dequeueReusableCellWithIdentifier:identifier];
+	
+	if(cell==nil)
+	{
+		cell=[[[FastTweetTableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:identifier] autorelease];
+	}
+	
+	cell.selectionStyle=UITableViewCellSelectionStyleGray;
+	
+	if(item.image)
+	{
+		cell.userImage=item.image;
+	}
+	else 
+	{
+		cell.userImage=[UIImage imageNamed:@"profileplaceholder.png"];
+	}
+	cell.tweet=item.headline;
+	cell.date=[item shortDisplayDate];
+	cell.username=item.origin;
+
+	return cell;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -868,7 +913,7 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 {
 }
 
-- (UITableViewCell *) headlineCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
+/*- (UITableViewCell *) headlineCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
 {
 	static NSString * identifier=@"FeedItemCellIdentifier";
 	
@@ -936,7 +981,55 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 	}
 	
 	return cell;
+}*/
+
+
+- (UITableViewCell *) headlineCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
+{
+	static NSString * identifier=@"FeedItemCellIdentifier";
+	
+	FastFeedItemCell * cell=[tableView dequeueReusableCellWithIdentifier:identifier];
+	
+	if(cell==nil)
+	{
+		cell=[[[FastFeedItemCell alloc] initWithFrame:CGRectZero reuseIdentifier:identifier] autorelease];
+	}
+	
+	cell.selectionStyle=UITableViewCellSelectionStyleGray;
+	
+	if([item.isRead boolValue])
+	{
+		cell.readHeadlineColor=[UIColor grayColor];
+	}
+	else 
+	{
+		cell.readHeadlineColor=[UIColor blackColor];
+	}
+
+	//[cell setWasRead:[item.isRead boolValue]];
+	
+	if([[item origSynopsis] length]>0)
+	{
+		if([[item synopsis] length]==0)
+		{
+			//item.synopsis=[stripper stripMarkup:[item origSynopsis]];
+			// faster to just strip up to what we need to display...
+			item.synopsis=[stripper stripMarkupSummary:[item origSynopsis] maxLength: 300];
+		}
+	}
+	
+	cell.synopsis=item.synopsis;
+	
+	cell.headline=item.headline;
+	
+	cell.origin=item.origin;
+	
+	cell.date=[item shortDisplayDate];
+
+	[cell setNeedsDisplay];
+	return cell;
 }
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -998,6 +1091,7 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
     [textRelease release];
     [textLoading release];
 	[stripper release];
+	
     [super dealloc];
 }
 

@@ -9,7 +9,7 @@
     
     self = [super initWithReuseIdentifier:reuseIdentifier];
     if (self) 
-	{
+	{ 
 		UIView * bg=[[UIView alloc] init];
 		
 		bg.backgroundColor=[UIColor clearColor];

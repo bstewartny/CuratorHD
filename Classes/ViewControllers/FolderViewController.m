@@ -13,12 +13,14 @@
 #import "MarkupStripper.h"
 #import "FolderTableViewCell.h"
 #import "FolderTweetTableViewCell.h"
+#import "FastFolderTableViewCell.h"
+#import "FastTweetFolderTableViewCell.h"
 
 @implementation FolderViewController
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	return 140.0;
+	return 104.0;
 }
 
 - (void) viewDidLoad
@@ -31,26 +33,18 @@
 {
 	static NSString * identifier=@"FeedItemCellIdentifier";
 	
-	FolderTableViewCell * cell=[tableView dequeueReusableCellWithIdentifier:identifier];
+	FastFolderTableViewCell * cell=[tableView dequeueReusableCellWithIdentifier:identifier];
 	
 	if(cell==nil)
 	{
-		cell=[[[FolderTableViewCell alloc] initWithReuseIdentifier:identifier] autorelease];
+		cell=[[[FastFolderTableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:identifier] autorelease];
 	}
-	
-	if(tableView.editing)
-	{
-		cell.selectionStyle=3;
-	}
-	else 
-	{
-		cell.selectionStyle=UITableViewCellSelectionStyleNone;
-	}
-	
-	cell.item=item;
-	
-	cell.sourceLabel.text=item.origin;
-	cell.dateLabel.text=[item shortDisplayDate];
+		
+	cell.selectionStyle=UITableViewCellSelectionStyleGray;
+
+	cell.origin=item.origin;
+	cell.date=[item shortDisplayDate];
+	cell.headline=item.headline;
 	
 	if([[item origSynopsis] length]>0)
 	{
@@ -60,29 +54,38 @@
 		}
 	}
 	
-	cell.synopsisLabel.text=[item synopsis];
+	cell.synopsis=item.synopsis;
 	
-	if([item.headline length]>0)
-	{
-		cell.headlineLabel.text=item.headline;
-	}
-	else 
-	{
-		if([item.synopsis length]>0)
-		{
-			cell.headlineLabel.text=item.synopsis;
-		}
-		else 
-		{
-			cell.headlineLabel.text=item.origSynopsis;
-		}
-	}
+	cell.comments=item.notes;  
 	
-	cell.commentLabel.text=item.notes;  
+	cell.itemImage=item.image;
 	
 	return cell;
 }
 
+- (UITableViewCell *) tweetCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
+{
+	static NSString * identifier=@"TweetItemCellIdentifier";
+	
+	FastTweetFolderTableViewCell * cell=[tableView dequeueReusableCellWithIdentifier:identifier];
+	
+	if(cell==nil)
+	{
+		cell=[[[FastTweetFolderTableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:identifier] autorelease];
+	}
+	
+	cell.selectionStyle=UITableViewCellSelectionStyleGray;
+
+	cell.tweet=item.headline;
+	cell.date=[item shortDisplayDate];
+	cell.username=item.origin;
+	cell.userImage=item.image;
+	cell.comments=item.notes;
+	
+	return cell;
+}
+
+/*
 - (UITableViewCell *) tweetCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
 {
 	static NSString * identifier=@"TweetItemCellIdentifier";
@@ -111,6 +114,6 @@
 	cell.commentLabel.text=item.notes;  
 	
 	return cell;
-}
+}*/
 
 @end

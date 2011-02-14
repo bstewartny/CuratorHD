@@ -23,6 +23,10 @@
 #import "FeedItemCell.h"
 #import "NewsletterHeadlineItemCell.h"
 #import "NewsletterSynopsisItemCell.h"
+#import "FastFolderTableViewCell.h"
+#import "FastTweetFolderTableViewCell.h"
+
+#import "MarkupStripper.h"
 
 #define kEditSectionTag 1001
 #define kAddSectionTag 1002
@@ -278,22 +282,36 @@
 			
 			int prev_section=-1;
 			
+			int section_item_count=-1;
+			
 			for (NSIndexPath * indexPath in sortedSelections)
 			{
 				if(indexPath.section != prev_section)
 				{
-					sectionItems=[[sections objectAtIndex:indexPath.section-1] sortedItems];
+					NewsletterSection * section=[sections objectAtIndex:indexPath.section-1];
+					
+					sectionItems=[section sortedItems];
+					
+					section_item_count=[sectionItems count];
 					
 					prev_section=indexPath.section;
 				}
 				
 				[[sectionItems objectAtIndex:indexPath.row] delete];
+				section_item_count--;
+				if(section_item_count==0)
+				{
+					// remember row to insert 
+					//salkjlklsdljfsd  
+				}
 			}
 			
 			[self.newsletter save];
 		}
 			
 		[self.newsletterTableView deleteRowsAtIndexPaths:selectedRows withRowAnimation:UITableViewRowAnimationFade];
+		
+	
 	}
 }
 
@@ -516,7 +534,11 @@
 			
 			NewsletterSection * section=[self sectionForSectionIndex:indexPath.section]; //   [[self.newsletter sortedSections] objectAtIndex:indexPath.section];
 			
-			return (indexPath.row >= [section.items count]);
+			int count=[section itemCount];
+			
+			if(indexPath.row==0 && count==0) return NO;
+			
+			return (indexPath.row >= count);
 		}
 	}
 } 
@@ -561,18 +583,18 @@
 	}
 	else 
 	{
-		if(viewMode!=kViewModeSections)
+		/*if(viewMode!=kViewModeSections)
 		{
 			if(section<=[self.newsletter.sections count])
 			{
 				NewsletterSection * newsletterSection=[self sectionForSectionIndex:section];
 			
-				if([newsletterSection.items count]==0)
+				if([newsletterSection itemCount]==0)
 				{
 					return @"No items in this section. Add items from sources or folders.";
 				}
 			}
-		}
+		}*/
 
 		return nil;
 	}
@@ -681,7 +703,17 @@
 		
 		NewsletterSection * newsletterSection=[self sectionForSectionIndex:section];
 		
-		return [newsletterSection.items count];
+		int count=[newsletterSection itemCount];
+	
+		if(count==0)
+		{
+			return 1;
+		}
+		else 
+		{
+			return count;
+		}
+
 	}
 }
 
@@ -718,7 +750,7 @@
 		cell.textLabel.textColor=nameColor;
 		cell.textLabel.text=newsletterSection.name;
 		cell.detailTextLabel.text=newsletterSection.summary;
-		cell.badgeString=[NSString stringWithFormat:@"%d",[newsletterSection.items count]];
+		cell.badgeString=[NSString stringWithFormat:@"%d",[newsletterSection itemCount]];
 	}
 	cell.selectionStyle=UITableViewCellSelectionStyleGray;
 	return cell;
@@ -735,7 +767,7 @@
 	cell.accessoryType=UITableViewCellAccessoryNone;
 	return cell;
 }
-
+/*
 - (UITableViewCell *)tableView:(UITableView *)tableView headlineItemCellForSection:(NewsletterSection*)section row:(NSInteger)row
 {
 	static NSString * identifier=@"FeedItemCellIdentifier";
@@ -769,7 +801,47 @@
 	cell.dateLabel.text=[item shortDisplayDate];
 	
 	return cell;
+}*/
+
+- (UITableViewCell *)tableView:(UITableView *)tableView headlineItemCellForSection:(NewsletterSection*)section row:(NSInteger)row
+{
+//- (UITableViewCell *) headlineCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
+//{
+	static NSString * identifier=@"FeedItemCellIdentifier";
+	FeedItem * item=(FeedItem *)[[section sortedItems] objectAtIndex:row];
+	
+	FastFolderTableViewCell * cell=[tableView dequeueReusableCellWithIdentifier:identifier];
+	
+	if(cell==nil)
+	{
+		cell=[[[FastFolderTableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:identifier] autorelease];
+	}
+	
+	cell.selectionStyle=UITableViewCellSelectionStyleGray;
+	
+	cell.origin=item.origin;
+	cell.date=[item shortDisplayDate];
+	cell.headline=item.headline;
+	
+	/*if([[item origSynopsis] length]>0)
+	{
+		if([[item synopsis] length]==0)
+		{
+			item.synopsis=[stripper stripMarkup:[item origSynopsis]];
+		}
+	}*/
+	
+	cell.synopsis=item.synopsis;
+	
+	cell.comments=item.notes;  
+	
+	cell.itemImage=item.image;
+	
+	return cell;
 }
+
+
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView synopsisItemCellForSection:(NewsletterSection*)section row:(NSInteger)row
 {
@@ -798,6 +870,72 @@
 	return cell;
 }
 
+- (UITableViewCell *) addItemsToSectionCell
+{
+	UITableViewCell * cell=[[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
+	
+	cell.selectionStyle=UITableViewCellSelectionStyleNone;
+	cell.textLabel.textColor=[UIColor lightGrayColor];
+	cell.textLabel.text=@"No items in this section. Add items from sources or folders.";
+	
+	return cell;
+}
+
+- (UITableViewCell *) headlineCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
+{
+	static NSString * identifier=@"FeedItemCellIdentifier";
+	
+	FastFolderTableViewCell * cell=[tableView dequeueReusableCellWithIdentifier:identifier];
+	
+	if(cell==nil)
+	{
+		cell=[[[FastFolderTableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:identifier] autorelease];
+	}
+	
+	cell.selectionStyle=UITableViewCellSelectionStyleGray;
+	
+	cell.origin=item.origin;
+	cell.date=[item shortDisplayDate];
+	cell.headline=item.headline;
+	
+	/*if([[item origSynopsis] length]>0)
+	{
+		if([[item synopsis] length]==0)
+		{
+			item.synopsis=[stripper stripMarkup:[item origSynopsis]];
+		}
+	}*/
+	
+	cell.synopsis=item.synopsis;
+	
+	cell.comments=item.notes;  
+	
+	cell.itemImage=item.image;
+	
+	return cell;
+}
+
+- (UITableViewCell *) tweetCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
+{
+	static NSString * identifier=@"TweetItemCellIdentifier";
+	
+	FastTweetFolderTableViewCell * cell=[tableView dequeueReusableCellWithIdentifier:identifier];
+	
+	if(cell==nil)
+	{
+		cell=[[[FastTweetFolderTableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:identifier] autorelease];
+	}
+	
+	cell.selectionStyle=UITableViewCellSelectionStyleGray;
+	
+	cell.tweet=item.headline;
+	cell.date=[item shortDisplayDate];
+	cell.username=item.origin;
+	cell.userImage=item.image;
+	cell.comments=item.notes;
+	
+	return cell;
+}
 - (UITableViewCell *)tableView:(UITableView *)tableView itemCellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
 	if(indexPath.section > [self.newsletter.sections count])
@@ -807,9 +945,31 @@
 	
 	NewsletterSection * newsletterSection=[self sectionForSectionIndex:indexPath.section];
 	
+	if(indexPath.row ==0 && [newsletterSection itemCount]==0)
+	{
+		return [self addItemsToSectionCell];
+	}
+	
 	if(viewMode==kViewModeHeadlines)
 	{
-		return [self tableView:tableView headlineItemCellForSection:newsletterSection row:indexPath.row];
+		FeedItem * item=(FeedItem *)[[newsletterSection sortedItems] objectAtIndex:indexPath.row];
+		
+		if([item.originId isEqualToString:@"twitter"] ||
+		   [item.originId hasPrefix:@"facebook"])
+		{
+			// display tweet
+			return [self tweetCellForRowAtIndexPath:tableView indexPath:indexPath item:item];
+		}
+		else 
+		{
+			// display headline
+			return [self headlineCellForRowAtIndexPath:tableView indexPath:indexPath item:item];
+		}
+
+		
+		
+		
+		//return [self tableView:tableView headlineItemCellForSection:newsletterSection row:indexPath.row];
 	}
 	else 
 	{
@@ -947,7 +1107,11 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 		
 		NewsletterSection * newsletterSection=[self sectionForSectionIndex:indexPath.section]; 
 		
-		if(indexPath.row <[newsletterSection.items count])
+		int count=[newsletterSection itemCount];
+		
+		if(indexPath.row==0 && count==0) return NO;
+		
+		if(indexPath.row <count)
 		{
 			return YES;
 		}
@@ -983,7 +1147,7 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
 			
 			NewsletterSection * newsletterSection=[self sectionForSectionIndex:indexPath.section];
 			
-			if(indexPath.row < [newsletterSection.items count])
+			if(indexPath.row < [newsletterSection itemCount])
 			{
 				return 70;//tableView.rowHeight;
 			}
@@ -1001,7 +1165,7 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
 			
 			NewsletterSection * newsletterSection=[self sectionForSectionIndex:indexPath.section];
 			
-			if(indexPath.row < [newsletterSection.items count])
+			if(indexPath.row < [newsletterSection itemCount])
 			{
 				FeedItem * item=(FeedItem *)[[newsletterSection sortedItems] objectAtIndex:indexPath.row];
 		
@@ -1152,14 +1316,21 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 		
 		NewsletterSection * section=[self sectionForSectionIndex:indexPath.section];  
 		
-		if (indexPath.row == [section.items count])
+		int sectionCount=[section itemCount];
+		
+		if(indexPath.row==0 && sectionCount==0)
+		{
+			return;
+		}
+		
+		if (indexPath.row == sectionCount)
 		{
 			// insert items to section
 			[self insertSelectedItemsToSection:section atIndexPath:indexPath inTableView:tableView];
 		}
 		else 
 		{
-			if (indexPath.row == [section.items count]+1)
+			if (indexPath.row == sectionCount+1)
 			{
 				// insert new section
 				[self addSection:nil];
@@ -1187,6 +1358,15 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 		if(indexPath.section > [self.newsletter.sections count])
 		{
 			[self addSection:nil];
+			return;
+		}
+		
+		NewsletterSection * section=[self sectionForSectionIndex:indexPath.section];
+		
+		int count=[section itemCount];
+		
+		if(indexPath.row==0 && count==0)
+		{
 			return;
 		}
 		
@@ -1219,7 +1399,14 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 			
 			NewsletterSection * section=[self sectionForSectionIndex:indexPath.section];
 			
-			if(indexPath.row ==[section.items count])
+			int count=[section itemCount];
+			
+			if(indexPath.row==0 && count==0)
+			{
+				return;
+			}
+			
+			if(indexPath.row ==count)
 			{
 				[self insertSelectedItemsToSection:section atIndexPath:indexPath inTableView:tableView];
 			}
@@ -1372,7 +1559,13 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 		
 		NewsletterSection * section=[self sectionForSectionIndex:indexPath.section];
 		
-		if(indexPath.row < [section.items count])
+		int count=[section itemCount];
+		
+		if(indexPath.row==0 && count==0)
+		{
+			return UITableViewCellEditingStyleNone;
+		}
+		if(indexPath.row < count)
 		{
 			return 3; // style value for multi-select delete checkboxes - not 100% if this is ok to use or not...
 		}
@@ -1413,7 +1606,7 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 		{
 			NewsletterSection * section=[self sectionForSectionIndex:sourceIndexPath.section];
 			
-			if(proposedDestinationIndexPath.row < [section.items count])
+			if(proposedDestinationIndexPath.row < [section itemCount])
 			{
 				return proposedDestinationIndexPath;
 			}

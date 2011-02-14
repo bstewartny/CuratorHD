@@ -372,22 +372,66 @@
 	return [v autorelease];
 }
 
+
+- (UITextField*) textFieldForIndexPath:(NSIndexPath *)indexPath
+{
+	switch (indexPath.section) {
+		case 0:
+			if(indexPath.row==0)
+			{
+				return  googleReaderUsernameTextField;  
+			}
+			else 
+			{
+				return googleReaderPasswordTextField;
+			}
+			
+		case 1:
+			if(indexPath.row==0)
+			{
+				return twitterUsernameTextField;
+			}
+			else 
+			{
+				return twitterPasswordTextField;
+			}
+			
+		case 2:
+			if(indexPath.row==0)
+			{
+				return infoNgenUsernameTextField;
+			}
+			else 
+			{
+				return infoNgenPasswordTextField;
+			}
+	}
+}
+
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
+{
+	UITextField * textField=[self textFieldForIndexPath:indexPath];
+	
+	[textField becomeFirstResponder];
+}
+
 - (UITableViewCell *) createTextFieldCell:(NSString *)labelText textFieldSelector:(SEL)textFieldSelector value:(NSString*)value isSecure:(BOOL) isSecure
 {
 	UITableViewCell * cell=[[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
 	cell.selectionStyle=UITableViewCellSelectionStyleNone;
 		
-	UILabel * label=[[UILabel alloc] initWithFrame:CGRectMake(10,10,100,30)];
+	UILabel * label=[[UILabel alloc] initWithFrame:CGRectMake(10,8,100,30)];
 	label.text=labelText;
-	label.textColor=[UIColor grayColor];
-	label.font=[UIFont systemFontOfSize:18];
+	label.textColor=[UIColor blackColor];
+	label.font=[UIFont boldSystemFontOfSize:17];
 	label.backgroundColor=[UIColor clearColor];
 	
-	UITextField * textField= [[UITextField alloc] initWithFrame:CGRectMake(105,14,370,22)];
+	UITextField * textField= [[UITextField alloc] initWithFrame:CGRectMake(105,12,370,22)];
 	//textField.autoresizingMask=UIViewAutoresizingFlexibleWidth;
 	textField.backgroundColor=[UIColor clearColor];
-	textField.font=[UIFont systemFontOfSize:18];//:18];
+	textField.font=[UIFont systemFontOfSize:17];//:18];
 	textField.text=value;
+	textField.textColor=[UIColor blackColor];
 	textField.delegate=self;
 	textField.clearButtonMode=UITextFieldViewModeWhileEditing;
 	
@@ -422,31 +466,31 @@
 		case 0:
 			if(indexPath.row==0)
 			{
-				return [self createTextFieldCell:@"Username:" textFieldSelector:@selector(setGoogleReaderUsernameTextField:) value:googleReaderUsername isSecure:NO];
+				return [self createTextFieldCell:@"Username" textFieldSelector:@selector(setGoogleReaderUsernameTextField:) value:googleReaderUsername isSecure:NO];
 			}
 			else 
 			{
-				return [self createTextFieldCell:@"Password:" textFieldSelector:@selector(setGoogleReaderPasswordTextField:) value:googleReaderPassword isSecure:YES];
+				return [self createTextFieldCell:@"Password" textFieldSelector:@selector(setGoogleReaderPasswordTextField:) value:googleReaderPassword isSecure:YES];
 			}
 
 		case 1:
 			if(indexPath.row==0)
 			{
-				return [self createTextFieldCell:@"Username:" textFieldSelector:@selector(setTwitterUsernameTextField:)  value:twitterUsername isSecure:NO];
+				return [self createTextFieldCell:@"Username" textFieldSelector:@selector(setTwitterUsernameTextField:)  value:twitterUsername isSecure:NO];
 			}
 			else 
 			{
-				return [self createTextFieldCell:@"Password:" textFieldSelector:@selector(setTwitterPasswordTextField:)  value:twitterPassword isSecure:YES];
+				return [self createTextFieldCell:@"Password" textFieldSelector:@selector(setTwitterPasswordTextField:)  value:twitterPassword isSecure:YES];
 			}
 			
 		case 2:
 			if(indexPath.row==0)
 			{
-				return [self createTextFieldCell:@"Username:" textFieldSelector:@selector(setInfoNgenUsernameTextField:)  value:infoNgenUsername isSecure:NO];
+				return [self createTextFieldCell:@"Username" textFieldSelector:@selector(setInfoNgenUsernameTextField:)  value:infoNgenUsername isSecure:NO];
 			}
 			else 
 			{
-				return [self createTextFieldCell:@"Password:" textFieldSelector:@selector(setInfoNgenPasswordTextField:)  value:infoNgenPassword isSecure:YES];
+				return [self createTextFieldCell:@"Password" textFieldSelector:@selector(setInfoNgenPasswordTextField:)  value:infoNgenPassword isSecure:YES];
 			}
 			
 			
