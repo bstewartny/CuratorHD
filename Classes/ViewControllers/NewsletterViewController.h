@@ -11,7 +11,7 @@
 
 #define kViewModeSections 0
 #define kViewModeHeadlines 1
-#define kViewModeSynopsis 2
+//#define kViewModeSynopsis 2
 
 @class Newsletter;
 @class NewsletterHTMLPreviewViewController;
@@ -26,6 +26,9 @@
 	UIToolbar * editActionToolbar;
 	NSMutableArray * selectedIndexPaths;
 	NewsletterSection * tmpEditSection;
+	
+	NSArray * cachedItems;
+	
 }
 
 @property(nonatomic,retain) IBOutlet UITableView * newsletterTableView;

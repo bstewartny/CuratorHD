@@ -51,11 +51,16 @@
 		contentView2 = [[ABTableViewCellView alloc] initWithFrame:CGRectZero];
 		contentView2.opaque = YES;
 		contentView2.autoresizingMask=UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		//self.contentView.backgroundColor=[UIColor clearColor];
 		[self.contentView addSubview:contentView2];
 		[contentView2 release];
     }
     return self;
+}
+
+- (void)willTransitionToState:(UITableViewCellStateMask)state
+{
+	[super willTransitionToState:state];
+	[self setNeedsDisplay];
 }
 
 - (void)dealloc
@@ -66,9 +71,7 @@
 - (void)setFrame:(CGRect)f
 {
 	[super setFrame:f];
-	CGRect b = [self.contentView bounds];
-	//b.size.height -= 1; // leave room for the seperator line
-	[contentView2 setFrame:b];
+	[contentView2 setFrame:[self.contentView bounds]];
 }
 
 - (void)setNeedsDisplay

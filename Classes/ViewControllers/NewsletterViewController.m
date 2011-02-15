@@ -6,7 +6,6 @@
 #import "NewsletterSection.h"
 #import "Feed.h"
 #import <QuartzCore/QuartzCore.h>
-//#import "NewsletterItemContentView.h"
 #import "BlankToolbar.h"
 #import "ImageResizer.h"
 #import "ItemFilter.h"
@@ -25,8 +24,6 @@
 #import "NewsletterSynopsisItemCell.h"
 #import "FastFolderTableViewCell.h"
 #import "FastTweetFolderTableViewCell.h"
-
-#import "MarkupStripper.h"
 
 #define kEditSectionTag 1001
 #define kAddSectionTag 1002
@@ -81,15 +78,17 @@
 	
 	viewMode=kViewModeHeadlines;
 	
-	UISegmentedControl * segmentedControl=[[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Sections",@"Headlines",@"Synopsis",nil]];
+	UISegmentedControl * segmentedControl=[[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Section View",@"Item View",nil]];
 	
 	segmentedControl.segmentedControlStyle=UISegmentedControlStyleBar;
 	segmentedControl.selectedSegmentIndex=viewMode;
 	[segmentedControl addTarget:self
 						 action:@selector(toggleViewMode:)
 			   forControlEvents:UIControlEventValueChanged];
+	
 	[segmentedControl sizeToFit];
-	segmentedControl.autoresizingMask=UIViewAutoresizingFlexibleWidth;
+	
+	//segmentedControl.autoresizingMask=UIViewAutoresizingFlexibleWidth;
 	
 	self.navigationItem.titleView=segmentedControl;
 	
@@ -282,8 +281,6 @@
 			
 			int prev_section=-1;
 			
-			int section_item_count=-1;
-			
 			for (NSIndexPath * indexPath in sortedSelections)
 			{
 				if(indexPath.section != prev_section)
@@ -292,18 +289,10 @@
 					
 					sectionItems=[section sortedItems];
 					
-					section_item_count=[sectionItems count];
-					
 					prev_section=indexPath.section;
 				}
 				
 				[[sectionItems objectAtIndex:indexPath.row] delete];
-				section_item_count--;
-				if(section_item_count==0)
-				{
-					// remember row to insert 
-					//salkjlklsdljfsd  
-				}
 			}
 			
 			[self.newsletter save];
@@ -476,7 +465,7 @@
 		
 		[self.navigationItem.titleView setEnabled:NO];
 		
-		if(viewMode==kViewModeHeadlines || viewMode==kViewModeSynopsis)
+		if(viewMode==kViewModeHeadlines)
 		{
 			self.editActionToolbar.frame=CGRectMake((self.view.bounds.size.width/2) - (380/2), -45, 380, 45);
 			
@@ -498,16 +487,10 @@
 	}
 }
 
-/*- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-	NSLog(@"didRotateFromInterfaceOrientation");
-	//[self.newsletterTableView reloadData];
-}*/
-
 // Ensure that the view controller supports rotation and that the split view can therefore show in both portrait and landscape.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
 {   
-	NSLog(@"shouldAutorotateToInterfaceOrientation");
+	//NSLog(@"shouldAutorotateToInterfaceOrientation");
 	return YES;
 }
 
@@ -527,18 +510,7 @@
 		}
 		else 
 		{
-			if (indexPath.section > [self.newsletter.sections count]) 
-			{
-				return NO;
-			}
-			
-			NewsletterSection * section=[self sectionForSectionIndex:indexPath.section]; //   [[self.newsletter sortedSections] objectAtIndex:indexPath.section];
-			
-			int count=[section itemCount];
-			
-			if(indexPath.row==0 && count==0) return NO;
-			
-			return (indexPath.row >= count);
+			return YES;
 		}
 	}
 } 
@@ -552,14 +524,16 @@
 	}
 	else
 	{
-		if(self.newsletter)
+		[cachedItems release];
+		cachedItems=[[NSMutableArray alloc] init];
+		
+		for(NewsletterSection * section in [self.newsletter sortedSections])
 		{
-			return [self.newsletter.sections count]+2;
+			NSArray * items=[section sortedItems];
+			[cachedItems addObject:items];
 		}
-		else
-		{
-			return 2;
-		}
+		
+		return [cachedItems count]+1;
 	}
 }	
 
@@ -575,31 +549,6 @@
 	[customKeepButton setTitle:[NSString stringWithFormat:@"Keep (%d)",numSelected] forState:UIControlStateNormal];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-	if(section==0)
-	{
-		return @"Tap to edit header title and description";
-	}
-	else 
-	{
-		/*if(viewMode!=kViewModeSections)
-		{
-			if(section<=[self.newsletter.sections count])
-			{
-				NewsletterSection * newsletterSection=[self sectionForSectionIndex:section];
-			
-				if([newsletterSection itemCount]==0)
-				{
-					return @"No items in this section. Add items from sources or folders.";
-				}
-			}
-		}*/
-
-		return nil;
-	}
-}
-
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
 	if(section==0)
@@ -612,20 +561,12 @@
 		return @"Sections";
 	}
 	
-	if(section<=[self.newsletter.sections count])
-	{
-		NewsletterSection * newsletterSection=[self sectionForSectionIndex:section];
-		return newsletterSection.name;
-	}
-	else 
-	{
-		return nil;
-	}
+	NewsletterSection * newsletterSection=[self sectionForSectionIndex:section];
+	return newsletterSection.name;
 }
 
 - (void) formViewDidCancel:(NSInteger)tag
 {
-	
 }
 
 - (void) formViewDidFinish:(NSInteger)tag withValues:(NSArray*)values
@@ -696,30 +637,17 @@
 	}
 	else
 	{
-		if(section > [self.newsletter.sections count])
-		{
-			return 1; 
-		}
-		
 		NewsletterSection * newsletterSection=[self sectionForSectionIndex:section];
 		
-		int count=[newsletterSection itemCount];
-	
-		if(count==0)
-		{
-			return 1;
-		}
-		else 
-		{
-			return count;
-		}
-
+		return [newsletterSection itemCount];
 	}
 }
 
 - (NewsletterSection *)sectionForSectionIndex:(NSInteger)section
 {
 	// subtract 1 for newsletter header...
+	// TODO: cache this or make sure we dont call it too frequently
+	NSLog(@"fetching all sections from database...");
 	return [[self.newsletter sortedSections] objectAtIndex:section-1];
 }
 
@@ -756,131 +684,6 @@
 	return cell;
 }
 
-- (UITableViewCell *)addSectionTableViewCell 
-{
-	UITableViewCell* cell=[[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
-	cell.selectionStyle=UITableViewCellSelectionStyleNone;
-	cell.textLabel.textColor=[UIColor lightGrayColor];
-	cell.textLabel.text=@"Tap here to add a new section";
-	cell.editingAccessoryType=UITableViewCellAccessoryNone;
-	cell.accessoryView=nil;
-	cell.accessoryType=UITableViewCellAccessoryNone;
-	return cell;
-}
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView headlineItemCellForSection:(NewsletterSection*)section row:(NSInteger)row
-{
-	static NSString * identifier=@"FeedItemCellIdentifier";
-
-	FeedItem * item=(FeedItem *)[[section sortedItems] objectAtIndex:row];
-	
-	NewsletterHeadlineItemCell * cell=(NewsletterHeadlineItemCell*)[tableView dequeueReusableCellWithIdentifier:identifier];
-
-	if(cell==nil)
-	{
-		cell=[[[NewsletterHeadlineItemCell alloc] initWithReuseIdentifier:identifier] autorelease];
-	}
-	
-	if(tableView.editing)
-	{
-		cell.selectionStyle=3;
-	}
-	else	
-	{
-		cell.selectionStyle=UITableViewCellSelectionStyleGray;
-	}
-	
-	cell.item=item;
-	
-	cell.synopsisLabel.text=item.synopsis;
-	
-	cell.headlineLabel.text=item.headline;
-		
-	cell.sourceLabel.text=item.origin;
-	
-	cell.dateLabel.text=[item shortDisplayDate];
-	
-	return cell;
-}*/
-
-- (UITableViewCell *)tableView:(UITableView *)tableView headlineItemCellForSection:(NewsletterSection*)section row:(NSInteger)row
-{
-//- (UITableViewCell *) headlineCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
-//{
-	static NSString * identifier=@"FeedItemCellIdentifier";
-	FeedItem * item=(FeedItem *)[[section sortedItems] objectAtIndex:row];
-	
-	FastFolderTableViewCell * cell=[tableView dequeueReusableCellWithIdentifier:identifier];
-	
-	if(cell==nil)
-	{
-		cell=[[[FastFolderTableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:identifier] autorelease];
-	}
-	
-	cell.selectionStyle=UITableViewCellSelectionStyleGray;
-	
-	cell.origin=item.origin;
-	cell.date=[item shortDisplayDate];
-	cell.headline=item.headline;
-	
-	/*if([[item origSynopsis] length]>0)
-	{
-		if([[item synopsis] length]==0)
-		{
-			item.synopsis=[stripper stripMarkup:[item origSynopsis]];
-		}
-	}*/
-	
-	cell.synopsis=item.synopsis;
-	
-	cell.comments=item.notes;  
-	
-	cell.itemImage=item.image;
-	
-	return cell;
-}
-
-
-
-
-- (UITableViewCell *)tableView:(UITableView *)tableView synopsisItemCellForSection:(NewsletterSection*)section row:(NSInteger)row
-{
-	static NSString *CellIdentifier = @"synopsisItemCellIdentifier";
-	
-	NewsletterSynopsisItemCell * cell=[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	
-	if(cell==nil)
-	{
-		cell=[[[NewsletterSynopsisItemCell alloc] initWithReuseIdentifier:CellIdentifier] autorelease];
-	}
-	
-	if(tableView.editing)
-	{
-		cell.selectionStyle=3;
-	}
-	else	
-	{
-		cell.selectionStyle=UITableViewCellSelectionStyleNone;
-	}
-	
-	FeedItem * item=(FeedItem *)[[section sortedItems] objectAtIndex:row];
-	
-	cell.item=item;
-	
-	return cell;
-}
-
-- (UITableViewCell *) addItemsToSectionCell
-{
-	UITableViewCell * cell=[[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
-	
-	cell.selectionStyle=UITableViewCellSelectionStyleNone;
-	cell.textLabel.textColor=[UIColor lightGrayColor];
-	cell.textLabel.text=@"No items in this section. Add items from sources or folders.";
-	
-	return cell;
-}
-
 - (UITableViewCell *) headlineCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
 {
 	static NSString * identifier=@"FeedItemCellIdentifier";
@@ -893,23 +696,12 @@
 	}
 	
 	cell.selectionStyle=UITableViewCellSelectionStyleGray;
-	
+	cell.item=item;
 	cell.origin=item.origin;
 	cell.date=[item shortDisplayDate];
 	cell.headline=item.headline;
-	
-	/*if([[item origSynopsis] length]>0)
-	{
-		if([[item synopsis] length]==0)
-		{
-			item.synopsis=[stripper stripMarkup:[item origSynopsis]];
-		}
-	}*/
-	
 	cell.synopsis=item.synopsis;
-	
 	cell.comments=item.notes;  
-	
 	cell.itemImage=item.image;
 	
 	return cell;
@@ -936,50 +728,22 @@
 	
 	return cell;
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView itemCellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	if(indexPath.section > [self.newsletter.sections count])
-	{
-		return [self addSectionTableViewCell];
-	}
+	FeedItem *item=[self itemAtIndexPath:indexPath];
 	
-	NewsletterSection * newsletterSection=[self sectionForSectionIndex:indexPath.section];
-	
-	if(indexPath.row ==0 && [newsletterSection itemCount]==0)
-	{
-		return [self addItemsToSectionCell];
-	}
-	
-	if(viewMode==kViewModeHeadlines)
-	{
-		FeedItem * item=(FeedItem *)[[newsletterSection sortedItems] objectAtIndex:indexPath.row];
-		
-		if([item.originId isEqualToString:@"twitter"] ||
+	if([item.originId isEqualToString:@"twitter"] ||
 		   [item.originId hasPrefix:@"facebook"])
-		{
-			// display tweet
-			return [self tweetCellForRowAtIndexPath:tableView indexPath:indexPath item:item];
-		}
-		else 
-		{
-			// display headline
-			return [self headlineCellForRowAtIndexPath:tableView indexPath:indexPath item:item];
-		}
-
-		
-		
-		
-		//return [self tableView:tableView headlineItemCellForSection:newsletterSection row:indexPath.row];
+	{
+		// display tweet
+		return [self tweetCellForRowAtIndexPath:tableView indexPath:indexPath item:item];
 	}
 	else 
 	{
-		if(viewMode==kViewModeSynopsis)
-		{
-			return [self tableView:tableView synopsisItemCellForSection:newsletterSection row:indexPath.row];
-		}
+		// display headline
+		return [self headlineCellForRowAtIndexPath:tableView indexPath:indexPath item:item];
 	}
-	
-	return nil;
 }
 
 - (UITableViewCell*)newsletterHeaderCell
@@ -1065,7 +829,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	NSLog(@"cellForRowAtIndexPath: %@",[indexPath description]);
+	//NSLog(@"cellForRowAtIndexPath: %@",[indexPath description]);
 	
 	if(indexPath.section==0)
 	{
@@ -1100,33 +864,13 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 	}
 	else 
 	{
-		if(indexPath.section > [self.newsletter.sections count])
-		{
-			return NO;
-		}
-		
-		NewsletterSection * newsletterSection=[self sectionForSectionIndex:indexPath.section]; 
-		
-		int count=[newsletterSection itemCount];
-		
-		if(indexPath.row==0 && count==0) return NO;
-		
-		if(indexPath.row <count)
-		{
-			return YES;
-		}
-		else 
-		{
-			return NO;
-		}
+		return YES;
 	}
 }
 
 - (CGFloat)tableView:(UITableView*)tableView
 heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
-	NSLog(@"heightForRowAtIndexPath");
-	
 	if(indexPath.section==0)
 	{
 		return 160;
@@ -1138,50 +882,7 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
 	}
 	else 
 	{
-		if(viewMode==kViewModeHeadlines)
-		{
-			if(indexPath.section >[self.newsletter.sections count])
-			{
-				return tableView.rowHeight;
-			}
-			
-			NewsletterSection * newsletterSection=[self sectionForSectionIndex:indexPath.section];
-			
-			if(indexPath.row < [newsletterSection itemCount])
-			{
-				return 70;//tableView.rowHeight;
-			}
-			else 
-			{
-				return tableView.rowHeight;
-			}
-		}
-		else 
-		{
-			if(indexPath.section >[self.newsletter.sections count])
-			{
-				return tableView.rowHeight;
-			}
-			
-			NewsletterSection * newsletterSection=[self sectionForSectionIndex:indexPath.section];
-			
-			if(indexPath.row < [newsletterSection itemCount])
-			{
-				FeedItem * item=(FeedItem *)[[newsletterSection sortedItems] objectAtIndex:indexPath.row];
-		
-				NewsletterSynopsisItemCellLayout layout=[NewsletterSynopsisItemCell layoutForItem:item withCellWidth:600.0]; //tableView.bounds.size.width];
-				
-				return layout.size.height;
-				/*
-				ItemSize itemSize=[NewsletterItemContentView sizeForCell:item viewMode:(viewMode==kViewModeSynopsis) rect:CGRectZero];
-		
-				return itemSize.size.height;*/
-			}
-			else 
-			{
-				return tableView.rowHeight;
-			}
-		}
+		return 104; 
 	}
 }
 
@@ -1201,10 +902,6 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		if(fromIndexPath.section != toIndexPath.section) return;
 		
 		if(fromIndexPath.section==0 || toIndexPath.section==0) return;
-		
-		if(fromIndexPath.section > [self.newsletter.sections count]) return;
-		
-		if(toIndexPath.section > [self.newsletter.sections count]) return;
 		
 		NewsletterSection * newsletterSection1=[self sectionForSectionIndex:fromIndexPath.section];
 		
@@ -1308,40 +1005,11 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 	}
 	else 
 	{
-		if(indexPath.section > [self.newsletter.sections count])
-		{
-			[self addSection:nil];
-			return;
-		}
-		
 		NewsletterSection * section=[self sectionForSectionIndex:indexPath.section];  
 		
-		int sectionCount=[section itemCount];
-		
-		if(indexPath.row==0 && sectionCount==0)
-		{
-			return;
-		}
-		
-		if (indexPath.row == sectionCount)
-		{
-			// insert items to section
-			[self insertSelectedItemsToSection:section atIndexPath:indexPath inTableView:tableView];
-		}
-		else 
-		{
-			if (indexPath.row == sectionCount+1)
-			{
-				// insert new section
-				[self addSection:nil];
-			}
-			else 
-			{
-				// delete item
-				[[[section sortedItems] objectAtIndex:indexPath.row] delete];
-				[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-			}
-		}
+		// delete item
+		[[[section sortedItems] objectAtIndex:indexPath.row] delete];
+		[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 	}
 	[[NSNotificationCenter defaultCenter] 
 	 postNotificationName:@"ReloadData"
@@ -1355,21 +1023,6 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 	
 	if(tableView.editing && (viewMode!=kViewModeSections))
 	{
-		if(indexPath.section > [self.newsletter.sections count])
-		{
-			[self addSection:nil];
-			return;
-		}
-		
-		NewsletterSection * section=[self sectionForSectionIndex:indexPath.section];
-		
-		int count=[section itemCount];
-		
-		if(indexPath.row==0 && count==0)
-		{
-			return;
-		}
-		
 		[selectedIndexPaths addObject:indexPath];
 		// get total # of currently selected items...
 		[self setNumRowsSelected:[selectedIndexPaths count]];
@@ -1391,39 +1044,24 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 		}
 		else 
 		{
-			if(indexPath.section > [self.newsletter.sections count])
-			{
-				[self addSection:nil];
-				return;
-			}
-			
-			NewsletterSection * section=[self sectionForSectionIndex:indexPath.section];
-			
-			int count=[section itemCount];
-			
-			if(indexPath.row==0 && count==0)
-			{
-				return;
-			}
-			
-			if(indexPath.row ==count)
-			{
-				[self insertSelectedItemsToSection:section atIndexPath:indexPath inTableView:tableView];
-			}
-			else 
-			{
-				[self editItemAtIndexPath:indexPath];
-			}
+			[self editItemAtIndexPath:indexPath];
 		}
 	}
 }
 
 - (FeedItem*) itemAtIndexPath:(NSIndexPath*)indexPath
 {
+	NSArray * cachedSectionItems=[cachedItems objectAtIndex:indexPath.section-1];// subtract one because newsletter header is first section
+	
+	FeedItem * item=[cachedSectionItems objectAtIndex:indexPath.row];
+	/*
 	NewsletterSection * newsletterSection=[self sectionForSectionIndex:indexPath.section];
 	
+	//FeedItem * item=[[newsletterSection itemFetcher] itemAtIndex:indexPath.row];
+	NSLog(@"fetching all section items from database...");
+	// TODO: cache sorted items or make sure we dont call this too many times during rendering or scrolling of table
 	FeedItem * item=(FeedItem *)[[newsletterSection sortedItems] objectAtIndex:indexPath.row];
-	
+	*/
 	return item;
 }
 
@@ -1552,27 +1190,7 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 	}
 	else
 	{
-		if(indexPath.section > [self.newsletter.sections count])
-		{
-			return UITableViewCellEditingStyleInsert;
-		}
-		
-		NewsletterSection * section=[self sectionForSectionIndex:indexPath.section];
-		
-		int count=[section itemCount];
-		
-		if(indexPath.row==0 && count==0)
-		{
-			return UITableViewCellEditingStyleNone;
-		}
-		if(indexPath.row < count)
-		{
-			return 3; // style value for multi-select delete checkboxes - not 100% if this is ok to use or not...
-		}
-		else 
-		{
-			return UITableViewCellEditingStyleInsert;
-		}
+		return 3; // style value for multi-select delete checkboxes - not 100% if this is ok to use or not...
 	}
 }
 
@@ -1604,16 +1222,7 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 		}
 		else 
 		{
-			NewsletterSection * section=[self sectionForSectionIndex:sourceIndexPath.section];
-			
-			if(proposedDestinationIndexPath.row < [section itemCount])
-			{
-				return proposedDestinationIndexPath;
-			}
-			else 
-			{
-				return sourceIndexPath;
-			}
+			return proposedDestinationIndexPath;
 		}
 	}
 }
@@ -1713,7 +1322,7 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 	[imagePickerPopover release];
 	[editActionToolbar release];
 	[selectedIndexPaths release];
-	
+	[cachedItems release];
 	[super dealloc];
 }
 

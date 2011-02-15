@@ -17,15 +17,6 @@ static UIFont * synopsisFont;
 	}
 }
 
-- (id) initWithReuseIdentifier:(NSString *)reuseIdentifier
-{
-	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
-    if (self) {
-        // Initialization code.
-    }
-    return self;
-}
-
 - (void) setHeadline:(NSString *)h
 {
 	[headline release];
@@ -39,15 +30,6 @@ static UIFont * synopsisFont;
 	if(selected)
 	{
 		self.readHeadlineColor=[UIColor grayColor];
-		[self setNeedsDisplay];
-	}
-}
-
-- (void) setEditing:(BOOL)editing animated:(BOOL)animated
-{
-	[super setEditing:editing animated:animated];
-	if(editing)
-	{
 		[self setNeedsDisplay];
 	}
 }
@@ -72,7 +54,6 @@ static UIFont * synopsisFont;
 		}
 		else 
 		{
-			
 			bbackgroundColor = [UIColor clearColor];
 			headlineColor =readHeadlineColor;
 			sourceColor = [UIColor grayColor];

@@ -15,6 +15,8 @@ static UIFont * commentsFont;
 
 - (void)drawContentView:(CGRect)r
 {
+	//NSLog(@"drawContentView: %@",NSStringFromCGRect(r));
+	
 	[super drawContentView:r];
 	
 	CGContextRef context = UIGraphicsGetCurrentContext();
@@ -44,12 +46,12 @@ static UIFont * commentsFont;
 	if([comments length]>0)
 	{
 		[commentsColor set];
-		[comments drawInRect:CGRectMake(70, 74, width-78,28) withFont:commentsFont lineBreakMode:UILineBreakModeTailTruncation];
+		[comments drawInRect:CGRectMake(78, 74, width-88,28) withFont:commentsFont lineBreakMode:UILineBreakModeTailTruncation];
 	}
 	else 
 	{
 		[sourceColor set];
-		[@"Tap to add comments" drawInRect:CGRectMake(70, 74, width-78,28) withFont:commentsFont lineBreakMode:UILineBreakModeTailTruncation];
+		[@"Tap to add comments" drawInRect:CGRectMake(78, 74, width-88,28) withFont:commentsFont lineBreakMode:UILineBreakModeTailTruncation];
 	}
 }
 

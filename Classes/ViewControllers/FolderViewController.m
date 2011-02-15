@@ -39,7 +39,9 @@
 	{
 		cell=[[[FastFolderTableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:identifier] autorelease];
 	}
-		
+			
+	cell.item=item;
+	
 	cell.selectionStyle=UITableViewCellSelectionStyleGray;
 
 	cell.origin=item.origin;

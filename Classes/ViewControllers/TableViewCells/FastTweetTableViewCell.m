@@ -33,26 +33,6 @@ static UIFont * tweetFont;
 	[self setNeedsDisplay];
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated 
-{    
-    [super setSelected:selected animated:animated];
-	//self.read=YES;
-	[self setNeedsDisplay];
-}
-
-- (void) setEditing:(BOOL)editing animated:(BOOL)animated
-{
-	[super setEditing:editing animated:animated];
-	
-	[self setNeedsDisplay];
-}
-
-- (void)setHighlighted:(BOOL)lit 
-{
-	[super setHighlighted:lit];
-	[self setNeedsDisplay];
-}
-
 - (void)drawContentView:(CGRect)r
 {
 	CGContextRef context = UIGraphicsGetCurrentContext();
@@ -91,11 +71,11 @@ static UIFont * tweetFont;
 	
 	CGContextFillRect(context, self.contentView.bounds);
 	
-	[userImage drawAtPoint:CGPointMake(4, 4)];
+	[userImage drawAtPoint:CGPointMake(8, 8)];
 	
 	CGPoint p;
 	
-	p.x = 8+userImage.size.width;
+	p.x = 16+userImage.size.width;
 	p.y = 0;
 	
 	[usernameColor set];
