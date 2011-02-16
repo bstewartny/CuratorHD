@@ -72,7 +72,16 @@
 
 - (void)viewDidLoad
 {
+	self.view.backgroundColor=[UIColor lightGrayColor];
+	
 	self.newsletterTableView.allowsSelectionDuringEditing=YES;
+	
+	CGRect f=self.newsletterTableView.frame;
+	f.origin.x+=1;
+	f.size.width-=1;
+	self.newsletterTableView.frame=f;
+	
+	
 	
 	selectedIndexPaths=[[NSMutableArray alloc] init];
 	

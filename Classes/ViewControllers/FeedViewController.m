@@ -555,11 +555,11 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
 	if(twitter)
 	{
-		return 70;
+		return 76;
 	}
 	else 
 	{
-		return 70; 
+		return 84; 
 		//return tableView.rowHeight;
 	}
 }

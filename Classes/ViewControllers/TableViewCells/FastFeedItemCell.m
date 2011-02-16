@@ -13,7 +13,7 @@ static UIFont * synopsisFont;
 	{
 		sourceFont=[[UIFont systemFontOfSize:12] retain];
 		headlineFont=[[UIFont boldSystemFontOfSize:17] retain];
-		synopsisFont=[[UIFont systemFontOfSize:12] retain];
+		synopsisFont=[[UIFont systemFontOfSize:14] retain];
 	}
 }
 
@@ -72,22 +72,22 @@ static UIFont * synopsisFont;
 	CGContextFillRect(context, self.contentView.bounds);
 	
 	CGPoint p;
-	p.x = 8;
-	p.y = 0;
+	p.x = 10;
+	p.y = 4;
 	
 	[sourceColor set];
 	[origin drawAtPoint:p withFont:sourceFont];
 	
 	CGFloat width=self.contentView.bounds.size.width;
 	
-	[date drawInRect:CGRectMake(width-150, 0, 140, 14) withFont:sourceFont lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentRight];
+	[date drawInRect:CGRectMake(width-150, 4, 140, 14) withFont:sourceFont lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentRight];
 	
 	[headlineColor set];
 	
-	[headline drawInRect:CGRectMake(8, 14, width-12, 18) withFont:headlineFont lineBreakMode:UILineBreakModeTailTruncation];
+	[headline drawInRect:CGRectMake(10, 18, width-18, 18) withFont:headlineFont lineBreakMode:UILineBreakModeTailTruncation];
 	
 	[synopsisColor set];
-	[synopsis drawInRect:CGRectMake(8,35, width-12, 28) withFont:synopsisFont lineBreakMode:UILineBreakModeTailTruncation];
+	[synopsis drawInRect:CGRectMake(10,40, width-18, 40) withFont:synopsisFont lineBreakMode:UILineBreakModeTailTruncation];
 }
 
 - (void)dealloc 

@@ -44,7 +44,15 @@
 	
 	cell.selectionStyle=UITableViewCellSelectionStyleGray;
 
-	cell.origin=item.origin;
+	if([item.origin length]==0)
+	{
+		cell.origin=@"From the Web";
+	}
+	else
+	{
+		cell.origin=item.origin;
+	}
+	
 	cell.date=[item shortDisplayDate];
 	cell.headline=item.headline;
 	
@@ -81,7 +89,15 @@
 	cell.tweet=item.headline;
 	cell.date=[item shortDisplayDate];
 	cell.username=item.origin;
-	cell.userImage=item.image;
+	
+	if(item.image)
+	{
+		cell.userImage=item.image;
+	}
+	else {
+		cell.userImage=[UIImage imageNamed:@"profileplaceholder.png"];
+	}
+
 	cell.comments=item.notes;
 	
 	return cell;

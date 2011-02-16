@@ -11,8 +11,8 @@ static UIFont * tweetFont;
 {
 	if(self==[FastTweetTableViewCell class])
 	{
-		usernameFont=[[UIFont boldSystemFontOfSize:14] retain];
-		tweetFont=[[UIFont systemFontOfSize:16] retain];
+		usernameFont=[[UIFont boldSystemFontOfSize:17] retain];
+		tweetFont=[[UIFont systemFontOfSize:17] retain];
 		dateFont=[[UIFont systemFontOfSize:12] retain];
 	}
 }
@@ -76,7 +76,7 @@ static UIFont * tweetFont;
 	CGPoint p;
 	
 	p.x = 16+userImage.size.width;
-	p.y = 0;
+	p.y = 4;
 	
 	[usernameColor set];
 	
@@ -86,11 +86,11 @@ static UIFont * tweetFont;
 	
 	[dateColor set];
 	
-	[date drawInRect:CGRectMake(width-150, 0, 140, 15) withFont:dateFont lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentRight];
+	[date drawInRect:CGRectMake(width-150, 4, 140, 15) withFont:dateFont lineBreakMode:UILineBreakModeClip alignment:UITextAlignmentRight];
 	
 	[tweetColor set];
 	
-	[tweet  drawInRect:CGRectMake(p.x, 15, width-p.x, 54) withFont:tweetFont lineBreakMode:UILineBreakModeWordWrap];
+	[tweet  drawInRect:CGRectMake(p.x, 24, (width-p.x) -12, 54) withFont:tweetFont lineBreakMode:UILineBreakModeWordWrap];
 }
 
 

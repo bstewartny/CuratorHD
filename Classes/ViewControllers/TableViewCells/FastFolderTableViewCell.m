@@ -17,7 +17,7 @@ static UIFont * commentsFont;
 	{
 		sourceFont=[[UIFont systemFontOfSize:12] retain];
 		headlineFont=[[UIFont boldSystemFontOfSize:17] retain];
-		synopsisFont=[[UIFont systemFontOfSize:12] retain];
+		synopsisFont=[[UIFont systemFontOfSize:14] retain];
 		commentsFont=[[UIFont italicSystemFontOfSize:14] retain];
 	}
 }
@@ -423,8 +423,8 @@ static UIFont * commentsFont;
 	}
 
 	CGPoint p;
-	p.x = 78;
-	p.y = 0;
+	p.x = 80;
+	p.y = 4;
 	
 	[sourceColor set];
 	[origin drawAtPoint:p withFont:sourceFont];
@@ -435,10 +435,10 @@ static UIFont * commentsFont;
 	
 	[headlineColor set];
 	
-	[headline drawInRect:CGRectMake(78, 14, width-88, 18) withFont:headlineFont lineBreakMode:UILineBreakModeTailTruncation];
+	[headline drawInRect:CGRectMake(80, 18, width-88, 18) withFont:headlineFont lineBreakMode:UILineBreakModeTailTruncation];
 	
 	[synopsisColor set];
-	[synopsis drawInRect:CGRectMake(78,35, width-88, 28) withFont:synopsisFont lineBreakMode:UILineBreakModeTailTruncation];
+	[synopsis drawInRect:CGRectMake(80,40, width-88, 34) withFont:synopsisFont lineBreakMode:UILineBreakModeTailTruncation];
 	
 	// draw seperator line
 	/*CGContextSetLineWidth(context,1);
@@ -454,12 +454,12 @@ static UIFont * commentsFont;
 	if([comments length]>0)
 	{
 		[commentsColor set];
-		[comments drawInRect:CGRectMake(78, 74, width-88,28) withFont:commentsFont lineBreakMode:UILineBreakModeTailTruncation];
+		[comments drawInRect:CGRectMake(80, 80, width-88,34) withFont:commentsFont lineBreakMode:UILineBreakModeTailTruncation];
 	}
 	else 
 	{
 		[sourceColor set];
-		[@"Tap to add comments" drawInRect:CGRectMake(78, 74, width-88,28) withFont:commentsFont lineBreakMode:UILineBreakModeTailTruncation];
+		[@"Tap to add comments" drawInRect:CGRectMake(80, 80, width-88,34) withFont:commentsFont lineBreakMode:UILineBreakModeTailTruncation];
 	}
 }
 

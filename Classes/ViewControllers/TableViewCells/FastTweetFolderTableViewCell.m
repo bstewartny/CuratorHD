@@ -46,12 +46,12 @@ static UIFont * commentsFont;
 	if([comments length]>0)
 	{
 		[commentsColor set];
-		[comments drawInRect:CGRectMake(78, 74, width-88,28) withFont:commentsFont lineBreakMode:UILineBreakModeTailTruncation];
+		[comments drawInRect:CGRectMake(16+userImage.size.width, 74, (width-16+userImage.size.width)-8,34) withFont:commentsFont lineBreakMode:UILineBreakModeTailTruncation];
 	}
 	else 
 	{
 		[sourceColor set];
-		[@"Tap to add comments" drawInRect:CGRectMake(78, 74, width-88,28) withFont:commentsFont lineBreakMode:UILineBreakModeTailTruncation];
+		[@"Tap to add comments" drawInRect:CGRectMake(16+userImage.size.width, 74, (width-16+userImage.size.width)-8,34) withFont:commentsFont lineBreakMode:UILineBreakModeTailTruncation];
 	}
 }
 

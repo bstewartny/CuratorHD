@@ -71,7 +71,9 @@
 - (void)setFrame:(CGRect)f
 {
 	[super setFrame:f];
-	[contentView2 setFrame:[self.contentView bounds]];
+	//CGRect b=[self.contentView bounds];
+	//b.size.height-=1;
+	[contentView2 setFrame:self.contentView.bounds];//[self.contentView bounds]];
 }
 
 - (void)setNeedsDisplay
