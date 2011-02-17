@@ -15,7 +15,7 @@
 #import "JSON.h"
 #import "MarkupStripper.h"
 #import "UrlUtils.h"
-#define kUseGoogleAppEngine YES
+#define kUseGoogleAppEngine NO
 
 @implementation GoogleAccountUpdater
 
@@ -312,6 +312,7 @@
 	 postNotificationName:@"UpdateStatus"
 	 object:@"Updating read status"];
 	
+	NSLog(@"Begining updateReadStatus");
 	
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"RssFeedItem" 
 											  inManagedObjectContext:moc];
@@ -411,6 +412,8 @@
 	
 	[request release];
 	[dict release];
+	
+	NSLog(@"Ending updateReadStatus");
 	
 	return num_updated;
 }
@@ -639,6 +642,8 @@
 	NSLog(@"Getting most recent %d items from feed: %@",maxItems,feed.name);
 	
 	NSData * rawData=[client getData:url];
+	
+	NSLog(@"Got raw data from feed...");
 	
 	if([self isDataSameAsLastTime:feed data:rawData])
 	{

@@ -108,6 +108,7 @@
 
 - (NSNumber*) currentUnreadCount
 {
+	NSLog(@"Feed.currentUnreadCount");
 	return [self unreadCount];
 }
 

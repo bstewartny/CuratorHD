@@ -258,7 +258,9 @@ static NSString * gaeCookie;
 	@try 
 	{
 		// attempt to avoid leaking NSData from response?
+		NSLog(@"clearing cached responses");
 		[[NSURLCache sharedURLCache] removeAllCachedResponses];
+		NSLog(@"done clearing cached responses");
 		
 		NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
 		[self appendAuthHeader:request];
@@ -267,12 +269,15 @@ static NSString * gaeCookie;
 		
 		NSHTTPURLResponse * response=NULL;
 		
+		
 		NSData * data= [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil];
 	
 		NSInteger code=[response statusCode];
 		
 		if(code >=200 && code < 404)
 		{
+			NSLog(@"Got data from url: %@",url);
+			NSLog(@"Got %d bytes from url: %@",[data length],url);
 			return data;
 		}
 		else 

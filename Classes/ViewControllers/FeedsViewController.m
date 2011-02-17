@@ -351,6 +351,7 @@
 					// refresh object so latest changes (such as unreadCount are displayed when row is reloaded...)
 					@try
 					{
+						NSLog(@"refreshObject: do we get correct count?");
 						[[feed managedObjectContext] refreshObject:feed mergeChanges:YES];
 						[tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
 					}

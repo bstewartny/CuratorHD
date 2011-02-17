@@ -70,16 +70,25 @@
 	[[self managedObjectContext] deleteObject:self];
 }
 
-
 - (NSString*) key
 {
-	return [NSString stringWithFormat:@"%@:%@",self.headline,self.url];
+	if([self.url length]>0)
+	{
+		return self.url;
+	}
+	else 
+	{
+		return self.headline;
+	}
+	// this is extra work, maybe just need URL if available, or headline if no url...
+	//return [NSString stringWithFormat:@"%@:%@",self.headline,self.url];
 }
 
 - (void) copyAttributes:(FeedItem*)item
 {
 	//TODO: do we need to release/autorelease the copies here?  Not sure about copy memory semantics...
-	self.headline=[[item.headline copy] autorelease];
+	// why do we need copy here? Cant we just set properties?  Not sure because this is managed object...
+	/*self.headline=[[item.headline copy] autorelease];
 	self.synopsis=[[item.synopsis copy] autorelease];
 	self.origSynopsis=[[item.origSynopsis copy] autorelease];
 	self.url=[[item.url copy] autorelease];
@@ -94,6 +103,25 @@
 	self.isRead=[[item.isRead copy] autorelease];
 	self.isStarred=[[item.isStarred copy] autorelease];
 	self.isShared=[[item.isShared copy] autorelease];
+	*/
+	
+	self.headline=item.headline;
+	self.synopsis=item.synopsis;
+	self.origSynopsis=item.origSynopsis;
+	self.url=item.url;
+	self.date=item.date;
+	self.notes=item.notes;
+	self.image=item.image;
+	self.imageUrl=item.imageUrl;
+	self.origin=item.origin;
+	self.originId=item.originId;
+	self.originUrl=item.originUrl;
+	self.uid=item.uid;
+	self.isRead=item.isRead;
+	self.isStarred=item.isStarred;
+	self.isShared=item.isShared;
+	
+	
 }
 
 + (NSString*) normalizeHeadline:(NSString*)s
@@ -212,8 +240,18 @@
 
 - (NSString*) key
 {
-	return [NSString stringWithFormat:@"%@:%@",self.headline,self.url];
+	if([self.url length]>0)
+	{
+		return self.url;
+	}
+	else 
+	{
+		return self.headline;
+	}
+	// this is extra work, maybe just need URL if available, or headline if no url...
+	//return [NSString stringWithFormat:@"%@:%@",self.headline,self.url];
 }
+
 
 - (id) init
 {
@@ -236,7 +274,7 @@
 - (void) copyAttributes:(FeedItem*)item
 {
 	//TODO: do we need to release/autorelease the copies here?  Not sure about copy memory semantics...
-	self.headline=[[item.headline copy] autorelease];
+	/*self.headline=[[item.headline copy] autorelease];
 	self.synopsis=[[item.synopsis copy] autorelease];
 	self.origSynopsis=[[item.origSynopsis copy] autorelease];
 	self.url=[[item.url copy] autorelease];
@@ -251,6 +289,23 @@
 	self.isRead=[[item.isRead copy] autorelease];
 	self.isStarred=[[item.isStarred copy] autorelease];
 	self.isShared=[[item.isShared copy] autorelease];
+	*/
+	
+	self.headline=item.headline;
+	self.synopsis=item.synopsis;
+	self.origSynopsis=item.origSynopsis;
+	self.url=item.url;
+	self.date=item.date;
+	self.notes=item.notes;
+	self.image=item.image;
+	self.imageUrl=item.imageUrl;
+	self.origin=item.origin;
+	self.originId=item.originId;
+	self.originUrl=item.originUrl;
+	self.uid=item.uid;
+	self.isRead=item.isRead;
+	self.isStarred=item.isStarred;
+	self.isShared=item.isShared;
 }
 
 - (void) dealloc

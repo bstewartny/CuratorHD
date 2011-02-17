@@ -891,7 +891,7 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
 	}
 	else 
 	{
-		return 104; 
+		return 124; 
 	}
 }
 

@@ -15,12 +15,13 @@
 #import "FolderTweetTableViewCell.h"
 #import "FastFolderTableViewCell.h"
 #import "FastTweetFolderTableViewCell.h"
+#import "DocumentEditFormViewController.h"
 
 @implementation FolderViewController
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	return 104.0;
+	return 124.0;
 }
 
 - (void) viewDidLoad
@@ -71,6 +72,35 @@
 	cell.itemImage=item.image;
 	
 	return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	if(tableView.editing)
+	{
+		[super tableView:tableView didSelectRowAtIndexPath:indexPath];
+	}
+	else
+	{
+		if([fetcher count]>0)
+		{
+			FeedItem * item=[fetcher itemAtIndex:indexPath.row];
+		
+			DocumentEditFormViewController *controller = [[DocumentEditFormViewController alloc] initWithNibName:@"DocumentEditFormView" bundle:nil];
+			
+			controller.item=item;
+			
+			controller.delegate=self;
+			
+			[controller setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+			[controller setModalPresentationStyle:UIModalPresentationPageSheet];
+			
+			[self presentModalViewController:controller animated:YES];
+			
+			[controller release];
+			 
+		}
+	}
 }
 
 - (UITableViewCell *) tweetCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item

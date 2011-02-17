@@ -32,8 +32,10 @@
 
 - (NSNumber *) currentUnreadCount
 {
+	NSLog(@"RssFeed.currentUnreadCount");
 	if ([self.feedCategory isEqualToString:@"_category"])
 	{
+		NSLog(@"get count from database dynamically");
 		int count=[self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(isRead==0) AND (feed.account.name==%@) AND (feed.feedCategory CONTAINS %@)",self.account.name,[NSString stringWithFormat:@"|%@|",self.name]]];
 		return [NSNumber numberWithInt:count];
 	}
@@ -41,11 +43,13 @@
 	{
 		if ([self.feedCategory isEqualToString:@"_all"])
 		{
+			NSLog(@"get count from database dynamically");
 			int count=[self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(isRead==0) AND (feed.account.name==%@)",self.account.name]];  
 			return [NSNumber numberWithInt:count];
 		}
 		else
 		{
+			NSLog(@"get unreadCount from object");
 			return [self unreadCount];
 		}
 	}

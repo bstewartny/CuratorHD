@@ -436,14 +436,13 @@
 	else 
 	{
 		RootFeedsViewController * feedsView=[[RootFeedsViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
-		//feedsView.title=@"Sources";
-		//feedsView.navigationItem.title=@"Sources";
 		
 		[feedsView setSourcesFetcher:sourcesFetcher];
 		[feedsView setFoldersFetcher:foldersFetcher];
 		[feedsView setNewslettersFetcher:newslettersFetcher];
 		
 		feedsView.itemDelegate=self;
+		
 		masterNavController=[[UINavigationController alloc] initWithRootViewController:feedsView];
 		
 		rootFeedsView=[feedsView retain];
@@ -455,84 +454,6 @@
 	[foldersFetcher release];
 	[newslettersFetcher release];
 }
-
-
-
-- (void) setUpSourcesViewOld
-{
-	NSLog(@"setUpSourcesView");
-	NSMutableArray * array=[NSMutableArray new];
-	
-	ArrayFetcher * arrayFetcher=[[ArrayFetcher alloc] init];
-	
-	// add accounts
-	
-	NSArray * tmpAccounts=[self accounts];
-	
-	for(FeedAccount * a in tmpAccounts)
-	{
-		NSLog(@"Got account from db: %@",[a name]);
-		if([a isDeleted])
-		{
-			NSLog(@"FeedAccount is deleted!");
-		}
-	}
-	
-	
-	[array addObjectsFromArray:tmpAccounts];
-	
-	// add newsletter fetcher
-	NewsletterFeedGroup * newslettersGroup=[[NewsletterFeedGroup alloc] init];
-	newslettersGroup.name=@"Newsletters";
-	newslettersGroup.image=[UIImage imageNamed:@"32-newsletter.png"];
-	newslettersGroup.editable=YES;
-	
-	[array addObject:newslettersGroup];
-	
-	[newslettersGroup release];
-	
-	// add folders
-	FolderFeedGroup * foldersGroup=[[FolderFeedGroup alloc] init];
-	foldersGroup.name=@"Folders";
-	foldersGroup.image=[UIImage imageNamed:@"32-folderclosed.png"];
-	foldersGroup.editable=YES;
-	
-	[array addObject:foldersGroup];
-	
-	[foldersGroup release];
-	
-	arrayFetcher.array=array;
-	[array release];
-	
-	if(masterNavController!=nil)
-	{
-		NSLog(@"popToRootViewControllerAnimated");
-		
-		[arrayFetcher performFetch];
-		
-		[accountFeedsView setFetcher:arrayFetcher];
-		
-		[masterNavController popToViewController:accountFeedsView animated:YES];
-		
-		[accountFeedsView.tableView reloadData];
-	}
-	else 
-	{
-		FeedsViewController * feedsView=[[FeedsViewController alloc] initWithNibName:@"FeedsView" bundle:nil];
-		feedsView.title=@"Sources";
-		feedsView.navigationItem.title=@"Sources";
-	
-		feedsView.fetcher=arrayFetcher;
-		feedsView.itemDelegate=self;
-		masterNavController=[[UINavigationController alloc] initWithRootViewController:feedsView];
-		
-		accountFeedsView=[feedsView retain];
-		[feedsView release];
-	}
-	
-	[arrayFetcher release];
-}
-
 
 - (void) createSampleNewsletter
 {
@@ -828,51 +749,29 @@
 
 	NSLog(@"accountSettingsDone");
 	
-	[[NSNotificationCenter defaultCenter] 
+	/*[[NSNotificationCenter defaultCenter] 
 	 postNotificationName:@"UpdateComplete"
 	 object:nil];
-	
+	*/
 	// reconfigure app
 	[self reconfigure];
 	
-	NSMutableArray * failedAccountNames=[[NSMutableArray alloc] init];
+	NSArray * accounts=[self accounts];
 	
-	/*if(![self areAccountsValid:failedAccountNames])
-	{
-		if([failedAccountNames count]>0)
-		{
-			if([failedAccountNames count]==1)
-			{
-				UIAlertView * alertView=[[UIAlertView alloc] initWithTitle:@"Invalid Account Settings" message:[NSString stringWithFormat:@"Failed to authenticate %@ account. Please verify username and password.",[failedAccountNames objectAtIndex:0]] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-				alertView.delegate=self;
-				alertView.tag=kInvalidAccountSettingsAlertViewTag;
-				[alertView show];
-				[alertView release];
-			}
-			else 
-			{
-				UIAlertView * alertView=[[UIAlertView alloc] initWithTitle:@"Invalid Account Settings" message:@"Failed to authenticate your accounts. Please verify account settings." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-				alertView.delegate=self;
-				alertView.tag=kInvalidAccountSettingsAlertViewTag;
-				[alertView show];
-				[alertView release];
-			}
-			//[self showAccountSettingsForm];
-		}
-	}
-	else 
-	{*/
-		[self setUpSourcesView];
+	ArrayFetcher * sourcesFetcher=[[ArrayFetcher alloc] init];
+	
+	sourcesFetcher.array=accounts;
 		
-		//if([self hasInternetConnection])
-		//{
-			if([[self accounts] count]>0)
-			{
-				[self update];
-			}
-		//}
-	//}
-	[failedAccountNames release];
+	[rootFeedsView setSourcesFetcher:sourcesFetcher];
+	
+	[sourcesFetcher release];
+	
+	[rootFeedsView.tableView reloadData];
+		
+	if([accounts count]>0)
+	{
+		[self update];
+	}
 }
 
 - (void) finishStartup
@@ -898,20 +797,6 @@
 	if([[self accounts]count]==0)
 	{
 		[self showAccountSettingsForm];
-		/*
-		AccountSettingsFormViewController * accountSettingsForm=[[AccountSettingsFormViewController alloc] initWithNibName:@"AccountSettingsFormView" bundle:nil];
-		
-		accountSettingsForm.modalPresentationStyle=UIModalPresentationFormSheet;
-		
-		[detailNavController presentModalViewController:accountSettingsForm animated:YES];
-	
-		[accountSettingsForm release];
-		*/
-		/*UIAlertView * noAccountsAlertView=[[UIAlertView alloc] initWithTitle:@"No account settings" message:@"Please setup your account info in app settings." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-		
-		[noAccountsAlertView show];
-		
-		[noAccountsAlertView release];*/
 	}
 	else 
 	{
@@ -927,6 +812,7 @@
 	
 	[pool drain];
 }
+
 - (void)showAccountSettingsForm
 {
 	AccountSettingsFormViewController * accountSettingsForm=[[AccountSettingsFormViewController alloc] initWithNibName:@"AccountSettingsFormView" bundle:nil];
@@ -967,15 +853,6 @@
 - (void) update
 {
 	NSLog(@"AppDelegate.update");
-	/*
-	FacebookClient * fb=[[[FacebookClient alloc] init] autorelease];
-	
-	if([fb isAuthorized])
-	{
-		NSArray * wall=[fb getWall];
-	}
-	*/
-	 
 	
 	if(!updating)
 	{
@@ -985,14 +862,12 @@
 			return;
 		}
 		
-		//if([self hasInternetConnection])
-		//{
-			updating=YES;
-			
-			BOOL needAuthorization=NO;
-			
-			if([self hasInternetConnection])
-			{
+		updating=YES;
+		
+		BOOL needAuthorization=NO;
+		
+		/*if([self hasInternetConnection])
+		{
 			// enumerate accounts on main thread for accounts which require user input on validation (such as OAuth accounts)
 			for(FeedAccount * account in [self accounts])
 			{
@@ -1002,40 +877,30 @@
 					break;
 				}
 			}
-			}
-			
-			if(!needAuthorization)
-			{
-				// send notification that update is starting
-				[[NSNotificationCenter defaultCenter] 
-				postNotificationName:@"UpdateStarting"
-				object:nil];
+		}*/
 		
-				[self performSelectorInBackground:@selector(update_start) withObject:nil];
-			}
-			else 
+		//if(!needAuthorization)
+		//{
+			// send notification that update is starting
+			[[NSNotificationCenter defaultCenter] 
+			postNotificationName:@"UpdateStarting"
+			object:nil];
+	
+			[self performSelectorInBackground:@selector(update_start) withObject:nil];
+		/*}
+		else 
+		{
+			updating=NO;
+			[self update_end];
+			for(FeedAccount * account in [self accounts])
 			{
-				updating=NO;
-				[self update_end];
-				for(FeedAccount * account in [self accounts])
+				if(![account isValid])
 				{
-					if(![account isValid])
-					{
-						[account authorize];
-						return;
-					}
+					[account authorize];
+					return;
 				}
 			}
-		//}
-		//else 
-		//{
-		//	[self update_end];
-		//	UIAlertView * alertView=[[UIAlertView alloc] initWithTitle:@"No Internet Connection" message:@"You must have an internet connection to update sources." delegate:nil cancelButtonTitle:@"Close" otherButtonTitles:nil];
-		//	
-		//	[alertView show];
-		//	
-		//	[alertView release];
-		//}
+		}*/
 	}
 }
 - (void) updateSingleAccountFromScroll:(NSString*)accountName
@@ -1248,7 +1113,7 @@
 		
 		AccountUpdater * updater=[feed.account accountUpdater];
 		
-		updater.iterations=[NSArray arrayWithObjects:[NSNumber numberWithInt:100],nil];
+		updater.iterations=[NSArray arrayWithObjects:[NSNumber numberWithInt:50],nil];
 		 
 		if([updater isAccountValid])
 		{
@@ -1455,7 +1320,6 @@
 	
 	BOOL hasConnection=[self hasInternetConnection];
 	 
-	
 	if((!hasConnection) || ([updater isAccountValid]))
 	{
 		NSManagedObjectContext * moc=[self createNewManagedObjectContext:NSMergeByPropertyObjectTrumpMergePolicy];
@@ -1740,7 +1604,7 @@
 	BOOL wasUpdated=NO;
 	@try 
 	{
-		[updater updateFeed:feed withContext:[feed managedObjectContext]];
+		//[updater updateFeed:feed withContext:[feed managedObjectContext]];
 		if([updater updateFeed:feed withContext:[feed managedObjectContext]])
 		{
 			wasUpdated=YES;
@@ -2329,8 +2193,6 @@
 
 - (FeedAccount*)fetchOrCreateAccount:(NSString*)accountName prefix:(NSString*)accountSettingsPrefix image:(UIImage*)image
 {
-	//NSLog(@"fetchOrCreateAccount: %@",accountName);
-	
 	// do we have this account in app settings?
 	NSString * username=[UserSettings getSetting:[NSString stringWithFormat:@"%@.username",accountSettingsPrefix]];
 	NSString * password=[UserSettings getSetting:[NSString stringWithFormat:@"%@.password",accountSettingsPrefix]];
@@ -2356,114 +2218,10 @@
 		else 
 		{
 			// delete account
-		
 			[self deleteAccount:accountName];
 		}
 	}
 
-	/*
-	
-	FeedAccount * account=nil;
-	
-	BOOL accountExists=NO;
-	for(FeedAccount * tmp in accounts)
-	{
-		if([tmp.name isEqualToString:accountName])
-		{
-			account=tmp;
-			accountExists=YES;
-			break;
-		}
-	}
-	
-	NSManagedObjectContext * moc=[self managedObjectContext];
-
-	if(account==nil)
-	{
-		account=[self fetchAccount:accountName];
-	}
-	
-	// do we have this account in the db?
-	//FeedAccount * account=[self fetchAccount:accountName];
-	
-	if(username && [username length]>0)
-	{
-		NSLog(@"Found username for %@ account: %@",accountName,username);
-		if(account==nil)
-		{
-			NSLog(@"Adding new %@ account to db...",accountName);
-			// add account to db
-			account= [NSEntityDescription insertNewObjectForEntityForName:@"FeedAccount" inManagedObjectContext:moc];
-			account.name=accountName;
-			account.image=image;
-			account.username=username;
-			account.password=password;
-			
-			[accounts addObject:account];
-		}
-		else 
-		{
-			// update credentials in case they changed
-			if([account.username isEqualToString:username])
-			{
-				// just update password in case it changed...
-				account.password=password;
-				
-				if(!accountExists)
-				{
-					[accounts addObject:account];
-				}
-			}
-			else 
-			{
-				NSLog(@"Username changed for %@ account, replacing existing account with new one...",accountName);
-				// username changed, so delete existing account and create a new one...
-				[moc deleteObject:account];
-				
-				if(accountExists)
-				{
-					[accounts removeObject:account];
-				}
-				
-				account=nil;
-				
-				account= [NSEntityDescription insertNewObjectForEntityForName:@"FeedAccount" inManagedObjectContext:moc];
-				
-				account.name=accountName;
-				account.image=image;
-				account.username=username;
-				account.password=password;
-				
-				[accounts addObject:account];
-			}
-		}
-	}
-	else 
-	{
-		if(account)
-		{
-			NSLog(@"No username in settings for %@ account, deleting account from db...",accountName);
-			[moc deleteObject:account];
-			
-			if(accountExists)
-			{
-				[accounts removeObject:account];
-			}
-			
-			// delete from db
-			
-			
-			
-			account=nil;
-		}
-	}
-	NSError * error=nil;
-	[moc save:&error];
-	if(error)
-	{
-		NSLog(@"Error saving account info: %@",[error localizedDescription]);
-	}*/
-	
 	return account;
 }
 

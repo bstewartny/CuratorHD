@@ -529,6 +529,22 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	}
 }
 
+
+- (void) redraw
+{
+	NSLog(@"redraw");
+	[self.tableView reloadData];
+	/*[[NSNotificationCenter defaultCenter] 
+	 postNotificationName:@"ReloadData"
+	 object:nil];*/
+}
+
+- (void) redraw:(FeedItem*)item
+{
+	[self redraw];
+}
+
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	if(tableView.editing)

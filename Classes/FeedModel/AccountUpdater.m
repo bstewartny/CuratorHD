@@ -184,8 +184,6 @@
 	int numNewItems=0;
 	BOOL requiresUpdateUnreadCount=NO;
 	
-	//int maxItemsList[]={1,20};
-	
 	for(int i=0;i<[iterations count];i++)
 	{
 		int maxItems=[[iterations objectAtIndex:i] intValue];

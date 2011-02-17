@@ -23,6 +23,8 @@
 	item.synopsis=synopsisTextView.text;
 	item.notes=commentsTextView.text;
 	
+	[item save];
+	
 	if(delegate)
 	{
 		[delegate redraw:item];
@@ -50,11 +52,12 @@
 	UITextField * textField=[[UITextField alloc] initWithFrame:CGRectMake(10,kHeadlineViewTop,self.view.bounds.size.width-20,kHeadlineViewHeight)];
 	textField.backgroundColor=[UIColor whiteColor];
 	textField.text=self.item.headline;
-	textField.font=[UIFont boldSystemFontOfSize:22]; 
+	textField.placeholder=@"Item headline";
+	textField.font=[UIFont boldSystemFontOfSize:17]; 
 	textField.textColor=self.headlineTextColor;
 	//textField.borderStyle=UITextBorderStyleRoundedRect;
 	
-	textField.layer.cornerRadius=6;
+	textField.layer.cornerRadius=4;
 	
 	self.headlineTextField=textField;
 	
@@ -64,10 +67,10 @@
 	
 	UITextView * textView=[[UITextView alloc] initWithFrame:CGRectMake(10,kHeadlineViewTop+kHeadlineViewHeight+5, self.view.bounds.size.width-20, self.view.bounds.size.height-(kHeadlineViewTop+kHeadlineViewHeight+kCommentsViewHeight+10+10))];  
 	textView.backgroundColor=[UIColor whiteColor];
-	textView.font=[UIFont systemFontOfSize:18];
+	textView.font=[UIFont systemFontOfSize:14];
 	textView.textColor=self.synopsisTextColor;
 	textView.text=self.item.synopsis;
-	textView.layer.cornerRadius=6;
+	textView.layer.cornerRadius=4;
 	self.synopsisTextView=textView;
 	
 	[self.view  addSubview:textView];
@@ -174,7 +177,7 @@
 	
 	[tools release];
 	
-	
+	[self.commentsTextView becomeFirstResponder];
 }
 
 - (void) viewDidUnload
@@ -189,7 +192,7 @@
 {
 	UIView * newView=[[[UIView alloc] initWithFrame:frame] autorelease];
 	newView.backgroundColor=[UIColor whiteColor];
-	newView.layer.cornerRadius=6;
+	newView.layer.cornerRadius=4;
 	
 	UIImage * quoteImage=[UIImage imageNamed:@"CommentQuoteImage.jpg"];
 		
@@ -204,7 +207,7 @@
 		
 	textView.backgroundColor=[UIColor whiteColor];
 	textView.textColor=[UIColor redColor]; //self.commentsTextColor;
-	textView.font=[UIFont italicSystemFontOfSize:18];
+	textView.font=[UIFont italicSystemFontOfSize:14];
 		
 	textView.text=self.item.notes;
 	
