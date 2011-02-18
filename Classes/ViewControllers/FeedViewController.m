@@ -201,24 +201,27 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad 
 {
-	self.view.backgroundColor=[UIColor lightGrayColor];
+	//self.view.backgroundColor=[UIColor lightGrayColor];
 	
 	//[self.tableView setBackgroundView:nil];
 	//[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
 	
 	//self.tableView.backgroundColor=[UIColor groupTableViewBackgroundColor];
 	
-	CGRect f=self.tableView.frame;
-	f.origin.x+=1;
-	f.size.width-=1;
-	self.tableView.frame=f;
+	//CGRect f=self.tableView.frame;
+	//f.origin.x+=1;
+	//f.size.width-=1;
+	//self.tableView.frame=f;
 	
 	//self.parentViewController.view.clipsToBounds=NO;
 	//self.view.clipsToBounds=NO;
 	//self.tableView.clipsToBounds=NO;
-	//self.tableView.layer.shadowColor=[UIColor blackColor].CGColor;
-	//self.tableView.layer.shadowOpacity=0.8;
-	//self.tableView.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.tableView.bounds].CGPath;
+	
+	//self.view.clipsToBounds=NO;
+	//self.view.layer.shadowColor=[UIColor blackColor].CGColor;
+	//self.view.layer.shadowOpacity=0.8;
+	//self.view.layer.shadowRadius=8.0;
+	//self.view.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.tableView.layer.bounds].CGPath;
 	//self.tableView.layer.borderColor=[UIColor grayColor].CGColor;
 	//self.tableView.layer.borderWidth=1;
 	

@@ -1,20 +1,9 @@
-//
-//  GoogleReaderClient.m
-//  Untitled
-
-//
-//  Created by Robert Stewart on 5/18/10.
-//  Copyright 2010 InfoNgen. All rights reserved.
-//
-
 #import "GoogleReaderClient.h"
 #import "JSON.h"
 #import "FeedItem.h"
 #import "TouchXML.h"
 #import "ItemFilter.h"
 #import "FeedAccount.h"
-//#import "GoogleReaderAtomFeed.h"
-//#import "GoogleReaderAccount.h"
 #import "UrlUtils.h"
 #import "UrlParams.h"
 #import "GoogleClientLogin.h"
@@ -62,7 +51,6 @@ static NSString * gaeCookie;
 				auth=[GoogleClientLogin getAuthKeyWithUsername:username andPassword:password forService:@"reader" withSource:@"CuratorHD"];
 				[auth retain];
 				NSLog(@"auth key=%@",auth);
-				//auth=[[self getAuthToken:self.account] retain];
 			}
 			
 			if(auth!=nil && [auth length]>0)
@@ -95,55 +83,6 @@ static NSString * gaeCookie;
 	
 	return [self getString:url];
 }
-/*
-- (NSString*) getAuthToken:(FeedAccount*)account
-{
-	NSLog(@"getSessionID");
-	
-	// TODO: encode parameters...
-	@try {
-	
-		NSString * url=[NSString stringWithFormat:@"https://www.google.com/accounts/ClientLogin?accountType=GOOGLE&service=reader&Email=%@&Passwd=%@",self.username,self.password];
-		
-		NSString * response=[self getString:url];
-
-		if(response==nil)
-		{
-			NSLog(@"No response returned...");
-			// authentication failed, return nil...
-			return nil;
-		}
-
-		NSRange auth_range=[response rangeOfString:@"Auth="];
-		
-		if(auth_range.location==NSNotFound)
-		{
-			NSLog(@"No Auth section found in response, maybe bad username or password...");
-			return nil;
-		}
-		
-		NSString * auth_tmp=[response substringFromIndex:auth_range.location+5];
-	
-		if([auth_tmp hasSuffix:@"\n"])
-		{
-			auth_tmp=[auth_tmp substringToIndex:[auth_tmp length]-1];
-		}
-		
-		if([auth_tmp hasSuffix:@"\n"])
-		{
-			auth_tmp = [auth_tmp substringToIndex:[auth_tmp length]-1];
-		}
-		
-		return auth_tmp;
-	}
-	@catch (NSException * e) {
-		NSLog(@"Exception getting Google Reader SID: %@",[e description]);
-		return nil;
-	}
-	@finally {
-		
-	}
-}*/
 
 - (void) appendAcceptGzipEncodingHeader:(NSMutableURLRequest*)request
 {
@@ -163,7 +102,6 @@ static NSString * gaeCookie;
 	{
 		[request addValue:@"InfoNgen Curator HD" forHTTPHeaderField:@"User-Agent"];
 	}
-
 }
 
 - (void) appendAuthHeader:(NSMutableURLRequest*)request
@@ -183,8 +121,6 @@ static NSString * gaeCookie;
 
 - (BOOL) postEditCommand:(NSString*)url params:(UrlParams*)params
 {
-	NSLog(@"post: %@",url);
-	
 	@try 
 	{
 		[[NSURLCache sharedURLCache] removeAllCachedResponses];
@@ -253,8 +189,6 @@ static NSString * gaeCookie;
 
 - (NSData*) getData:(NSString*)url
 {
-	NSLog(@"%@",url);
-	
 	@try 
 	{
 		// attempt to avoid leaking NSData from response?
@@ -276,8 +210,6 @@ static NSString * gaeCookie;
 		
 		if(code >=200 && code < 404)
 		{
-			NSLog(@"Got data from url: %@",url);
-			NSLog(@"Got %d bytes from url: %@",[data length],url);
 			return data;
 		}
 		else 
@@ -449,8 +381,6 @@ static NSString * gaeCookie;
 		NSLog(@"Got 0 items from GAE");
 	}
 
- 
-	
 	[pool drain];
 	
 	return tmp;
@@ -573,11 +503,8 @@ static NSString * gaeCookie;
 			return [NSString stringWithFormat:@"http://www.google.com/reader/api/0/stream/contents/user/-/label/%@",[tag stringByReplacingOccurrencesOfString:@" " withString:@"%20"]];
 		case GoogleReaderFeedTypeFollowingItems:
 			return @"http://www.google.com/reader/api/0/stream/contents/user/-/state/com.google/broadcast-friends";
-			
-			//return @"http://www.google.com/reader/api/0/stream/contents/user/-/state/com.blogger/blogger-following";
 		case GoogleReaderFeedTypeNotes:
 			return @"http://www.google.com/reader/api/0/stream/contents/user/-/state/com.google/created";
-			
 		default:
 			return @"http://www.google.com/reader/api/0/stream/contents/user/-/state/com.google/reading-list";
 	}
@@ -728,7 +655,6 @@ static NSString * gaeCookie;
 	return tmp;
 }
 
-
 - (NSArray*) getUnreadIds:(int)max
 {
 	NSString * url=[NSString stringWithFormat:@"http://www.google.com/reader/api/0/stream/items/ids?s=user/-/state/com.google/reading-list&xt=user/-/state/com.google/read&n=%d",max ];
@@ -807,78 +733,17 @@ static NSString * gaeCookie;
 	return [NSString stringWithFormat:@"tag:google.com,2005:reader/item/%@",tmp];
 }
 
-
-
-
-/*
-- (void) getFeedUnreadCounts
-{
-	NSString * url=@"http://www.google.com/reader/api/0/unread-count?all=true";
-	
-	// gives # of unread items per feed...
-	
-	
-	<object>
-		<number name="max">1000</number>
-			<list name="unreadcounts">
-				<object>
-					<string name="id">feed/http://developer.yahoo.com/blogs/hadoop/index.xml</string>
-					<number name="count">3</number>
-					<number name="newestItemTimestampUsec">1282176962619732</number>
-				</object>
-				<object>
-					<string name="id">feed/http://bikesfortherestofus.blogspot.com/feeds/posts/default</string>
-					<number name="count">1</number>
-					<number name="newestItemTimestampUsec">1282219023076810</number>
-				</object>
-				...
-	
-	NSString * data=[self getString:@"http://www.google.com/reader/api/0/tag/list"];
-	
-	NSMutableArray * tagnames=[[[NSMutableArray alloc] init] autorelease];
-	NSAutoreleasePool * pool=[[NSAutoreleasePool alloc] init];
-	
-	CXMLDocument *xmlParser = [[[CXMLDocument alloc] initWithXMLString:data options:0 error:nil] autorelease];
-	
-	NSArray * tags=[xmlParser nodesForXPath:@"object/list[@name='tags']/object/string[@name='id']" error:nil];
-	
-	if(tags)
-	{
-		for(CXMLElement * tag in tags)
-		{
-			NSString * tagid=[tag  stringValue];
-			NSRange range=[tagid rangeOfString:@"/label/"];
-			if(range.location!=NSNotFound)
-			{
-				NSString * tagName=[tagid substringFromIndex:range.location + 7];
-				
-				[tagnames addObject:tagName];
-			}
-		}
-	}
-	
-	[pool drain];
-	
-	
-	 
-}
-*/
-
 - (BOOL) isValid
 {
-	//NSLog(@"GoogleReaderClient.isValid");
-	
 	@synchronized(auth)
 	{
 		return (auth!=nil && [auth length]>0);
 	}
 }
+
 - (void) markAsRead:(FeedItem*)item
 {
-	NSLog(@"markItemAsRead: %@",item.uid);
-	
 	NSString * url=@"http://www.google.com/reader/api/0/edit-tag";
-	
 	
 	if(token==nil || [token length]==0)
 	{
@@ -904,17 +769,16 @@ static NSString * gaeCookie;
 	if(![self postEditCommand:url params:params])
 	{
 		NSLog(@"Failed to mark item as read: %@",[params getQueryString]);
-		@synchronized(token)
+		/*@synchronized(token)
 		{
 			// maybe edit token is expired...
 			[token release];
 			token=[[self getEditToken] retain];
-		}
+		}*/
 	}
 
 	[params release];
 }
-
 
 - (NSArray*) getSubscriptionList:(NSMutableDictionary*)imageCache
 {
@@ -946,7 +810,9 @@ static NSString * gaeCookie;
 				
 				TempFeed * feed=[TempFeed new];
 				
-				feed.name=[stripper stripMarkup:[subscription objectForKey:@"title"]];
+				//feed.name=[stripper stripMarkup:[subscription objectForKey:@"title"]];
+				feed.name=[subscription objectForKey:@"title"];
+				
 				feed.feedId=[subscription objectForKey:@"id"];
 				feed.htmlUrl=[subscription objectForKey:@"htmlUrl"];
 				
@@ -989,90 +855,15 @@ static NSString * gaeCookie;
 				
 				[feedCategory release];
 				
-				/*UIImage * img=nil;
-				if(imageCache)
-				{
-					@synchronized(imageCache)
-					{
-						img=[imageCache objectForKey:feed.feedId];
-					}
-				}
-				if(img==nil)
-				{
-					NSLog(@"No favicon found in cache for key: %@",feed.feedId);
-					requiresFaviconDownload=YES;
-				}*/
-				
-				//feed.image=img;
-				
 				[feeds addObject:feed];
 				
 				[feed release];
 			}
 		}
-		
-		/*if(requiresFaviconDownload)
-		{
-			// get favicons
-			NSLog(@"Queieing favicon downloads to operation queue...");
-			
-			NSOperationQueue * queue=[[NSOperationQueue alloc] init];
-			[queue setMaxConcurrentOperationCount:4];
-			int num_queued=0;
-			for(TempFeed * feed in feeds)
-			{
-				if(feed.image==nil)
-				{
-					NSInvocationOperation * op=[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(getFaviconForFeed:) object:[NSArray arrayWithObjects:feed,imageCache,nil]];
-				
-					[queue addOperation:op];
-				
-					[op release];
-					num_queued++;
-				}
-			}
-			NSLog(@"Queued %d requests to operation queue...",num_queued);
-			[queue waitUntilAllOperationsAreFinished];
-			[queue release];
-		}*/
 	}
 	
 	return feeds;
 }
-
-/*
-- (void) getFaviconForFeed:(NSArray*)args
-{
-	TempFeed* feed=[args objectAtIndex:0];
-	
-	NSMutableDictionary * imageCache=[args objectAtIndex:1];
-
-	UIImage * img=nil;
-	if(imageCache)
-	{
-		@synchronized(imageCache)
-		{
-			img=[imageCache objectForKey:feed.feedId];
-		}
-	}
-	if(img==nil)
-	{
-		img=[UrlUtils faviconFromUrl:feed.htmlUrl imageCache:imageCache];
-		if(img!=nil)
-		{
-			if (imageCache) 
-			{
-				@synchronized(imageCache)
-				{
-					[imageCache setObject:img forKey:feed.feedId];
-				}
-			}
-		}
-	}
-	
-	feed.image=img;
-}
-*/
 
 - (NSArray*) getFollowingItems:(ItemFilter*)filter
 {
@@ -1109,9 +900,6 @@ static NSString * gaeCookie;
 
 - (void) dealloc
 {
-	//[auth release];
-	//[token release];
-	//[account release];
 	[username release];
 	[password release];
 	[super dealloc];

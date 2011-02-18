@@ -14,6 +14,7 @@
 #import "FolderViewController.h"
 #import "FeedAccount.h"
 #import "UserSettings.h"
+#import "CustomCellBackgroundView.h"
 
 @implementation RootFeedsViewController
 @synthesize tableView,sourcesFetcher,newslettersFetcher,foldersFetcher,itemDelegate;
@@ -29,7 +30,16 @@
 {
     [super viewDidLoad];
 	
+	self.tableView.showsVerticalScrollIndicator=NO;
+	self.tableView.showsHorizontalScrollIndicator=NO;
+	
 	self.tableView.allowsSelectionDuringEditing=YES;
+	
+	[self.tableView setBackgroundView:nil];
+	[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
+	
+	
+	self.tableView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
 	
 	self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(toggleEditMode:)] autorelease];
 				[[NSNotificationCenter defaultCenter]
@@ -203,6 +213,8 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 	
 	[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 	
+	[tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
+	
 	[[NSNotificationCenter defaultCenter] 
 	 postNotificationName:@"ReloadActionData"
 	 object:nil];
@@ -234,6 +246,36 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		 postNotificationName:@"ReloadActionData"
 		 object:nil];
 	}
+	//[tableView reloadSections:[NSIndexSet indexSetWithIndex:fromIndexPath.section] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+
+
+
+- (CustomCellBackgroundViewPosition) cellPositionForIndexPath:(NSIndexPath*)indexPath
+{
+	int count=[self tableView:tableView numberOfRowsInSection:indexPath.section];
+	
+	if(count==1)
+	{
+		return CustomCellBackgroundViewPositionSingle;
+	}
+	else {
+		if(indexPath.row==0)
+		{
+			return CustomCellBackgroundViewPositionTop;
+		}
+		else {
+			
+			if(indexPath.row==count-1)
+			{
+				return CustomCellBackgroundViewPositionBottom;
+			}
+			else {
+				return CustomCellBackgroundViewPositionMiddle;
+			}
+		}
+	}
 }
 
 - (void)configureCell:(UITableViewCell*)cell 
@@ -241,14 +283,30 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 {
 	Feed * feed=[[self fetcherForSection:indexPath.section] itemAtIndex:indexPath.row];
 	
+	
+	cell.backgroundColor=[UIColor clearColor];
+	
+	CustomCellBackgroundView * gbView=[[[CustomCellBackgroundView alloc] initWithFrame:CGRectZero] autorelease];
+	
+	[gbView setPosition:[self cellPositionForIndexPath:indexPath]];
+
+	cell.backgroundView=gbView;
+	
+	gbView.fillColor=[UIColor blackColor]; 
+	gbView.borderColor=[UIColor grayColor];
+	
+	cell.backgroundView.alpha=0.5;
+	
+	cell.textLabel.textColor=[UIColor whiteColor];
+	
 	if(indexPath.section==0)
 	{
-		cell.editingAccessoryType=UITableViewCellAccessoryDetailDisclosureButton;
+		//cell.editingAccessoryType=UITableViewCellAccessoryDetailDisclosureButton;
 		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 	}
 	else 
 	{
-		cell.editingAccessoryType=UITableViewCellAccessoryDetailDisclosureButton;
+		//cell.editingAccessoryType=UITableViewCellAccessoryDetailDisclosureButton;
 		cell.accessoryType=UITableViewCellAccessoryNone;
 	}
 	
@@ -297,7 +355,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		cell.textLabel.font=[UIFont boldSystemFontOfSize:16];
 	}
 	
-	cell.selectionStyle=UITableViewCellSelectionStyleGray;
+	//cell.selectionStyle=UITableViewCellSelectionStyleGray;
 	cell.textLabel.text=feed.name;
 }
 
@@ -308,6 +366,20 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	{
 		UITableViewCell * cell=[[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
 		cell.textLabel.textColor=[UIColor lightGrayColor];
+		cell.backgroundColor=[UIColor clearColor];
+		CustomCellBackgroundView * gbView=[[[CustomCellBackgroundView alloc] initWithFrame:CGRectZero] autorelease];
+		
+		[gbView setPosition:[self cellPositionForIndexPath:indexPath]];
+		
+		cell.backgroundView=gbView;
+		
+		gbView.fillColor=[UIColor blackColor]; 
+		gbView.borderColor=[UIColor grayColor];
+		
+		cell.backgroundView.alpha=0.5;
+		
+		//cell.textLabel.textColor=[UIColor whiteColor];
+		
 		switch(indexPath.section)
 		{
 			case 0:
@@ -320,15 +392,20 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 				cell.textLabel.text=@"Add Newsletter";
 				break;
 		}
-		cell.selectionStyle=UITableViewCellSelectionStyleGray;
+		cell.selectionStyle=UITableViewCellSelectionStyleNone;
 		return cell;
 	}
 
 	BadgedTableViewCell * cell = [[[BadgedTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1  reuseIdentifier:nil] autorelease];
-		
+		cell.selectionStyle=UITableViewCellSelectionStyleNone;
 	[self configureCell:cell atIndexPath:indexPath];
 	
 	return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+	return 30;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -351,7 +428,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		}
 	}
 }
-
+/*
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
 	switch (section) {
@@ -363,7 +440,55 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 			return @"Newsletters";
 	}
 }
+*/
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+	UIView * v=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 30)];
+	v.backgroundColor=[UIColor clearColor];
+	
+	UILabel * label=[[UILabel alloc] init];
+	
+	label.textColor=[UIColor whiteColor];
+	
+	
+	
+	 
+	switch (section) {
+		case 0:
+			label.text= @"Sources";
+			break;
+		case 1:
+			label.text= @"Folders";
+			break;
+		case 2:
+			label.text= @"Newsletters";
+			break;
+	}
+	
+	
+	
+	label.backgroundColor=[UIColor clearColor];
+	
+	[label sizeToFit];
+	
+	CGRect f=label.frame;
+	f.origin.x=15;
+	f.origin.y=5;
+	label.frame=f;
+	
+	[v addSubview:label];
+	
+	[label release];
+	
+	return [v autorelease];
+}
 
+
+
+
+
+
+/*
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
 	//if(indexPath.section==0) return;
@@ -384,10 +509,18 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		[[[UIApplication sharedApplication] delegate] editNewsletterName:[newslettersFetcher itemAtIndex:indexPath.row]];
 		return;
 	}
+}*/
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return tableView.editing;
+	
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	if(tableView.editing)
+	{
 	if (indexPath.row >=[[self fetcherForSection:indexPath.section] count]) 
 	{
 		return UITableViewCellEditingStyleInsert;
@@ -396,6 +529,11 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	{
 		return UITableViewCellEditingStyleDelete;
 	}
+	}
+	else {
+		return UITableViewCellEditingStyleNone;
+	}
+
 }
 
 - (ItemFetcher*) fetcherForSection:(NSInteger)section
@@ -440,6 +578,25 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 					break;
 			}
 			
+			return;
+		}
+		else 
+		{
+			switch(indexPath.section)
+			{
+				case 0:
+					// edit source - show sources form
+					[[[UIApplication sharedApplication] delegate] showAccountSettingsForm];
+					break;
+				case 1:
+					// edit folder
+					[[[UIApplication sharedApplication] delegate] editFolderName:[foldersFetcher itemAtIndex:indexPath.row]];
+					break;
+				case 2:
+					// edit newsleter
+					[[[UIApplication sharedApplication] delegate] editNewsletterName:[newslettersFetcher itemAtIndex:indexPath.row]];
+					break;
+			}
 			return;
 		}
 	}

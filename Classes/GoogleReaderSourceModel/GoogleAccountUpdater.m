@@ -339,19 +339,7 @@
 			[dict setObject:unreadItem forKey:unreadItem.uid];
 		}
 		
-		int max = 200; //[localUnreadItems count] * 10;
-		
-		//if(max<200)
-		//{
-		//	max=200;
-		//}
-		
-		//if(max>1000)
-		//{
-		//	max=1000;
-		//}
-		
-		//int max=2000;// max item ids to fetch from server
+		int max = 200; 
 		
 		NSArray * remoteReadIds=[client getReadIds:max];
 		
@@ -532,7 +520,7 @@
 	if(requiresFaviconDownload)
 	{
 		// get favicons
-		NSLog(@"Queieing favicon downloads to operation queue...");
+		/*NSLog(@"Queieing favicon downloads to operation queue...");
 		
 		NSOperationQueue * queue=[[NSOperationQueue alloc] init];
 		[queue setMaxConcurrentOperationCount:4];
@@ -553,7 +541,7 @@
 		
 		NSLog(@"Queued %d requests to operation queue...",num_queued);
 		[queue waitUntilAllOperationsAreFinished];
-		[queue release];
+		[queue release];*/
 	}
 	
 	for(NSString * url in [map allKeys])
@@ -582,12 +570,10 @@
 	return updated;
 }
 
-
 - (void) getFaviconForFeed:(RssFeed* )feed
 {
 	feed.image=[UrlUtils faviconFromUrl:feed.htmlUrl imageCache:nil];
 }
-
 
 - (NSArray*) getMostRecentItems:(RssFeed*)feed maxItems:(int)maxItems
 {
@@ -635,7 +621,6 @@
 	[[NSNotificationCenter defaultCenter] 
 	 postNotificationName:@"UpdateStatus"
 	 object:[NSString stringWithFormat:@"Updating \"%@\"...",feed.name]];
-	
 	
 	NSString * url=[NSString stringWithFormat:@"%@?n=%d",feed.url,maxItems];
 	

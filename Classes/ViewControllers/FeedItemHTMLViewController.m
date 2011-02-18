@@ -393,13 +393,13 @@
 
 - (void)viewDidLoad
 {
-	webView.layer.cornerRadius=10;
-	prevWebView.layer.cornerRadius=10;
-	nextWebView.layer.cornerRadius=10;
+	//webView.layer.cornerRadius=10;
+	//prevWebView.layer.cornerRadius=10;
+	//nextWebView.layer.cornerRadius=10;
 	
-	webView.clipsToBounds=YES;
-	prevWebView.clipsToBounds=YES;
-	nextWebView.clipsToBounds=YES;
+	//webView.clipsToBounds=YES;
+	//prevWebView.clipsToBounds=YES;
+	//nextWebView.clipsToBounds=YES;
 	
 	webView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
 	prevWebView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
@@ -416,13 +416,13 @@
 	
 	[webViewContainer setNeedsLayout];
 	
-	appendSynopsisItem = [[UIMenuItem alloc] initWithTitle:@"Add to Synopsis" action:@selector(appendSynopsis:)];
-	replaceSynopsisItem = [[UIMenuItem alloc] initWithTitle:@"Set as Synopsis" action:@selector(replaceSynopsis:)];
-	shareSelectedTextItem = [[UIMenuItem alloc] initWithTitle:@"Share..." action:@selector(shareSelectedText:)];
+	//appendSynopsisItem = [[UIMenuItem alloc] initWithTitle:@"Add to Synopsis" action:@selector(appendSynopsis:)];
+	//replaceSynopsisItem = [[UIMenuItem alloc] initWithTitle:@"Set as Synopsis" action:@selector(replaceSynopsis:)];
+	//shareSelectedTextItem = [[UIMenuItem alloc] initWithTitle:@"Share..." action:@selector(shareSelectedText:)];
 	
-	[[UIMenuController sharedMenuController] setMenuItems:[NSArray arrayWithObjects:shareSelectedTextItem,appendSynopsisItem,replaceSynopsisItem,nil]]; 
+	//[[UIMenuController sharedMenuController] setMenuItems:[NSArray arrayWithObjects:shareSelectedTextItem,appendSynopsisItem,replaceSynopsisItem,nil]]; 
 	
-	[[NSNotificationCenter defaultCenter]
+	/*[[NSNotificationCenter defaultCenter]
 	 addObserver:self
 	 selector:@selector(handleNotification:)
 	 name:@"ReloadData"
@@ -432,7 +432,7 @@
 	 addObserver:self
 	 selector:@selector(handleNotification:)
 	 name:@"ReloadActionData"
-	 object:nil];
+	 object:nil];*/
 	
 	downButton.enabled=NO;
 	upButton.enabled=NO;

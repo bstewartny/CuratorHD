@@ -1,7 +1,6 @@
 #import "FeedsViewController.h"
 #import "Feed.h"
 #import "FeedGroup.h"
-//#import "AddFeedViewController.h"
 #import "FeedViewController.h"
 #import "Newsletter.h"
 #import "ItemFetcher.h"
@@ -10,6 +9,8 @@
 #import "NewsletterSection.h"
 #import <QuartzCore/QuartzCore.h>
 #import "BadgedTableViewCell.h"
+#import "CustomCellBackgroundView.h"
+
 @implementation FeedsViewController
 @synthesize tableView,fetcher,itemDelegate,editable,items;
 
@@ -24,6 +25,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+	self.tableView.showsVerticalScrollIndicator=NO;
+	self.tableView.showsHorizontalScrollIndicator=NO;
+	
+	[self.tableView setBackgroundView:nil];
+	[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
+	
+	
+	self.tableView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
+	
 	/*UIButton * favoritesbuttonview=[UIButton buttonWithType:UIButtonTypeCustom];
 	[favoritesbuttonview setImage:[UIImage imageNamed:@"accept.png"] forState:UIControlStateNormal];
 	
@@ -336,7 +346,7 @@
 		NSString * accountName=[array objectAtIndex:0];
 		NSString * url=[array objectAtIndex:1];
 		
-		NSLog(@"FeedsViewControler: FeedUpdated revd, looking for url match: %@",url);
+		//NSLog(@"FeedsViewControler: FeedUpdated revd, looking for url match: %@",url);
 		
 		NSArray * feeds=self.items;
 		for(int i=0;i<[feeds count];i++)
@@ -347,11 +357,11 @@
 			{
 				if([[feed url] isEqualToString:url])
 				{
-					NSLog(@"FeedsViewControler: FeedUpdated revd, update table row...%@",url);
+					//NSLog(@"FeedsViewControler: FeedUpdated revd, update table row...%@",url);
 					// refresh object so latest changes (such as unreadCount are displayed when row is reloaded...)
 					@try
 					{
-						NSLog(@"refreshObject: do we get correct count?");
+						//NSLog(@"refreshObject: do we get correct count?");
 						[[feed managedObjectContext] refreshObject:feed mergeChanges:YES];
 						[tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
 					}
@@ -378,7 +388,7 @@
 					if([feed.feedCategory isEqualToString:@"_all"] ||
 					   [feed.feedCategory isEqualToString:@"_category"])
 					{
-						NSLog(@"FeedsViewControler: FeedUpdated revd, accountfeed, update table row...%@",url);
+						//NSLog(@"FeedsViewControler: FeedUpdated revd, accountfeed, update table row...%@",url);
 						
 						[tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
 					}
@@ -443,10 +453,52 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	 object:nil];
 }
 
+
+- (CustomCellBackgroundViewPosition) cellPositionForIndexPath:(NSIndexPath*)indexPath
+{
+	int count=[self tableView:tableView numberOfRowsInSection:indexPath.section];
+	
+	if(count==1)
+	{
+		return CustomCellBackgroundViewPositionSingle;
+	}
+	else {
+		if(indexPath.row==0)
+		{
+			return CustomCellBackgroundViewPositionTop;
+		}
+		else {
+			
+			if(indexPath.row==count-1)
+			{
+				return CustomCellBackgroundViewPositionBottom;
+			}
+			else {
+				return CustomCellBackgroundViewPositionMiddle;
+			}
+		}
+	}
+}
+
 - (void)configureCell:(UITableViewCell*)cell 
           atIndexPath:(NSIndexPath*)indexPath
 {
 	Feed * feed=[self.items objectAtIndex:indexPath.row];
+	
+	cell.backgroundColor=[UIColor clearColor];
+	
+	CustomCellBackgroundView * gbView=[[[CustomCellBackgroundView alloc] initWithFrame:CGRectZero] autorelease];
+	
+	[gbView setPosition:[self cellPositionForIndexPath:indexPath]];
+	
+	cell.backgroundView=gbView;
+	
+	gbView.fillColor=[UIColor blackColor]; 
+	gbView.borderColor=[UIColor grayColor];
+	
+	cell.backgroundView.alpha=0.5;
+	
+	cell.textLabel.textColor=[UIColor whiteColor];
 	
 	//Feed * feed=[fetcher itemAtIndex:indexPath.row];
 	
@@ -496,7 +548,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	cell.editingAccessoryType=UITableViewCellAccessoryDetailDisclosureButton;
 	
 	
-	cell.selectionStyle=UITableViewCellSelectionStyleGray;
+	cell.selectionStyle=UITableViewCellSelectionStyleNone;
 
 	[self configureCell:cell atIndexPath:indexPath];
 	
@@ -508,11 +560,47 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	return [self.items count];
 	//return [fetcher count];
 }
-
+/*
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
 	return self.title;
+}*/
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+	return 30;
 }
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+	UIView * v=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 30)];
+	v.backgroundColor=[UIColor clearColor];
+	
+	UILabel * label=[[UILabel alloc] init];
+	
+	label.textColor=[UIColor whiteColor];
+	
+	label.text=self.title;
+	
+	 	
+	
+	
+	label.backgroundColor=[UIColor clearColor];
+	
+	[label sizeToFit];
+	
+	CGRect f=label.frame;
+	f.origin.x=15;
+	f.origin.y=5;
+	label.frame=f;
+	
+	[v addSubview:label];
+	
+	[label release];
+	
+	return [v autorelease];
+}
+
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {

@@ -1,14 +1,6 @@
-//
-//  FeedsViewController.h
-//  Untitled
-//
-//  Created by Robert Stewart on 6/10/10.
-//  Copyright 2010 InfoNgen. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 #import "UpdatableFeedViewController.h"
-//@class FeedGroup;
+
 @class ItemFetcher;
 
 @interface FeedsViewController : UpdatableFeedViewController {

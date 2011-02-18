@@ -539,7 +539,7 @@
 	splitView=[[MGSplitViewController alloc] init];
 	splitView.dividerStyle=MGSplitViewDividerStyleNone;
 	splitView.delegate=self;
-	
+	//splitView.view.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
 	[self setUpSourcesView];
 
 	// push previous navigation state to restore user to where they left off...
@@ -562,6 +562,18 @@
 	FeedViewController * feedView=[[FeedViewController alloc] initWithNibName:@"FeedView" bundle:nil];
 	
 	detailNavController=[[UINavigationController alloc] initWithRootViewController:feedView];
+	
+	detailNavController.view.layer.shadowRadius=8;
+	detailNavController.view.layer.shadowOpacity=0.8;
+	detailNavController.view.layer.shadowColor=[UIColor blackColor].CGColor;
+	
+	CGRect path=detailNavController.view.layer.bounds;
+	path.origin.y+=44;
+	path.size.height-=44;
+	
+	detailNavController.view.layer.shadowPath=[UIBezierPath bezierPathWithRect:path].CGPath;
+	
+	//detailNavController.view.clipsToBounds=NO;
 	
 	[feedView release];
 	
