@@ -13,7 +13,7 @@
 #import "FeedsViewController.h"
 #import "FolderViewController.h"
 #import "FormViewController.h"
-
+#import "FeedsTableViewCell.h"
 @implementation AddItemsToSectionViewController
 @synthesize tableView,newsletter;
 
@@ -67,7 +67,7 @@
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
-	self.tableView.separatorColor=[UIColor darkGrayColor];
+	//self.tableView.separatorColor=[UIColor darkGrayColor];
 	
 	[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
 	self.tableView.backgroundView.backgroundColor=[UIColor blackColor];
@@ -119,9 +119,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	BadgedTableViewCell * cell = [[[BadgedTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1  reuseIdentifier:nil] autorelease];
+	FeedsTableViewCell * cell = [[[FeedsTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1  reuseIdentifier:nil] autorelease];
 	
-	cell.selectionStyle=UITableViewCellSelectionStyleGray;
+	cell.selectionStyle=UITableViewCellSelectionStyleNone;
 	
 	[self configureCell:cell atIndexPath:indexPath];
 	
@@ -133,9 +133,54 @@
 	return [newsletter.sections count]+1; //  [[self fetcherForSection:section] count];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-	return newsletter.name;
+	return 23;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+	return 44;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+	UIView * v=[[UIView alloc] initWithFrame:CGRectZero];
+	v.backgroundColor=[UIColor clearColor];
+	v.frame=CGRectMake(0,0,320,44);
+	return [v autorelease];
+}
+
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+	UIView * v=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, [self tableView:tableView heightForHeaderInSection:section])];
+	v.backgroundColor=[UIColor viewFlipsideBackgroundColor];
+	v.alpha=0.8;
+	
+	
+	UILabel * label=[[UILabel alloc] init];
+	
+	label.textColor=[UIColor whiteColor];
+	label.font=[UIFont boldSystemFontOfSize:17];
+	label.shadowColor=[UIColor blackColor];
+	label.shadowOffset=CGSizeMake(0, 1);
+	
+	label.text= newsletter.name;
+	
+	label.backgroundColor=[UIColor clearColor];
+	
+	[label sizeToFit];
+	
+	CGRect f=label.frame;
+	f.origin.x=5;
+	f.origin.y=v.frame.size.height-(f.size.height+2);
+	label.frame=f;
+	
+	[v addSubview:label];
+	
+	[label release];
+	
+	return [v autorelease];
 }
 
 - (void) addSection

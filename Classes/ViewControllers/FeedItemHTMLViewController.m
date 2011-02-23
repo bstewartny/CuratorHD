@@ -38,6 +38,7 @@
 #import "EmailHTMLRenderer.h"
 #import "DocumentHTMLRenderer.h"
 #import "SHK.h"
+#import "AddItemsViewController.h"
 
 @implementation FeedItemHTMLViewController
 @synthesize item,fetcher,shareText,webViewContainer,imageListPopover,prevWebView,nextWebView,tmpWebView,showPublishView,appendSynopsisItem,shareSelectedTextItem,replaceSynopsisItem,selectedImageSource,selectedImageLink,navPopoverController,publishButton,favoritesButton,itemIndex,webView,backButton,forwardButton,upButton,downButton,actionButton,activityView;
@@ -505,6 +506,21 @@
 	[buttons addObject:bi];
 	[bi release];
 	
+	bi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(organizeTouch:)];
+	[buttons addObject:bi];
+	bi.enabled=YES;
+	
+	[bi release];
+	
+	
+	
+	
+	bi = [[UIBarButtonItem alloc]
+		  initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+	bi.width=10;
+	[buttons addObject:bi];
+	[bi release];
+	
 	 bi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionTouch:)];
 	[buttons addObject:bi];
 	bi.enabled=YES;
@@ -735,6 +751,44 @@
 	{
 		[self downButtonTouch:nil];
 	}
+}
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
+{
+	[popoverController release];
+	popoverController=nil;
+}
+- (void) organizeTouch:(id)sender
+{
+	if(item==nil) return;
+	
+	FolderFetcher * foldersFetcher=[[FolderFetcher alloc] init];
+	
+	NewsletterFetcher * newslettersFetcher=[[NewsletterFetcher alloc] init];
+	
+											
+	AddItemsViewController * feedsView=[[AddItemsViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
+	//feedsView.title=@"Add Items";
+	//feedsView.navigationItem.title=@"Add Items";
+	
+	[feedsView setFoldersFetcher:foldersFetcher];
+	[feedsView setNewslettersFetcher:newslettersFetcher];
+	
+	feedsView.itemDelegate=self;
+	
+	UINavigationController * navController=[[UINavigationController alloc] initWithRootViewController:feedsView];
+	
+	organizePopover=[[UIPopoverController alloc] initWithContentViewController:navController];
+	
+	[organizePopover presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+	
+	
+	
+	[navController release];
+	[feedsView release];
+	
+	[foldersFetcher release];
+	[newslettersFetcher release];
+	
 }
 
 - (IBAction) actionTouch:(id)sender
@@ -1578,7 +1632,8 @@
 	[self.tmpWebView stopLoading];
 	[self.nextWebView stopLoading];
 	[self.prevWebView stopLoading];
-	
+	[organizePopover release];
+	organizePopover=nil;
 	[fetcher release];
 	[item release];
 	[backButton release];

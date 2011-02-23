@@ -16,14 +16,36 @@
 #import "FormViewController.h"
 #import "Folder.h"
 #import "Newsletter.h"
-
+#import "FeedsTableViewCell.h"
 #define kAddFolderWithItemsTag 1001
 #define kAddNewsletterWithItemsTag 1002
 
 @implementation AddItemsViewController
 @synthesize tableView,newslettersFetcher,foldersFetcher,itemDelegate;
 
+- (void) addToFolder:(Folder*)folder
+{
+	FeedItemDictionary * selectedItems=[[[UIApplication sharedApplication] delegate] selectedItems];
+	
+	for(FeedItem * item in selectedItems.items)
+	{
+		[folder addFeedItem:item];
+		
+	}
+	[folder save];
+}
 
+- (void) addToSection:(NewsletterSection*)section
+{
+	
+}
+- (void) cancelOrganize
+{
+	FeedViewController * feedView=[[[[UIApplication sharedApplication] delegate] detailNavController] topViewController];
+	
+	
+	[feedView cancelOrganize];
+}
 - (void) formViewDidCancel:(NSInteger)tag
 {
 	
@@ -41,23 +63,13 @@
 			NSLog(@"create folder with name: %@",folderName);
 			Folder * newFolder=[[[UIApplication sharedApplication] delegate] createNewFolder:folderName];
 			
-			// add selected items to new folder...
-			FeedItemDictionary * selectedItems=[[[UIApplication sharedApplication] delegate] selectedItems];
+			[self addToFolder:newFolder];
 			
-			// add selected items to folder...
-			for(FeedItem * item in selectedItems.items)
-			{
-				[newFolder addFeedItem:item];
-				
-			}
-			[newFolder save];
 			[self.foldersFetcher performFetch];
 			[self.tableView reloadData];
 			
-			FeedViewController * feedView=[[[[UIApplication sharedApplication] delegate] detailNavController] topViewController];
+			[self cancelOrganize];
 			
-			
-			[feedView cancelOrganize];
 		}
 		return;
 	}
@@ -96,7 +108,7 @@
 {
     [super viewDidLoad];
 	
-	self.tableView.separatorColor=[UIColor darkGrayColor];
+	//self.tableView.separatorColor=[UIColor darkGrayColor];
 	 
 	[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
 	self.tableView.backgroundView.backgroundColor=[UIColor blackColor];
@@ -190,9 +202,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	BadgedTableViewCell * cell = [[[BadgedTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1  reuseIdentifier:nil] autorelease];
+	FeedsTableViewCell * cell = [[[FeedsTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1  reuseIdentifier:nil] autorelease];
 	
-	cell.selectionStyle=UITableViewCellSelectionStyleGray;
+	cell.selectionStyle=UITableViewCellSelectionStyleNone;
 	
 	[self configureCell:cell atIndexPath:indexPath];
 	
@@ -204,16 +216,64 @@
 	return [[self fetcherForSection:section] count]+1;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+	return 23;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+	return 44;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+	UIView * v=[[UIView alloc] initWithFrame:CGRectZero];
+	v.backgroundColor=[UIColor clearColor];
+	v.frame=CGRectMake(0,0,320,44);
+	return [v autorelease];
+}
+
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+	UIView * v=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, [self tableView:tableView heightForHeaderInSection:section])];
+	v.backgroundColor=[UIColor viewFlipsideBackgroundColor];
+	v.alpha=0.8;
+	
+	
+	UILabel * label=[[UILabel alloc] init];
+	
+	label.textColor=[UIColor whiteColor];
+	label.font=[UIFont boldSystemFontOfSize:17];
+	label.shadowColor=[UIColor blackColor];
+	label.shadowOffset=CGSizeMake(0, 1);
+	
+	
 	switch (section) 
 	{
 		case 0:
-			return @"Folders";
+			label.text= @"Folders";
+			break;
 		case 1:
-			return @"Newsletters";
+			label.text= @"Newsletters";
+			break;
 	}
+	label.backgroundColor=[UIColor clearColor];
+	
+	[label sizeToFit];
+	
+	CGRect f=label.frame;
+	f.origin.x=5;
+	f.origin.y=v.frame.size.height-(f.size.height+2);
+	label.frame=f;
+	
+	[v addSubview:label];
+	
+	[label release];
+	
+	return [v autorelease];
 }
+
 
 - (ItemFetcher*) fetcherForSection:(NSInteger)section
 {
@@ -270,22 +330,13 @@
 		
 		if(indexPath.section==0)
 		{
-			FeedItemDictionary * selectedItems=[[[UIApplication sharedApplication] delegate] selectedItems];
+			[self addToFolder:feed];
 			
-			// add selected items to folder...
-			for(FeedItem * item in selectedItems.items)
-			{
-				[feed addFeedItem:item];
-				 
-			}
-			[feed save];
 			[self.foldersFetcher performFetch];
 			[self.tableView reloadData];
 			
-			FeedViewController * feedView=[[[[UIApplication sharedApplication] delegate] detailNavController] topViewController];
+			[self cancelOrganize];
 			
-			
-			[feedView cancelOrganize];
 			
 			return;
 		}

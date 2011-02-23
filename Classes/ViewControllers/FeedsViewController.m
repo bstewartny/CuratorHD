@@ -10,6 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "BadgedTableViewCell.h"
 #import "CustomCellBackgroundView.h"
+#import "FeedsTableViewCell.h"
 
 @implementation FeedsViewController
 @synthesize tableView,fetcher,itemDelegate,editable,items;
@@ -28,7 +29,7 @@
 	self.tableView.showsVerticalScrollIndicator=NO;
 	self.tableView.showsHorizontalScrollIndicator=NO;
 	
-	self.tableView.separatorColor=[UIColor darkGrayColor];
+	//self.tableView.separatorColor=[UIColor darkGrayColor];
 	
 	[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
 	self.tableView.backgroundView.backgroundColor=[UIColor blackColor];
@@ -583,7 +584,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	BadgedTableViewCell * cell = [[[BadgedTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1  reuseIdentifier:nil] autorelease];
+	FeedsTableViewCell * cell = [[[FeedsTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1  reuseIdentifier:nil] autorelease];
 	
 	cell.editingAccessoryType=UITableViewCellAccessoryDetailDisclosureButton;
 	

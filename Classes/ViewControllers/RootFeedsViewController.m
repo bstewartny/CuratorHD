@@ -15,6 +15,7 @@
 #import "FeedAccount.h"
 #import "UserSettings.h"
 #import "CustomCellBackgroundView.h"
+#import "FeedsTableViewCell.h"
 
 @implementation RootFeedsViewController
 @synthesize tableView,sourcesFetcher,newslettersFetcher,foldersFetcher,itemDelegate;
@@ -32,7 +33,7 @@
 	
 	self.tableView.showsVerticalScrollIndicator=NO;
 	self.tableView.showsHorizontalScrollIndicator=NO;
-	self.tableView.separatorColor=[UIColor darkGrayColor];
+	//self.tableView.separatorColor=[UIColor darkGrayColor];
 	//self.tableView.alpha=0.5;
 	//self.tableView.backgroundView.alpha=0.8;
 	self.tableView.allowsSelectionDuringEditing=YES;
@@ -371,7 +372,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	if((tableView.editing && (indexPath.row >= [[self fetcherForSection:indexPath.section] count])) ||
 	   ([[self fetcherForSection:indexPath.section] count]==0 ))
 	{
-		UITableViewCell * cell=[[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
+		FeedsTableViewCell * cell=[[[FeedsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
 		//cell.textLabel.textColor=[UIColor lightGrayColor];
 		cell.backgroundColor=[UIColor clearColor];
 		
@@ -426,7 +427,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		return cell;
 	}
 
-	BadgedTableViewCell * cell = [[[BadgedTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1  reuseIdentifier:nil] autorelease];
+	FeedsTableViewCell * cell = [[[FeedsTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1  reuseIdentifier:nil] autorelease];
 		cell.selectionStyle=UITableViewCellSelectionStyleNone;
 	[self configureCell:cell atIndexPath:indexPath];
 	

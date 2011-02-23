@@ -33,7 +33,7 @@
 	IBOutlet UIWebView * nextWebView;
 	
 	//IBOutlet UITextField * commentTextField;
-	
+	UIPopoverController * organizePopover;
 	
 	UIWebView * tmpWebView;
 	

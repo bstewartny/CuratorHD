@@ -229,6 +229,7 @@
 		B0F5503611D3EEB00060958E /* Tumblr-Video-Button.png in Resources */ = {isa = PBXBuildFile; fileRef = B0F5502F11D3EEB00060958E /* Tumblr-Video-Button.png */; };
 		B0F5507011D3F55F0060958E /* HTMLImageParser.m in Sources */ = {isa = PBXBuildFile; fileRef = B0F5506F11D3F55F0060958E /* HTMLImageParser.m */; };
 		B0F5FBB5120C7E45003C6E1B /* OrderedFeed.m in Sources */ = {isa = PBXBuildFile; fileRef = B0F5FBB4120C7E45003C6E1B /* OrderedFeed.m */; };
+		B0F851DA131598060032037E /* FeedsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0F851D9131598060032037E /* FeedsTableViewCell.m */; };
 		B0FC9671122FF5680007C65B /* icon_checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = B0FC9670122FF5680007C65B /* icon_checkmark.png */; };
 		B0FC96B7123001D10007C65B /* AppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0FC96B6123001D10007C65B /* AppSettingsViewController.m */; };
 		C40798ED1271DEB800823C4F /* HelpWizardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C40798EC1271DEB800823C4F /* HelpWizardViewController.m */; };
@@ -850,6 +851,8 @@
 		B0F5506F11D3F55F0060958E /* HTMLImageParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLImageParser.m; sourceTree = "<group>"; };
 		B0F5FBB3120C7E45003C6E1B /* OrderedFeed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderedFeed.h; sourceTree = "<group>"; };
 		B0F5FBB4120C7E45003C6E1B /* OrderedFeed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderedFeed.m; sourceTree = "<group>"; };
+		B0F851D8131598060032037E /* FeedsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedsTableViewCell.h; sourceTree = "<group>"; };
+		B0F851D9131598060032037E /* FeedsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedsTableViewCell.m; sourceTree = "<group>"; };
 		B0FC9670122FF5680007C65B /* icon_checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_checkmark.png; sourceTree = "<group>"; };
 		B0FC96B5123001D10007C65B /* AppSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppSettingsViewController.h; sourceTree = "<group>"; };
 		B0FC96B6123001D10007C65B /* AppSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppSettingsViewController.m; sourceTree = "<group>"; };
@@ -1868,6 +1871,8 @@
 				B0D65D2A13098AEA00BA5684 /* FastFolderTableViewCell.m */,
 				B0D65DDC1309B8D900BA5684 /* FastTweetFolderTableViewCell.h */,
 				B0D65DDD1309B8D900BA5684 /* FastTweetFolderTableViewCell.m */,
+				B0F851D8131598060032037E /* FeedsTableViewCell.h */,
+				B0F851D9131598060032037E /* FeedsTableViewCell.m */,
 			);
 			path = TableViewCells;
 			sourceTree = "<group>";
@@ -2965,6 +2970,7 @@
 				B0D65CB813097F8F00BA5684 /* UIImage+Alpha.m in Sources */,
 				B0D65D2B13098AEA00BA5684 /* FastFolderTableViewCell.m in Sources */,
 				B0D65DDE1309B8D900BA5684 /* FastTweetFolderTableViewCell.m in Sources */,
+				B0F851DA131598060032037E /* FeedsTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
