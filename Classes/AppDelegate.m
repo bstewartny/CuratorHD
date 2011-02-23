@@ -563,13 +563,13 @@
 	
 	detailNavController=[[UINavigationController alloc] initWithRootViewController:feedView];
 	
-	detailNavController.view.layer.shadowRadius=8;
+	detailNavController.view.layer.shadowRadius=10;
 	detailNavController.view.layer.shadowOpacity=0.8;
 	detailNavController.view.layer.shadowColor=[UIColor blackColor].CGColor;
 	
 	CGRect path=detailNavController.view.layer.bounds;
-	path.origin.y+=44;
-	path.size.height-=44;
+	path.origin.y+=64;
+	path.size.height-=64;
 	
 	detailNavController.view.layer.shadowPath=[UIBezierPath bezierPathWithRect:path].CGPath;
 	

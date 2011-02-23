@@ -201,6 +201,7 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad 
 {
+	self.tableView.backgroundColor=[UIColor colorWithRed:(247.0/255.0) green:(247.0/255.0) blue:(247.0/255.0) alpha:1.0];
 	//self.view.backgroundColor=[UIColor lightGrayColor];
 	
 	//[self.tableView setBackgroundView:nil];
@@ -1018,15 +1019,13 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 	
 	if([item.isRead boolValue])
 	{
-		cell.readHeadlineColor=[UIColor grayColor];
+		cell.readHeadlineColor=[UIColor darkGrayColor];
 	}
 	else 
 	{
 		cell.readHeadlineColor=[UIColor blackColor];
 	}
 
-	//[cell setWasRead:[item.isRead boolValue]];
-	
 	if([[item origSynopsis] length]>0)
 	{
 		if([[item synopsis] length]==0)

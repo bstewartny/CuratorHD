@@ -6,6 +6,7 @@
 static UIFont * usernameFont;
 static UIFont * dateFont;
 static UIFont * tweetFont;
+static UIColor * cellBackgroundColor;
 
 + (void) initialize
 {
@@ -14,6 +15,7 @@ static UIFont * tweetFont;
 		usernameFont=[[UIFont boldSystemFontOfSize:17] retain];
 		tweetFont=[[UIFont systemFontOfSize:17] retain];
 		dateFont=[[UIFont systemFontOfSize:12] retain];
+		cellBackgroundColor=[[UIColor colorWithRed:(247.0/255.0) green:(247.0/255.0) blue:(247.0/255.0) alpha:1.0] retain];
 	}
 }
 
@@ -61,7 +63,7 @@ static UIFont * tweetFont;
 	}
 	else 
 	{
-		bbackgroundColor = [UIColor whiteColor];
+		bbackgroundColor = cellBackgroundColor;//[UIColor whiteColor];
 		tweetColor = [UIColor blackColor];
 		dateColor = [UIColor grayColor];
 		usernameColor=[UIColor blackColor];

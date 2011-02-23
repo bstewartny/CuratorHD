@@ -10,6 +10,7 @@ static UIFont * sourceFont;
 static UIFont * headlineFont;
 static UIFont * synopsisFont;
 static UIFont * commentsFont;
+static UIColor * cellBackgroundColor;
 
 + (void) initialize
 {
@@ -19,6 +20,7 @@ static UIFont * commentsFont;
 		headlineFont=[[UIFont boldSystemFontOfSize:17] retain];
 		synopsisFont=[[UIFont systemFontOfSize:14] retain];
 		commentsFont=[[UIFont italicSystemFontOfSize:14] retain];
+		cellBackgroundColor=[[UIColor colorWithRed:(247.0/255.0) green:(247.0/255.0) blue:(247.0/255.0) alpha:1.0] retain];
 	}
 }
 
@@ -376,7 +378,7 @@ static UIFont * commentsFont;
 	}
 	else 
 	{
-		bbackgroundColor = [UIColor whiteColor];
+		bbackgroundColor = cellBackgroundColor;//[UIColor whiteColor];
 		headlineColor =[UIColor blackColor];
 		sourceColor = [UIColor grayColor];
 		synopsisColor = [UIColor grayColor];

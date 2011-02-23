@@ -32,14 +32,17 @@
 	
 	self.tableView.showsVerticalScrollIndicator=NO;
 	self.tableView.showsHorizontalScrollIndicator=NO;
-	
+	self.tableView.separatorColor=[UIColor darkGrayColor];
+	//self.tableView.alpha=0.5;
+	//self.tableView.backgroundView.alpha=0.8;
 	self.tableView.allowsSelectionDuringEditing=YES;
 	
-	[self.tableView setBackgroundView:nil];
+	//[self.tableView setBackgroundView:nil];
 	[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
+	self.tableView.backgroundView.backgroundColor=[UIColor blackColor];
+	self.tableView.backgroundView.alpha=0.5;
 	
-	
-	self.tableView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
+	//self.tableView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
 	
 	self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(toggleEditMode:)] autorelease];
 				[[NSNotificationCenter defaultCenter]
@@ -286,18 +289,22 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	
 	cell.backgroundColor=[UIColor clearColor];
 	
-	CustomCellBackgroundView * gbView=[[[CustomCellBackgroundView alloc] initWithFrame:CGRectZero] autorelease];
+	cell.textLabel.font=[UIFont boldSystemFontOfSize:17];
 	
-	[gbView setPosition:[self cellPositionForIndexPath:indexPath]];
+	//CustomCellBackgroundView * gbView=[[[CustomCellBackgroundView alloc] initWithFrame:CGRectZero] autorelease];
+	
+	//[gbView setPosition:[self cellPositionForIndexPath:indexPath]];
 
-	cell.backgroundView=gbView;
+	//cell.backgroundView=gbView;
 	
-	gbView.fillColor=[UIColor blackColor]; 
-	gbView.borderColor=[UIColor grayColor];
+	//gbView.fillColor=[UIColor blackColor]; 
+	//gbView.borderColor=[UIColor grayColor];
 	
-	cell.backgroundView.alpha=0.5;
+	//cell.backgroundView.alpha=0.5;
 	
 	cell.textLabel.textColor=[UIColor whiteColor];
+	cell.textLabel.shadowColor=[UIColor blackColor];
+	cell.textLabel.shadowOffset=CGSizeMake(0, 1);
 	
 	if(indexPath.section==0)
 	{
@@ -322,12 +329,12 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		if(unreadCount>0)
 		{
 			[cell setBadgeString:[NSString stringWithFormat:@"%d",unreadCount]];
-			cell.textLabel.font=[UIFont boldSystemFontOfSize:16];
+			//cell.textLabel.font=[UIFont boldSystemFontOfSize:16];
 		}
 		else 
 		{
 			[cell setBadgeString:nil];
-			cell.textLabel.font=[UIFont systemFontOfSize:16];
+			//cell.textLabel.font=[UIFont systemFontOfSize:16];
 		}
 	}
 	else 
@@ -352,7 +359,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 			}
 		}
 		
-		cell.textLabel.font=[UIFont boldSystemFontOfSize:16];
+		//cell.textLabel.font=[UIFont boldSystemFontOfSize:16];
 	}
 	
 	//cell.selectionStyle=UITableViewCellSelectionStyleGray;
@@ -365,20 +372,43 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	   ([[self fetcherForSection:indexPath.section] count]==0 ))
 	{
 		UITableViewCell * cell=[[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
-		cell.textLabel.textColor=[UIColor lightGrayColor];
+		//cell.textLabel.textColor=[UIColor lightGrayColor];
 		cell.backgroundColor=[UIColor clearColor];
-		CustomCellBackgroundView * gbView=[[[CustomCellBackgroundView alloc] initWithFrame:CGRectZero] autorelease];
 		
-		[gbView setPosition:[self cellPositionForIndexPath:indexPath]];
 		
-		cell.backgroundView=gbView;
+		//CustomCellBackgroundView * gbView=[[[CustomCellBackgroundView alloc] initWithFrame:CGRectZero] autorelease];
 		
-		gbView.fillColor=[UIColor blackColor]; 
-		gbView.borderColor=[UIColor grayColor];
+		//[gbView setPosition:[self cellPositionForIndexPath:indexPath]];
 		
-		cell.backgroundView.alpha=0.5;
+		//cell.backgroundView=gbView;
+		
+		//gbView.fillColor=[UIColor blackColor]; 
+		//gbView.borderColor=[UIColor grayColor];
+		
+		//cell.backgroundView.alpha=0.5;
 		
 		//cell.textLabel.textColor=[UIColor whiteColor];
+		
+		cell.textLabel.font=[UIFont boldSystemFontOfSize:17];
+		
+		//CustomCellBackgroundView * gbView=[[[CustomCellBackgroundView alloc] initWithFrame:CGRectZero] autorelease];
+		
+		//[gbView setPosition:[self cellPositionForIndexPath:indexPath]];
+		
+		//cell.backgroundView=gbView;
+		
+		//gbView.fillColor=[UIColor blackColor]; 
+		//gbView.borderColor=[UIColor grayColor];
+		
+		//cell.backgroundView.alpha=0.5;
+		
+		cell.textLabel.textColor=[UIColor lightGrayColor];
+		cell.textLabel.shadowColor=[UIColor blackColor];
+		cell.textLabel.shadowOffset=CGSizeMake(0, 1);
+		
+		
+		
+		
 		
 		switch(indexPath.section)
 		{
@@ -405,7 +435,11 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-	return 30;
+	return 23;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+	return 44;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -441,18 +475,37 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	}
 }
 */
+/*- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+	if(section==2) return @"www.infongen.com";
+	
+	return nil;
+	 
+}*/
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+	UIView * v=[[UIView alloc] initWithFrame:CGRectZero];
+	v.backgroundColor=[UIColor clearColor];
+	v.frame=CGRectMake(0,0,320,44);
+	return [v autorelease];
+}
+
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-	UIView * v=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 30)];
-	v.backgroundColor=[UIColor clearColor];
+	UIView * v=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, [self tableView:tableView heightForHeaderInSection:section])];
+	v.backgroundColor=[UIColor viewFlipsideBackgroundColor];
+	v.alpha=0.8;
+	
 	
 	UILabel * label=[[UILabel alloc] init];
 	
 	label.textColor=[UIColor whiteColor];
+	label.font=[UIFont boldSystemFontOfSize:17];
+	label.shadowColor=[UIColor blackColor];
+	label.shadowOffset=CGSizeMake(0, 1);
 	
-	
-	
-	 
 	switch (section) {
 		case 0:
 			label.text= @"Sources";
@@ -465,15 +518,13 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 			break;
 	}
 	
-	
-	
 	label.backgroundColor=[UIColor clearColor];
 	
 	[label sizeToFit];
 	
 	CGRect f=label.frame;
-	f.origin.x=15;
-	f.origin.y=5;
+	f.origin.x=5;
+	f.origin.y=v.frame.size.height-(f.size.height+2);
 	label.frame=f;
 	
 	[v addSubview:label];

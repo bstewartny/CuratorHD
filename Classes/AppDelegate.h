@@ -1,11 +1,3 @@
-//
-//  UntitledAppDelegate.h
-//  Untitled
-//
-//  Created by Robert Stewart on 2/2/10.
-//  Copyright Apple Inc 2010. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>

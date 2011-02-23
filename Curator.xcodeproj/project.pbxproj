@@ -31,6 +31,7 @@
 		B028397212A56DB900D01F61 /* FBDialog.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B028396B12A56DB900D01F61 /* FBDialog.bundle */; };
 		B02F24C3116CF8AB008A0200 /* NewsletterUpdateFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B02F24C2116CF8AB008A0200 /* NewsletterUpdateFormView.xib */; };
 		B02F25F5116D152B008A0200 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = B02F25F4116D152B008A0200 /* blank.png */; };
+		B02F5DBC130F065300B4EC89 /* 28-star.png in Resources */ = {isa = PBXBuildFile; fileRef = B02F5DBB130F065300B4EC89 /* 28-star.png */; };
 		B0338D5E11356A8B00764C4A /* icon_post.png in Resources */ = {isa = PBXBuildFile; fileRef = B0338D5D11356A8B00764C4A /* icon_post.png */; };
 		B0338D8911356EF200764C4A /* comment_edit.png in Resources */ = {isa = PBXBuildFile; fileRef = B0338D8811356EF200764C4A /* comment_edit.png */; };
 		B0338F131135A98B00764C4A /* TextViewTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0338F121135A98B00764C4A /* TextViewTableCell.m */; };
@@ -540,6 +541,7 @@
 		B028396D12A56DB900D01F61 /* Facebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Facebook.h; sourceTree = "<group>"; };
 		B02F24C2116CF8AB008A0200 /* NewsletterUpdateFormView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsletterUpdateFormView.xib; sourceTree = "<group>"; };
 		B02F25F4116D152B008A0200 /* blank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank.png; sourceTree = "<group>"; };
+		B02F5DBB130F065300B4EC89 /* 28-star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "28-star.png"; sourceTree = "<group>"; };
 		B0338D5D11356A8B00764C4A /* icon_post.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_post.png; sourceTree = "<group>"; };
 		B0338D8811356EF200764C4A /* comment_edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comment_edit.png; sourceTree = "<group>"; };
 		B0338F111135A98B00764C4A /* TextViewTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextViewTableCell.h; sourceTree = "<group>"; };
@@ -2051,6 +2053,7 @@
 		C444AC6911C1719C007C96F0 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				B02F5DBB130F065300B4EC89 /* 28-star.png */,
 				B0BB03BE12EF38A20020132A /* 32-facebook.png */,
 				B0BB03BF12EF38A20020132A /* 32-folderclosed.png */,
 				B0BB03C012EF38A20020132A /* 32-folderopen.png */,
@@ -2749,6 +2752,7 @@
 				B0BB03CA12EF38A20020132A /* 32-newsletter.png in Resources */,
 				B0BB03CB12EF38A20020132A /* 32-twitter.png in Resources */,
 				B00FDF8712FB0B44002480F4 /* FeedItemDocument.html in Resources */,
+				B02F5DBC130F065300B4EC89 /* 28-star.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

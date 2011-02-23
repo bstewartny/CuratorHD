@@ -68,7 +68,7 @@
 	feed.name=@"Starred Items";
 	feed.feedType=@"02GoogleFeed";
 	feed.feedCategory=@"_starred";
-	feed.image=[UIImage imageNamed:@"starred.png"];
+	feed.image=[UIImage imageNamed:@"28-star.png"];
 	
 	[feeds addObject:feed];
 	

@@ -28,12 +28,13 @@
 	self.tableView.showsVerticalScrollIndicator=NO;
 	self.tableView.showsHorizontalScrollIndicator=NO;
 	
-	[self.tableView setBackgroundView:nil];
+	self.tableView.separatorColor=[UIColor darkGrayColor];
+	
 	[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
+	self.tableView.backgroundView.backgroundColor=[UIColor blackColor];
+	self.tableView.backgroundView.alpha=0.5;
 	
-	
-	self.tableView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
-	
+
 	/*UIButton * favoritesbuttonview=[UIButton buttonWithType:UIButtonTypeCustom];
 	[favoritesbuttonview setImage:[UIImage imageNamed:@"accept.png"] forState:UIControlStateNormal];
 	
@@ -485,7 +486,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 {
 	Feed * feed=[self.items objectAtIndex:indexPath.row];
 	
-	cell.backgroundColor=[UIColor clearColor];
+	/*cell.backgroundColor=[UIColor clearColor];
 	
 	CustomCellBackgroundView * gbView=[[[CustomCellBackgroundView alloc] initWithFrame:CGRectZero] autorelease];
 	
@@ -498,7 +499,43 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	
 	cell.backgroundView.alpha=0.5;
 	
+	
+	
+	
+	*/
+	
+	cell.textLabel.textColor=[UIColor lightGrayColor];
+	cell.backgroundColor=[UIColor clearColor];
+	
+	cell.textLabel.font=[UIFont boldSystemFontOfSize:17];
+	
+	//CustomCellBackgroundView * gbView=[[[CustomCellBackgroundView alloc] initWithFrame:CGRectZero] autorelease];
+	
+	//[gbView setPosition:[self cellPositionForIndexPath:indexPath]];
+	
+	//cell.backgroundView=gbView;
+	
+	//gbView.fillColor=[UIColor blackColor]; 
+	//gbView.borderColor=[UIColor grayColor];
+	
+	//cell.backgroundView.alpha=0.5;
+	
 	cell.textLabel.textColor=[UIColor whiteColor];
+	cell.textLabel.shadowColor=[UIColor blackColor];
+	cell.textLabel.shadowOffset=CGSizeMake(0, 1);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	//Feed * feed=[fetcher itemAtIndex:indexPath.row];
 	
@@ -520,19 +557,22 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		if(unreadCount>0)
 		{
 			[cell setBadgeString:[NSString stringWithFormat:@"%d",unreadCount]];
-			cell.textLabel.font=[UIFont boldSystemFontOfSize:16];
+			//cell.textLabel.font=[UIFont boldSystemFontOfSize:16];
+			cell.textLabel.textColor=[UIColor whiteColor];
 		}
 		else 
 		{
 			[cell setBadgeString:nil];
-			cell.textLabel.font=[UIFont systemFontOfSize:16];
+			//cell.textLabel.font=[UIFont boldSystemFontOfSize:16];
 		}
 	}
 	else 
 	{
-		cell.textLabel.font=[UIFont boldSystemFontOfSize:16];
+		//cell.textLabel.font=[UIFont boldSystemFontOfSize:16];
 	}
 
+	//cell.textLabel.shadowColor=[UIColor blackColor];
+	
 	cell.textLabel.text=feed.name;
 	
 	if(feed.image)
@@ -568,9 +608,53 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-	return 30;
+	return 23;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+	return 44;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+	UIView * v=[[UIView alloc] initWithFrame:CGRectZero];
+	v.backgroundColor=[UIColor clearColor];
+	v.frame=CGRectMake(0,0,320,44);
+	return [v autorelease];
 }
 
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+	UIView * v=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, [self tableView:tableView heightForHeaderInSection:section])];
+	v.backgroundColor=[UIColor viewFlipsideBackgroundColor];
+	v.alpha=0.8;
+	
+	
+	UILabel * label=[[UILabel alloc] init];
+	
+	label.textColor=[UIColor whiteColor];
+	label.font=[UIFont boldSystemFontOfSize:17];
+	label.shadowColor=[UIColor blackColor];
+	label.shadowOffset=CGSizeMake(0, 1);
+	
+	label.text=self.title;
+	
+	label.backgroundColor=[UIColor clearColor];
+	
+	[label sizeToFit];
+	
+	CGRect f=label.frame;
+	f.origin.x=5;
+	f.origin.y=v.frame.size.height-(f.size.height+2);
+	label.frame=f;
+	
+	[v addSubview:label];
+	
+	[label release];
+	
+	return [v autorelease];
+}
+/*
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
 	UIView * v=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 30)];
@@ -600,7 +684,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	
 	return [v autorelease];
 }
-
+*/
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {

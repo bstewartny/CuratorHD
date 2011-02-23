@@ -96,6 +96,12 @@
 {
     [super viewDidLoad];
 	
+	self.tableView.separatorColor=[UIColor darkGrayColor];
+	 
+	[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
+	self.tableView.backgroundView.backgroundColor=[UIColor blackColor];
+	self.tableView.backgroundView.alpha=0.5;
+	
 	self.navigationItem.title=@"Add Selected Items";
 	
 	[self.navigationItem setLeftBarButtonItem:[[[UIBarButtonItem alloc] initWithCustomView:[[UIView new] autorelease]] autorelease]];
@@ -113,6 +119,27 @@
           atIndexPath:(NSIndexPath*)indexPath
 {
 	ItemFetcher * fetcher=[self fetcherForSection:indexPath.section];
+	
+	
+	
+	cell.backgroundColor=[UIColor clearColor];
+	
+	cell.textLabel.font=[UIFont boldSystemFontOfSize:17];
+	 
+	cell.textLabel.textColor=[UIColor whiteColor];
+	cell.textLabel.shadowColor=[UIColor blackColor];
+	cell.textLabel.shadowOffset=CGSizeMake(0, 1);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	if([fetcher count]<=indexPath.row)
 	{

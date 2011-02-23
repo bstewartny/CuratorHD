@@ -6,6 +6,7 @@
 static UIFont * sourceFont;
 static UIFont * headlineFont;
 static UIFont * synopsisFont;
+static UIColor * cellBackgroundColor;
 
 + (void) initialize
 {
@@ -14,6 +15,9 @@ static UIFont * synopsisFont;
 		sourceFont=[[UIFont systemFontOfSize:12] retain];
 		headlineFont=[[UIFont boldSystemFontOfSize:17] retain];
 		synopsisFont=[[UIFont systemFontOfSize:14] retain];
+		cellBackgroundColor=[[UIColor colorWithRed:(247.0/255.0) green:(247.0/255.0) blue:(247.0/255.0) alpha:1.0] retain];
+		//cellBackgroundColor=[[UIColor colorWithRed:(200.0/255.0) green:(200.0/255.0) blue:(200.0/255.0) alpha:1.0] retain];
+		
 	}
 }
 
@@ -29,7 +33,7 @@ static UIFont * synopsisFont;
     [super setSelected:selected animated:animated];
 	if(selected)
 	{
-		self.readHeadlineColor=[UIColor grayColor];
+		self.readHeadlineColor=[UIColor darkGrayColor];
 		[self setNeedsDisplay];
 	}
 }
@@ -57,17 +61,17 @@ static UIFont * synopsisFont;
 			bbackgroundColor = [UIColor clearColor];
 			headlineColor =readHeadlineColor;
 			sourceColor = [UIColor grayColor];
-			synopsisColor = [UIColor grayColor];
+			synopsisColor = [UIColor darkGrayColor];
 		}
 	}
 	else 
 	{
-		bbackgroundColor = [UIColor whiteColor];
+		bbackgroundColor = cellBackgroundColor;//[UIColor whiteColor];
 		headlineColor =readHeadlineColor;
 		sourceColor = [UIColor grayColor];
-		synopsisColor = [UIColor grayColor];
+		synopsisColor = [UIColor darkGrayColor];
 	}
-
+	
 	[bbackgroundColor set];
 	CGContextFillRect(context, self.contentView.bounds);
 	

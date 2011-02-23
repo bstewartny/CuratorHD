@@ -75,7 +75,7 @@
 	//self.view.backgroundColor=[UIColor lightGrayColor];
 	
 	self.newsletterTableView.allowsSelectionDuringEditing=YES;
-	
+	self.newsletterTableView.backgroundColor=[UIColor colorWithRed:(247.0/255.0) green:(247.0/255.0) blue:(247.0/255.0) alpha:1.0];
 	//CGRect f=self.newsletterTableView.frame;
 	//f.origin.x+=1;
 	//f.size.width-=1;

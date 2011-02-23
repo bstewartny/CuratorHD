@@ -22,9 +22,9 @@
 	renderer.pageWidth=640;
 	
 	NSString   *html= [renderer getHTML:self.newsletter];
-	self.webView.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.webView.layer.bounds].CGPath;
+	//self.webView.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.webView.layer.bounds].CGPath;
 	
-	self.webView.scalesPageToFit=YES;
+	self.webView.scalesPageToFit=NO;
 	
 	[self.webView loadHTMLString:html baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
 	
@@ -32,13 +32,13 @@
 }
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-	self.webView.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.webView.layer.bounds].CGPath;
+	//self.webView.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.webView.layer.bounds].CGPath;
 	
 }
 
 - (void) viewDidAppear:(BOOL)animated
 {
-	self.webView.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.webView.layer.bounds].CGPath;
+	//self.webView.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.webView.layer.bounds].CGPath;
 	
 	[super viewDidAppear:animated];
 }
@@ -46,7 +46,7 @@
 {
 	self.view.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
 	
-	self.webView.frame=CGRectMake(20, 20, self.view.bounds.size.width-40,self.view.bounds.size.height-20);
+	/*self.webView.frame=CGRectMake(20, 20, self.view.bounds.size.width-40,self.view.bounds.size.height-20);
 	
 	self.webView.autoresizingMask=UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	
@@ -55,8 +55,10 @@
 	self.webView.layer.shadowOpacity=0.8;
 	self.webView.layer.shadowOffset=CGSizeZero;
 	self.webView.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.webView.layer.bounds].CGPath;
+	*/
+	self.webView.backgroundColor=[UIColor viewFlipsideBackgroundColor];
 	
-	self.webView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
+	//self.webView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
 	
 	self.navigationItem.title=newsletter.name; //@"Newsletter Preview";
 	
