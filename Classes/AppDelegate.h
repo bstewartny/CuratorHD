@@ -162,5 +162,6 @@
 //- (NSString*) shareText;
 - (void) markAsRead:(FeedItem*)item;
 
+- (void) pushMasterViewController:(UIViewController*)controller;
 
 @end

@@ -624,6 +624,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 }
 
 
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
 	UIView * v=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, [self tableView:tableView heightForHeaderInSection:section])];

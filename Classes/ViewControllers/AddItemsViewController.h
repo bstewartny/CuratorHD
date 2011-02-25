@@ -13,14 +13,14 @@
 		IBOutlet UITableView * tableView;
 		ItemFetcher * newslettersFetcher;
 		ItemFetcher * foldersFetcher;
-		id itemDelegate;
+		id delegate;
 	}
 	
 	@property(nonatomic,retain)IBOutlet UITableView * tableView;
 	
 	@property(nonatomic,retain)ItemFetcher * newslettersFetcher;
 	@property(nonatomic,retain)ItemFetcher * foldersFetcher;
-	@property(nonatomic,assign) id itemDelegate;
+	@property(nonatomic,assign) id delegate;
 
 
 @end

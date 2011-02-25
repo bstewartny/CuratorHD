@@ -21,31 +21,8 @@
 #define kAddNewsletterWithItemsTag 1002
 
 @implementation AddItemsViewController
-@synthesize tableView,newslettersFetcher,foldersFetcher,itemDelegate;
+@synthesize tableView,newslettersFetcher,foldersFetcher,delegate;
 
-- (void) addToFolder:(Folder*)folder
-{
-	FeedItemDictionary * selectedItems=[[[UIApplication sharedApplication] delegate] selectedItems];
-	
-	for(FeedItem * item in selectedItems.items)
-	{
-		[folder addFeedItem:item];
-		
-	}
-	[folder save];
-}
-
-- (void) addToSection:(NewsletterSection*)section
-{
-	
-}
-- (void) cancelOrganize
-{
-	FeedViewController * feedView=[[[[UIApplication sharedApplication] delegate] detailNavController] topViewController];
-	
-	
-	[feedView cancelOrganize];
-}
 - (void) formViewDidCancel:(NSInteger)tag
 {
 	
@@ -63,12 +40,12 @@
 			NSLog(@"create folder with name: %@",folderName);
 			Folder * newFolder=[[[UIApplication sharedApplication] delegate] createNewFolder:folderName];
 			
-			[self addToFolder:newFolder];
+			[delegate addToFolder:newFolder];
 			
 			[self.foldersFetcher performFetch];
 			[self.tableView reloadData];
 			
-			[self cancelOrganize];
+			[delegate cancelOrganize];
 			
 		}
 		return;
@@ -330,25 +307,23 @@
 		
 		if(indexPath.section==0)
 		{
-			[self addToFolder:feed];
+			[delegate addToFolder:feed];
 			
 			[self.foldersFetcher performFetch];
 			[self.tableView reloadData];
 			
-			[self cancelOrganize];
-			
+			[delegate cancelOrganize];
 			
 			return;
 		}
 		if(indexPath.section==1)
 		{
 			AddItemsToSectionViewController * sectionsView=[[AddItemsToSectionViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
-			
+			sectionsView.delegate=self.delegate;
 			sectionsView.newsletter=feed;
 			[self.navigationController pushViewController:sectionsView animated:YES];
 			
 			[sectionsView release];
-			
 		}
 	}
 }

@@ -752,11 +752,13 @@
 		[self downButtonTouch:nil];
 	}
 }
+
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
 {
 	[popoverController release];
 	popoverController=nil;
 }
+
 - (void) organizeTouch:(id)sender
 {
 	if(item==nil) return;
@@ -765,7 +767,6 @@
 	
 	NewsletterFetcher * newslettersFetcher=[[NewsletterFetcher alloc] init];
 	
-											
 	AddItemsViewController * feedsView=[[AddItemsViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
 	//feedsView.title=@"Add Items";
 	//feedsView.navigationItem.title=@"Add Items";
@@ -773,7 +774,7 @@
 	[feedsView setFoldersFetcher:foldersFetcher];
 	[feedsView setNewslettersFetcher:newslettersFetcher];
 	
-	feedsView.itemDelegate=self;
+	feedsView.delegate=self;
 	
 	UINavigationController * navController=[[UINavigationController alloc] initWithRootViewController:feedsView];
 	
@@ -781,14 +782,28 @@
 	
 	[organizePopover presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 	
-	
-	
 	[navController release];
 	[feedsView release];
 	
 	[foldersFetcher release];
 	[newslettersFetcher release];
-	
+}
+
+- (void) addToFolder:(Folder*)folder
+{
+	[folder addFeedItem:self.item];
+	[folder save];
+}
+
+- (void) addToSection:(NewsletterSection*)section
+{
+	[section addFeedItem:self.item];
+	[section save];
+}
+
+- (void) cancelOrganize
+{
+	[organizePopover dismissPopoverAnimated:YES];
 }
 
 - (IBAction) actionTouch:(id)sender

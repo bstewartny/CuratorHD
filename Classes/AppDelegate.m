@@ -377,6 +377,13 @@
 	}
 }
 
+- (void) pushMasterViewController:(UIViewController*)controller
+{
+	tmpViewController=[[masterNavController topViewController] retain];
+	
+	[masterNavController pushViewController:controller animated:YES];
+}
+/*
 - (void) showSelectedView
 {
 	
@@ -406,7 +413,7 @@
 	[newslettersFetcher release];
 	
 }
-
+*/
 - (void) setUpSourcesView
 {
 	NSLog(@"setUpSourcesView");

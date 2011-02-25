@@ -15,7 +15,7 @@
 #import "FormViewController.h"
 #import "FeedsTableViewCell.h"
 @implementation AddItemsToSectionViewController
-@synthesize tableView,newsletter;
+@synthesize tableView,newsletter,delegate;
 
 - (void) formViewDidCancel:(NSInteger)tag
 {
@@ -33,21 +33,11 @@
 		
 		newSection.name=sectionName;
 		
-		FeedItemDictionary * selectedItems=[[[UIApplication sharedApplication] delegate] selectedItems];
-		
-		
-		// add selected items to folder...
-		for(FeedItem * item in selectedItems.items)
-		{
-			[newSection addFeedItem:item];
-		}
-		[newSection save]; 
+		[delegate addToSection:newSection];
 		
 		[self.tableView reloadData];
 		
-		FeedViewController * feedView=[[[[UIApplication sharedApplication] delegate] detailNavController] topViewController];
-		
-		[feedView cancelOrganize];
+		[delegate cancelOrganize];
 	}
 }
 	 
@@ -204,20 +194,11 @@
 	{
 		NewsletterSection * section=[[newsletter sortedSections] objectAtIndex:indexPath.row];
 
-		FeedItemDictionary * selectedItems=[[[UIApplication sharedApplication] delegate] selectedItems];
-		
-		// add selected items to folder...
-		for(FeedItem * item in selectedItems.items)
-		{
-			[section addFeedItem:item];
-		}
-		[section save]; 
+		[delegate addToSection:section];
 		
 		[self.tableView reloadData];
+		[delegate cancelOrganize];
 		
-		FeedViewController * feedView=[[[[UIApplication sharedApplication] delegate] detailNavController] topViewController];
-		
-		[feedView cancelOrganize];
 	}
 }
 

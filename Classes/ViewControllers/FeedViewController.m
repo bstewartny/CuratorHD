@@ -17,6 +17,7 @@
 #import "BlankToolbar.h"
 #import "FastFeedItemCell.h"
 #import "FastTweetTableViewCell.h"
+#import "AddItemsViewController.h"
 
 #define REFRESH_HEADER_HEIGHT 60.0f
 
@@ -166,6 +167,30 @@
 	[self.tableView setEditing:NO animated:NO];
 }
 
+- (void) addToFolder:(Folder*)folder
+{
+	FeedItemDictionary * selectedItems=[[[UIApplication sharedApplication] delegate] selectedItems];
+	
+	for(FeedItem * item in selectedItems.items)
+	{
+		[folder addFeedItem:item];
+		
+	}
+	[folder save];
+}
+
+- (void) addToSection:(NewsletterSection*)section
+{
+	FeedItemDictionary * selectedItems=[[[UIApplication sharedApplication] delegate] selectedItems];
+	
+	// add selected items to folder...
+	for(FeedItem * item in selectedItems.items)
+	{
+		[section addFeedItem:item];
+	}
+	[section save]; 
+}
+
 - (void) organize:(id)sender
 {
 	if([fetcher count]==0) return;
@@ -177,10 +202,29 @@
 	
 	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelOrganize)] autorelease];
 	
-	[[[UIApplication sharedApplication] delegate] showSelectedView];
+	[[[[UIApplication sharedApplication] delegate] selectedItems] removeAllItems];
 	
-	[self.tableView setEditing:YES animated:YES];
+	FolderFetcher * foldersFetcher=[[FolderFetcher alloc] init];
+	
+	NewsletterFetcher * newslettersFetcher=[[NewsletterFetcher alloc] init];
+	
+	AddItemsViewController * feedsView=[[AddItemsViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
+	//feedsView.title=@"Add Items";
+	//feedsView.navigationItem.title=@"Add Items";
+	
+	[feedsView setFoldersFetcher:foldersFetcher];
+	[feedsView setNewslettersFetcher:newslettersFetcher];
+	
+	feedsView.delegate=self;
 
+	[[[UIApplication sharedApplication] delegate] pushMasterViewController:feedsView];
+	
+	[feedsView release];
+	
+	[foldersFetcher release];
+	[newslettersFetcher release];
+
+	[self.tableView setEditing:YES animated:YES];
 }
 
 - (void) setOrganizeRightBarButtonItem
