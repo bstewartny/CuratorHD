@@ -276,6 +276,8 @@
 			}
 			
 			[self.newsletter save];
+			
+			 
 		}
 		else
 		{
@@ -310,6 +312,9 @@
 		[self.newsletterTableView deleteRowsAtIndexPaths:selectedRows withRowAnimation:UITableViewRowAnimationFade];
 		
 	
+		[[NSNotificationCenter defaultCenter] 
+		 postNotificationName:@"ReloadData"
+		 object:nil];
 	}
 }
 

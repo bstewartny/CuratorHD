@@ -1,37 +1,27 @@
 #import <UIKit/UIKit.h>
-
+@class Font;
 @interface FontPickerViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>{
 	UITableView * tableView;
 	id delegate;
-	NSArray * fonts;
-	NSArray * fontNames;
-	NSArray * fontSizes;
-	NSArray * fontSizeNames;
-	NSArray * fontStyleNames;
-	NSInteger tag;
-	NSString * fontName;
-	NSString * fontSize;
-	NSString * fontTitle;
-	NSString * fontStyle;
-	NSArray * fontStyles;
-	NSArray * colorNames;
-	NSString * colorName;
 	
+	Font * font;
+	NSString * sectionName;
+	NSArray * families;
+	NSArray * styles; 
+	NSArray * sizes;
+	NSArray * weights;
+	NSArray * colors;
 }
-@property(nonatomic,retain) NSString * fontTitle;
-@property(nonatomic) NSInteger tag;
-@property(nonatomic,retain) NSString * fontName;
-@property(nonatomic,retain) NSString * fontSize;
-@property(nonatomic,retain) NSString * fontStyle;
-
-@property(nonatomic,retain) NSArray * colorNames;
-@property(nonatomic,retain) NSString * colorName;
-
+@property(nonatomic,retain) Font * font;
+@property(nonatomic,assign) NSString * sectionName;
 @property(nonatomic,assign) id delegate;
 @property(nonatomic,retain) UITableView * tableView;
-@property(nonatomic,retain) NSArray * fonts;
-@property(nonatomic,retain) NSArray * fontNames;
-@property(nonatomic,retain) NSArray * fontSizes;
-@property(nonatomic,retain) NSArray * fontSizeNames;
+@property(nonatomic,retain) NSArray * families;
+@property(nonatomic,retain) NSArray * styles; 
+@property(nonatomic,retain) NSArray * sizes;
+@property(nonatomic,retain) NSArray * weights;
+@property(nonatomic,retain) NSArray * colors;
+
+- (id) initWithFont:(Font*)font;
 
 @end

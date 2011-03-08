@@ -11,6 +11,7 @@
 
 @class ItemFetcher;
 @class NewsletterSection;
+@class Font;
 
 @interface Newsletter  : NSManagedObject {
 }
@@ -24,25 +25,17 @@
 @property(nonatomic,retain) UIImage * image;
 @property(nonatomic,retain) NSNumber * isFavorite;
 
-@property(nonatomic,retain) NSString * titleFont;
-@property(nonatomic,retain) NSString * titleColor;
-@property(nonatomic,retain) NSString * titleSize;
+@property(nonatomic,retain) Font * titleFont;
 
-@property(nonatomic,retain) NSString * commentsFont;
-@property(nonatomic,retain) NSString * commentsColor;
-@property(nonatomic,retain) NSString * commentsSize;
+@property(nonatomic,retain) Font * commentsFont;
 
-@property(nonatomic,retain) NSString * sectionFont;
-@property(nonatomic,retain) NSString * sectionColor;
-@property(nonatomic,retain) NSString * sectionSize;
+@property(nonatomic,retain) Font * sectionFont;
 
-@property(nonatomic,retain) NSString * headlineFont;
-@property(nonatomic,retain) NSString * headlineColor;
-@property(nonatomic,retain) NSString * headlineSize;
+@property(nonatomic,retain) Font * headlineFont;
 
-@property(nonatomic,retain) NSString * bodyFont;
-@property(nonatomic,retain) NSString * bodyColor;
-@property(nonatomic,retain) NSString * bodySize;
+@property(nonatomic,retain) Font * bodyFont;
+
+@property(nonatomic,retain) Font * summaryFont;
 
 
 /*@property(nonatomic,retain) NSNumber * clearOnPublish;

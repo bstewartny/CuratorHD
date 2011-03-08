@@ -302,7 +302,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	//gbView.borderColor=[UIColor grayColor];
 	
 	//cell.backgroundView.alpha=0.5;
-	
+	cell.textLabel.backgroundColor=[UIColor clearColor];
 	cell.textLabel.textColor=[UIColor whiteColor];
 	cell.textLabel.shadowColor=[UIColor blackColor];
 	cell.textLabel.shadowOffset=CGSizeMake(0, 1);

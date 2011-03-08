@@ -795,6 +795,8 @@
 	//NSLog(@"url=%@",url);
 	//NSLog(@"Getting most recent %d items from feed: %@",maxItems,feed.name);
 	
+	NSLog(@"getMostRecentReaderItems: %@",url);
+	
 	NSData * rawData=[client getData:url];
 	
 	if([self isDataSameAsLastTime:feed data:rawData])
@@ -820,8 +822,9 @@
 				TempFeedItem * tmp=[[TempFeedItem alloc] init];
 				@try 
 				{
-					tmp.headline=[stripper stripMarkup:[item objectForKey:@"title"]];
-					
+					//tmp.headline=[stripper stripMarkup:[item objectForKey:@"title"]];
+					tmp.headline=[item objectForKey:@"title"];
+								  
 					if([item objectForKey:@"alternate"])
 					{
 						tmp.url=[[[item objectForKey:@"alternate"] objectAtIndex:0] objectForKey:@"href"];
@@ -842,33 +845,36 @@
 					
 					for (NSString * category in categories)
 					{
-						if([category hasPrefix:@"user/"] && [category hasSuffix:@"/state/com.google/read"])
+						if ([category hasPrefix:@"user/"]) 
 						{
-							// item has been read
-							tmp.isRead=[NSNumber numberWithBool:YES];
-							continue;
-						}
-						if([category hasPrefix:@"user/"] && [category hasSuffix:@"/state/com.google/starred"])
-						{
-							// item has been read
-							tmp.isStarred=[NSNumber numberWithBool:YES];
-							continue;
-						}
-						if([category hasPrefix:@"user/"] && [category hasSuffix:@"/state/com.google/broadcast"])
-						{
-							// item has been read
-							tmp.isShared=[NSNumber numberWithBool:YES];
-							continue;
-						}
-						if([category hasPrefix:@"user/"] && [category hasSuffix:@"/source/com.google/post"])
-						{
-							isPost=YES;
-							continue;
-						}
-						if([category hasPrefix:@"user/"] && [category hasSuffix:@"/source/com.google/link"])
-						{
-							isLink=YES;
-							continue;
+							if([category hasSuffix:@"/state/com.google/read"])
+							{
+								// item has been read
+								tmp.isRead=[NSNumber numberWithBool:YES];
+								continue;
+							}
+							if([category hasSuffix:@"/state/com.google/starred"])
+							{
+								// item has been read
+								tmp.isStarred=[NSNumber numberWithBool:YES];
+								continue;
+							}
+							if([category hasSuffix:@"/state/com.google/broadcast"])
+							{
+								// item has been read
+								tmp.isShared=[NSNumber numberWithBool:YES];
+								continue;
+							}
+							if([category hasSuffix:@"/source/com.google/post"])
+							{
+								isPost=YES;
+								continue;
+							}
+							if([category hasSuffix:@"/source/com.google/link"])
+							{
+								isLink=YES;
+								continue;
+							}
 						}
 					}
 					
@@ -876,20 +882,25 @@
 					
 					if([item objectForKey:@"content"])
 					{
+						//NSLog(@"get content");
 						synopsis=[[item objectForKey:@"content"] objectForKey:@"content"];
 					}
 					else 
 					{
+						
+						//NSLog(@"get summary");
 						synopsis=[[item objectForKey:@"summary"] objectForKey:@"content"];
 					}
 					
 					tmp.origSynopsis=synopsis;
 					
-					if ([item objectForKey:@"annotations"]) 
-					{
+					//if ([item objectForKey:@"annotations"]) 
+					//{
 						NSArray * annotations=[item objectForKey:@"annotations"];
+						
 						if([annotations count]>0)
 						{
+							NSLog(@"get annotations");
 							NSString * notes=[[annotations objectAtIndex:0] objectForKey:@"content"];
 							
 							if (notes && [notes length]>0) 
@@ -897,21 +908,21 @@
 								tmp.notes=[stripper stripMarkup:notes]; //[notes flattenHTML];
 							}
 						}
-					}
+					//}
 					
 					//"via":[{"href":"http://www.google.com/reader/public/atom/user/14480565058256660224/state/com.google/broadcast","title":"Scobleizer's shared items"}]
 					
 					
-					if ([item objectForKey:@"origin"])
-					{
-						NSString * origin=[stripper stripMarkup:[[item objectForKey:@"origin"] objectForKey:@"title"]];
-						NSString * htmlUrl=[[item objectForKey:@"origin"] objectForKey:@"htmlUrl"];
-						NSString * streamId=[[item objectForKey:@"origin"] objectForKey:@"streamId"];
-						
-						tmp.origin=origin;
-						tmp.originUrl=htmlUrl;
-						tmp.originId=streamId;
-					}
+					//if ([item objectForKey:@"origin"])
+					//{
+						NSDictionary * origin=[item objectForKey:@"origin"];
+						if(origin)
+						{
+							tmp.origin=[origin objectForKey:@"title"];
+							tmp.originUrl=[origin objectForKey:@"htmlUrl"];
+							tmp.originId=[origin objectForKey:@"streamId"];
+						}
+					//}
 					
 					tmp.uid=[item objectForKey:@"id"];
 					

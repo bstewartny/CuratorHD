@@ -52,6 +52,7 @@
 #import "RootFeedsViewController.h"
 #import "FormViewController.h"
 #import "MGSplitViewController.h"
+#import "Font.h"
 
 @interface AppDelegate (CoreDataPrivate)
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
@@ -85,7 +86,7 @@
 - (NSString*) newsletterTemplateName
 {
 	 
-	if(newsletterFormat==nil)
+	/*if(newsletterFormat==nil)
 	{
 		newsletterFormat=@"wide";
 	}
@@ -95,9 +96,9 @@
 		return @"NewsletterDocumentTwoColumn";
 	}
 	else 
-	{
+	{*/
 		return @"NewsletterDocumentOneColumn";
-	}
+	//}
 }
 
 - (FeedItem*) currentItem
@@ -2160,33 +2161,13 @@
 	}
 	
 	// setup default formatting...
-	newNewsletter.titleFont=@"Helvetica";
-	newNewsletter.titleSize=@"x-large";
-	newNewsletter.titleColor=@"black";
 	
-	newNewsletter.commentsFont=@"Georgia";
-	newNewsletter.commentsSize=@"medium";
-	newNewsletter.commentsColor=@"grey";
-	
-	newNewsletter.sectionFont=@"Helvetica";
-	newNewsletter.sectionSize=@"x-large";
-	newNewsletter.sectionColor=@"black";
-	
-	newNewsletter.headlineFont=@"Helvetica";
-	newNewsletter.headlineSize=@"x-large";
-	newNewsletter.headlineColor=@"blue";
-	
-	newNewsletter.bodyFont=@"Georgia";
-	newNewsletter.bodySize=@"medium";
-	newNewsletter.bodyColor=@"black";
-	
-	// use default logo...
-	//UIImage * logo=[UIImage imageNamed:@"logo-infongen2.png"];
-	
-	//if(logo)
-	//{
-	//	newNewsletter.logoImage=logo;
-	//}
+	newNewsletter.titleFont=[[[Font alloc] initWithFamily:@"Arial" weight:@"bold" style:@"normal" size:@"x-large" color:@"black"] autorelease];
+	newNewsletter.commentsFont=[[[Font alloc] initWithFamily:@"Arial" weight:@"bold" style:@"italic" size:@"medium" color:@"red"] autorelease];
+	newNewsletter.sectionFont=[[[Font alloc] initWithFamily:@"Arial" weight:@"bold" style:@"normal" size:@"large" color:@"black"] autorelease];
+	newNewsletter.headlineFont=[[[Font alloc] initWithFamily:@"Arial" weight:@"bold" style:@"normal" size:@"large" color:@"darkblue"] autorelease];
+	newNewsletter.bodyFont=[[[Font alloc] initWithFamily:@"Georgia" weight:@"normal" style:@"normal" size:@"small" color:@"black"] autorelease];
+	newNewsletter.summaryFont=[[[Font alloc] initWithFamily:@"Georgia" weight:@"normal" style:@"normal" size:@"medium" color:@"grey"] autorelease];
 	
 	[newNewsletter save];
 	

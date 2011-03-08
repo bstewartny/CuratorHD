@@ -61,7 +61,7 @@ static NSString * gaeCookie;
 					token=[[self getEditToken] retain];
 					NSLog(@"Edit token=%@",token);
 				}
-				
+				/*
 				if(gaeCookie==nil || [gaeCookie length]==0)
 				{
 					NSLog(@"Getting GAE cookie...");
@@ -69,7 +69,7 @@ static NSString * gaeCookie;
 
 					[gaeCookie retain];
 					NSLog(@"GAE Cookie=%@",gaeCookie);
-				}
+				}*/
 			}
 		}
 	}
@@ -192,9 +192,9 @@ static NSString * gaeCookie;
 	@try 
 	{
 		// attempt to avoid leaking NSData from response?
-		NSLog(@"clearing cached responses");
+		//NSLog(@"clearing cached responses");
 		[[NSURLCache sharedURLCache] removeAllCachedResponses];
-		NSLog(@"done clearing cached responses");
+		//NSLog(@"done clearing cached responses");
 		
 		NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
 		[self appendAuthHeader:request];
@@ -512,6 +512,8 @@ static NSString * gaeCookie;
 
 - (NSArray*) getItemsForUrl:(NSString*)url  filter:(ItemFilter*)filter
 {
+	NSLog(@"getItemsForUrl:%@",url);
+	
 	unsigned long current_seconds=[[NSDate date] timeIntervalSince1970];
 	
 	NSString * timestamp=[NSString stringWithFormat:@"%D",current_seconds];
@@ -640,7 +642,7 @@ static NSString * gaeCookie;
 				}
 				@catch (NSException * e) 
 				{
-					NSLog(@"Exception parsing result item from response: %@",[e description]);
+					NSLog(@"Exception parsing result item from response: %@",[e userInfo]);
 				}
 				@finally 
 				{

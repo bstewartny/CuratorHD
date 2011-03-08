@@ -768,6 +768,7 @@
 	NewsletterFetcher * newslettersFetcher=[[NewsletterFetcher alloc] init];
 	
 	AddItemsViewController * feedsView=[[AddItemsViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
+	feedsView.navigationItem.title=@"Add Item to...";
 	//feedsView.title=@"Add Items";
 	//feedsView.navigationItem.title=@"Add Items";
 	
@@ -793,12 +794,20 @@
 {
 	[folder addFeedItem:self.item];
 	[folder save];
+	
+	[[NSNotificationCenter defaultCenter] 
+	 postNotificationName:@"ReloadData"
+	 object:nil];
 }
 
 - (void) addToSection:(NewsletterSection*)section
 {
 	[section addFeedItem:self.item];
 	[section save];
+	
+	[[NSNotificationCenter defaultCenter] 
+	 postNotificationName:@"ReloadData"
+	 object:nil];
 }
 
 - (void) cancelOrganize

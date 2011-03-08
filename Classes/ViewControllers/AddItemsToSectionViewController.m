@@ -62,7 +62,7 @@
 	[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
 	self.tableView.backgroundView.backgroundColor=[UIColor blackColor];
 	self.tableView.backgroundView.alpha=0.5;
-	self.navigationItem.title=@"Add Selected Items";
+	//self.navigationItem.title=@"Add Selected Items";
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

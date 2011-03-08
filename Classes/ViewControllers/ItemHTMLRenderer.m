@@ -10,22 +10,24 @@
 #import "FeedItem.h"
 #import "Base64.h"
 #import "Newsletter.h"
-
+ 
 @implementation ItemHTMLRenderer
 @synthesize embedImageData,newsletter,includeSynopsis,maxSynopsisSize,useOriginalSynopsis;
 
 
 - (NSString*) applyNewsletterStyles:(Newsletter*)newsletter toHtml:(NSString*)html
 {
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{titleStyle}}" withString:[self getStyleForFontFamily:newsletter.titleFont fontSize:newsletter.titleSize fontColor:newsletter.titleColor]];
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{titleStyle}}" withString:[newsletter.titleFont cssStyle]];
+																						 
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{summaryStyle}}" withString:[newsletter.summaryFont cssStyle]];
 	
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{headlineStyle}}" withString:[self getStyleForFontFamily:newsletter.headlineFont fontSize:newsletter.headlineSize fontColor:newsletter.headlineColor]];
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{headlineStyle}}" withString:[newsletter.headlineFont cssStyle]];
 	
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{sectionStyle}}" withString:[self getStyleForFontFamily:newsletter.sectionFont fontSize:newsletter.sectionSize fontColor:newsletter.sectionColor]];
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{sectionStyle}}" withString:[newsletter.sectionFont cssStyle]];
 	
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{commentsStyle}}" withString:[self getStyleForFontFamily:newsletter.commentsFont fontSize:newsletter.commentsSize fontColor:newsletter.commentsColor]];
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{commentsStyle}}" withString:[newsletter.commentsFont cssStyle]];
 	
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{bodyStyle}}" withString:[self getStyleForFontFamily:newsletter.bodyFont fontSize:newsletter.bodySize fontColor:newsletter.bodyColor]];
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{bodyStyle}}" withString:[newsletter.bodyFont cssStyle]];
 	
 	return html;
 }
@@ -44,7 +46,7 @@
 	{
 		fontColor=@"#000000";
 	}
-	NSString * style=[NSString stringWithFormat:@"font-family:%@; font-size:%@; color:%@;",fontFamily,fontSize,fontColor];
+	NSString * style=[NSString stringWithFormat:@"font-family:'%@'; font-size:%@; color:%@;",fontFamily,fontSize,fontColor];
 	return style;
 }
 

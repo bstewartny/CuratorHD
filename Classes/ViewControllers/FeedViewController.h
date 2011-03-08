@@ -34,6 +34,7 @@
 	UIPopoverController * navPopoverController;
 	NSString * origTitle;
 	BOOL folderMode;
+	BOOL editMode;
 	 
 	
 }

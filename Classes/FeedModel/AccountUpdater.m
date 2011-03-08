@@ -53,6 +53,7 @@
 	{
 		return NO;
 	}
+	//NSLog(@"updateFeed:%@",feed.name);
 	
 	BOOL updated=NO;
 	
@@ -64,12 +65,15 @@
 	BOOL requiresUpdateUnreadCount=NO;
 	
 	//int maxItemsList[]={1,20};
-	
+	//NSLog(@"Doing %d iterations",[iterations count]);
 	for(int i=0;i<[iterations count];i++)
 	{
 		int maxItems=[[iterations objectAtIndex:i] intValue];
+		//NSLog(@"doing iteration for maxItems=%d",maxItems);
 		
 		NSArray * items=[self getMostRecentItems:feed maxItems:maxItems];
+		
+		//NSLog(@"got %d most recent items",[items count]);
 		
 		if([items count]>0)
 		{
@@ -125,7 +129,7 @@
 			
 			if(numNewItems==[items count])
 			{
-				NSLog(@"Added %d new items from feed, fetching more items...",numNewItems);
+				//NSLog(@"Added %d new items from feed, fetching more items...",numNewItems);
 				// get more...
 				continue;
 			}
@@ -156,7 +160,7 @@
 	
 	if(requiresUpdateUnreadCount)
 	{
-		NSLog(@"updating feed unread count");
+		//NSLog(@"updating feed unread count");
 		// update feed unread count
 		feed.lastUpdated=[NSDate date];
 		[feed updateUnreadCount];

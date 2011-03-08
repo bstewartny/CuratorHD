@@ -209,6 +209,7 @@
 	NewsletterFetcher * newslettersFetcher=[[NewsletterFetcher alloc] init];
 	
 	AddItemsViewController * feedsView=[[AddItemsViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
+	feedsView.navigationItem.title=@"Add Selected Items";
 	//feedsView.title=@"Add Items";
 	//feedsView.navigationItem.title=@"Add Items";
 	
@@ -229,16 +230,44 @@
 
 - (void) setOrganizeRightBarButtonItem
 {
-	BlankToolbar * tools=[[BlankToolbar alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
+	BlankToolbar * tools=[[BlankToolbar alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
 	
 	tools.opaque=NO;
 	tools.backgroundColor=[UIColor clearColor];
 	
-	[tools setItems:[NSArray arrayWithObjects:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease],
-					 [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(organize:)] autorelease],
-					 nil]];
+	NSMutableArray * toolBarItems=[[NSMutableArray alloc] init];
+	
+	[toolBarItems addObject:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease]];
+	
+	[toolBarItems addObject:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(organize:)] autorelease]];
+	
+	UIBarButtonItem * space=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil] autorelease];
+	space.width=20;
+	
+	[toolBarItems addObject:space];
+	
+	if(editable)
+	{
+		UIBarButtonItem * editButton=[[UIBarButtonItem alloc] init];
+		editButton.title=@"Edit";
+		editButton.target=self;
+		editButton.action=@selector(toggleEditMode:) ;
+		editButton.style = UIBarButtonItemStyleBordered;
+		[toolBarItems addObject:editButton];
+		[editButton release];
+	}
+	else 
+	{
+		UIBarButtonItem * actionButton=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTouched:)];
+		[toolBarItems addObject:actionButton];
+		[actionButton release];
+	}
+	
+	[tools setItems:toolBarItems];
+	[toolBarItems release];
 	
 	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithCustomView:tools] autorelease];
+	
 	[tools release];
 }
 
@@ -320,7 +349,7 @@
 	[format setDateFormat:@"MMM d, yyyy h:mm a"];
 	self.dateFormatter=format;
 	[format release];
-	
+	/*
 	NSMutableArray * toolbaritems=[[NSMutableArray alloc] init];
 	
 	refreshButton=[[UIBarButtonItem	alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshButtonTouch:)];
@@ -376,6 +405,7 @@
 	[self.toolbar setItems:toolbaritems];
 	
 	[toolbaritems release];
+	*/
 	
 	[fetcher performFetch];
 	
@@ -386,12 +416,17 @@
 		if(fetcher)
 		{
 			[self addPullToRefreshHeader];
+			[self addPullToRefreshFooter];
 		}
 	}
 	
 	[tableView reloadData];
 }
 
+- (void)addPullToRefreshFooter
+{
+	// TODO
+}
 - (void)addPullToRefreshHeader 
 {
 	self.textPull=@"Pull down to refresh...";
@@ -420,7 +455,7 @@
 
 - (void) actionButtonTouched:(id)sender
 {
-	UIActionSheet * actionSheet=[[UIActionSheet alloc] initWithTitle:@"Feed Actions" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Mark All as Read",@"Delete Older Than 7 Days",@"Delete Older Than 30 Days",@"Delete Older Than 90 Days",@"Delete Read Items",nil];
+	UIActionSheet * actionSheet=[[UIActionSheet alloc] initWithTitle:@"Feed Actions" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Mark All as Read",@"Delete Older Than 7 Days",@"Delete Older Than 30 Days",@"Delete Older Than 90 Days",@"Delete All Read Items",nil];
 	
 	[actionSheet showFromBarButtonItem:sender animated:YES];
 	
@@ -520,13 +555,14 @@
 		
 		buttonItem.style=UIBarButtonItemStyleBordered;
 		buttonItem.title=@"Edit";
-		
+		editMode=NO;
 		[self.tableView reloadData];
 	}
 	else
 	{	
 		if([fetcher count]>0)
 		{
+			editMode=YES;
 			[self.tableView setEditing:YES animated:YES];
 		
 			buttonItem.style=UIBarButtonItemStyleDone;
@@ -546,7 +582,7 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 	[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 	
 	[[NSNotificationCenter defaultCenter] 
-	 postNotificationName:@"ReloadActionData"
+	 postNotificationName:@"ReloadData"
 	 object:nil];
 }
 
@@ -1107,8 +1143,14 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 
 -(UITableViewCellEditingStyle)tableView:(UITableView*)tableView editingStyleForRowAtIndexPath:(NSIndexPath*)indexPath 
 {
-	 
-	return 3;
+	if(editable && editMode)
+	{
+		return UITableViewCellEditingStyleDelete;
+	}
+	else 
+	{
+		return 3;
+	}
 }
 
 - (void) refreshButtonTouch:(id)sender

@@ -110,6 +110,8 @@
 
 - (NSString*) stripMarkup:(NSString*)s
 {
+	if([s length]==0) return s;
+	
 	NSMutableString * tmp=[NSMutableString stringWithString:s];
 	
 	[self replaceTags:tmp startChar:@"<" endChar:@">" replacements:tags];

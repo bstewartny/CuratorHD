@@ -1,62 +1,75 @@
 #import "FontPickerViewController.h"
 #import "UIColorAdditions.h"
 #import "CustomCellBackgroundView.h"
-@implementation FontPickerViewController
-@synthesize tableView,colorName,colorNames,fontSizeNames,fontStyle,fonts,fontNames,delegate,fontName,tag,fontTitle,fontSize,fontSizes;
+#import <QuartzCore/QuartzCore.h>
+#import "Font.h"
 
+@implementation FontPickerViewController
+@synthesize tableView,delegate;
+@synthesize families;
+@synthesize styles;
+@synthesize sizes;
+@synthesize weights;
+@synthesize colors,sectionName;
+@synthesize font;
+
+- (id) initWithFont:(Font*)font
+{
+	if(self=[super initWithNibName:@"NewsletterFormattingView" bundle:nil])
+	{
+		self.font=font;
+		self.families=[NSArray arrayWithObjects:[FontValue withName:@"Arial" andValue:@"Arial"],
+					   [FontValue withName:@"Georgia" andValue:@"Georgia"],
+					   [FontValue withName:@"Courier" andValue:@"Courier"],nil];
+		
+		self.styles=[NSArray arrayWithObjects:[FontValue withName:@"Normal" andValue:@"normal"],
+					 [FontValue withName:@"Italic" andValue:@"italic"],nil];
+		
+		self.weights=[NSArray arrayWithObjects:[FontValue withName:@"Normal" andValue:@"normal"],
+					  [FontValue withName:@"Bold" andValue:@"bold"],nil];
+		
+		self.sizes=[NSArray arrayWithObjects:[FontValue withName:@"Small" andValue:@"small"],
+					[FontValue withName:@"Medium" andValue:@"medium"],
+					[FontValue withName:@"Large" andValue:@"large"],
+					[FontValue withName:@"Extra Large" andValue:@"x-large"],nil];
+		
+		self.colors=[NSArray arrayWithObjects:[FontValue withName:@"Black" andValue:@"black"],
+					 [FontValue withName:@"Grey" andValue:@"grey"],
+					 [FontValue withName:@"Red" andValue:@"red"],
+					 [FontValue withName:@"Blue" andValue:@"darkblue"],nil];
+	}
+	return self;
+}
 - (void) viewDidLoad
 {
-	//self.navigationItem.title=@"Fonts";
-	
 	[self.tableView setBackgroundView:nil];
 	[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
 
 	self.tableView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
-	
-	//fontStyles=[[NSArray arrayWithObjects:@"normal",@"bold",nil] retain];
-	//fontStyleNames=[[NSArray arrayWithObjects:@"Normal",@"Bold",nil] retain];
-}
-- (void) pickedFontStyle:(NSString*)style
-{
-	[delegate fontPicker:self pickedFontStyle:style];
-}
-- (void) pickedFontSize:(NSString*)size 
-{
-	[delegate fontPicker:self pickedFontSize:size];
-}
-- (void) pickedFontColor:(NSString*)colorName 
-{
-	[delegate fontPicker:self pickedFontColor:colorName];
-}
-
-- (void) pickedFont:(UIFont*)font withName:(NSString*)name
-{
-	[delegate fontPicker:self pickedFont:font withName:name];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if(section==0)
+	switch (section) 
 	{
-		return [fonts count];
-	}
-	else 
-	{
-		if(section==1)
-		{
-			return [fontSizes count];
-		}
-		else 
-		{
-			return [colorNames count];
-		}
+		case 0:
+			return [families count];	
+		case 1:
+			return [styles count];
+		case 2:
+			return [weights count];
+		case 3:
+			return [sizes count];
+		case 4:
+			return [colors count];
 	}
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	return 3;
+	return 5;
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
 	return 30;
@@ -71,20 +84,18 @@
 	
 	label.textColor=[UIColor whiteColor];
 	
-	if(section==0)
+	switch (section) 
 	{
-		label.text=[NSString stringWithFormat:@"%@ Font",fontTitle];
-	}
-	else 
-	{
-		if(section==1)
-		{
-			label.text=[NSString stringWithFormat:@"%@ Size",fontTitle];
-		}
-		else 
-		{
-			label.text=[NSString stringWithFormat:@"%@ Color",fontTitle];
-		}
+		case 0:
+			label.text=[NSString stringWithFormat:@"%@ Font",sectionName];	
+		case 1:
+			label.text=[NSString stringWithFormat:@"%@ Style",sectionName];
+		case 2:
+			label.text=[NSString stringWithFormat:@"%@ Weight",sectionName];
+		case 3:
+			label.text=[NSString stringWithFormat:@"%@ Size",sectionName];
+		case 4:
+			label.text=[NSString stringWithFormat:@"%@ Color",sectionName];
 	}
 
 	label.backgroundColor=[UIColor clearColor];
@@ -122,159 +133,93 @@
 	
 	cell.textLabel.textColor=[UIColor whiteColor];
 	
-	if(indexPath.section==0)
+	NSString * value;
+	FontValue * fontValue;
+	int numValues;
+	
+	switch (indexPath.section) 
 	{
-		if(indexPath.row==0)
-		{
-			[cell.backgroundView setPosition:CustomCellBackgroundViewPositionTop];
-		}
-		else 
-		{
-			if(indexPath.row==[fontNames count]-1)
-			{
-				[cell.backgroundView setPosition:CustomCellBackgroundViewPositionBottom];
-			}
-			else 
-			{
-				[cell.backgroundView setPosition:CustomCellBackgroundViewPositionMiddle];
-			}
-		}
-		NSString * name=[fontNames objectAtIndex:indexPath.row];
-		UIFont * font=[fonts objectAtIndex:indexPath.row];
-		
-		if([name isEqualToString:fontName])
-		{
-			cell.accessoryType=UITableViewCellAccessoryCheckmark;
-		}
-		else 
-		{
-			cell.accessoryType=UITableViewCellAccessoryNone;
-		}
-		cell.textLabel.font=font;
-		cell.textLabel.text=name;
+		case 0:
+			value=font.family;
+			fontValue=[families objectAtIndex:indexPath.row];
+			numValues=[families count];
+			break;
+		case 1:
+			value=font.style;
+			fontValue=[styles objectAtIndex:indexPath.row];
+			numValues=[styles count];
+			break;
+		case 2:
+			value=font.weight;
+			fontValue=[weights objectAtIndex:indexPath.row];
+			numValues=[weights count];
+			break;
+		case 3:
+			value=font.size;
+			fontValue=[sizes objectAtIndex:indexPath.row];
+			numValues=[sizes count];
+			break;
+		case 4:
+			value=font.color;
+			fontValue=[colors objectAtIndex:indexPath.row];
+			numValues=[colors count];
+			break;
+	}
+	
+	if(indexPath.row==0)
+	{
+		[cell.backgroundView setPosition:CustomCellBackgroundViewPositionTop];
 	}
 	else 
 	{
-		if(indexPath.section==1)
+		if(indexPath.row==numValues-1)
 		{
-			if(indexPath.row==0)
-			{
-				[cell.backgroundView setPosition:CustomCellBackgroundViewPositionTop];
-			}
-			else 
-			{
-				if(indexPath.row==[fontSizes count]-1)
-				{
-					[cell.backgroundView setPosition:CustomCellBackgroundViewPositionBottom];
-				}
-				else 
-				{
-					[cell.backgroundView setPosition:CustomCellBackgroundViewPositionMiddle];
-				}
-			}
-			NSString * size=[fontSizes objectAtIndex:indexPath.row];
-			
-			CGFloat sz=12.0 + (2.0 * indexPath.row);
-			
-			UIFont * currentFont=nil;
-			
-			if(fontName)
-			{
-				currentFont=[UIFont fontWithName:fontName size:sz];
-			}
-			else 
-			{
-				currentFont=[UIFont systemFontOfSize:sz];
-			}
-			
-			if(currentFont)
-			{
-				cell.textLabel.font=currentFont;
-			}
-			
-			if([size isEqualToString:fontSize])
-			{
-				cell.accessoryType=UITableViewCellAccessoryCheckmark;
-			}
-			else 
-			{
-				cell.accessoryType=UITableViewCellAccessoryNone;
-			}
-			cell.textLabel.text=[fontSizeNames objectAtIndex:indexPath.row];
+			[cell.backgroundView setPosition:CustomCellBackgroundViewPositionBottom];
 		}
 		else 
 		{
-			if(indexPath.row==0)
-			{
-				[cell.backgroundView setPosition:CustomCellBackgroundViewPositionTop];
-			}
-			else 
-			{
-				if(indexPath.row==[colorNames count]-1)
-				{
-					[cell.backgroundView setPosition:CustomCellBackgroundViewPositionBottom];
-				}
-				else 
-				{
-					[cell.backgroundView setPosition:CustomCellBackgroundViewPositionMiddle];
-				}
-			}
-			//switch(indexPath.row)
-			//{
-				//case 0:
-					cell.textLabel.font=[UIFont systemFontOfSize:18];
-				//	break;
-				//case 1:
-				//	cell.textLabel.font=[UIFont boldSystemFontOfSize:18];
-				//	break;
-			//}
-			if([[colorNames objectAtIndex:indexPath.row] isEqualToString:colorName])
-			{
-				cell.accessoryType=UITableViewCellAccessoryCheckmark;
-			}
-			else 
-			{
-				cell.accessoryType=UITableViewCellAccessoryNone;
-			}
-			cell.textLabel.text=[colorNames objectAtIndex:indexPath.row];
-			
-			UIColor * color=[UIColor searchForColorByName:[colorNames objectAtIndex:indexPath.row]];
-			if(color==nil)
-			{
-				color=[UIColor lightGrayColor];
-			}
-			cell.imageView.backgroundColor=color;
-			cell.imageView.frame=CGRectMake(0, 0, 40, 40);
-			cell.imageView.image=[UIImage imageNamed:@"dot_blank.png"];
-			
-			
+			[cell.backgroundView setPosition:CustomCellBackgroundViewPositionMiddle];
 		}
 	}
 	
+	if([value isEqualToString:fontValue.value])
+	{
+		cell.accessoryType=UITableViewCellAccessoryCheckmark;
+	}
+	else 
+	{
+		cell.accessoryType=UITableViewCellAccessoryNone;
+	}
+	
+	cell.textLabel.text=fontValue.name;
+	 
 	return cell;
 }
 
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	if(indexPath.section==0)
+	switch (indexPath.section) 
 	{
-		self.fontName=[fontNames objectAtIndex:indexPath.row];
-		[self pickedFont:[fonts objectAtIndex:indexPath.row] withName:[fontNames objectAtIndex:indexPath.row]];
+		case 0:
+			font.family=[[families objectAtIndex:indexPath.row] value];
+			break;	
+		case 1:
+			font.style=[[styles objectAtIndex:indexPath.row] value];
+			break;	
+		case 2:
+			font.weight=[[weights objectAtIndex:indexPath.row] value];
+			break;
+		case 3:
+			font.size=[[sizes objectAtIndex:indexPath.row] value];
+			break;
+		case 4:
+			font.color=[[colors objectAtIndex:indexPath.row] value];
+			break;
 	}
-	else 
-	{
-		if(indexPath.section==1)
-		{
-			self.fontSize=[fontSizes objectAtIndex:indexPath.row];
-			[self pickedFontSize:[fontSizes objectAtIndex:indexPath.row]];
-		}
-		else 
-		{
-			self.colorName=[colorNames objectAtIndex:indexPath.row];
-			[self pickedFontColor:self.colorName];
-		}
-	}
+	
 	[tableView reloadData];
+	
+	[delegate fontPicker:self pickedFont:font];
 }
 
 
@@ -286,20 +231,16 @@
 
 - (void)dealloc 
 {
-	[colorNames release];
-	[colorName release];
-	[fontStyles release];
-	[fontStyleNames release];
-	[fontTitle release];
-	[fontSizes release];
-	[fontSizeNames release];
-	[fontSize release];
+	[sectionName release];
+	[font release];
 	[tableView release];
-	[fonts release];
-	[fontNames release];
-	[fontName release];
-	[fontStyle release];
-    [super dealloc];
+	[families release];
+	[styles release];
+	[sizes release];
+	[weights release];
+	[colors release];
+	
+	[super dealloc];
 }
 
 @end

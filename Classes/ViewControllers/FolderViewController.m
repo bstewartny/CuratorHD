@@ -84,9 +84,14 @@
 	{
 		if([fetcher count]>0)
 		{
-			FeedItem * item=[fetcher itemAtIndex:indexPath.row];
+			
+			[itemDelegate showItemHtml:indexPath.row itemFetcher:fetcher];
+			
+			
+			/*
+			 FeedItem * item=[fetcher itemAtIndex:indexPath.row];
 		
-			DocumentEditFormViewController *controller = [[DocumentEditFormViewController alloc] initWithNibName:@"DocumentEditFormView" bundle:nil];
+			 DocumentEditFormViewController *controller = [[DocumentEditFormViewController alloc] initWithNibName:@"DocumentEditFormView" bundle:nil];
 			
 			controller.item=item;
 			
@@ -98,7 +103,7 @@
 			[self presentModalViewController:controller animated:YES];
 			
 			[controller release];
-			 
+			*/
 		}
 	}
 }

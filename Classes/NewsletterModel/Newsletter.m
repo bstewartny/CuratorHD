@@ -4,10 +4,11 @@
 #import "FeedItem.h"
 #import "FeedFetcher.h"
 #import "NewsletterItem.h"
+#import "Font.h"
 
 @implementation Newsletter 
 @dynamic name,lastPublished,logoImageUrl,logoImage,sections,summary,displayOrder,image,isFavorite;//,clearOnPublish,maxSynopsisSize,templateName,headlineColor,sectionColor,commentColor;
-@dynamic titleFont,titleSize,titleColor,commentsFont,commentsColor,commentsSize,sectionFont,sectionColor,sectionSize,headlineFont,headlineColor,headlineSize,bodyFont,bodyColor,bodySize;
+@dynamic titleFont,commentsFont,sectionFont,headlineFont,bodyFont,summaryFont;
 
 + (Newsletter*) createInContext:(NSManagedObjectContext*)moc
 {

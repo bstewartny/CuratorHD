@@ -91,7 +91,7 @@
 	self.tableView.backgroundView.backgroundColor=[UIColor blackColor];
 	self.tableView.backgroundView.alpha=0.5;
 	
-	self.navigationItem.title=@"Add Selected Items";
+	//self.navigationItem.title=@"Add Selected Items";
 	
 	[self.navigationItem setLeftBarButtonItem:[[[UIBarButtonItem alloc] initWithCustomView:[[UIView new] autorelease]] autorelease]];
 	
@@ -319,6 +319,7 @@
 		if(indexPath.section==1)
 		{
 			AddItemsToSectionViewController * sectionsView=[[AddItemsToSectionViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
+			sectionsView.navigationItem.title=self.navigationItem.title;
 			sectionsView.delegate=self.delegate;
 			sectionsView.newsletter=feed;
 			[self.navigationController pushViewController:sectionsView animated:YES];

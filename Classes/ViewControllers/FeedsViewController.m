@@ -487,60 +487,14 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 {
 	Feed * feed=[self.items objectAtIndex:indexPath.row];
 	
-	/*cell.backgroundColor=[UIColor clearColor];
-	
-	CustomCellBackgroundView * gbView=[[[CustomCellBackgroundView alloc] initWithFrame:CGRectZero] autorelease];
-	
-	[gbView setPosition:[self cellPositionForIndexPath:indexPath]];
-	
-	cell.backgroundView=gbView;
-	
-	gbView.fillColor=[UIColor blackColor]; 
-	gbView.borderColor=[UIColor grayColor];
-	
-	cell.backgroundView.alpha=0.5;
-	
-	
-	
-	
-	*/
-	
 	cell.textLabel.textColor=[UIColor lightGrayColor];
 	cell.backgroundColor=[UIColor clearColor];
-	
+	cell.textLabel.backgroundColor=[UIColor clearColor];
+	 
 	cell.textLabel.font=[UIFont boldSystemFontOfSize:17];
-	
-	//CustomCellBackgroundView * gbView=[[[CustomCellBackgroundView alloc] initWithFrame:CGRectZero] autorelease];
-	
-	//[gbView setPosition:[self cellPositionForIndexPath:indexPath]];
-	
-	//cell.backgroundView=gbView;
-	
-	//gbView.fillColor=[UIColor blackColor]; 
-	//gbView.borderColor=[UIColor grayColor];
-	
-	//cell.backgroundView.alpha=0.5;
-	
 	cell.textLabel.textColor=[UIColor whiteColor];
 	cell.textLabel.shadowColor=[UIColor blackColor];
 	cell.textLabel.shadowOffset=CGSizeMake(0, 1);
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//Feed * feed=[fetcher itemAtIndex:indexPath.row];
-	
-	//NSLog(@"feed %@ , class=%@",feed.name, [[feed class] description]);
 	
 	if([feed.feedCategory isEqualToString:@"_category"])
 	{
@@ -558,21 +512,13 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		if(unreadCount>0)
 		{
 			[cell setBadgeString:[NSString stringWithFormat:@"%d",unreadCount]];
-			//cell.textLabel.font=[UIFont boldSystemFontOfSize:16];
 			cell.textLabel.textColor=[UIColor whiteColor];
 		}
 		else 
 		{
 			[cell setBadgeString:nil];
-			//cell.textLabel.font=[UIFont boldSystemFontOfSize:16];
 		}
 	}
-	else 
-	{
-		//cell.textLabel.font=[UIFont boldSystemFontOfSize:16];
-	}
-
-	//cell.textLabel.shadowColor=[UIColor blackColor];
 	
 	cell.textLabel.text=feed.name;
 	

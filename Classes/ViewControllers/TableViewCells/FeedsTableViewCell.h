@@ -10,7 +10,7 @@
 #import "BadgedTableViewCell.h"
 
 @interface FeedsTableViewCell : BadgedTableViewCell {
-
+	BOOL isSelected;
 }
 
 @end
