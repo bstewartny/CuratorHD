@@ -10,10 +10,29 @@
 #import "FeedItem.h"
 #import "Base64.h"
 #import "Newsletter.h"
- 
+#import "Font.h"
+
 @implementation ItemHTMLRenderer
 @synthesize embedImageData,newsletter,includeSynopsis,maxSynopsisSize,useOriginalSynopsis;
 
+- (NSString*) applyDefaultStyles:(NSString*)html
+{
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{titleStyle}}" withString:[[[[Font alloc] initWithFamily:@"Arial" weight:@"bold" style:@"normal" size:@"x-large" color:@"black"] autorelease] cssStyle]];
+	
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{summaryStyle}}" withString:[[[[Font alloc] initWithFamily:@"Georgia" weight:@"normal" style:@"normal" size:@"medium" color:@"grey"] autorelease] cssStyle]];
+	
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{headlineStyle}}" withString:[[[[Font alloc] initWithFamily:@"Arial" weight:@"bold" style:@"normal" size:@"x-large" color:@"black"] autorelease] cssStyle]];
+	
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{sectionStyle}}" withString:[[[[Font alloc] initWithFamily:@"Arial" weight:@"bold" style:@"normal" size:@"large" color:@"black"] autorelease] cssStyle]];
+	
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{commentsStyle}}" withString:[[[[Font alloc] initWithFamily:@"Arial" weight:@"bold" style:@"italic" size:@"medium" color:@"red"] autorelease] cssStyle]];
+	
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{bodyStyle}}" withString:[[[[Font alloc] initWithFamily:@"Arial" weight:@"normal" style:@"normal" size:@"large" color:@"black"] autorelease] cssStyle]];
+	
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{dateStyle}}" withString:[[[[Font alloc] initWithFamily:@"Arial" weight:@"normal" style:@"normal" size:@"medium" color:@"grey"] autorelease] cssStyle]];
+
+	return html;
+}
 
 - (NSString*) applyNewsletterStyles:(Newsletter*)newsletter toHtml:(NSString*)html
 {
@@ -29,9 +48,11 @@
 	
 	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{bodyStyle}}" withString:[newsletter.bodyFont cssStyle]];
 	
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{dateStyle}}" withString:[newsletter.dateFont cssStyle]];
+	
 	return html;
 }
-
+/*
 - (NSString*) getStyleForFontFamily:(NSString*)fontFamily fontSize:(NSString*)fontSize fontColor:(NSString*)fontColor
 {
 	if([fontFamily length]==0)
@@ -49,7 +70,7 @@
 	NSString * style=[NSString stringWithFormat:@"font-family:'%@'; font-size:%@; color:%@;",fontFamily,fontSize,fontColor];
 	return style;
 }
-
+*/
 - (void) dealloc
 {
 	[newsletter release];
@@ -525,6 +546,12 @@
 	{
 		html=[self applyNewsletterStyles:newsletter toHtml:html];
 	}
+	else 
+	{
+		html=[self applyDefaultStyles:html];	
+		
+	}
+
 	
 	return html;
 	

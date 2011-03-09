@@ -161,7 +161,7 @@
 //- (UIImage*) shareImage;
 //- (NSString*) shareText;
 - (void) markAsRead:(FeedItem*)item;
-
+- (void) applyDefaultFormatting:(Newsletter*)newsletter;
 - (void) pushMasterViewController:(UIViewController*)controller;
 
 @end

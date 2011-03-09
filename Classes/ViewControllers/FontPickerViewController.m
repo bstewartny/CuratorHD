@@ -88,14 +88,19 @@
 	{
 		case 0:
 			label.text=[NSString stringWithFormat:@"%@ Font",sectionName];	
+			break;
 		case 1:
 			label.text=[NSString stringWithFormat:@"%@ Style",sectionName];
+			break;
 		case 2:
 			label.text=[NSString stringWithFormat:@"%@ Weight",sectionName];
+			break;
 		case 3:
 			label.text=[NSString stringWithFormat:@"%@ Size",sectionName];
+			break;
 		case 4:
 			label.text=[NSString stringWithFormat:@"%@ Color",sectionName];
+			break;
 	}
 
 	label.backgroundColor=[UIColor clearColor];

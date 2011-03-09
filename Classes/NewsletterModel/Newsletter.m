@@ -8,7 +8,7 @@
 
 @implementation Newsletter 
 @dynamic name,lastPublished,logoImageUrl,logoImage,sections,summary,displayOrder,image,isFavorite;//,clearOnPublish,maxSynopsisSize,templateName,headlineColor,sectionColor,commentColor;
-@dynamic titleFont,commentsFont,sectionFont,headlineFont,bodyFont,summaryFont;
+@dynamic titleFont,commentsFont,sectionFont,headlineFont,bodyFont,summaryFont,dateFont;
 
 + (Newsletter*) createInContext:(NSManagedObjectContext*)moc
 {

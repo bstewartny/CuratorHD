@@ -36,6 +36,7 @@
 @property(nonatomic,retain) Font * bodyFont;
 
 @property(nonatomic,retain) Font * summaryFont;
+@property(nonatomic,retain) Font * dateFont;
 
 
 /*@property(nonatomic,retain) NSNumber * clearOnPublish;

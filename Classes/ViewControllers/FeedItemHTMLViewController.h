@@ -21,6 +21,7 @@
 	NSInteger itemIndex;
 	//NSArray	* items;
 	ItemFetcher * fetcher;
+	UITextField * addressBar;
 	NSMutableArray * publishActions;
 	IBOutlet UIBarButtonItem * backButton;
 	IBOutlet UIBarButtonItem * forwardButton;
@@ -69,7 +70,7 @@
 
 @property(nonatomic,retain) NSString * shareText;
 //@property(nonatomic,retain) UIImage * shareImage;
-
+@property(nonatomic,retain) UITextField * addressBar;
 @property(nonatomic,retain) NSString * selectedImageSource;
 @property(nonatomic,retain) NSString * selectedImageLink;
 @property(nonatomic,retain) UIPopoverController * imageListPopover;

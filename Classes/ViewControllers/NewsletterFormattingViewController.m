@@ -8,8 +8,9 @@
 #define kSectionSectionHeadings 1
 #define kSectionSummary 2
 #define kSectionArticleTitles 3
-#define kSectionBodyText 4
-#define kSectionComments 5
+#define kSectionDate 4
+#define kSectionBodyText 5
+#define kSectionComments 6
 #import "Font.h"
 
 @implementation NewsletterFormattingViewController
@@ -19,13 +20,15 @@
 {
 	switch (section) {
 		case kSectionTitle:
-			return @"Title";
+			return @"Newsletter Title";
 		case kSectionSectionHeadings:
 			return @"Section Headings";
 		case kSectionSummary:
-			return @"Summaries";
+			return @"Section Summaries";
 		case kSectionArticleTitles:
 			return @"Headlines";
+		case kSectionDate:
+			return @"Date Lines";
 		case kSectionBodyText:
 			return @"Body Text";
 		case kSectionComments:
@@ -45,6 +48,9 @@
 		
 		case kSectionArticleTitles:
 			return self.newsletter.headlineFont;
+		case kSectionDate:
+			return self.newsletter.dateFont;
+			
 		case kSectionBodyText:
 			return self.newsletter.bodyFont;
 		
@@ -64,7 +70,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	return 5;
+	return 7;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

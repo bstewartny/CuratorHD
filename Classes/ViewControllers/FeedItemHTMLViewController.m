@@ -41,7 +41,7 @@
 #import "AddItemsViewController.h"
 
 @implementation FeedItemHTMLViewController
-@synthesize item,fetcher,shareText,webViewContainer,imageListPopover,prevWebView,nextWebView,tmpWebView,showPublishView,appendSynopsisItem,shareSelectedTextItem,replaceSynopsisItem,selectedImageSource,selectedImageLink,navPopoverController,publishButton,favoritesButton,itemIndex,webView,backButton,forwardButton,upButton,downButton,actionButton,activityView;
+@synthesize item,fetcher,addressBar,shareText,webViewContainer,imageListPopover,prevWebView,nextWebView,tmpWebView,showPublishView,appendSynopsisItem,shareSelectedTextItem,replaceSynopsisItem,selectedImageSource,selectedImageLink,navPopoverController,publishButton,favoritesButton,itemIndex,webView,backButton,forwardButton,upButton,downButton,actionButton,activityView;
 
 -(NSString*) getString:(NSString*)javascript
 {
@@ -128,6 +128,8 @@
 	prevWebView.scalesPageToFit=NO;
 	nextWebView.scalesPageToFit=NO;
 	
+	//addressBar.text=item.url;
+	
 	if(animated)
 	{
 		[CATransaction begin];
@@ -137,7 +139,7 @@
 		animation = [CATransition animation];
 		animation.type = kCATransitionPush;
 		animation.subtype=transitionDirection;
-		animation.duration = 0.25;
+		animation.duration = 0.35;
 	
 		//commentTextField.text=item.notes;
 		
@@ -461,18 +463,48 @@
 	
 	[buttons addObject:bi];
 	[bi release];
+	
 	activityView=[[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
 	activityView.hidden=YES;
 	activityView.activityIndicatorViewStyle=UIActivityIndicatorViewStyleGray;
 	
-	bi = [[UIBarButtonItem alloc] initWithCustomView:activityView];
+	//addressBar=[[UITextField alloc] initWithFrame:CGRectMake(0, 11, 500, 24)];
+	//addressBar.backgroundColor=[UIColor lightGrayColor];
+	//addressBar.textColor=[UIColor blackColor];
+	//addressBar.layer.cornerRadius=12;
+	//addressBar.font=[UIFont systemFontOfSize:17];
+	//addressBar.text=@"http://www.microsoft.com/why_do_we_suck.aspx?guid=123141323jljl23j4l2k34j2lkj42lk423";
+	//addressBar.delegate=self;
+	
+	//addressBar.leftView=activityView;
+	//addressBar.leftViewMode=UITextFieldViewModeAlways;
+	
+	bi=[[UIBarButtonItem alloc] initWithCustomView:activityView];
 	
 	[buttons addObject:bi];
+	
 	[bi release];
+	
+	//bi= [[UIBarButtonItem alloc]
+	//	 initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+	
+	//[buttons addObject:bi];
+	//[bi release];
+	
+	
+	
+	//activityView=[[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
+	//activityView.hidden=YES;
+	//activityView.activityIndicatorViewStyle=UIActivityIndicatorViewStyleGray;
+	
+	//bi = [[UIBarButtonItem alloc] initWithCustomView:activityView];
+	
+	//[buttons addObject:bi];
+	//[bi release];
 	
 	// create a spacer
 	bi = [[UIBarButtonItem alloc]
-		  initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+		initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
 	bi.width=10;
 	
 	[buttons addObject:bi];
@@ -488,7 +520,7 @@
 	// create a spacer
 	bi = [[UIBarButtonItem alloc]
 		  initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-	bi.width=10;
+	bi.width=5;
 	[buttons addObject:bi];
 	[bi release];
 	
@@ -517,7 +549,7 @@
 	
 	bi = [[UIBarButtonItem alloc]
 		  initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-	bi.width=10;
+	bi.width=20;
 	[buttons addObject:bi];
 	[bi release];
 	
@@ -559,7 +591,10 @@
 		[self attacheLongPressGestureToWebView:nextWebView];
 	}
 }
-
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+	return NO;
+}
 - (void) done:(id)sender
 {
 	[self.parentViewController dismissModalViewControllerAnimated:YES];
@@ -792,7 +827,7 @@
 
 - (void) addToFolder:(Folder*)folder
 {
-	[folder addFeedItem:self.item];
+	[folder addFeedItem:[self currentItem]];
 	[folder save];
 	
 	[[NSNotificationCenter defaultCenter] 
@@ -802,7 +837,7 @@
 
 - (void) addToSection:(NewsletterSection*)section
 {
-	[section addFeedItem:self.item];
+	[section addFeedItem:[self currentItem]];
 	[section save];
 	
 	[[NSNotificationCenter defaultCenter] 
@@ -1538,11 +1573,11 @@
 			animation = [CATransition animation];
 			animation.type = kCATransitionPush;
 			animation.subtype=kCATransitionFromRight;
-			animation.duration = 0.25;
+			animation.duration = 0.35;
 			
 			tmpWebView=[[UIWebView alloc] init];
 			tmpWebView.frame=webView.frame;
-			tmpWebView.layer.cornerRadius=10;
+			//tmpWebView.layer.cornerRadius=10;
 			tmpWebView.clipsToBounds=YES;
 			tmpWebView.scalesPageToFit=YES;
 			tmpWebView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
@@ -1556,6 +1591,8 @@
 			
 			tmpWebView.delegate=self;
 			
+			//addressBar.text=[[request URL] absoluteString];
+			
 			[tmpWebView loadRequest:request];
 			
 			[CATransaction commit];
@@ -1563,12 +1600,23 @@
 			return NO;
 		}
 	}
+	else 
+	{
+		if(navigationType==UIWebViewNavigationTypeLinkClicked || navigationType==UIWebViewNavigationTypeBackForward)
+		{
+			//addressBar.text=[[request URL] absoluteString];
+		}
+	}
+
 	return YES;
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView 
 {
 	NSLog(@"webViewDidStartLoad");
+	
+	//addressBar.text=[[[webView request] URL  ]absoluteString];
+	
 	UIApplication* app = [UIApplication sharedApplication]; 
     app.networkActivityIndicatorVisible = YES;
 	[activityView startAnimating];
@@ -1681,6 +1729,7 @@
 	[imageListPopover release];
 	[tmpWebView release];
 	[shareText release];
+	//[addressBar release];
     [super dealloc];
 }
 
