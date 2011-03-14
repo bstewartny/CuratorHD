@@ -131,7 +131,7 @@ static CGFloat fontHeight;
 		return;
 	}
 	   
-	DocumentEditFormViewController *controller = [[DocumentEditFormViewController alloc] initWithNibName:@"DocumentEditFormView" bundle:nil];
+	DocumentEditFormViewController *controller = [[DocumentEditFormViewController alloc] initAllowComments:YES];
 	
 	controller.item=item;
 	
@@ -156,7 +156,7 @@ static CGFloat fontHeight;
 	
 	arrayFetcher.array=[NSArray arrayWithObject:item];
 	
-	[[[UIApplication sharedApplication] delegate] showItemHtml:0 itemFetcher:arrayFetcher];
+	[[[UIApplication sharedApplication] delegate] showItemHtml:0 itemFetcher:arrayFetcher allowComments:NO];
 	
 	[arrayFetcher release];
 }

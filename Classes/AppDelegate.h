@@ -163,5 +163,7 @@
 - (void) markAsRead:(FeedItem*)item;
 - (void) applyDefaultFormatting:(Newsletter*)newsletter;
 - (void) pushMasterViewController:(UIViewController*)controller;
+- (void) showItemHtml:(NSInteger)index itemFetcher:(ItemFetcher*)itemFetcher allowComments:(BOOL)allowComments;
+
 
 @end

@@ -27,6 +27,8 @@
 - (void) viewDidLoad
 {
 	self.folderMode=YES;
+	self.updatable=NO;
+	
 	[super viewDidLoad];
 }
 
@@ -74,7 +76,7 @@
 	return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+/*- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	if(tableView.editing)
 	{
@@ -85,28 +87,13 @@
 		if([fetcher count]>0)
 		{
 			
-			[itemDelegate showItemHtml:indexPath.row itemFetcher:fetcher];
+			[itemDelegate showItemHtml:indexPath.row itemFetcher:fetcher allowComments:YES];
 			
 			
-			/*
-			 FeedItem * item=[fetcher itemAtIndex:indexPath.row];
-		
-			 DocumentEditFormViewController *controller = [[DocumentEditFormViewController alloc] initWithNibName:@"DocumentEditFormView" bundle:nil];
-			
-			controller.item=item;
-			
-			controller.delegate=self;
-			
-			[controller setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-			[controller setModalPresentationStyle:UIModalPresentationPageSheet];
-			
-			[self presentModalViewController:controller animated:YES];
-			
-			[controller release];
-			*/
+			 
 		}
 	}
-}
+}*/
 
 - (UITableViewCell *) tweetCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
 {

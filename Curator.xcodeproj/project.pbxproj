@@ -14,9 +14,12 @@
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		B00656741249039C00CA2383 /* SplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B00656731249039C00CA2383 /* SplitViewController.m */; };
+		B009B81613299279001F459E /* PullToRefreshViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B009B81513299279001F459E /* PullToRefreshViewController.m */; };
 		B00A17A412159115005DA09A /* ImageListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B00A17A312159115005DA09A /* ImageListViewController.m */; };
 		B00A17A612159E51005DA09A /* icon_comment_add.png in Resources */ = {isa = PBXBuildFile; fileRef = B00A17A512159E51005DA09A /* icon_comment_add.png */; };
 		B00FDF8712FB0B44002480F4 /* FeedItemDocument.html in Resources */ = {isa = PBXBuildFile; fileRef = B00FDF8612FB0B44002480F4 /* FeedItemDocument.html */; };
+		B015AAEB132A848E004458BF /* ItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B015AAEA132A848E004458BF /* ItemViewController.m */; };
+		B015AAF5132A8B3D004458BF /* ItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B015AAF4132A8B3D004458BF /* ItemView.xib */; };
 		B025DE8512F1BA71003F205A /* TweetTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B025DE8412F1BA71003F205A /* TweetTableViewCell.m */; };
 		B025DF1412F1CE9F003F205A /* FolderTweetTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B025DF1312F1CE9F003F205A /* FolderTweetTableViewCell.m */; };
 		B02837CB12A4013B00D01F61 /* FacebookAccountUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = B02837CA12A4013B00D01F61 /* FacebookAccountUpdater.m */; };
@@ -506,7 +509,7 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		1D6058910D05DD3D006BFB54 /* Curator HD Testing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Curator HD Testing.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D6058910D05DD3D006BFB54 /* Curator HD Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Curator HD Debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28A0AAE50D9B0CCF005BE974 /* Curator_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Curator_Prefix.pch; sourceTree = "<group>"; };
@@ -515,10 +518,15 @@
 		8D1107310486CEB800E47090 /* Curator-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Curator-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		B00656721249039C00CA2383 /* SplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplitViewController.h; sourceTree = "<group>"; };
 		B00656731249039C00CA2383 /* SplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplitViewController.m; sourceTree = "<group>"; };
+		B009B81413299279001F459E /* PullToRefreshViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullToRefreshViewController.h; sourceTree = "<group>"; };
+		B009B81513299279001F459E /* PullToRefreshViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullToRefreshViewController.m; sourceTree = "<group>"; };
 		B00A17A212159115005DA09A /* ImageListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageListViewController.h; sourceTree = "<group>"; };
 		B00A17A312159115005DA09A /* ImageListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageListViewController.m; sourceTree = "<group>"; };
 		B00A17A512159E51005DA09A /* icon_comment_add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_comment_add.png; sourceTree = "<group>"; };
 		B00FDF8612FB0B44002480F4 /* FeedItemDocument.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = FeedItemDocument.html; sourceTree = "<group>"; };
+		B015AAE9132A848E004458BF /* ItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemViewController.h; sourceTree = "<group>"; };
+		B015AAEA132A848E004458BF /* ItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemViewController.m; sourceTree = "<group>"; };
+		B015AAF4132A8B3D004458BF /* ItemView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ItemView.xib; sourceTree = "<group>"; };
 		B025DE8312F1BA71003F205A /* TweetTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TweetTableViewCell.h; path = ../TweetTableViewCell.h; sourceTree = "<group>"; };
 		B025DE8412F1BA71003F205A /* TweetTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TweetTableViewCell.m; path = ../TweetTableViewCell.m; sourceTree = "<group>"; };
 		B025DF1212F1CE9F003F205A /* FolderTweetTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FolderTweetTableViewCell.h; path = ../FolderTweetTableViewCell.h; sourceTree = "<group>"; };
@@ -1254,7 +1262,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1D6058910D05DD3D006BFB54 /* Curator HD Testing.app */,
+				1D6058910D05DD3D006BFB54 /* Curator HD Debug.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1818,6 +1826,7 @@
 				B03AF5E212E5FEB600A3744F /* FolderView.xib */,
 				B096714712E7978000BD0B7B /* NewsletterFormattingView.xib */,
 				B096717812E7D8F400BD0B7B /* FolderTableViewCell.xib */,
+				B015AAF4132A8B3D004458BF /* ItemView.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2029,6 +2038,10 @@
 				B093288912F735C600013B15 /* ColorPickerViewController.m */,
 				B093288B12F735D400013B15 /* FontPickerViewController.h */,
 				B093288C12F735D400013B15 /* FontPickerViewController.m */,
+				B009B81413299279001F459E /* PullToRefreshViewController.h */,
+				B009B81513299279001F459E /* PullToRefreshViewController.m */,
+				B015AAE9132A848E004458BF /* ItemViewController.h */,
+				B015AAEA132A848E004458BF /* ItemViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -2449,7 +2462,7 @@
 			);
 			name = InfoNgen;
 			productName = Untitled;
-			productReference = 1D6058910D05DD3D006BFB54 /* Curator HD Testing.app */;
+			productReference = 1D6058910D05DD3D006BFB54 /* Curator HD Debug.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -2763,6 +2776,7 @@
 				B0BB03CB12EF38A20020132A /* 32-twitter.png in Resources */,
 				B00FDF8712FB0B44002480F4 /* FeedItemDocument.html in Resources */,
 				B02F5DBC130F065300B4EC89 /* 28-star.png in Resources */,
+				B015AAF5132A8B3D004458BF /* ItemView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2977,6 +2991,8 @@
 				B0D65DDE1309B8D900BA5684 /* FastTweetFolderTableViewCell.m in Sources */,
 				B0F851DA131598060032037E /* FeedsTableViewCell.m in Sources */,
 				B0463BB11326959400690BC1 /* Font.m in Sources */,
+				B009B81613299279001F459E /* PullToRefreshViewController.m in Sources */,
+				B015AAEB132A848E004458BF /* ItemViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

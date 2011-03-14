@@ -7,28 +7,28 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UpdatableFeedViewController.h"
+#import "PullToRefreshViewController.h"
 #import <MessageUI/MessageUI.h>
 #import "ItemFetcher.h"
 
 @class ItemFetcher;
 @class MarkupStripper;
-@interface FeedViewController : UpdatableFeedViewController <UIActionSheetDelegate,MFMailComposeViewControllerDelegate,ItemFetcherDelegate> {
-	IBOutlet UITableView * tableView;
+@interface FeedViewController : PullToRefreshViewController <UIActionSheetDelegate,MFMailComposeViewControllerDelegate,ItemFetcherDelegate> {
+	//IBOutlet UITableView * tableView;
 	ItemFetcher * fetcher;
 	NSDateFormatter * dateFormatter;
 	id itemDelegate;
 	BOOL favoritesMode;
 	BOOL editable;
-	UIView *refreshHeaderView;
-    UILabel *refreshLabel;
-    UIImageView *refreshArrow;
-    UIActivityIndicatorView *refreshSpinner;
-    BOOL isDragging;
-    BOOL isLoading;
-    NSString *textPull;
-    NSString *textRelease;
-    NSString *textLoading;
+	//UIView *refreshHeaderView;
+    //UILabel *refreshLabel;
+    //UIImageView *refreshArrow;
+    //UIActivityIndicatorView *refreshSpinner;
+    //BOOL isDragging;
+    //BOOL isLoading;
+    //NSString *textPull;
+    //NSString *textRelease;
+    //NSString *textLoading;
 	MarkupStripper * stripper;
 	BOOL twitter;
 	UIPopoverController * navPopoverController;
@@ -42,19 +42,19 @@
 @property(nonatomic) BOOL twitter;
 @property(nonatomic,retain) NSString * origTitle;
 @property(nonatomic,retain) ItemFetcher	* fetcher;
-@property(nonatomic,retain) IBOutlet UITableView * tableView;
+//@property(nonatomic,retain) IBOutlet UITableView * tableView;
 @property(nonatomic,assign) id itemDelegate;
 @property(nonatomic,retain) NSDateFormatter * dateFormatter;
 @property(nonatomic) BOOL favoritesMode;
 @property(nonatomic) BOOL editable;
 @property(nonatomic,retain) UIPopoverController * navPopoverController;
-@property (nonatomic, retain) UIView *refreshHeaderView;
-@property (nonatomic, retain) UILabel *refreshLabel;
-@property (nonatomic, retain) UIImageView *refreshArrow;
-@property (nonatomic, retain) UIActivityIndicatorView *refreshSpinner;
-@property (nonatomic, copy) NSString *textPull;
-@property (nonatomic, copy) NSString *textRelease;
-@property (nonatomic, copy) NSString *textLoading;
+//@property (nonatomic, retain) UIView *refreshHeaderView;
+//@property (nonatomic, retain) UILabel *refreshLabel;
+//@property (nonatomic, retain) UIImageView *refreshArrow;
+//@property (nonatomic, retain) UIActivityIndicatorView *refreshSpinner;
+//@property (nonatomic, copy) NSString *textPull;
+//@property (nonatomic, copy) NSString *textRelease;
+//@property (nonatomic, copy) NSString *textLoading;
 
 - (IBAction) actionTouch:(id)sender;
 

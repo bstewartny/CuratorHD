@@ -54,7 +54,7 @@
 	
 	feed=[TempFeed new];
 	feed.url=[client getUrlForType:GoogleReaderFeedTypeAllItems tag:nil];
-	feed.name=@"All Items";
+	feed.name=@"All Google Reader Items";
 	feed.feedType=@"01GoogleFeed";
 	feed.feedCategory=@"_all";
 	feed.image=[UIImage imageNamed:@"32-googlreader.png"];
@@ -118,6 +118,7 @@
 	for(NSString * tag in tags)
 	{
 		feed=[TempFeed new];
+		
 		feed.url=[client getUrlForType:GoogleReaderFeedTypeTaggedItems tag:tag];
 		feed.name=tag;
 		if(ordinal<10)
@@ -133,6 +134,20 @@
 		ordinal++;
 		feed.image=[UIImage imageNamed:@"32-folderclosed.png"];
 	
+		[feeds addObject:feed];
+		
+		[feed release];
+		
+		// add "all items"feed for this category
+		
+		feed=[TempFeed new];
+		feed.url=[NSString stringWithFormat:@"category://%@",tag];//[client getUrlForType:GoogleReaderFeedTypeTaggedItems tag:tag];
+		feed.name=[NSString stringWithFormat:@"All %@ Items",tag];
+		feed.feedType=@"0"; // for sorting...
+		feed.feedCategory=[NSString stringWithFormat:@"|%@|",tag];
+		
+		feed.image=[UIImage imageNamed:@"32-folderclosed.png"];
+		
 		[feeds addObject:feed];
 		
 		[feed release];
@@ -193,7 +208,9 @@
 	
 	readingListFeed.name=@"AllItems";
 	
-	NSArray * items=[self getMostRecentReaderItems:readingListFeed maxItems:max];
+	NSDate * minDate=[RssFeed maxDateWithAccountName:self.account.name withManagedObjectContext:moc];
+	
+	NSArray * items=[self getMostRecentReaderItems:readingListFeed maxItems:max minDate:minDate];
 	
 	NSLog(@"Got %d recent unread items from reading list",[items count]);
 	
@@ -589,7 +606,7 @@
 	   [feed.feedCategory isEqualToString:@"_shared"] ||
 	   [feed.feedCategory isEqualToString:@"_notes"])
 	{
-		return [self getMostRecentReaderItems:feed maxItems:maxItems];
+		return [self getMostRecentReaderItems:feed maxItems:maxItems minDate:nil];
 	}
 	
 	if([feed.feedType isEqualToString:@"GoogleAtom"])
@@ -775,7 +792,7 @@
 	return results;
 }
 
-- (NSArray*) getMostRecentReaderItems:(RssFeed*)feed maxItems:(int)maxItems  
+- (NSArray*) getMostRecentReaderItems:(RssFeed*)feed maxItems:(int)maxItems minDate:(NSDate*)minDate
 {
 	unsigned long current_seconds=[[NSDate date] timeIntervalSince1970];
 	
@@ -783,6 +800,7 @@
 	
 	NSString * url;
 	
+	// get largest updated timestamp for items in the database...
 	// blatant temporary hack to allow passing in of URL with appended params already...
 	if([feed.url hasSuffix:@"&"])
 	{
@@ -791,7 +809,18 @@
 	else 
 	{
 		url=[feed.url stringByAppendingFormat:@"?n=%d&ck=%@&client=%@",maxItems,timestamp,kGoogleReaderClientName];
-	}	
+	}
+	
+	//NSDate * maxUpdatedDate=[feed maxDate];
+	
+	if(minDate)
+	{
+		unsigned long max_updated_seconds=[minDate timeIntervalSince1970];
+		NSString * max_updated_timestamp=[NSString stringWithFormat:@"%D",max_updated_seconds];
+		
+		url=[url stringByAppendingFormat:@"&ot=%@",max_updated_timestamp];
+	}
+	
 	//NSLog(@"url=%@",url);
 	//NSLog(@"Getting most recent %d items from feed: %@",maxItems,feed.name);
 	
@@ -822,8 +851,8 @@
 				TempFeedItem * tmp=[[TempFeedItem alloc] init];
 				@try 
 				{
-					//tmp.headline=[stripper stripMarkup:[item objectForKey:@"title"]];
-					tmp.headline=[item objectForKey:@"title"];
+					tmp.headline=[stripper stripMarkup:[item objectForKey:@"title"]];
+					//tmp.headline=[item objectForKey:@"title"];
 								  
 					if([item objectForKey:@"alternate"])
 					{
@@ -918,7 +947,7 @@
 						NSDictionary * origin=[item objectForKey:@"origin"];
 						if(origin)
 						{
-							tmp.origin=[origin objectForKey:@"title"];
+							tmp.origin=[stripper stripMarkup:[origin objectForKey:@"title"]];
 							tmp.originUrl=[origin objectForKey:@"htmlUrl"];
 							tmp.originId=[origin objectForKey:@"streamId"];
 						}

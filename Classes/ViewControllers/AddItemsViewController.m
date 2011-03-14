@@ -310,9 +310,9 @@
 			[delegate addToFolder:feed];
 			
 			[self.foldersFetcher performFetch];
-			[self.tableView reloadData];
+			[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 			
-			[delegate cancelOrganize];
+			[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.7];
 			
 			return;
 		}
@@ -327,6 +327,11 @@
 			[sectionsView release];
 		}
 	}
+}
+
+- (void) cancelOrganize
+{
+	[delegate cancelOrganize];
 }
 
 // Override to allow orientations other than the default portrait orientation.

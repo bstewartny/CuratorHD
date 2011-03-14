@@ -33,17 +33,11 @@
 	
 	self.tableView.showsVerticalScrollIndicator=NO;
 	self.tableView.showsHorizontalScrollIndicator=NO;
-	//self.tableView.separatorColor=[UIColor darkGrayColor];
-	//self.tableView.alpha=0.5;
-	//self.tableView.backgroundView.alpha=0.8;
 	self.tableView.allowsSelectionDuringEditing=YES;
 	
-	//[self.tableView setBackgroundView:nil];
 	[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
 	self.tableView.backgroundView.backgroundColor=[UIColor blackColor];
 	self.tableView.backgroundView.alpha=0.5;
-	
-	//self.tableView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
 	
 	self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(toggleEditMode:)] autorelease];
 				[[NSNotificationCenter defaultCenter]
@@ -114,13 +108,6 @@
 		[foldersFetcher performFetch];
 		[tableView reloadData];
 	}
-	/*if([pNotification.name isEqualToString:@"FeedsUpdated"])
-	{
-		[sourcesFetcher performFetch];
-		[newslettersFetcher performFetch];
-		[foldersFetcher performFetch];
-		[tableView reloadData];
-	}*/
 } 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -173,13 +160,13 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 			case 2:
 				// add newsletter
 				[[[UIApplication sharedApplication] delegate] addNewsletter];
-				
 				break;
 		}
 		return;
 	}
 	
-	switch (indexPath.section) {
+	switch (indexPath.section) 
+	{
 		case 0:
 		{
 			FeedAccount * account=[sourcesFetcher itemAtIndex:indexPath.row];
@@ -250,11 +237,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		 postNotificationName:@"ReloadActionData"
 		 object:nil];
 	}
-	//[tableView reloadSections:[NSIndexSet indexSetWithIndex:fromIndexPath.section] withRowAnimation:UITableViewRowAnimationNone];
 }
-
-
-
 
 - (CustomCellBackgroundViewPosition) cellPositionForIndexPath:(NSIndexPath*)indexPath
 {
@@ -264,18 +247,20 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	{
 		return CustomCellBackgroundViewPositionSingle;
 	}
-	else {
+	else 
+	{
 		if(indexPath.row==0)
 		{
 			return CustomCellBackgroundViewPositionTop;
 		}
-		else {
-			
+		else 
+		{
 			if(indexPath.row==count-1)
 			{
 				return CustomCellBackgroundViewPositionBottom;
 			}
-			else {
+			else 
+			{
 				return CustomCellBackgroundViewPositionMiddle;
 			}
 		}
@@ -287,21 +272,8 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 {
 	Feed * feed=[[self fetcherForSection:indexPath.section] itemAtIndex:indexPath.row];
 	
-	
 	cell.backgroundColor=[UIColor clearColor];
-	
 	cell.textLabel.font=[UIFont boldSystemFontOfSize:17];
-	
-	//CustomCellBackgroundView * gbView=[[[CustomCellBackgroundView alloc] initWithFrame:CGRectZero] autorelease];
-	
-	//[gbView setPosition:[self cellPositionForIndexPath:indexPath]];
-
-	//cell.backgroundView=gbView;
-	
-	//gbView.fillColor=[UIColor blackColor]; 
-	//gbView.borderColor=[UIColor grayColor];
-	
-	//cell.backgroundView.alpha=0.5;
 	cell.textLabel.backgroundColor=[UIColor clearColor];
 	cell.textLabel.textColor=[UIColor whiteColor];
 	cell.textLabel.shadowColor=[UIColor blackColor];
@@ -309,12 +281,10 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	
 	if(indexPath.section==0)
 	{
-		//cell.editingAccessoryType=UITableViewCellAccessoryDetailDisclosureButton;
 		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 	}
 	else 
 	{
-		//cell.editingAccessoryType=UITableViewCellAccessoryDetailDisclosureButton;
 		cell.accessoryType=UITableViewCellAccessoryNone;
 	}
 	
@@ -330,12 +300,10 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		if(unreadCount>0)
 		{
 			[cell setBadgeString:[NSString stringWithFormat:@"%d",unreadCount]];
-			//cell.textLabel.font=[UIFont boldSystemFontOfSize:16];
 		}
 		else 
 		{
 			[cell setBadgeString:nil];
-			//cell.textLabel.font=[UIFont systemFontOfSize:16];
 		}
 	}
 	else 
@@ -343,11 +311,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		if([feed isKindOfClass:[Newsletter class]])
 		{
 			int count=[feed itemCount];
-			/*for(NewsletterSection * section in [feed sections])
-			{
-				count+=[[section items] count];
-			}*/
-			[cell setBadgeString:[NSString stringWithFormat:@"%d",count]];
+			[cell setBadgeString:[NSString stringWithFormat:@"%d",[feed itemCount]]];
 			cell.imageView.image=[UIImage imageNamed:@"32-newsletter.png"];
 		}
 		else 
@@ -355,15 +319,12 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 			if([feed isKindOfClass:[Folder class]])
 			{
 				int count=[feed itemCount];
-				[cell setBadgeString:[NSString stringWithFormat:@"%d",count ]];
+				[cell setBadgeString:[NSString stringWithFormat:@"%d",[feed itemCount]]];
 				cell.imageView.image=[UIImage imageNamed:@"32-folderclosed.png"];
 			}
 		}
-		
-		//cell.textLabel.font=[UIFont boldSystemFontOfSize:16];
 	}
 	
-	//cell.selectionStyle=UITableViewCellSelectionStyleGray;
 	cell.textLabel.text=feed.name;
 }
 
@@ -373,43 +334,12 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	   ([[self fetcherForSection:indexPath.section] count]==0 ))
 	{
 		FeedsTableViewCell * cell=[[[FeedsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
-		//cell.textLabel.textColor=[UIColor lightGrayColor];
+		
 		cell.backgroundColor=[UIColor clearColor];
-		
-		
-		//CustomCellBackgroundView * gbView=[[[CustomCellBackgroundView alloc] initWithFrame:CGRectZero] autorelease];
-		
-		//[gbView setPosition:[self cellPositionForIndexPath:indexPath]];
-		
-		//cell.backgroundView=gbView;
-		
-		//gbView.fillColor=[UIColor blackColor]; 
-		//gbView.borderColor=[UIColor grayColor];
-		
-		//cell.backgroundView.alpha=0.5;
-		
-		//cell.textLabel.textColor=[UIColor whiteColor];
-		
 		cell.textLabel.font=[UIFont boldSystemFontOfSize:17];
-		
-		//CustomCellBackgroundView * gbView=[[[CustomCellBackgroundView alloc] initWithFrame:CGRectZero] autorelease];
-		
-		//[gbView setPosition:[self cellPositionForIndexPath:indexPath]];
-		
-		//cell.backgroundView=gbView;
-		
-		//gbView.fillColor=[UIColor blackColor]; 
-		//gbView.borderColor=[UIColor grayColor];
-		
-		//cell.backgroundView.alpha=0.5;
-		
 		cell.textLabel.textColor=[UIColor lightGrayColor];
 		cell.textLabel.shadowColor=[UIColor blackColor];
 		cell.textLabel.shadowOffset=CGSizeMake(0, 1);
-		
-		
-		
-		
 		
 		switch(indexPath.section)
 		{
@@ -438,6 +368,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 {
 	return 23;
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
 	return 44;
@@ -463,26 +394,6 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		}
 	}
 }
-/*
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-	switch (section) {
-		case 0:
-			return @"Sources";
-		case 1:
-			return @"Folders";
-		case 2:
-			return @"Newsletters";
-	}
-}
-*/
-/*- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-	if(section==2) return @"www.infongen.com";
-	
-	return nil;
-	 
-}*/
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
@@ -498,7 +409,6 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	UIView * v=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, [self tableView:tableView heightForHeaderInSection:section])];
 	v.backgroundColor=[UIColor viewFlipsideBackgroundColor];
 	v.alpha=0.8;
-	
 	
 	UILabel * label=[[UILabel alloc] init];
 	
@@ -535,38 +445,9 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	return [v autorelease];
 }
 
-
-
-
-
-
-/*
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
-{
-	//if(indexPath.section==0) return;
-	Feed * feed=nil;
-	NSString * promptTitle=nil;
-	if(indexPath.section==0)
-	{
-		[[[UIApplication sharedApplication] delegate] showAccountSettingsForm];
-		return;
-	}
-	if(indexPath.section==1)
-	{
-		[[[UIApplication sharedApplication] delegate] editFolderName:[foldersFetcher itemAtIndex:indexPath.row]];
-		return;
-	}
-	if(indexPath.section==2)
-	{
-		[[[UIApplication sharedApplication] delegate] editNewsletterName:[newslettersFetcher itemAtIndex:indexPath.row]];
-		return;
-	}
-}*/
-
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	return tableView.editing;
-	
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -679,57 +560,71 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 			}
 		}
 	}
-
 	
-	///if(!aTableView.editing)
-	//{
-		Feed * feed=[[self fetcherForSection:indexPath.section] itemAtIndex:indexPath.row];
-		if(indexPath.section==1)
+	Feed * feed=[[self fetcherForSection:indexPath.section] itemAtIndex:indexPath.row];
+	if(indexPath.section==1)
+	{
+		[[[UIApplication sharedApplication] delegate] showFolder:feed delegate:self.itemDelegate editable:YES];
+		return;
+	}
+	if(indexPath.section==2)
+	{
+		[[[UIApplication sharedApplication] delegate] showNewsletter:feed delegate:self.itemDelegate editable:YES];
+		return;
+	}
+	if(indexPath.section==0)
+	{
+		if([feed respondsToSelector:@selector(feedFetcher)])
 		{
-			[[[UIApplication sharedApplication] delegate] showFolder:feed delegate:self.itemDelegate editable:YES];
-			return;
-		}
-		if(indexPath.section==2)
-		{
-			[[[UIApplication sharedApplication] delegate] showNewsletter:feed delegate:self.itemDelegate editable:YES];
-			return;
-		}
-		if(indexPath.section==0)
-		{
-			if([feed respondsToSelector:@selector(feedFetcher)])
+			ItemFetcher * feedFetcher=[feed feedFetcher];
+			
+			if(feedFetcher!=nil)
 			{
-				ItemFetcher * feedFetcher=[feed feedFetcher];
+				[feedFetcher performFetch];
 				
-				if(feedFetcher!=nil)
+				NSArray * feeds=[feedFetcher items];
+				
+				Feed * firstFeed=nil;
+				
+				if([feeds count]>0)
 				{
-					FeedsViewController * feedsView=[[FeedsViewController alloc] initWithNibName:@"FeedsView" bundle:nil];
-					
-					feedsView.editable=(indexPath.section>0); //[feed editable];
-					feedsView.fetcher=feedFetcher;
-					feedsView.title=feed.name;
-					feedsView.itemDelegate=self.itemDelegate;
-					//feedsView.navigationItem.title=feed.name;
-					
-					[self.navigationController pushViewController:feedsView animated:YES];
-					
-					[feedsView release];
+					firstFeed=[feeds objectAtIndex:0];
 				}
-				else 
+				
+				
+				FeedsViewController * feedsView=[[FeedsViewController alloc] initWithNibName:@"FeedsView" bundle:nil];
+				
+				feedsView.editable=(indexPath.section>0);
+				feedsView.fetcher=feedFetcher;
+				feedsView.title=feed.name;
+				feedsView.itemDelegate=self.itemDelegate;
+				
+				[self.navigationController pushViewController:feedsView animated:YES];
+				
+				
+				if(firstFeed)
 				{
-					[[[UIApplication sharedApplication] delegate] showFeed:feed delegate:self.itemDelegate editable:NO];
+					[feedsView.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]   animated:NO scrollPosition:UITableViewScrollPositionNone];
+					
+					[[[UIApplication sharedApplication] delegate] showFeed:firstFeed delegate:self.itemDelegate editable:NO];
 				}
+				[feedsView release];
+				
 			}
 			else 
 			{
 				[[[UIApplication sharedApplication] delegate] showFeed:feed delegate:self.itemDelegate editable:NO];
 			}
 		}
-	//}
+		else 
+		{
+			[[[UIApplication sharedApplication] delegate] showFeed:feed delegate:self.itemDelegate editable:NO];
+		}
+	}
 }
 
-// Override to allow orientations other than the default portrait orientation.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
+{
 	return YES;
 }
 
@@ -740,6 +635,5 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	[foldersFetcher release];
 	[super dealloc];
 }
-
 
 @end

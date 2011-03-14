@@ -235,6 +235,14 @@
 	
 	previewController.newsletter=self.newsletter;
 	
+	CATransition* transition = [CATransition animation];
+	transition.duration = 0.3;
+	transition.type = kCATransitionFade;
+	transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+	
+	[self.navigationController.view.layer 
+	 addAnimation:transition forKey:kCATransition];
+	
 	[self.navigationController pushViewController:previewController animated:NO];
 	
 	[previewController release];
@@ -1086,7 +1094,7 @@ commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 
 - (void) editItem:(FeedItem*)item
 {
-	DocumentEditFormViewController *controller = [[DocumentEditFormViewController alloc] initWithNibName:@"DocumentEditFormView" bundle:nil];
+	DocumentEditFormViewController *controller = [[DocumentEditFormViewController alloc] initAllowComments:YES];
 	
 	controller.item=item;
 	

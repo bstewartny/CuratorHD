@@ -18,6 +18,6 @@
 @property(nonatomic,retain) FeedAccount * account;
 
 - (ItemFetcher*) feedFetcher;
-
+- (NSDate*) maxDate;
  
 @end

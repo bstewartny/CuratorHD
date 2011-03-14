@@ -47,7 +47,7 @@
 	*/
 	feed=[TempFeed new];
 	feed.url=@"http://twitter.com/statuses/friends_timeline.json";
-	feed.name=@"Timeline";
+	feed.name=@"Twitter Timeline";
 	feed.feedType=@"02TwitterFeed";
 	feed.feedCategory=@"_twitter_friends";
 	feed.image=[UIImage imageNamed:@"shared.gif"];
@@ -125,7 +125,7 @@
 		
 		feed.feedCategory=@"_twitter_list";
 		ordinal++;
-		feed.image=[UIImage imageNamed:@"folder.png"];
+		feed.image=[UIImage imageNamed:@"32-folderclosed.png"];
 		
 		[feeds addObject:feed];
 		

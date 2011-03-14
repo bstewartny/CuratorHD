@@ -10,7 +10,7 @@
 #define kHeadlineViewTop 50
 
 @implementation DocumentEditFormViewController
-@synthesize item, headlineTextField,commentsView,synopsisTextView,commentsTextView,delegate,headlineTextColor,synopsisTextColor,commentsTextColor;
+@synthesize item, headlineTextField,synopsisTextView,delegate,headlineTextColor,synopsisTextColor;
 
 - (IBAction) cancel:(id)sender
 {
@@ -21,7 +21,7 @@
 {
 	item.headline=headlineTextField.text;
 	item.synopsis=synopsisTextView.text;
-	item.notes=commentsTextView.text;
+	item.notes=commentTextView.text;
 	
 	[item save];
 	
@@ -43,51 +43,54 @@
 	//self.commentsTextColor=[NewsletterItemContentView colorWithHexString:@"b00027"];
 	self.headlineTextColor=[UIColor blackColor];
 	self.synopsisTextColor=[UIColor grayColor];
-	self.commentsTextColor=[UIColor redColor];
+	//self.commentsTextColor=[UIColor redColor];
 	
 	// Observe keyboard hide and show notifications to resize the text view appropriately.
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+	self.contentView.backgroundColor=[UIColor whiteColor];
 	
-	UITextField * textField=[[UITextField alloc] initWithFrame:CGRectMake(10,kHeadlineViewTop,self.view.bounds.size.width-20,kHeadlineViewHeight)];
+	UITextField * textField=[[UITextField alloc] initWithFrame:CGRectMake(10,0,self.contentView.bounds.size.width-20,24)];
 	textField.backgroundColor=[UIColor whiteColor];
 	textField.text=self.item.headline;
 	textField.placeholder=@"Item headline";
 	textField.font=[UIFont boldSystemFontOfSize:17]; 
 	textField.textColor=self.headlineTextColor;
+	textField.autoresizingMask=UIViewAutoresizingFlexibleWidth;
+	
 	//textField.borderStyle=UITextBorderStyleRoundedRect;
 	
-	textField.layer.cornerRadius=4;
+	//textField.layer.cornerRadius=4;
 	
 	self.headlineTextField=textField;
 	
-	[self.view  addSubview:textField];
+	[self.contentView  addSubview:textField];
 	
 	[textField release];
 	
-	UITextView * textView=[[UITextView alloc] initWithFrame:CGRectMake(10,kHeadlineViewTop+kHeadlineViewHeight+5, self.view.bounds.size.width-20, self.view.bounds.size.height-(kHeadlineViewTop+kHeadlineViewHeight+kCommentsViewHeight+10+10))];  
+	UITextView * textView=[[UITextView alloc] initWithFrame:CGRectMake(10,24+5, self.contentView.bounds.size.width-20, self.contentView.bounds.size.height-(24+10))];  
 	textView.backgroundColor=[UIColor whiteColor];
 	textView.font=[UIFont systemFontOfSize:14];
 	textView.textColor=self.synopsisTextColor;
 	textView.text=self.item.synopsis;
-	textView.layer.cornerRadius=4;
+	//textView.layer.cornerRadius=4;
 	self.synopsisTextView=textView;
-	
-	[self.view  addSubview:textView];
+	textView.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+	[self.contentView  addSubview:textView];
 	
 	[textView release];
 	
-	self.commentsView=[self createNewCommentsView:CGRectMake(10,(self.view.bounds.size.height-(kCommentsViewHeight+10)) / 2, self.view.bounds.size.width-20, kCommentsViewHeight)];
+	//self.commentsView=[self createNewCommentsView:CGRectMake(10,(self.view.bounds.size.height-(kCommentsViewHeight+10)) / 2, self.view.bounds.size.width-20, kCommentsViewHeight)];
 	
-	[self.view addSubview:commentsView];
+	//[self.view addSubview:commentsView];
 	
 	
 	// create a toolbar to have two buttons in the right
-	BlankToolbar* tools = [[BlankToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width,44)];
-	tools.autoresizingMask=UIViewAutoresizingFlexibleWidth;
+	//BlankToolbar* tools = [[BlankToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width,44)];
+	//tools.autoresizingMask=UIViewAutoresizingFlexibleWidth;
 	
-	tools.backgroundColor=[UIColor clearColor];
-	tools.opaque=NO;
+	toolbar.backgroundColor=[UIColor clearColor];
+	toolbar.opaque=NO;
 	
 	// create the array to hold the buttons, which then gets added to the toolbar
 	NSMutableArray* buttons = [[NSMutableArray alloc] init];
@@ -167,201 +170,18 @@
 	*/
 	
 	// stick the buttons in the toolbar
-	[tools setItems:buttons animated:NO];
+	[toolbar setItems:buttons animated:NO];
 	
 	[buttons release];
 	
 	// and put the toolbar in the nav bar
+	self.commentTextView.text=self.item.notes;
 	
-	[self.view addSubview:tools];
-	
-	[tools release];
-	
-	[self.commentsTextView becomeFirstResponder];
+	[self.commentTextView becomeFirstResponder];
 }
 
-- (void) viewDidUnload
-{
-	[super viewDidUnload];
-   
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-}
 
-- (UIView *) createNewCommentsView:(CGRect)frame
-{
-	UIView * newView=[[[UIView alloc] initWithFrame:frame] autorelease];
-	newView.backgroundColor=[UIColor whiteColor];
-	newView.layer.cornerRadius=4;
-	
-	UIImage * quoteImage=[UIImage imageNamed:@"CommentQuoteImage.jpg"];
-		
-	UIImageView * quoteImageView=[[UIImageView alloc] initWithImage:quoteImage];
-		
-	quoteImageView.frame=CGRectMake(2, (frame.size.height - quoteImage.size.height) / 2, quoteImage.size.width, quoteImage.size.height);
-		
-	UIView * seperatorView=[[UIView alloc] initWithFrame:CGRectMake(48, 10, 2, frame.size.height-20)];
-	seperatorView.backgroundColor=[UIColor grayColor];
-		
-	UITextView * textView=[[UITextView alloc] initWithFrame:CGRectMake(52,5, frame.size.width - 60, frame.size.height-10)];
-		
-	textView.backgroundColor=[UIColor whiteColor];
-	textView.textColor=[UIColor redColor]; //self.commentsTextColor;
-	textView.font=[UIFont italicSystemFontOfSize:14];
-		
-	textView.text=self.item.notes;
-	
-	self.commentsTextView=textView;
-		
-	[newView addSubview:quoteImageView];
-	[newView addSubview:seperatorView];
-	[newView addSubview:textView];
-	
-	[seperatorView release];
-	
-	[quoteImageView release];
-	
-	[textView release];
-	
-	return newView;
-}
-
-- (void)keyboardWillShow:(NSNotification *)notification {
-    
-	/*
-     Reduce the size of the text view so that it's not obscured by the keyboard.
-     Animate the resize so that it's in sync with the appearance of the keyboard.
-	*/
-	
-    NSDictionary *userInfo = [notification userInfo];
-    
-    // Get the origin of the keyboard when it's displayed.
-    NSValue* aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-	
-    // Get the top of the keyboard as the y coordinate of its origin in self's view's coordinate system. The bottom of the text view's frame should align with the top of the keyboard's final position.
-    CGRect keyboardRect = [aValue CGRectValue];
-	
-	// depending on what orientation we are, we need either height or width of keyboard
-	CGFloat keyboardHeight = keyboardRect.size.height;
-	
-	// assume we are in other orientation
-	if(keyboardHeight >= 768.0)
-	{
-		keyboardHeight=keyboardRect.size.width;
-	}
-	_keyboardHeight=keyboardHeight;
-	
-	// Get the duration of the animation.
-    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSTimeInterval animationDuration;
-    [animationDurationValue getValue:&animationDuration];
-    
-	[self doKeyboardWillShow:keyboardHeight animationDuration:animationDuration];
-	
-	_keyboardVisible=YES;
-	
-}
-
-- (void) doKeyboardWillShow:(CGFloat)keyboardHeight animationDuration:(NSTimeInterval)animationDuration
-{
-	// animate in sync with keyboard animation
-	[UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:animationDuration];
-    
-	[self moveTextBoxesAboveKeyboard:keyboardHeight];
-	
-    [UIView commitAnimations];
-}
-
-- (void) moveTextBoxesAboveKeyboard:(CGFloat)keyboardHeight
-{
-	CGRect newTextViewFrame = self.synopsisTextView.frame;
-    newTextViewFrame.size.height = newTextViewFrame.size.height - keyboardHeight;
-    
-	CGRect newCommentsFrame=self.commentsView.frame;
-	newCommentsFrame.origin.y=newCommentsFrame.origin.y - keyboardHeight;
-	
-	self.synopsisTextView.frame=newTextViewFrame;
-	self.commentsView.frame=newCommentsFrame;
-}
-
-- (void)keyboardWillHide:(NSNotification *)notification 
-{
-	NSDictionary* userInfo = [notification userInfo];
-    
-	// animate in sync with keyboard animation
-	NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSTimeInterval animationDuration;
-    [animationDurationValue getValue:&animationDuration];
-    
-	[self doKeyboardWillHide:animationDuration];
-	
-	_keyboardVisible=NO;
-	
-}
-
-- (void) doKeyboardWillHide:(NSTimeInterval)animationDuration
-{
-	[UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:animationDuration];
-	
-    [self setTextViewFrames];
-	
-	[UIView commitAnimations];
-}
-
-- (void) setTextViewFrames
-{
-	self.synopsisTextView.frame = CGRectMake(10,kHeadlineViewTop+kHeadlineViewHeight+5, self.view.bounds.size.width-20, self.view.bounds.size.height-(kHeadlineViewTop+kHeadlineViewHeight+kCommentsViewHeight+10+10));
-    self.commentsView.frame = CGRectMake(10,self.view.bounds.size.height-(kCommentsViewHeight+10), self.view.bounds.size.width-20, kCommentsViewHeight);
-}
-
-// Override to allow orientations other than the default portrait orientation.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
-{
-    // Return YES for supported orientations
-    return YES;
-}
-
-- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-	if(_keyboardVisible)
-	{
-		[self setTextViewFrames];
-		
-		[UIView beginAnimations:nil context:NULL];
-		
-		[self moveTextBoxesAboveKeyboard:_keyboardHeight];
-		
-		[UIView commitAnimations];
-	}
-	else 
-	{
-		[self setTextViewFrames];
-	}
-}
-
-- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-	if(_keyboardVisible)
-	{
-	
-	}
-	else 
-	{
-		
-		
-	}
-}
-
-- (void)didReceiveMemoryWarning 
-{
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
-}
-
+/*
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
@@ -374,18 +194,18 @@
 	[super viewDidAppear:animated];
 	
 	[self.commentsTextView setNeedsDisplay];
-}
+}*/
 
 - (void)dealloc 
 {
 	[item release];
 	[headlineTextField release];
 	[synopsisTextView release];
-	[commentsTextView release];
+	//[commentsTextView release];
 	[headlineTextColor release];
-	[commentsView release];
+	//[commentsView release];
 	[synopsisTextColor release];
-	[commentsTextColor release];
+	//[commentsTextColor release];
     [super dealloc];
 }
 

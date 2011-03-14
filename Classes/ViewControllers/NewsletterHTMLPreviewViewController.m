@@ -123,7 +123,7 @@
 		formatter.newsletter=self.newsletter;
 		formatter.delegate=self;
 		
-		[masterNavController pushViewController:formatter animated:NO];
+		[masterNavController pushViewController:formatter animated:YES];
 		[formatter release];
 	//}
 }

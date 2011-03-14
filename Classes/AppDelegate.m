@@ -152,34 +152,24 @@
 		  withBarButtonItem:(UIBarButtonItem*)barButtonItem 
 	   forPopoverController: (UIPopoverController*)pc
 {
-	NSLog(@"splitViewController:willHideViewController");
 	barButtonItem.title = @"Sources";
 	
 	[[self.detailNavController topViewController].navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
 	
-	//[self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
-    self.navPopoverController = pc;
+	self.navPopoverController = pc;
 }
 - (void)splitViewController:(MGSplitViewController*)svc 
 	 willShowViewController:(UIViewController *)aViewController 
   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
 {
-	NSLog(@"splitViewController:willShowViewController");
 	[[self.detailNavController topViewController].navigationItem setLeftBarButtonItem:[[[UIBarButtonItem alloc] initWithCustomView:[[UIView new] autorelease]] autorelease]];
-    //[self.navigationItem setLeftBarButtonItem:nil animated:YES];
+    
 	self.navPopoverController = nil;
 }
 
 - (void) showFeed:(Feed*)feed delegate:(id)itemDelegate editable:(BOOL)editable
 {
-	NSLog(@"showFeed");
-	
 	FeedViewController * feedView=[[FeedViewController alloc] initWithNibName:@"FeedView" bundle:nil];
-	
-	if([detailNavController topViewController])
-	{
-		feedView.navigationItem.leftBarButtonItem=[detailNavController topViewController].navigationItem.leftBarButtonItem;
-	}
 	
 	feedView.editable=editable; 
 	feedView.itemDelegate=itemDelegate;
@@ -190,7 +180,7 @@
 	
 	feedView.fetcher=[feed itemFetcher];
 	
-	[detailNavController setViewControllers:[NSArray arrayWithObject:feedView] animated:NO];
+	[self setDetailViewController:feedView];
 	
 	[feedView release];
 }
@@ -199,19 +189,14 @@
 {
 	FolderViewController * folderView=[[FolderViewController alloc] initWithNibName:@"FolderView" bundle:nil];
 	
-	if([detailNavController topViewController])
-	{
-		folderView.navigationItem.leftBarButtonItem=[detailNavController topViewController].navigationItem.leftBarButtonItem;
-	}
-	
 	folderView.editable=editable; 
 	folderView.itemDelegate=itemDelegate;
 	folderView.title=feed.name;
 	folderView.navigationItem.title=feed.name;
 	folderView.fetcher=[feed itemFetcher];
 	
-	[detailNavController setViewControllers:[NSArray arrayWithObject:folderView] animated:NO];
-
+	[self setDetailViewController:folderView];
+	
 	[folderView release];
 }
 
@@ -219,28 +204,38 @@
 {
 	NewsletterViewController * newsletterView=[[NewsletterViewController alloc] initWithNibName:@"NewsletterView" bundle:nil];
 	
-	if([detailNavController topViewController])
-	{
-		newsletterView.navigationItem.leftBarButtonItem=[detailNavController topViewController].navigationItem.leftBarButtonItem;
-	}
-
-	//[newsletterView setViewMode:kViewModeSynopsis];
-	
 	newsletterView.newsletter=feed;
 	newsletterView.title=feed.name;
 	
-	[detailNavController setViewControllers:[NSArray arrayWithObject:newsletterView] animated:NO];
-
+	[self setDetailViewController:newsletterView];
+	
 	[newsletterView release];	
 }
 
+- (void) setDetailViewController:(UIViewController*)controller
+{
+	if([detailNavController topViewController])
+	{
+		controller.navigationItem.leftBarButtonItem=[detailNavController topViewController].navigationItem.leftBarButtonItem;
+	}
+	
+	CATransition* transition = [CATransition animation];
+	transition.duration = 0.3;
+	transition.type = kCATransitionFade;
+	transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+	
+	[detailNavController.view.layer 
+	 addAnimation:transition forKey:kCATransition];
+	
+	[detailNavController setViewControllers:[NSArray arrayWithObject:controller] animated:NO];
+}
  
-- (void) showItemHtml:(NSInteger)index itemFetcher:(ItemFetcher*)itemFetcher
+- (void) showItemHtml:(NSInteger)index itemFetcher:(ItemFetcher*)itemFetcher allowComments:(BOOL)allowComments
 {
 	self.fetcher=itemFetcher;
 	self.itemIndex=index;
 	
-	FeedItemHTMLViewController * itemHtml=[[FeedItemHTMLViewController alloc] initWithNibName:@"FeedItemHTMLView" bundle:nil];
+	FeedItemHTMLViewController * itemHtml=[[FeedItemHTMLViewController alloc] initAllowComments:allowComments] ;//]WithNibName:@"FeedItemHTMLView" bundle:nil];
 	
 	itemHtml.showPublishView=NO;
 	
@@ -253,7 +248,7 @@
 	
 	[itemHtml release];
 }
-
+/*
 - (UIViewController*) controllerForFetcher:(ItemFetcher*)fetcher
 {
 	UIViewController * controller=nil;
@@ -341,7 +336,7 @@
 	}
 	return nil;
 }
-
+*/
 - (void) reconfigure
 {
 	NSLog(@"reconfigure");

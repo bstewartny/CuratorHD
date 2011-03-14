@@ -41,7 +41,7 @@
 #import "AddItemsViewController.h"
 
 @implementation FeedItemHTMLViewController
-@synthesize item,fetcher,addressBar,shareText,webViewContainer,imageListPopover,prevWebView,nextWebView,tmpWebView,showPublishView,appendSynopsisItem,shareSelectedTextItem,replaceSynopsisItem,selectedImageSource,selectedImageLink,navPopoverController,publishButton,favoritesButton,itemIndex,webView,backButton,forwardButton,upButton,downButton,actionButton,activityView;
+@synthesize item,fetcher,shareText,imageListPopover,prevWebView,nextWebView,tmpWebView,showPublishView,appendSynopsisItem,shareSelectedTextItem,replaceSynopsisItem,selectedImageSource,selectedImageLink,navPopoverController,publishButton,favoritesButton,itemIndex,webView,backButton,forwardButton,upButton,downButton,actionButton,activityView;
 
 -(NSString*) getString:(NSString*)javascript
 {
@@ -98,6 +98,18 @@
 		[[NSNotificationCenter defaultCenter] 
 		postNotificationName:@"SelectItem"
 		object:self.item];
+		
+		if(allowComments)
+		{
+			self.commentTextView.text=self.item.notes;
+		}
+	}
+	else 
+	{
+		if(allowComments)
+		{
+			self.commentTextView.text=nil;
+		}
 	}
 
 	// remember last item so we can save and revisit on app restart...
@@ -128,8 +140,6 @@
 	prevWebView.scalesPageToFit=NO;
 	nextWebView.scalesPageToFit=NO;
 	
-	//addressBar.text=item.url;
-	
 	if(animated)
 	{
 		[CATransaction begin];
@@ -141,15 +151,13 @@
 		animation.subtype=transitionDirection;
 		animation.duration = 0.35;
 	
-		//commentTextField.text=item.notes;
-		
 		if([transitionDirection isEqualToString:kCATransitionFromRight])
 		{
 			// go next
 			//
-			[webViewContainer bringSubviewToFront:nextWebView];
+			[contentView bringSubviewToFront:nextWebView];
 			
-			[[webViewContainer layer] addAnimation:animation forKey:@"myanimationkey"];
+			[[contentView layer] addAnimation:animation forKey:@"myanimationkey"];
 			id tmp=prevWebView;
 			
 			prevWebView=webView;
@@ -168,8 +176,8 @@
 		{
 			// go prev
 			//
-			[webViewContainer bringSubviewToFront:prevWebView];
-			[[webViewContainer layer] addAnimation:animation forKey:@"myanimationkey"];
+			[contentView bringSubviewToFront:prevWebView];
+			[[contentView layer] addAnimation:animation forKey:@"myanimationkey"];
 		
 			id tmp=nextWebView;
 			
@@ -192,33 +200,7 @@
 	{
 		[self.webView loadHTMLString:[self getHtml:item] baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
 		[self.webView setNeedsDisplay];	
-		
-		
-		//[prevWebView loadHTMLString:@"<html><body></body></html>" baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
-		
-		//[nextWebView loadHTMLString:@"<html><body></body></html>" baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
-
-		//[prevWebView setNeedsDisplay];
-		//[nextWebView setNeedsDisplay];
 	}
-}
-
-- (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc 
-{
-    barButtonItem.title = @"Sources";
-	[self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
-    self.navPopoverController = pc;
-}
-
-// Called when the view is shown again in the split view, invalidating the button and popover controller.
-- (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem 
-{
-    [self.navigationItem setLeftBarButtonItem:nil animated:YES];
-	self.navPopoverController = nil;
-}
-
-- (void)splitViewController:(UISplitViewController*)svc popoverController:(UIPopoverController*)pc willPresentViewController:(UIViewController *)aViewController
-{
 }
 
 - (IBAction) commentsTouch:(id)sender
@@ -269,7 +251,6 @@
 	}
 	else 
 	{
-		//[button setImage:[UIImage imageNamed:@"GreenChecked-Transparent.png"] forState:UIControlStateNormal];
 		[button setImage:[UIImage imageNamed:@"accept.png"] forState:UIControlStateNormal];
 		[favorites addItem:item];
 	}
@@ -289,7 +270,6 @@
 
 -(void)handleNotification:(NSNotification *)pNotification
 {
-	//if([pNotification.name isEqualToString:@"ReloadData"] || [pNotification.name isEqualToString:@"ReloadActionData"])
 	if([pNotification.name isEqualToString:@"ReloadActionData"])
 	{
 		self.shareText=nil;
@@ -320,7 +300,7 @@
 
 - (void) shareSelectedText:(id)sender
 {
-	NSString * selectedText=[self getSelectedText]; //[self getString:@"''+window.getSelection()"];
+	NSString * selectedText=[self getSelectedText];
 	
 	UIActionSheet * actionSheet=[[UIActionSheet alloc] initWithTitle:@"Share Selected Text" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Email",@"Facebook",@"Google Reader",@"Twitter",@"Tumblr",nil];
 								  
@@ -396,56 +376,65 @@
 
 - (void)viewDidLoad
 {
-	//webView.layer.cornerRadius=10;
-	//prevWebView.layer.cornerRadius=10;
-	//nextWebView.layer.cornerRadius=10;
+	[super viewDidLoad];
 	
-	//webView.clipsToBounds=YES;
-	//prevWebView.clipsToBounds=YES;
-	//nextWebView.clipsToBounds=YES;
+	webView=[[UIWebView alloc] init];
+	webView.delegate=self;
+	webView.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+	webView.frame=self.contentView.bounds;
+	[self.contentView addSubview:webView];
+	
+	prevWebView=[[UIWebView alloc] init];
+	prevWebView.delegate=self;
+	prevWebView.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+	prevWebView.frame=self.contentView.bounds;
+	[self.contentView addSubview:prevWebView];
+	
+	nextWebView=[[UIWebView alloc] init];
+	nextWebView.delegate=self;
+	nextWebView.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+	nextWebView.frame=self.contentView.bounds;
+	[self.contentView addSubview:nextWebView];
 	
 	webView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
 	prevWebView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
 	nextWebView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
 	
-	CGRect inset=CGRectInset(webViewContainer.frame, 15, 15);
-	inset.origin.y=50;
-	inset.size.height=inset.size.height - (50-15);
+	contentView.contentMode=UIViewContentModeRedraw;
 	
-	webViewContainer.frame=inset;
-	
-	webViewContainer.contentMode=UIViewContentModeRedraw;
-	webViewContainer.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-	
-	[webViewContainer setNeedsLayout];
-	
-	//appendSynopsisItem = [[UIMenuItem alloc] initWithTitle:@"Add to Synopsis" action:@selector(appendSynopsis:)];
-	//replaceSynopsisItem = [[UIMenuItem alloc] initWithTitle:@"Set as Synopsis" action:@selector(replaceSynopsis:)];
-	//shareSelectedTextItem = [[UIMenuItem alloc] initWithTitle:@"Share..." action:@selector(shareSelectedText:)];
-	
-	//[[UIMenuController sharedMenuController] setMenuItems:[NSArray arrayWithObjects:shareSelectedTextItem,appendSynopsisItem,replaceSynopsisItem,nil]]; 
-	
-	/*[[NSNotificationCenter defaultCenter]
-	 addObserver:self
-	 selector:@selector(handleNotification:)
-	 name:@"ReloadData"
-	 object:nil];
-	
-	[[NSNotificationCenter defaultCenter]
-	 addObserver:self
-	 selector:@selector(handleNotification:)
-	 name:@"ReloadActionData"
-	 object:nil];*/
+	[contentView setNeedsLayout];
 	
 	downButton.enabled=NO;
 	upButton.enabled=NO;
 	
-	// create a toolbar to have two buttons in the right
-	BlankToolbar* tools = [[BlankToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width,44)];
-	tools.autoresizingMask=UIViewAutoresizingFlexibleWidth;
+	[self setupToolbar];
 	
-	tools.backgroundColor=[UIColor clearColor];
-	tools.opaque=NO;
+	[contentView bringSubviewToFront:webView];
+
+	// use swipes left and right to navigate up/down through feed items...
+	if(![webView isEqual:tmpWebView])
+	{
+		[self attacheSwipeGesturesToWebView:webView];
+		[self attacheLongPressGestureToWebView:webView];
+	}
+	
+	if(![prevWebView isEqual:tmpWebView])
+	{
+		[self attacheSwipeGesturesToWebView:prevWebView];
+		[self attacheLongPressGestureToWebView:prevWebView];
+	}
+	
+	if(![nextWebView isEqual:tmpWebView])
+	{
+		[self attacheSwipeGesturesToWebView:nextWebView];
+		[self attacheLongPressGestureToWebView:nextWebView];
+	}
+}
+
+- (void) setupToolbar
+{
+	toolbar.backgroundColor=[UIColor clearColor];
+	toolbar.opaque=NO;
 	
 	// create the array to hold the buttons, which then gets added to the toolbar
 	NSMutableArray* buttons = [[NSMutableArray alloc] init];
@@ -468,43 +457,15 @@
 	activityView.hidden=YES;
 	activityView.activityIndicatorViewStyle=UIActivityIndicatorViewStyleGray;
 	
-	//addressBar=[[UITextField alloc] initWithFrame:CGRectMake(0, 11, 500, 24)];
-	//addressBar.backgroundColor=[UIColor lightGrayColor];
-	//addressBar.textColor=[UIColor blackColor];
-	//addressBar.layer.cornerRadius=12;
-	//addressBar.font=[UIFont systemFontOfSize:17];
-	//addressBar.text=@"http://www.microsoft.com/why_do_we_suck.aspx?guid=123141323jljl23j4l2k34j2lkj42lk423";
-	//addressBar.delegate=self;
-	
-	//addressBar.leftView=activityView;
-	//addressBar.leftViewMode=UITextFieldViewModeAlways;
-	
 	bi=[[UIBarButtonItem alloc] initWithCustomView:activityView];
 	
 	[buttons addObject:bi];
 	
 	[bi release];
 	
-	//bi= [[UIBarButtonItem alloc]
-	//	 initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-	
-	//[buttons addObject:bi];
-	//[bi release];
-	
-	
-	
-	//activityView=[[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
-	//activityView.hidden=YES;
-	//activityView.activityIndicatorViewStyle=UIActivityIndicatorViewStyleGray;
-	
-	//bi = [[UIBarButtonItem alloc] initWithCustomView:activityView];
-	
-	//[buttons addObject:bi];
-	//[bi release];
-	
 	// create a spacer
 	bi = [[UIBarButtonItem alloc]
-		initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+		  initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
 	bi.width=10;
 	
 	[buttons addObject:bi];
@@ -544,59 +505,55 @@
 	
 	[bi release];
 	
-	
-	
-	
 	bi = [[UIBarButtonItem alloc]
 		  initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
 	bi.width=20;
 	[buttons addObject:bi];
 	[bi release];
 	
-	 bi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionTouch:)];
+	bi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionTouch:)];
 	[buttons addObject:bi];
 	bi.enabled=YES;
 	
 	[bi release];
 	
 	// stick the buttons in the toolbar
-	[tools setItems:buttons animated:NO];
+	[toolbar setItems:buttons animated:NO];
 	
 	[buttons release];
-	
-	// and put the toolbar in the nav bar
-	
-	[self.view addSubview:tools];
-	
-	[tools release];
-	
-	[webViewContainer bringSubviewToFront:webView];
+}
 
-	// use swipes left and right to navigate up/down through feed items...
-	if(![webView isEqual:tmpWebView])
-	{
-		[self attacheSwipeGesturesToWebView:webView];
-		[self attacheLongPressGestureToWebView:webView];
-	}
-	
-	if(![prevWebView isEqual:tmpWebView])
-	{
-		[self attacheSwipeGesturesToWebView:prevWebView];
-		[self attacheLongPressGestureToWebView:prevWebView];
-	}
-	
-	if(![nextWebView isEqual:tmpWebView])
-	{
-		[self attacheSwipeGesturesToWebView:nextWebView];
-		[self attacheLongPressGestureToWebView:nextWebView];
-	}
-}
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-{
-	return NO;
-}
 - (void) done:(id)sender
 {
+	if(allowComments)
+	{
+		if(self.item)
+		{
+			if([self.item.notes length]>0)
+			{
+				if(![self.item.notes isEqualToString:self.commentTextView.text])
+				{
+					self.item.notes=self.commentTextView.text;
+					[self.item save];
+					[[NSNotificationCenter defaultCenter] 
+					 postNotificationName:@"UpdateFeedView"
+					 object:nil];
+					
+				}
+			}
+			else 
+			{
+				if([self.commentTextView.text length]>0)
+				{
+					self.item.notes=self.commentTextView.text;
+					[self.item save];
+					[[NSNotificationCenter defaultCenter] 
+					 postNotificationName:@"UpdateFeedView"
+					 object:nil];
+				}
+			}
+		}
+	}
 	[self.parentViewController dismissModalViewControllerAnimated:YES];
 }
 
@@ -804,8 +761,6 @@
 	
 	AddItemsViewController * feedsView=[[AddItemsViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
 	feedsView.navigationItem.title=@"Add Item to...";
-	//feedsView.title=@"Add Items";
-	//feedsView.navigationItem.title=@"Add Items";
 	
 	[feedsView setFoldersFetcher:foldersFetcher];
 	[feedsView setNewslettersFetcher:newslettersFetcher];
@@ -976,7 +931,6 @@
 	}
 }
 
-
 - (BOOL) isCurrentViewAnItem
 {
 	NSURLRequest * request=webView.request;
@@ -1053,6 +1007,7 @@
 	
 	return url;
 }
+
 - (SHKItem*) currentImageShareItem:(UIImage*)image
 {
 	FeedItem * currentItem=[self currentItem];
@@ -1090,8 +1045,6 @@
 	}
 	
 	return shareItem;
-
-	
 }
 
 - (void)shareTextActionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -1173,7 +1126,6 @@
 			default:
 				break;
 		}
-		
 	}
 	@catch (NSException * e) {
 		
@@ -1182,7 +1134,6 @@
 	{
 		sharingText=NO;
 	}
-	
 }
 
 - (void)shareImageActionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -1413,7 +1364,7 @@
 				animation.subtype=kCATransitionFromLeft;
 				animation.duration = 0.35;
 				
-				[[webViewContainer layer] addAnimation:animation forKey:@"myanimationkey"];
+				[[contentView layer] addAnimation:animation forKey:@"myanimationkey"];
 				
 				[self renderItem];
 				
@@ -1467,7 +1418,7 @@
 	animation.subtype=kCATransitionFromLeft;
 	animation.duration = 0.35;
 	
-	[[webViewContainer layer] addAnimation:animation forKey:@"myanimationkey"];
+	[[contentView layer] addAnimation:animation forKey:@"myanimationkey"];
 	
 	[self renderItem];
 	
@@ -1516,9 +1467,12 @@
 //Sent before a web view begins loading content.
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-	if ([request.URL.scheme isEqualToString:@"mailto"]) {
+	NSLog(@"shouldStartLoadWithRequest");
+	if ([request.URL.scheme isEqualToString:@"mailto"]) 
+	{
 		// make sure this device is setup to send email
-		if ([MFMailComposeViewController canSendMail]) {
+		if ([MFMailComposeViewController canSendMail]) 
+		{
 			// create mail composer object
 			MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
 			
@@ -1530,7 +1484,6 @@
 			
 			if([request.URL.resourceSpecifier isEqualToString:@"mobile@infongen.com"])
 			{
-			
 				[mailer setSubject:@"Curator HD Feedback"];
 			
 				[mailer setMessageBody:@"Thank you for using Curator HD!\n\nTell us what you think.\n\nWe'd love to hear your feedback.\n\n" isHTML:NO];
@@ -1541,7 +1494,9 @@
 			
 			// release composer object
 			[mailer release];
-		} else {
+		} 
+		else 
+		{
 			// alert to user there is no email support
 			UIAlertView * alertView=[[UIAlertView alloc] initWithTitle:@"Cannot send mail" message:@"Curator HD cannot send mail at this time.  Please verify mail settings on your iPad." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 			[alertView show];
@@ -1577,34 +1532,24 @@
 			
 			tmpWebView=[[UIWebView alloc] init];
 			tmpWebView.frame=webView.frame;
-			//tmpWebView.layer.cornerRadius=10;
 			tmpWebView.clipsToBounds=YES;
 			tmpWebView.scalesPageToFit=YES;
 			tmpWebView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
 			
 			[self attacheLongPressGestureToWebView:tmpWebView];
 			
-			[webViewContainer addSubview:tmpWebView];
-			[webViewContainer bringSubviewToFront:tmpWebView];
+			[contentView addSubview:tmpWebView];
+			[contentView bringSubviewToFront:tmpWebView];
 			
-			[[webViewContainer layer] addAnimation:animation forKey:@"myanimationkey"];
+			[[contentView layer] addAnimation:animation forKey:@"myanimationkey"];
 			
 			tmpWebView.delegate=self;
-			
-			//addressBar.text=[[request URL] absoluteString];
 			
 			[tmpWebView loadRequest:request];
 			
 			[CATransaction commit];
 			
 			return NO;
-		}
-	}
-	else 
-	{
-		if(navigationType==UIWebViewNavigationTypeLinkClicked || navigationType==UIWebViewNavigationTypeBackForward)
-		{
-			//addressBar.text=[[request URL] absoluteString];
 		}
 	}
 
@@ -1614,8 +1559,6 @@
 - (void)webViewDidStartLoad:(UIWebView *)webView 
 {
 	NSLog(@"webViewDidStartLoad");
-	
-	//addressBar.text=[[[webView request] URL  ]absoluteString];
 	
 	UIApplication* app = [UIApplication sharedApplication]; 
     app.networkActivityIndicatorVisible = YES;
@@ -1659,47 +1602,29 @@
 	[self removeHrefTargets:webView];
 }
 
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    // Release any cached data, images, etc that aren't in use.
-}
-
 - (void)viewDidUnload 
 {
 	[super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 	self.navPopoverController=nil;
-	
 	self.webView.delegate=nil;
 	self.tmpWebView.delegate=nil;
 	self.nextWebView.delegate=nil;
 	self.prevWebView.delegate=nil;
-	
 	[self.webView stopLoading];
 	[self.tmpWebView stopLoading];
 	[self.nextWebView stopLoading];
 	[self.prevWebView stopLoading];
-	
 }
-
-// Override to allow orientations other than the default portrait orientation.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
-{
-    // Return YES for supported orientations
-    return YES;
-}
-
+ 
 - (void)dealloc 
 {
 	NSLog(@"dealloc");
-	
 	self.webView.delegate=nil;
 	self.tmpWebView.delegate=nil;
 	self.nextWebView.delegate=nil;
 	self.prevWebView.delegate=nil;
-	
 	[self.webView stopLoading];
 	[self.tmpWebView stopLoading];
 	[self.nextWebView stopLoading];
@@ -1729,7 +1654,6 @@
 	[imageListPopover release];
 	[tmpWebView release];
 	[shareText release];
-	//[addressBar release];
     [super dealloc];
 }
 

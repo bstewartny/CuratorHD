@@ -60,6 +60,8 @@
 
 - (void) refreshButtonTouch:(id)sender
 {
+	if(!updatable) return;
+	
 	UIBarButtonItem * button=(UIBarButtonItem*)sender;
 	
 	if([[[UIApplication sharedApplication] delegate] isUpdating])

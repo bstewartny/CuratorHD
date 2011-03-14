@@ -1,10 +1,10 @@
 #import <UIKit/UIKit.h>
-#import "UpdatableFeedViewController.h"
+#import "PullToRefreshViewController.h"
 
 @class ItemFetcher;
 
-@interface FeedsViewController : UpdatableFeedViewController {
-	IBOutlet UITableView * tableView;
+@interface FeedsViewController : PullToRefreshViewController {
+	//IBOutlet UITableView * tableView;
 	ItemFetcher * fetcher;
 	id itemDelegate;
 	BOOL editable;
@@ -12,7 +12,7 @@
 }
 @property(nonatomic,retain) NSArray * items;
 @property(nonatomic,retain) ItemFetcher * fetcher;
-@property(nonatomic,retain) IBOutlet UITableView * tableView;
+//@property(nonatomic,retain) IBOutlet UITableView * tableView;
 @property(nonatomic,assign) id itemDelegate;
 @property(nonatomic) BOOL editable;
 

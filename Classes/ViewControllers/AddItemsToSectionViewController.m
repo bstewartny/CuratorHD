@@ -196,10 +196,15 @@
 
 		[delegate addToSection:section];
 		
-		[self.tableView reloadData];
-		[delegate cancelOrganize];
+		[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 		
+		[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.7];
 	}
+}
+
+- (void) cancelOrganize
+{
+	[delegate cancelOrganize];
 }
 
 // Override to allow orientations other than the default portrait orientation.

@@ -10,7 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 @implementation UpdatableViewController
-@synthesize activityIndicatorView,activityView;
+@synthesize activityIndicatorView,activityView,updatable;
 
 - (BOOL) isUpdating
 {

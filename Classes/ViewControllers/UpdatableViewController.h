@@ -12,10 +12,11 @@
 	BOOL updating;
 	UIView * activityView;
 	UIActivityIndicatorView * activityIndicatorView;
+	BOOL updatable;
 }
 @property(nonatomic,retain) UIActivityIndicatorView * activityIndicatorView;
 @property(nonatomic,retain) UIView * activityView;
-
+@property(nonatomic) BOOL updatable;
 - (BOOL) isUpdating;
 - (IBAction) update;
 - (void) doUpdate;

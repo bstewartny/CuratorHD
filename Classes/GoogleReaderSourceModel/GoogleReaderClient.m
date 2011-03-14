@@ -191,6 +191,8 @@ static NSString * gaeCookie;
 {
 	@try 
 	{
+		NSLog(@"getData: %@",url);
+		
 		// attempt to avoid leaking NSData from response?
 		//NSLog(@"clearing cached responses");
 		[[NSURLCache sharedURLCache] removeAllCachedResponses];

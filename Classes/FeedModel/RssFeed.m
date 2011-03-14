@@ -30,6 +30,46 @@
 	}
 }
 
++ (NSDate*) maxDateWithAccountName:(NSString*)accountName withManagedObjectContext:(NSManagedObjectContext*)moc
+{
+	NSFetchRequest *request = [[NSFetchRequest alloc] init];
+	
+	[request setEntity:[NSEntityDescription entityForName:@"RssFeedItem" inManagedObjectContext:moc]];
+	
+	[request setPredicate:[NSPredicate predicateWithFormat:@"feed.account.name==%@",accountName]];
+	
+	[request setFetchBatchSize:0];
+	[request setFetchLimit:1];
+	
+	[request setSortDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO]]];
+	
+	[request setPropertiesToFetch:[NSArray arrayWithObject:@"date"]];
+	
+	NSError *error;
+	
+	NSArray * results=[moc executeFetchRequest:request error:&error];
+	
+	NSDate * date=nil;
+	
+	if([results count]>0)
+	{
+		FeedItem * item=[results objectAtIndex:0];
+		if(item)
+		{
+			date=item.date; //[item.date autorelease];
+		}
+	}
+	
+	[request release];
+	
+	return date;
+}
+
+- (NSDate*) maxDate
+{
+	return [RssFeed maxDateWithAccountName:self.account.name withManagedObjectContext:[self managedObjectContext]];
+}
+
 - (NSNumber *) currentUnreadCount
 {
 	//NSLog(@"RssFeed.currentUnreadCount");
@@ -219,6 +259,15 @@
 
 - (ItemFetcher*) itemFetcher
 {
+	if([self.url hasPrefix:@"category://"])
+	{
+		CategoryItemFetcher * itemFetcher = [[CategoryItemFetcher alloc] init];
+		
+		itemFetcher.accountName=self.account.name;
+		itemFetcher.feedCategory=[self.url substringFromIndex:11];//   self.name;
+		
+		return [itemFetcher autorelease]; 
+	}
 	if([self.feedCategory isEqualToString:@"_category"])
 	{
 		CategoryItemFetcher * itemFetcher = [[CategoryItemFetcher alloc] init];

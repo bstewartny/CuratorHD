@@ -19,11 +19,11 @@
 #import "FastTweetTableViewCell.h"
 #import "AddItemsViewController.h"
 
-#define REFRESH_HEADER_HEIGHT 60.0f
+//#define REFRESH_HEADER_HEIGHT 60.0f
 
 @implementation FeedViewController
-@synthesize tableView,folderMode,fetcher,dateFormatter,itemDelegate,favoritesMode,editable;
-@synthesize textPull, origTitle,textRelease, navPopoverController,textLoading, refreshHeaderView, refreshLabel, refreshArrow, refreshSpinner;
+@synthesize folderMode,fetcher,dateFormatter,itemDelegate,favoritesMode,editable;
+@synthesize  origTitle, navPopoverController;
 @synthesize twitter;
 
 -(void)handleNotification:(NSNotification *)pNotification
@@ -32,19 +32,27 @@
 }
 -(void)handleNotificationUI:(NSNotification *)pNotification
 {
+	 
+	if([pNotification.name isEqualToString:@"UpdateFeedView"])
+	{
+		[self.fetcher performFetch];
+		[tableView reloadData];
+	}
 	if([pNotification.name isEqualToString:@"ReloadData"])
 	{
 		[tableView reloadData];
+		return;
 	}
 	if([pNotification.name isEqualToString:@"SelectItem"])
 	{
 		[self selectItem:pNotification.object];
+		return;
 	}
 	if([pNotification.name isEqualToString:@"AccountUpdated"])
 	{
 		NSString * accountName=[pNotification object];
 		
-		if([self.fetcher isKindOfClass:[AccountItemFetcher class]])
+		if([self.fetcher isKindOfClass:[AccountItemFetcher class]] || [self.fetcher isKindOfClass:[CategoryItemFetcher class]])
 		{
 			if([accountName isEqualToString:[self.fetcher accountName]])
 			{
@@ -62,7 +70,7 @@
 		NSString * accountName=[array objectAtIndex:0];
 		NSString * message=[array objectAtIndex:1];
 		
-		if([self.fetcher isKindOfClass:[AccountItemFetcher class]])
+		if([self.fetcher isKindOfClass:[AccountItemFetcher class]] || [self.fetcher isKindOfClass:[CategoryItemFetcher class]])
 		{
 			if([accountName isEqualToString:[self.fetcher accountName]])
 			{
@@ -274,6 +282,7 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad 
 {
+	
 	self.tableView.backgroundColor=[UIColor colorWithRed:(247.0/255.0) green:(247.0/255.0) blue:(247.0/255.0) alpha:1.0];
 	//self.view.backgroundColor=[UIColor lightGrayColor];
 	
@@ -345,6 +354,13 @@
 	 name:@"AccountUpdateFailed"
 	 object:nil];
 	
+	
+	[[NSNotificationCenter defaultCenter]
+	 addObserver:self
+	 selector:@selector(handleNotification:)
+	 name:@"UpdateFeedView"
+	 object:nil];
+	
 	NSDateFormatter *format = [[NSDateFormatter alloc] init];
 	[format setDateFormat:@"MMM d, yyyy h:mm a"];
 	self.dateFormatter=format;
@@ -413,6 +429,7 @@
 	
 	if(!folderMode)
 	{
+		self.updatable=YES;
 		if(fetcher)
 		{
 			[self addPullToRefreshHeader];
@@ -422,11 +439,11 @@
 	
 	[tableView reloadData];
 }
-
 - (void)addPullToRefreshFooter
 {
 	// TODO
 }
+/*
 - (void)addPullToRefreshHeader 
 {
 	self.textPull=@"Pull down to refresh...";
@@ -451,11 +468,11 @@
     [tableView addSubview:refreshLabel];
     [tableView addSubview:refreshArrow];
     [tableView addSubview:refreshSpinner];
-}
+}*/  
 
 - (void) actionButtonTouched:(id)sender
 {
-	UIActionSheet * actionSheet=[[UIActionSheet alloc] initWithTitle:@"Feed Actions" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Mark All as Read",@"Delete Older Than 7 Days",@"Delete Older Than 30 Days",@"Delete Older Than 90 Days",@"Delete All Read Items",nil];
+	UIActionSheet * actionSheet=[[UIActionSheet alloc] initWithTitle:self.navigationItem.title delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Mark All as Read",@"Delete Older Than 7 Days",@"Delete Older Than 30 Days",@"Delete Older Than 90 Days",@"Delete All Read Items",nil];
 	
 	[actionSheet showFromBarButtonItem:sender animated:YES];
 	
@@ -472,48 +489,93 @@
 	}
 	else 
 	{
-		if([fetcher isKindOfClass:[AccountItemFetcher class]])
+		if([fetcher isKindOfClass:[CategoryItemFetcher class]])
 		{
 			if(buttonIndex==0)
 			{
-				AccountFeedFetcher * accountFeedFetcher=[[AccountFeedFetcher alloc] init];
-				accountFeedFetcher.accountName=[fetcher accountName];
-				[accountFeedFetcher markAllAsRead];
-				[accountFeedFetcher release];
-				[self.tableView reloadData];
-				return;
+				CategoryFeedFetcher * categoryFeedFetcher=[[CategoryFeedFetcher alloc] init];
+				categoryFeedFetcher.accountName=[fetcher accountName];
+				categoryFeedFetcher.feedCategory=[fetcher feedCategory];
+				[categoryFeedFetcher markAllAsRead];
+				[categoryFeedFetcher release];
 			}
 			else 
 			{
 				// get all feeds in account to process...
-				AccountUpdatableFeedFetcher * feedFetcher=[[AccountUpdatableFeedFetcher alloc] init];
-				feedFetcher.accountName=[fetcher accountName];
-				for(Feed * accountFeed in [feedFetcher items])
+				CategoryFeedFetcher * categoryFeedFetcher=[[CategoryFeedFetcher alloc] init];
+				categoryFeedFetcher.accountName=[fetcher accountName];
+				categoryFeedFetcher.feedCategory=[fetcher feedCategory];
+				for(Feed * categoryFeed in [categoryFeedFetcher items])
 				{
 					switch(buttonIndex)
 					{
 						case 1: // delete older than 7 days
-							[accountFeed deleteOlderThan:7];
+							[categoryFeed deleteOlderThan:7];
 							break;
 							
 						case 2: // delete older than 30 days
-							[accountFeed deleteOlderThan:30];
+							[categoryFeed deleteOlderThan:30];
 							break;
 							
 						case 3: // delete older than 90 days
-							[accountFeed deleteOlderThan:90];
+							[categoryFeed deleteOlderThan:90];
 							break;
 							
 						case 4: // delete older than 90 days
-							[accountFeed deleteReadItems];
+							[categoryFeed deleteReadItems];
 							break;
 							
 					}
 				}
-				[feedFetcher release];
+				[categoryFeedFetcher release];
+			}
+		}
+		else 
+		{
+			if([fetcher isKindOfClass:[AccountItemFetcher class]])
+			{
+				if(buttonIndex==0)
+				{
+					AccountFeedFetcher * accountFeedFetcher=[[AccountFeedFetcher alloc] init];
+					accountFeedFetcher.accountName=[fetcher accountName];
+					[accountFeedFetcher markAllAsRead];
+					[accountFeedFetcher release];
+				}
+				else 
+				{
+					// get all feeds in account to process...
+					AccountUpdatableFeedFetcher * feedFetcher=[[AccountUpdatableFeedFetcher alloc] init];
+					feedFetcher.accountName=[fetcher accountName];
+					for(Feed * accountFeed in [feedFetcher items])
+					{
+						switch(buttonIndex)
+						{
+							case 1: // delete older than 7 days
+								[accountFeed deleteOlderThan:7];
+								break;
+								
+							case 2: // delete older than 30 days
+								[accountFeed deleteOlderThan:30];
+								break;
+								
+							case 3: // delete older than 90 days
+								[accountFeed deleteOlderThan:90];
+								break;
+								
+							case 4: // delete older than 90 days
+								[accountFeed deleteReadItems];
+								break;
+								
+						}
+					}
+					[feedFetcher release];
+				}
 			}
 		}
 		[self.tableView reloadData];
+		[[NSNotificationCenter defaultCenter] 
+		 postNotificationName:@"UpdateFeedsView"
+		 object:nil];
 		return;
 	}
 
@@ -542,6 +604,11 @@
 			break;
 	}
 	[self.tableView reloadData];
+	
+	// send notification to reload feeds view to reflect new counts...
+	[[NSNotificationCenter defaultCenter] 
+	 postNotificationName:@"UpdateFeedsView"
+	 object:nil];
 }
 
 - (IBAction) toggleEditMode:(id)sender
@@ -645,7 +712,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	{
 		if([fetcher count]>0)
 		{
-			[itemDelegate showItemHtml:indexPath.row itemFetcher:fetcher];
+			[itemDelegate showItemHtml:indexPath.row itemFetcher:fetcher allowComments:self.folderMode];
 		}
 	}
 }
@@ -767,7 +834,7 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 	
 	return cell;
 }*/
-
+/*
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView 
 {
 	if (folderMode) {
@@ -781,7 +848,7 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 	{
 		isDragging = YES;
 	}
-}
+}*/
 - (UITableViewCell *) tweetCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
 {
 	static NSString * identifier=@"TweetItemCellIdentifier";
@@ -809,7 +876,7 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 
 	return cell;
 }
-
+/*
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 	
 	if(folderMode)
@@ -934,7 +1001,7 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
     refreshLabel.text = self.textPull;
     refreshArrow.hidden = NO;
     [refreshSpinner stopAnimating];
-}
+}*/
 
 - (void)refresh 
 {
@@ -960,6 +1027,15 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 	}
 	else 
 	{
+		if([fetcher isKindOfClass:[CategoryItemFetcher class]])
+		{
+			NSLog(@"updating single category");
+			// for now update entire account because it is simpler (we still may need to implement per-category at some point)
+			[[[UIApplication sharedApplication] delegate] updateSingleAccountFromScroll:[fetcher accountName]];
+			
+			return;
+		}
+		
 		if([fetcher isKindOfClass:[AccountItemFetcher class]])
 		{
 			NSLog(@"updating single account");
@@ -1012,77 +1088,6 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 - (void)splitViewController:(UISplitViewController*)svc popoverController:(UIPopoverController*)pc willPresentViewController:(UIViewController *)aViewController
 {
 }
-
-/*- (UITableViewCell *) headlineCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
-{
-	static NSString * identifier=@"FeedItemCellIdentifier";
-	
-	FeedItemCell * cell=[tableView dequeueReusableCellWithIdentifier:identifier];
-	
-	if(cell==nil)
-	{
-		cell=[[[FeedItemCell alloc] initWithReuseIdentifier:identifier] autorelease];
-	}
-		
-	cell.selectionStyle=UITableViewCellSelectionStyleGray;
-		
-	if([item.isRead boolValue])
-	{
-		cell.headlineLabel.textColor=[UIColor grayColor];
-		cell.readImageView.image=[UIImage imageNamed:@"dot_blank.png"];
-	}
-	else 
-	{
-		cell.headlineLabel.textColor=[UIColor blackColor];
-		cell.readImageView.image=[UIImage imageNamed:@"dot_blue.png"];
-	}
-	
-	if([[item origSynopsis] length]>0)
-	{
-		if([[item synopsis] length]==0)
-		{
-			//item.synopsis=[stripper stripMarkup:[item origSynopsis]];
-			// faster to just strip up to what we need to display...
-			item.synopsis=[stripper stripMarkupSummary:[item origSynopsis] maxLength: 300];
-		}
-	}
-	
-	cell.synopsisLabel.text=[item synopsis];
-	
-	if([item.headline length]>0)
-	{
-		cell.headlineLabel.text=item.headline;
-	}
-	else 
-	{
-		if([item.synopsis length]>0)
-		{
-			cell.headlineLabel.text=item.synopsis;
-		}
-		else 
-		{
-			cell.headlineLabel.text=item.origSynopsis;
-		}
-	}
-	
-	cell.sourceLabel.text=item.origin;
-	
-	cell.dateLabel.text=[item shortDisplayDate];
-	
-	cell.sourceImageView.image=nil;
-	
-	if([item isKindOfClass:[RssFeedItem class]])
-	{
-		UIImage * img=[[((RssFeedItem*)item) feed] image];
-		if(img)
-		{
-			cell.sourceImageView.image=img;
-		}
-	}
-	
-	return cell;
-}*/
-
 
 - (UITableViewCell *) headlineCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
 {
@@ -1182,20 +1187,11 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 }
 
 - (void)dealloc {
-	[tableView release];
 	[origTitle release];
 	[fetcher release];
 	[dateFormatter release];
 	[navPopoverController release];
-	[refreshHeaderView release];
-    [refreshLabel release];
-    [refreshArrow release];
-    [refreshSpinner release];
-    [textPull release];
-    [textRelease release];
-    [textLoading release];
 	[stripper release];
-	
     [super dealloc];
 }
 

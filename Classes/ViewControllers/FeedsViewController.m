@@ -13,13 +13,13 @@
 #import "FeedsTableViewCell.h"
 
 @implementation FeedsViewController
-@synthesize tableView,fetcher,itemDelegate,editable,items;
+@synthesize fetcher,itemDelegate,editable,items;
 
 - (void) viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
 	
-	[self.tableView reloadData];
+	[self reloadTableData];
 }
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
@@ -29,96 +29,20 @@
 	self.tableView.showsVerticalScrollIndicator=NO;
 	self.tableView.showsHorizontalScrollIndicator=NO;
 	
-	//self.tableView.separatorColor=[UIColor darkGrayColor];
-	
 	[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
 	self.tableView.backgroundView.backgroundColor=[UIColor blackColor];
 	self.tableView.backgroundView.alpha=0.5;
 	
-
-	/*UIButton * favoritesbuttonview=[UIButton buttonWithType:UIButtonTypeCustom];
-	[favoritesbuttonview setImage:[UIImage imageNamed:@"accept.png"] forState:UIControlStateNormal];
-	
-	[favoritesbuttonview addTarget:self action:@selector(showFavorites) forControlEvents:UIControlEventTouchUpInside];
-	favoritesbuttonview.frame=CGRectMake(0,0,25,25);
-	
-	UIBarButtonItem * favoritesbutton=[[UIBarButtonItem alloc] initWithCustomView:favoritesbuttonview];
-	self.navigationItem.rightBarButtonItem=favoritesbutton;
-	
-	[favoritesbutton release];
-	*/
-	NSMutableArray * toolbaritems=[[NSMutableArray alloc] init];
-	
-	refreshButton=[[UIBarButtonItem	alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshButtonTouch:)];
-
-	[toolbaritems addObject:refreshButton];
-	
-	activityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
-    activityIndicatorView.activityIndicatorViewStyle=UIActivityIndicatorViewStyleGray;
-	
-	UIBarButtonItem * activityIndicatorItem=[[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
-	
-	[toolbaritems addObject:activityIndicatorItem];
-	
-	[activityIndicatorItem release];
-	
-	UIBarButtonItem * spacer;
-	
-	statusLabel=[[UILabel alloc] init];
-	statusLabel.backgroundColor=[UIColor clearColor];
-	statusLabel.font=[UIFont systemFontOfSize:11];
-	statusLabel.textColor=[UIColor grayColor];
-	
-	if(editable)
-	{
-		statusLabel.frame=CGRectMake(0, 0, 110, 20);
-	}
-	else 
-	{
-		statusLabel.frame=CGRectMake(0, 0, 180, 20);
-	}
-
-	UIBarButtonItem * statusLabelItem=[[UIBarButtonItem alloc] initWithCustomView:statusLabel];
-	
-	[toolbaritems addObject:statusLabelItem];
-	
-	[statusLabelItem release];
-	
-	spacer= [[UIBarButtonItem alloc]
-			 initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-	[toolbaritems addObject:spacer];
-	[spacer release];
-	
-	if(editable)
-	{
-		UIBarButtonItem * addButton=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonTouched:)];
-		addButton.style = UIBarButtonItemStyleBordered;
-		[toolbaritems addObject:addButton];
-		[addButton release];
-		
-		
-		UIBarButtonItem * editButton=[[UIBarButtonItem alloc] init];
-		editButton.title=@"Edit";
-		editButton.target=self;
-		editButton.action=@selector(toggleEditMode:) ;
-		editButton.style = UIBarButtonItemStyleBordered;
-		[toolbaritems addObject:editButton];
-		[editButton release];
-	}
-	else 
+	if(!editable)
 	{
 		if([fetcher isKindOfClass:[AccountFeedFetcher class]] ||
 		   [fetcher isKindOfClass:[CategoryFeedFetcher class]])
 		{
-			UIBarButtonItem * actionButton=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTouched:)];
-			[toolbaritems addObject:actionButton];
-			[actionButton release];
+			self.updatable=YES;
+			self.pullDownBackgroundColor=[UIColor viewFlipsideBackgroundColor];
+			[self addPullToRefreshHeader];
 		}
 	}
-	
-	[self.toolbar setItems:toolbaritems];
-	
-	[toolbaritems release];
 	
 	[[NSNotificationCenter defaultCenter]
 	 addObserver:self
@@ -138,16 +62,41 @@
 	 name:@"FeedUpdated"
 	 object:nil];
 	
-	 
+	[[NSNotificationCenter defaultCenter]
+	 addObserver:self
+	 selector:@selector(handleReloadData:)
+	 name:@"FeedUpdateFinished"
+	 object:nil];
+	
+	[[NSNotificationCenter defaultCenter]
+	 addObserver:self
+	 selector:@selector(handleReloadData:)
+	 name:@"FeedUpdateFailed"
+	 object:nil];
+	
+	[[NSNotificationCenter defaultCenter]
+	 addObserver:self
+	 selector:@selector(handleReloadData:)
+	 name:@"AccountUpdated"
+	 object:nil];
+	
+	[[NSNotificationCenter defaultCenter]
+	 addObserver:self
+	 selector:@selector(handleReloadData:)
+	 name:@"AccountUpdateFailed"
+	 object:nil];
+	
+	[[NSNotificationCenter defaultCenter]
+	 addObserver:self
+	 selector:@selector(handleReloadData:)
+	 name:@"UpdateFeedsView"
+	 object:nil];
 	
 	[self performFetch];
-	//[fetcher performFetch];
 }
 
 - (void) performFetch
 {
-	//[fetcher performFetch];
-	
 	self.items=[fetcher items];
 }
 
@@ -156,17 +105,13 @@
 	if([fetcher isKindOfClass:[NewsletterFetcher class]])
 	{
 		// create new newsletter
-		
 		[[[UIApplication sharedApplication] delegate] addNewsletter];
-		 
 		return;
 	}
 	if([fetcher isKindOfClass:[NewsletterSectionFetcher class]])
 	{
 		// create new newsletter section
-		
 		[[[UIApplication sharedApplication] delegate] addNewsletterSection:[fetcher newsletter]];
-		
 		return;
 	}
 	if([fetcher isKindOfClass:[FolderFetcher class]])
@@ -198,7 +143,7 @@
 	{
 		[fetcher markAllAsRead];
 		[self performFetch];
-		[self.tableView reloadData];
+		[self reloadTableData];
 		return;
 	}
 }
@@ -212,7 +157,7 @@
 		{
 			[feed deleteOlderThan:days];
 			[self performFetch];
-			[self.tableView reloadData];
+			[self reloadTableData];
 		}
 		return;
 	}
@@ -227,7 +172,7 @@
 		{
 			[feed deleteReadItems];
 			[self performFetch];
-			[self.tableView reloadData];
+			[self reloadTableData];
 		}
 		return;
 	}
@@ -261,35 +206,6 @@
 	}
 }
 
-- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet willDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-}
-
-- (void)actionSheetCancel:(UIActionSheet *)actionSheet
-{
-}
-
-- (void) appSettings:(id)sender
-{
-	// show app settings modal form...
-	
-	//InAppSettingsModalViewController *settings = [[InAppSettingsModalViewController alloc] init];
-    //[self presentModalViewController:settings animated:YES];
-    //[settings release];
-	
-	/*InAppSettingsViewController *settings = [[InAppSettingsViewController alloc] init];
-	
-	[[[[UIApplication sharedApplication] delegate] masterNavController] pushViewController:settings animated:YES];
-	
-    //[self presentModalViewController:settings animated:YES];
-    [settings release];
-	*/
-}
-
 - (IBAction) toggleEditMode:(id)sender
 {
 	UIBarButtonItem * buttonItem=(UIBarButtonItem*)sender;
@@ -301,7 +217,7 @@
 		buttonItem.style=UIBarButtonItemStyleBordered;
 		buttonItem.title=@"Edit";
 		
-		[tableView reloadData];
+		[self reloadTableData];
 	}
 	else
 	{
@@ -319,11 +235,19 @@
 
 -(void)handleReloadDataUI:(NSNotification *)pNotification
 {
+	if([pNotification.name isEqualToString:@"UpdateFeedsView"])
+	{
+		NSLog(@"FeedsViewControler: UpdateFeedsView revd, perform fetch and reload data...");
+		[self performFetch];
+		[self reloadTableData];
+		return;
+	}
 	if([pNotification.name isEqualToString:@"ReloadData"])
 	{
 		NSLog(@"FeedsViewControler: ReloadData revd, perform fetch and reload data...");
 		[self performFetch];
-		[tableView reloadData];
+		[self reloadTableData];
+		return;
 	}
 	if([pNotification.name isEqualToString:@"ReloadActionData"])
 	{
@@ -333,22 +257,20 @@
 		{
 			NSLog(@"FeedsViewControler: ReloadActionData revd, perform fetch and reload data...");
 			[self performFetch];
-			[tableView reloadData];
+			[self reloadTableData];
 		}
 	}
 	if([pNotification.name isEqualToString:@"FeedsUpdated"])
 	{
 		NSLog(@"FeedsViewControler: FeedsUpdated revd, perform fetch and reload data...");
 		[self performFetch];
-		[tableView reloadData];
+		[self reloadTableData];
 	}
 	if([pNotification.name isEqualToString:@"FeedUpdated"])
 	{
 		NSArray * array=(NSArray*)pNotification.object;
 		NSString * accountName=[array objectAtIndex:0];
 		NSString * url=[array objectAtIndex:1];
-		
-		//NSLog(@"FeedsViewControler: FeedUpdated revd, looking for url match: %@",url);
 		
 		NSArray * feeds=self.items;
 		for(int i=0;i<[feeds count];i++)
@@ -359,13 +281,12 @@
 			{
 				if([[feed url] isEqualToString:url])
 				{
-					//NSLog(@"FeedsViewControler: FeedUpdated revd, update table row...%@",url);
 					// refresh object so latest changes (such as unreadCount are displayed when row is reloaded...)
 					@try
 					{
-						//NSLog(@"refreshObject: do we get correct count?");
 						[[feed managedObjectContext] refreshObject:feed mergeChanges:YES];
-						[tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+						
+						[self reloadTableRow:i];
 					}
 					@catch (NSException * e) 
 					{
@@ -373,7 +294,6 @@
 					}
 					@finally 
 					{
-					
 					}
 				}
 			}
@@ -390,11 +310,46 @@
 					if([feed.feedCategory isEqualToString:@"_all"] ||
 					   [feed.feedCategory isEqualToString:@"_category"])
 					{
-						//NSLog(@"FeedsViewControler: FeedUpdated revd, accountfeed, update table row...%@",url);
-						
-						[tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+						[self reloadTableRow:i];
 					}
 				}
+			}
+		}
+	}
+	
+	if([pNotification.name isEqualToString:@"AccountUpdated"])
+	{
+		NSString * accountName=[pNotification object];
+		
+		if([self.fetcher isKindOfClass:[AccountFeedFetcher class]] ||
+		   [self.fetcher isKindOfClass:[CategoryFeedFetcher class]])
+		{
+			if([accountName isEqualToString:[self.fetcher accountName]])
+			{
+				[self stopLoading];
+				[self.fetcher performFetch];
+				[self reloadTableData];
+			}
+		}
+	}
+	
+	if([pNotification.name isEqualToString:@"AccountUpdateFailed"])
+	{
+		NSArray * array=[pNotification object];
+		NSString * accountName=[array objectAtIndex:0];
+		NSString * message=[array objectAtIndex:1];
+		
+		if([self.fetcher isKindOfClass:[AccountFeedFetcher class]]||
+		   [self.fetcher isKindOfClass:[CategoryFeedFetcher class]])
+		{
+			if([accountName isEqualToString:[self.fetcher accountName]])
+			{
+				[self stopLoading];
+				
+				UIAlertView * alert=[[UIAlertView alloc] initWithTitle:@"Update Failed" message:message delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil];
+				
+				[alert show];
+				[alert release];
 			}
 		}
 	}
@@ -407,12 +362,10 @@
 	{
 		[tableView setEditing:NO animated:YES];
 	}
-	else {
+	else 
+	{
 		[tableView setEditing:YES animated:YES];
 	}
-
-	
-	//tableView.editing=!tableView.editing;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -528,12 +481,37 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	}
 }
 
+- (void) reloadTableRow:(NSInteger)row
+{
+	NSIndexPath *ipath = [self.tableView indexPathForSelectedRow];
+	NSIndexPath *pathToReload=[NSIndexPath indexPathForRow:row inSection:0];
+	
+	[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:pathToReload] withRowAnimation:UITableViewRowAnimationFade];
+	
+	if(ipath)
+	{
+		if(pathToReload.section==ipath.section && pathToReload.row==ipath.row)
+		{
+			[self.tableView selectRowAtIndexPath:ipath animated:NO scrollPosition:UITableViewScrollPositionNone];
+		}
+	}
+}
+
+- (void) reloadTableData
+{
+	NSIndexPath *ipath = [self.tableView indexPathForSelectedRow];
+	[self.tableView reloadData];
+	if(ipath)
+	{
+		[self.tableView selectRowAtIndexPath:ipath animated:NO scrollPosition:UITableViewScrollPositionNone];
+	}
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	FeedsTableViewCell * cell = [[[FeedsTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1  reuseIdentifier:nil] autorelease];
 	
 	cell.editingAccessoryType=UITableViewCellAccessoryDetailDisclosureButton;
-	
 	
 	cell.selectionStyle=UITableViewCellSelectionStyleNone;
 
@@ -545,22 +523,18 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	return [self.items count];
-	//return [fetcher count];
 }
-/*
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-	return self.title;
-}*/
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
 	return 23;
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
 	return 44;
 }
+
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
 	UIView * v=[[UIView alloc] initWithFrame:CGRectZero];
@@ -569,14 +543,11 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	return [v autorelease];
 }
 
-
-
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
 	UIView * v=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, [self tableView:tableView heightForHeaderInSection:section])];
 	v.backgroundColor=[UIColor viewFlipsideBackgroundColor];
 	v.alpha=0.8;
-	
 	
 	UILabel * label=[[UILabel alloc] init];
 	
@@ -602,43 +573,10 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	
 	return [v autorelease];
 }
-/*
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-	UIView * v=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 30)];
-	v.backgroundColor=[UIColor clearColor];
-	
-	UILabel * label=[[UILabel alloc] init];
-	
-	label.textColor=[UIColor whiteColor];
-	
-	label.text=self.title;
-	
-	 	
-	
-	
-	label.backgroundColor=[UIColor clearColor];
-	
-	[label sizeToFit];
-	
-	CGRect f=label.frame;
-	f.origin.x=15;
-	f.origin.y=5;
-	label.frame=f;
-	
-	[v addSubview:label];
-	
-	[label release];
-	
-	return [v autorelease];
-}
-*/
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
 	Feed * feed=[self.items objectAtIndex:indexPath.row];
-	
-	//Feed * feed=[fetcher itemAtIndex:indexPath.row];
 	
 	// prompt for name
 	UIAlertView *prompt = [[UIAlertView alloc] initWithTitle:@"Change Name" 
@@ -681,13 +619,11 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 			{
 				Feed * feed=[self.items objectAtIndex:actionSheet.tag];
 				
-				//Feed * feed=[fetcher itemAtIndex:actionSheet.tag];
-				
 				feed.name=textField.text;
 				
 				[feed save];
 				
-				[tableView reloadData];	
+				[self reloadTableData];
 				
 				[[NSNotificationCenter defaultCenter] 
 				 postNotificationName:@"ReloadActionData"
@@ -702,7 +638,6 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	if(!aTableView.editing)
 	{
 		Feed * feed=[self.items objectAtIndex:indexPath.row];
-		//Feed * feed=[fetcher itemAtIndex:indexPath.row];	
 		
 		if([feed respondsToSelector:@selector(feedFetcher)])
 		{
@@ -710,16 +645,32 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		
 			if(feedFetcher!=nil)
 			{
+				[feedFetcher performFetch];
+				
+				NSArray * feeds=[feedFetcher items];
+				
+				Feed * firstFeed=nil;
+				
+				if([feeds count]>0)
+				{
+					firstFeed=[feeds objectAtIndex:0];
+				}
+				
 				FeedsViewController * feedsView=[[FeedsViewController alloc] initWithNibName:@"FeedsView" bundle:nil];
 			
 				feedsView.editable=(self.editable || [feed editable]);
 				feedsView.fetcher=feedFetcher;
 				feedsView.title=feed.name;
 				feedsView.itemDelegate=self.itemDelegate;
-				//feedsView.navigationItem.title=feed.name;
-			
-				[self.navigationController pushViewController:feedsView animated:YES];
 				
+				[self.navigationController pushViewController:feedsView animated:YES];
+				 
+				if(firstFeed)
+				{
+					[feedsView.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]   animated:NO scrollPosition:UITableViewScrollPositionNone];
+				
+					[[[UIApplication sharedApplication] delegate] showFeed:firstFeed delegate:self.itemDelegate editable:self.editable];
+				}
 				[feedsView release];
 			}
 			else 
@@ -730,6 +681,40 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		else 
 		{
 			[[[UIApplication sharedApplication] delegate] showFeed:feed delegate:self.itemDelegate editable:self.editable];
+		}
+	}
+}
+
+- (void)refresh 
+{
+    if([[[UIApplication sharedApplication] delegate] isUpdating])
+	{
+		[self performSelector:@selector(stopLoading) withObject:nil afterDelay:0.3];
+		return;
+	}
+	
+	if(![[[UIApplication sharedApplication] delegate] hasInternetConnection])
+	{
+		[self performSelector:@selector(stopLoading) withObject:nil afterDelay:0.3];
+		return;
+	}
+	
+	if([fetcher isKindOfClass:[FeedItemFetcher class]])
+	{
+		[[[UIApplication sharedApplication] delegate] updateSingleFromScroll:[fetcher feed]];
+		return;
+	}
+	else 
+	{
+		if([fetcher isKindOfClass:[AccountFeedFetcher class]]  ||
+		   [fetcher isKindOfClass:[CategoryFeedFetcher class]])
+		{
+			[[[UIApplication sharedApplication] delegate] updateSingleAccountFromScroll:[fetcher accountName]];
+			return;
+		}
+		else 
+		{
+			[self performSelector:@selector(stopLoading) withObject:nil afterDelay:0.3];
 		}
 	}
 }
@@ -767,7 +752,6 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 - (void)dealloc 
 {
 	[items release];
-	[tableView release];
 	[fetcher release];
 	[super dealloc];
 }
