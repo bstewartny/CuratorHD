@@ -40,6 +40,8 @@
 #import "SHK.h"
 #import "AddItemsViewController.h"
 
+#define SWIPE_DURATION 0.30
+
 @implementation FeedItemHTMLViewController
 @synthesize item,fetcher,shareText,imageListPopover,prevWebView,nextWebView,tmpWebView,showPublishView,appendSynopsisItem,shareSelectedTextItem,replaceSynopsisItem,selectedImageSource,selectedImageLink,navPopoverController,publishButton,favoritesButton,itemIndex,webView,backButton,forwardButton,upButton,downButton,actionButton,activityView;
 
@@ -142,6 +144,11 @@
 	
 	if(animated)
 	{
+		NSString * html=[self getHtml:item];
+		NSURL * baseUrl=[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
+		
+		UIWebView * webViewToClear;
+		
 		[CATransaction begin];
 		
 		CATransition *animation;
@@ -149,7 +156,7 @@
 		animation = [CATransition animation];
 		animation.type = kCATransitionPush;
 		animation.subtype=transitionDirection;
-		animation.duration = 0.35;
+		animation.duration = SWIPE_DURATION;
 	
 		if([transitionDirection isEqualToString:kCATransitionFromRight])
 		{
@@ -163,14 +170,16 @@
 			prevWebView=webView;
 			webView=nextWebView;
 			
-			[webView loadHTMLString:[self getHtml:item] baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
+			[webView loadHTMLString:html baseURL:baseUrl];
 			
 			nextWebView=tmp;
 			
-			[nextWebView loadHTMLString:@"<html><body></body></html>" baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
+			webViewToClear=nextWebView;
+			
+			[nextWebView loadHTMLString:@"<html><body></body></html>" baseURL:baseUrl];
 			
 			[webView setNeedsDisplay];
-			[nextWebView setNeedsDisplay];
+			//[nextWebView setNeedsDisplay];
 		}
 		else 
 		{
@@ -184,17 +193,21 @@
 			nextWebView=webView;
 			webView=prevWebView;
 			
-			[webView loadHTMLString:[self getHtml:item] baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
+			[webView loadHTMLString:html baseURL:baseUrl];
 			
 			prevWebView=tmp;
 			
-			[prevWebView loadHTMLString:@"<html><body></body></html>" baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
+			webViewToClear=prevWebView;
+			//[prevWebView loadHTMLString:@"<html><body></body></html>" baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
 			
 			[webView setNeedsDisplay];
-			[prevWebView setNeedsDisplay];
+			//[prevWebView setNeedsDisplay];
 		}
 
 		[CATransaction commit];
+		
+		[webViewToClear loadHTMLString:@"<html><body></body></html>" baseURL:baseUrl];
+		[webViewToClear setNeedsDisplay];
 	}
 	else 
 	{
@@ -1362,7 +1375,7 @@
 				animation = [CATransition animation];
 				animation.type = kCATransitionPush;
 				animation.subtype=kCATransitionFromLeft;
-				animation.duration = 0.35;
+				animation.duration = SWIPE_DURATION;
 				
 				[[contentView layer] addAnimation:animation forKey:@"myanimationkey"];
 				
@@ -1416,7 +1429,7 @@
 	animation = [CATransition animation];
 	animation.type = kCATransitionPush;
 	animation.subtype=kCATransitionFromLeft;
-	animation.duration = 0.35;
+	animation.duration = SWIPE_DURATION;
 	
 	[[contentView layer] addAnimation:animation forKey:@"myanimationkey"];
 	
@@ -1528,7 +1541,7 @@
 			animation = [CATransition animation];
 			animation.type = kCATransitionPush;
 			animation.subtype=kCATransitionFromRight;
-			animation.duration = 0.35;
+			animation.duration = SWIPE_DURATION;
 			
 			tmpWebView=[[UIWebView alloc] init];
 			tmpWebView.frame=webView.frame;

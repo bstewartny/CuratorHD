@@ -379,37 +379,7 @@
 	
 	[masterNavController pushViewController:controller animated:YES];
 }
-/*
-- (void) showSelectedView
-{
-	
-	[[self selectedItems] removeAllItems];
-	
-	
-	FolderFetcher * foldersFetcher=[[FolderFetcher alloc] init];
-	
-	NewsletterFetcher * newslettersFetcher=[[NewsletterFetcher alloc] init];
-	
-	AddItemsViewController * feedsView=[[AddItemsViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
-	//feedsView.title=@"Add Items";
-	//feedsView.navigationItem.title=@"Add Items";
-		
-	[feedsView setFoldersFetcher:foldersFetcher];
-	[feedsView setNewslettersFetcher:newslettersFetcher];
-		
-	feedsView.itemDelegate=self;
-	
-	tmpViewController=[[masterNavController topViewController] retain];
-	
-	[masterNavController pushViewController:feedsView animated:YES];
-										   
-	[feedsView release];
-	
-	[foldersFetcher release];
-	[newslettersFetcher release];
-	
-}
-*/
+
 - (void) setUpSourcesView
 {
 	NSLog(@"setUpSourcesView");
@@ -524,6 +494,7 @@
 	markAsReadQueue=[[NSOperationQueue alloc] init];
 	
 	[queue setMaxConcurrentOperationCount:4];
+	
 	[markAsReadQueue setMaxConcurrentOperationCount:1];
 	
 	self.headlineColor=[NewsletterItemContentView colorWithHexString:@"336699"];
@@ -537,31 +508,12 @@
 		[self createHelpObjects];
 	}
 	
-	// create a split view
-	
 	splitView=[[MGSplitViewController alloc] init];
 	splitView.dividerStyle=MGSplitViewDividerStyleNone;
 	splitView.delegate=self;
-	//splitView.view.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
+	
 	[self setUpSourcesView];
 
-	// push previous navigation state to restore user to where they left off...
-	/*if(fetchers)
-	{
-		for(ItemFetcher * fetcher in fetchers)
-		{
-			UIViewController * controller=[self controllerForFetcher:fetcher];
-			
-			if(controller)
-			{
-				[masterNavController pushViewController:controller animated:NO];
-			}
-		}
-		
-		self.fetchers=nil;
-	}*/
-	
-	
 	FeedViewController * feedView=[[FeedViewController alloc] initWithNibName:@"FeedView" bundle:nil];
 	
 	detailNavController=[[UINavigationController alloc] initWithRootViewController:feedView];
@@ -576,13 +528,10 @@
 	
 	detailNavController.view.layer.shadowPath=[UIBezierPath bezierPathWithRect:path].CGPath;
 	
-	//detailNavController.view.clipsToBounds=NO;
-	
 	[feedView release];
 	
 	splitView.viewControllers=[NSArray arrayWithObjects:masterNavController,detailNavController,nil];
 	
-	// add to split view
 	[window addSubview:splitView.view];
 	
 	[window makeKeyAndVisible];
@@ -596,12 +545,6 @@
 {
 	NSMutableArray * items=[[NSMutableArray alloc] init];
 	
-	//NSString * contents= [NSString stringWithContentsOfFile: [[NSBundle mainBundle] pathForResource:@"help" ofType:@"xml"] 
-//							  encoding: NSUTF8StringEncoding 
-//								 error: nil];
-	
-	
-	// parse xml...
 	CXMLDocument *xmlParser = [[[CXMLDocument alloc] initWithData:rssData options:0 error:nil] autorelease];
 	
 	// Set the resultNodes Array to contain an object for every instance of an  node in our RSS feed
@@ -652,8 +595,6 @@
 			
 			tmp.date=[formatter dateFromString:[itemNode elementValue:@"pubDate"]];
 			
-			//tmp.date=[
-			
 			[items addObject:tmp];
 		}
 		@catch (NSException * e) 
@@ -672,7 +613,6 @@
 	
 - (BOOL) areAccountsValid:(NSMutableArray*)failedAccountNames
 {
-	NSLog(@"areAccountsValid");
 	if([[self accounts] count]>0)
 	{
 		if([self hasInternetConnection])
@@ -682,7 +622,7 @@
 			app.networkActivityIndicatorVisible = YES;
 			
 			BOOL failed=NO;
-			//NSMutableArray * failedAccountNames=[[NSMutableArray alloc] init];
+			
 			@try 
 			{
 				// first update feed lists for each account...
@@ -717,8 +657,6 @@
 
 - (void) validateAccounts
 {
-	NSLog(@"validateAccounts");
-	
 	NSMutableArray * failedAccountNames=[[NSMutableArray alloc] init];
 	
 	if(![self areAccountsValid:failedAccountNames])
@@ -741,9 +679,6 @@
 				[alertView show];
 				[alertView release];
 			}
-			
-			//[self showAccountSettingsForm];
-			
 		}
 	}
 	[failedAccountNames release];
@@ -764,11 +699,6 @@
 
 	NSLog(@"accountSettingsDone");
 	
-	/*[[NSNotificationCenter defaultCenter] 
-	 postNotificationName:@"UpdateComplete"
-	 object:nil];
-	*/
-	// reconfigure app
 	[self reconfigure];
 	
 	NSArray * accounts=[self accounts];
@@ -787,6 +717,27 @@
 	{
 		[self update];
 	}
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+	NSAutoreleasePool * pool=[[NSAutoreleasePool alloc] init];
+	
+	@try 
+	{
+		// flush any sharing requests made while app was offline...
+		[SHK flushOfflineQueue];
+	}
+	@catch (NSException * e) 
+	{
+		NSLog(@"Failed to flush offline queue with ShareKit: %@",[e userInfo]);
+	}
+	@finally 
+	{
+		
+	}
+	
+	[pool drain];
 }
 
 - (void) finishStartup
@@ -830,13 +781,17 @@
 
 - (void)showAccountSettingsForm
 {
-	AccountSettingsFormViewController * accountSettingsForm=[[AccountSettingsFormViewController alloc] initWithNibName:@"AccountSettingsFormView" bundle:nil];
+	AccountSettingsFormViewController * accountSettingsForm=[[AccountSettingsFormViewController alloc] initWithStyle:UITableViewStyleGrouped];
 	
 	accountSettingsForm.delegate=self;
 	accountSettingsForm.modalPresentationStyle=UIModalPresentationFormSheet;
+
+	UINavigationController * accountSettingsNav=[[UINavigationController alloc] initWithRootViewController:accountSettingsForm];
+	accountSettingsNav.modalPresentationStyle=UIModalPresentationFormSheet;
 	
-	[detailNavController presentModalViewController:accountSettingsForm animated:YES];
+	[detailNavController presentModalViewController:accountSettingsNav animated:YES];
 	
+	[accountSettingsNav	release];
 	[accountSettingsForm release];
 }
 
@@ -1697,11 +1652,11 @@
 	// get accounts from db
 	FeedAccount * account;
 	
-	[self fetchOrCreateAccount:@"Google Reader" prefix:@"googlereader" image:[UIImage imageNamed:@"32-googlreader.png"]];
+	[self fetchOrCreateAccount:@"Google Reader" sortName:@"01" prefix:@"googlereader" image:[UIImage imageNamed:@"32-googlreader.png"]];
 	
-	[self fetchOrCreateAccount:@"InfoNgen" prefix:@"infongen" image:[UIImage imageNamed:@"32-infongen.png"]];
-		
-	[self fetchOrCreateAccount:@"Twitter" prefix:@"twitter" image:[UIImage imageNamed:@"32-twitter.png"]];
+	[self fetchOrCreateAccount:@"Twitter" sortName:@"02" prefix:@"twitter" image:[UIImage imageNamed:@"32-twitter.png"]];
+	
+	[self fetchOrCreateAccount:@"InfoNgen" sortName:@"03" prefix:@"infongen" image:[UIImage imageNamed:@"32-infongen.png"]];
 	
 	// verify twitter has saved userId/screenName, otherwise logout from twitter
 	// we need this in case user has previously saved twitter account in keychain
@@ -1719,7 +1674,7 @@
 	}
 }
 
-- (void) addAccount:(NSString*)name prefix:(NSString*)prefix image:(UIImage*)image username:(NSString*)username password:(NSString*)password
+- (void) addAccount:(NSString*)name  sortName:(NSString*)sortName prefix:(NSString*)prefix image:(UIImage*)image username:(NSString*)username password:(NSString*)password
 {
 	NSLog(@"addAccount: %@",name);
 	NSManagedObjectContext * moc=[self managedObjectContext];
@@ -1732,6 +1687,7 @@
 		account.username=username;
 		account.password=password;
 		account.image=image;
+		account.sortName=sortName;
 	}
 	else 
 	{
@@ -1741,6 +1697,7 @@
 		account.image=image;
 		account.username=username;
 		account.password=password;
+		account.sortName=sortName;
 	}
 	
 	NSError * error=nil;
@@ -1811,7 +1768,7 @@
     NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
     
 	[request setEntity:entity];
-	[request setSortDescriptors:[NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"name" 
+	[request setSortDescriptors:[NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"sortName" 
 																					 ascending:YES] autorelease]]];
 	
 	return [NSMutableArray arrayWithArray:[[self managedObjectContext] executeFetchRequest:request error:nil]];
@@ -2192,7 +2149,7 @@
 	return newFolder;
 }
 
-- (FeedAccount*)fetchOrCreateAccount:(NSString*)accountName prefix:(NSString*)accountSettingsPrefix image:(UIImage*)image
+- (FeedAccount*)fetchOrCreateAccount:(NSString*)accountName sortName:(NSString*)sortName prefix:(NSString*)accountSettingsPrefix image:(UIImage*)image
 {
 	// do we have this account in app settings?
 	NSString * username=[UserSettings getSetting:[NSString stringWithFormat:@"%@.username",accountSettingsPrefix]];
@@ -2206,7 +2163,7 @@
 		if([username length]>0)
 		{
 			// create new account
-			[self addAccount:accountName prefix:accountSettingsPrefix image:image username:username password:password];
+			[self addAccount:accountName sortName:sortName prefix:accountSettingsPrefix image:image username:username password:password];
 		}
 	}
 	else 
@@ -2214,7 +2171,7 @@
 		if([username length]>0)
 		{
 			// update settings
-			[self addAccount:accountName prefix:accountSettingsPrefix image:image username:username password:password];
+			[self addAccount:accountName sortName:sortName prefix:accountSettingsPrefix image:image username:username password:password];
 		}
 		else 
 		{

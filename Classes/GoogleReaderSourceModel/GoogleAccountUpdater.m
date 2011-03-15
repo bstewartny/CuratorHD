@@ -609,7 +609,7 @@
 		return [self getMostRecentReaderItems:feed maxItems:maxItems minDate:nil];
 	}
 	
-	if([feed.feedType isEqualToString:@"GoogleAtom"])
+	if([feed.feedType isEqualToString:@"RssFeed"])
 	{
 		return [self getMostRecentAtomItems:feed maxItems:maxItems];
 	}

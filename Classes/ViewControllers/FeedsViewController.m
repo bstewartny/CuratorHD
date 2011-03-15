@@ -486,7 +486,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	NSIndexPath *ipath = [self.tableView indexPathForSelectedRow];
 	NSIndexPath *pathToReload=[NSIndexPath indexPathForRow:row inSection:0];
 	
-	[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:pathToReload] withRowAnimation:UITableViewRowAnimationFade];
+	[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:pathToReload] withRowAnimation:UITableViewRowAnimationNone];
 	
 	if(ipath)
 	{

@@ -312,7 +312,7 @@
 			[self.foldersFetcher performFetch];
 			[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 			
-			[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.7];
+			[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.5];
 			
 			return;
 		}

@@ -50,7 +50,7 @@
 	feed.name=@"Twitter Timeline";
 	feed.feedType=@"02TwitterFeed";
 	feed.feedCategory=@"_twitter_friends";
-	feed.image=[UIImage imageNamed:@"shared.gif"];
+	feed.image=[UIImage imageNamed:@"32-twitter.png"];
 	
 	[feeds addObject:feed];
 	

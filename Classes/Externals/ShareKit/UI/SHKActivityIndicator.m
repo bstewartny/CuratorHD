@@ -252,6 +252,29 @@ static SHKActivityIndicator *currentIndicator = nil;
 
 - (void)setProperRotation:(BOOL)animated
 {
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+	
+    if (animated)
+    {
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.3];
+    }
+	
+    if (orientation == UIInterfaceOrientationPortraitUpsideDown)
+        self.transform = CGAffineTransformRotate(CGAffineTransformIdentity, SHKdegreesToRadians(180));
+    else if (orientation == UIInterfaceOrientationLandscapeRight)
+        self.transform = CGAffineTransformRotate(CGAffineTransformIdentity, SHKdegreesToRadians(90));
+    else if (orientation == UIInterfaceOrientationLandscapeLeft)
+        self.transform = CGAffineTransformRotate(CGAffineTransformIdentity, SHKdegreesToRadians(-90));
+	
+    if (animated)
+        [UIView commitAnimations];
+}
+/*
+- (void)setProperRotation:(BOOL)animated
+{
+	NSLog(@"setProperRotation");
+	
 	UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
 	
 	if (animated)
@@ -261,17 +284,24 @@ static SHKActivityIndicator *currentIndicator = nil;
 	}
 	
 	if (orientation == UIDeviceOrientationPortraitUpsideDown)
+	{
+		NSLog(@"UIDeviceOrientationPortraitUpsideDown");
 		self.transform = CGAffineTransformRotate(CGAffineTransformIdentity, SHKdegreesToRadians(180));	
-	
+	}
 	else if (orientation == UIDeviceOrientationLandscapeLeft)
+	{
+		NSLog(@"UIDeviceOrientationLandscapeLeft");
 		self.transform = CGAffineTransformRotate(CGAffineTransformIdentity, SHKdegreesToRadians(90));	
-	
+	}
 	else if (orientation == UIDeviceOrientationLandscapeRight)
+	{
+		NSLog(@"UIDeviceOrientationLandscapeRight");
 		self.transform = CGAffineTransformRotate(CGAffineTransformIdentity, SHKdegreesToRadians(-90));
+	}
 	
 	if (animated)
 		[UIView commitAnimations];
-}
+}*/
 
 
 @end

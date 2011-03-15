@@ -52,6 +52,8 @@
 @class RootFeedsViewController;
 @class FeedViewController;
 @class Folder;
+@class FeedAccount; 
+
 //@class MGSplitViewController;
 @interface AppDelegate : NSObject <UIApplicationDelegate,MGSplitViewControllerDelegate> 
 {
@@ -164,6 +166,7 @@
 - (void) applyDefaultFormatting:(Newsletter*)newsletter;
 - (void) pushMasterViewController:(UIViewController*)controller;
 - (void) showItemHtml:(NSInteger)index itemFetcher:(ItemFetcher*)itemFetcher allowComments:(BOOL)allowComments;
-
+- (void) addAccount:(NSString*)name  sortName:(NSString*)sortName prefix:(NSString*)prefix image:(UIImage*)image username:(NSString*)username password:(NSString*)password;
+- (FeedAccount*)fetchOrCreateAccount:(NSString*)accountName sortName:(NSString*)sortName prefix:(NSString*)accountSettingsPrefix image:(UIImage*)image;
 
 @end

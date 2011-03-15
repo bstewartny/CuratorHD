@@ -99,7 +99,24 @@
 	
 	// TODO: for each item in local list NOT in remote, delete from local
 	
-	for(id feed in feeds)
+	
+	TempFeed * allItemsFeed=[[TempFeed alloc] init];
+	
+	allItemsFeed.name=@"All InfoNgen Items";
+	allItemsFeed.feedType=@"01InfoNgen";
+	allItemsFeed.feedCategory=@"_all";
+	allItemsFeed.url=@"infongen://all";
+	allItemsFeed.image=[UIImage imageNamed:@"32-infongen.png"];
+	
+	
+	NSMutableArray * allFeeds=[NSMutableArray arrayWithArray:feeds];
+	
+	[allFeeds addObject:allItemsFeed];
+	
+	[allItemsFeed release];
+	
+	
+	for(id feed in allFeeds)
 	{
 		RssFeed * existingFeed=[map objectForKey:[feed url]];
 		if(existingFeed==nil)
@@ -121,10 +138,15 @@
 		}
 		else 
 		{
-			if(![existingFeed.name isEqualToString:[feed name]])
+			if((![existingFeed.name isEqualToString:[feed name]]) ||
+			   (![existingFeed.feedType isEqualToString:[feed feedType]]) ||
+			   (![existingFeed.feedCategory isEqualToString:[feed feedCategory]]))
 			{
 				existingFeed.name=[feed name];
-				[existingFeed save];
+				existingFeed.feedType=[feed feedType];
+				existingFeed.feedCategory=[feed feedCategory];
+				existingFeed.image=[feed image];
+				//[existingFeed save];
 				
 				updated=YES;
 			}
@@ -133,13 +155,16 @@
 	
 	[map release];
 	
-	// save object context
-	NSError * error=nil;
-	if(![moc save:&error])
+	if(updated)
 	{
-		if(error)
+		// save object context
+		NSError * error=nil;
+		if(![moc save:&error])
 		{
-			NSLog(@"Failed to save in InfoNgenAccountUpdater.updateFeedListWithContext: %@",[error userInfo]);
+			if(error)
+			{
+				NSLog(@"Failed to save in InfoNgenAccountUpdater.updateFeedListWithContext: %@",[error userInfo]);
+			}
 		}
 	}
 	
@@ -157,6 +182,19 @@
 	 postNotificationName:@"UpdateStatus"
 	 object:[NSString stringWithFormat:@"Updating \"%@\"...",feed.name]];
 
+	if([feed.feedCategory isEqualToString:@"_all"])
+	{
+		// get all items from database...?
+		return nil;
+	}
+	else 
+	{
+		return [self getMostRecentRssItems:feed maxItems:maxItems];
+	}
+}
+
+- (NSArray*) getMostRecentRssItems:(RssFeed*)feed maxItems:(int)maxItems
+{
 	// if feed was updated less than 5 minutes ago, dont update again...
 	// we do this because updating lots of InfoNgen RSS feeds is very slow compared to twitter/facebook/googlereader,
 	// and user many refresh those feeds more often...
@@ -231,9 +269,27 @@
 			
 			tmp.origSynopsis=synopsis;
 			
-			tmp.origin=[UrlUtils hostFromUrl:tmp.url];
+			NSString * host=[UrlUtils hostFromUrl:tmp.url];
 			
-			tmp.originId=tmp.origin;
+			if([host length]>0)
+			{
+				if([host isEqualToString:@"infongen.com"])
+				{
+					tmp.origin=feed.name;
+				}
+				else 
+				{
+					tmp.origin=[NSString stringWithFormat:@"%@ - %@",feed.name,host];
+				}
+			}
+			else 
+			{
+				tmp.origin=feed.name;
+			}
+
+			//tmp.origin=[UrlUtils hostFromUrl:tmp.url];
+			
+			tmp.originId=host; //tmp.origin;
 			tmp.originUrl=tmp.url;
 			
 			[results addObject:tmp];

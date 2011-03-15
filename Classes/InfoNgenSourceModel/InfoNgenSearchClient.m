@@ -254,8 +254,8 @@
 			savedSearch.name=Title;
 			savedSearch.url=[NSString stringWithFormat:@"http://rss.infongen.com/search.rss?name=%@",escapedTitle];
 			savedSearch.feedCategory=@"_top";
-			
-			savedSearch.image=[UIImage imageNamed:@"InfoNgen-Logo-White-Wide.png"];
+			savedSearch.feedType=@"RssFeed";
+			//savedSearch.image=[UIImage imageNamed:@"InfoNgen-Logo-White-Wide.png"];
 			
 			//savedSearch.image=[UrlUtils faviconFromUrl:savedSearch.url imageCache:imageCache];
 			

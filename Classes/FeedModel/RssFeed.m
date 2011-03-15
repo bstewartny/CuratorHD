@@ -283,7 +283,7 @@
 		AccountItemFetcher * itemFetcher = [[AccountItemFetcher alloc] init];
 		
 		itemFetcher.accountName=self.account.name;
-		itemFetcher.feedType=@"GoogleAtom";// HACK
+		itemFetcher.feedType=@"RssFeed";// HACK
 		
 		return [itemFetcher autorelease]; 
 	}

@@ -9,6 +9,7 @@
 	 
 }
 
+@property(nonatomic,retain) NSString * sortName;
 @property(nonatomic,retain) NSString * name;
 @property(nonatomic,retain) NSString * username;
 @property(nonatomic,retain) NSString * password;

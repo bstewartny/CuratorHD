@@ -823,7 +823,7 @@ static NSString * gaeCookie;
 				feed.url=[NSString stringWithFormat:@"http://www.google.com/reader/atom/%@",[subscription objectForKey:@"id"]];
 				
 				// get category (folder to put feed into)
-				feed.feedType=@"GoogleAtom";
+				feed.feedType=@"RssFeed";
 				
 				NSArray * categories=[subscription objectForKey:@"categories"];
 				NSMutableString * feedCategory=[[NSMutableString alloc] init];

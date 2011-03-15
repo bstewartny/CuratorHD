@@ -1,16 +1,7 @@
-//
-//  AccountSettingsFormViewController.h
-//  Untitled
-//
-//  Created by Robert Stewart on 5/27/10.
-//  Copyright 2010 InfoNgen. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 
 @class TwitterClient;
-@interface AccountSettingsFormViewController : UIViewController<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource> {
-	IBOutlet UITableView * tableView;
+@interface AccountSettingsFormViewController : UITableViewController<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource> {
 	id delegate;
 	UITextField * googleReaderUsernameTextField;
 	UITextField * googleReaderPasswordTextField;
@@ -18,7 +9,6 @@
 	UITextField * infoNgenPasswordTextField;
 	UITextField * twitterUsernameTextField;
 	UITextField * twitterPasswordTextField;
-	IBOutlet UINavigationBar * navBar;
 	UITextField * activeTextField;
 	
 	NSOperationQueue * operationQueue;
@@ -29,9 +19,6 @@
 	
 	IBOutlet UIBarButtonItem * cancelButton;
 	IBOutlet UIBarButtonItem * doneButton;
-	
-	BOOL keyboardVisible;
-	CGFloat keyboardHeight;
 	
 	UILabel * googleReaderStatusLabel;
 	UILabel * twitterStatusLabel;
@@ -44,17 +31,11 @@
 	NSString * infoNgenPassword;
 	NSString * twitterUsername;
 	NSString * twitterPassword;
-	
-	
 }
-@property(nonatomic,retain) IBOutlet UINavigationBar * navBar;
 @property(nonatomic,retain) UITextField * activeTextField;
 @property(nonatomic,retain) IBOutlet UIBarButtonItem * cancelButton;
 @property(nonatomic,retain) IBOutlet UIBarButtonItem * doneButton;
-
-@property(nonatomic,retain) IBOutlet UITableView * tableView;
 @property(nonatomic,assign) id delegate;
-
 @property(nonatomic,retain) UITextField * googleReaderUsernameTextField;
 @property(nonatomic,retain) UITextField * googleReaderPasswordTextField;
 @property(nonatomic,retain) UITextField * infoNgenUsernameTextField;
@@ -64,10 +45,6 @@
 
 - (IBAction)textFieldDidBeginEditing:(UITextField *)textField;
 - (IBAction)textFieldDidEndEditing:(UITextField *)textField;
-
--(void) keyboardWillHide:(NSNotification *)note;
--(void) keyboardWillShow:(NSNotification *)note;
-
 - (IBAction) cancel;
 - (IBAction) done;
 

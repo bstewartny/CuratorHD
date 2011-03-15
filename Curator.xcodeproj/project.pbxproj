@@ -32,6 +32,7 @@
 		B028397012A56DB900D01F61 /* FBLoginDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = B028396712A56DB900D01F61 /* FBLoginDialog.m */; };
 		B028397112A56DB900D01F61 /* FBDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = B028396912A56DB900D01F61 /* FBDialog.m */; };
 		B028397212A56DB900D01F61 /* FBDialog.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B028396B12A56DB900D01F61 /* FBDialog.bundle */; };
+		B02EAE69132F94FA0090B00C /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = B02EAE68132F94FA0090B00C /* MBProgressHUD.m */; };
 		B02F24C3116CF8AB008A0200 /* NewsletterUpdateFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B02F24C2116CF8AB008A0200 /* NewsletterUpdateFormView.xib */; };
 		B02F25F5116D152B008A0200 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = B02F25F4116D152B008A0200 /* blank.png */; };
 		B02F5DBC130F065300B4EC89 /* 28-star.png in Resources */ = {isa = PBXBuildFile; fileRef = B02F5DBB130F065300B4EC89 /* 28-star.png */; };
@@ -509,7 +510,7 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		1D6058910D05DD3D006BFB54 /* Curator HD Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Curator HD Debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D6058910D05DD3D006BFB54 /* Curator HD Testing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Curator HD Testing.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28A0AAE50D9B0CCF005BE974 /* Curator_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Curator_Prefix.pch; sourceTree = "<group>"; };
@@ -549,6 +550,8 @@
 		B028396B12A56DB900D01F61 /* FBDialog.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = FBDialog.bundle; sourceTree = "<group>"; };
 		B028396C12A56DB900D01F61 /* FBConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBConnect.h; sourceTree = "<group>"; };
 		B028396D12A56DB900D01F61 /* Facebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Facebook.h; sourceTree = "<group>"; };
+		B02EAE67132F94FA0090B00C /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		B02EAE68132F94FA0090B00C /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		B02F24C2116CF8AB008A0200 /* NewsletterUpdateFormView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsletterUpdateFormView.xib; sourceTree = "<group>"; };
 		B02F25F4116D152B008A0200 /* blank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank.png; sourceTree = "<group>"; };
 		B02F5DBB130F065300B4EC89 /* 28-star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "28-star.png"; sourceTree = "<group>"; };
@@ -1262,7 +1265,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1D6058910D05DD3D006BFB54 /* Curator HD Debug.app */,
+				1D6058910D05DD3D006BFB54 /* Curator HD Testing.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1426,6 +1429,15 @@
 				B028396D12A56DB900D01F61 /* Facebook.h */,
 			);
 			path = FBConnect;
+			sourceTree = "<group>";
+		};
+		B02EAE64132F94E30090B00C /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				B02EAE67132F94FA0090B00C /* MBProgressHUD.h */,
+				B02EAE68132F94FA0090B00C /* MBProgressHUD.m */,
+			);
+			name = MBProgressHUD;
 			sourceTree = "<group>";
 		};
 		B03B4B7312F86B820047D5CF /* MGSplitViewController */ = {
@@ -1834,6 +1846,7 @@
 		B0A54EFD12FC58C400913912 /* Externals */ = {
 			isa = PBXGroup;
 			children = (
+				B02EAE64132F94E30090B00C /* MBProgressHUD */,
 				B03B4B7312F86B820047D5CF /* MGSplitViewController */,
 				B0B59708128B71BC0080DF12 /* RegexKitLite */,
 				B062AD9C1243F835005D4BDA /* ShareKit */,
@@ -2462,7 +2475,7 @@
 			);
 			name = InfoNgen;
 			productName = Untitled;
-			productReference = 1D6058910D05DD3D006BFB54 /* Curator HD Debug.app */;
+			productReference = 1D6058910D05DD3D006BFB54 /* Curator HD Testing.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -2993,6 +3006,7 @@
 				B0463BB11326959400690BC1 /* Font.m in Sources */,
 				B009B81613299279001F459E /* PullToRefreshViewController.m in Sources */,
 				B015AAEB132A848E004458BF /* ItemViewController.m in Sources */,
+				B02EAE69132F94FA0090B00C /* MBProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

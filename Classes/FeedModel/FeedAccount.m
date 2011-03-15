@@ -8,7 +8,7 @@
 #import "FacebookAccountUpdater.h"
 
 @implementation FeedAccount
-@dynamic name,username,password,feeds,image;
+@dynamic name,username,password,feeds,image,sortName;
 
 - (ItemFetcher*) feedFetcher
 {

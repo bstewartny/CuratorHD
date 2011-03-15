@@ -7,9 +7,10 @@
 #import "GoogleClientLogin.h"
 
 @implementation AccountSettingsFormViewController
-@synthesize tableView,delegate,navBar,twitterUsernameTextField,twitterPasswordTextField,googleReaderUsernameTextField,googleReaderPasswordTextField,infoNgenUsernameTextField,infoNgenPasswordTextField;
+@synthesize delegate,twitterUsernameTextField,twitterPasswordTextField,googleReaderUsernameTextField,googleReaderPasswordTextField,infoNgenUsernameTextField,infoNgenPasswordTextField;
 @synthesize doneButton;
 @synthesize cancelButton,activeTextField;
+
 - (IBAction) cancel
 {
 	[delegate accountSettingsDidCancel:self];
@@ -78,18 +79,15 @@
 	}
 	else 
 	{
-		// start spinner
 		[cancelButton setEnabled:NO];
 		[doneButton setEnabled:NO];
-		//cancelButton.hidden=YES;
-		//doneButton.hidden=YES;
-		self.navBar.topItem.title =@"Verifying Accounts...";
+		self.navigationItem.title=@"Verifying Accounts...";
 	}
 }
 
 - (void) maybeDone
 {
-	[tableView reloadData];
+	[self.tableView reloadData];
 	
 	if(num_failed + num_succeeded >= num_accounts)
 	{
@@ -99,11 +97,7 @@
 			[cancelButton setEnabled:YES];
 			[doneButton setEnabled:YES];
 			
-			//cancelButton.hidden=NO;
-			//doneButton.hidden=NO;
-			
-			self.navBar.topItem.titleView=nil;
-			self.navBar.topItem.title =@"Account Settings";
+			self.navigationItem.title=@"Account Settings";
 			
 			UIAlertView * alertView=[[UIAlertView alloc] initWithTitle:@"Login Failed" message:@"Failed to validate accounts. Please verify username and password." delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil];
 			
@@ -113,12 +107,7 @@
 		}
 		else 
 		{
-			//[cancelButton setEnabled:YES];
-			//[doneButton setEnabled:YES];
-			// all succeeded, close
-			
-			self.navBar.topItem.titleView=nil;
-			self.navBar.topItem.title =@"Accounts Verified";
+			self.navigationItem.title =@"Accounts Verified";
 			
 			[self performSelector:@selector(close) withObject:nil afterDelay:0.1];
 		}
@@ -143,8 +132,6 @@
 
 - (void) verifyTwitter
 {
-	NSLog(@"verifyTwitter");
-	
 	twitterClient.username=twitterUsernameTextField.text;
 	twitterClient.password=twitterPasswordTextField.text;
 	twitterClient.verifyDelegate=self;
@@ -174,31 +161,6 @@
 	{
 		[self performSelectorOnMainThread:@selector(verifyGoogleFailed) withObject:nil waitUntilDone:NO];
 	}
-
-	/*GoogleReaderClient * client=[[GoogleReaderClient alloc] initWithUsername:googleReaderUsernameTextField.text password:googleReaderPasswordTextField.text useCachedAuth:NO];
-	
-	if([client isValid])
-	{
-		[client release];
-		[self performSelectorOnMainThread:@selector(verifyGoogleSucceeded) withObject:nil waitUntilDone:NO];
-	}
-	else 
-	{
-		[client release];
-		[self performSelectorOnMainThread:@selector(verifyGoogleFailed) withObject:nil waitUntilDone:NO];
-	}*/
-}
-
-- (void) makeAlertLabel:(UITextField*)textField 
-{
-	//textField.superview.layer.borderColor=[UIColor redColor].CGColor;
-	//textField.superview.layer.borderWidth=2;
-}
-
-- (void) removeAlertLabel:(UITextField*)textField
-{
-	//textField.superview.layer.borderColor=[UIColor clearColor].CGColor;
-	//textField.superview.layer.borderWidth=0;
 }
 
 - (void) verifyInfoNgenFailed
@@ -206,8 +168,6 @@
 	num_failed++;
 	infoNgenStatusLabel.textColor=[UIColor redColor];
 	infoNgenStatusLabel.text=@"Failed!";
-	[self makeAlertLabel:infoNgenUsernameTextField];
-	[self makeAlertLabel:infoNgenPasswordTextField];
 	[self maybeDone];
 }
 
@@ -216,8 +176,6 @@
 	num_failed++;
 	twitterStatusLabel.textColor=[UIColor redColor];
 	twitterStatusLabel.text=@"Failed!";
-	[self makeAlertLabel:twitterUsernameTextField];
-	[self makeAlertLabel:twitterPasswordTextField];
 	[self maybeDone];
 }
 
@@ -226,29 +184,19 @@
 	num_failed++;
 	googleReaderStatusLabel.textColor=[UIColor redColor];
 	googleReaderStatusLabel.text=@"Failed!";
-	[self makeAlertLabel:googleReaderUsernameTextField];
-	[self makeAlertLabel:googleReaderPasswordTextField];
 	[self maybeDone];
 }
 
 - (void) removeAlertLabels
 {
-	[self removeAlertLabel:googleReaderUsernameTextField];
-	[self removeAlertLabel:googleReaderPasswordTextField];
-	[self removeAlertLabel:twitterUsernameTextField];
-	[self removeAlertLabel:twitterPasswordTextField];
-	[self removeAlertLabel:infoNgenUsernameTextField];
-	[self removeAlertLabel:infoNgenPasswordTextField];
-	
 	twitterStatusLabel.text=nil;
 	infoNgenStatusLabel.text=nil;
 	googleReaderStatusLabel.text=nil;
-	
 }
 
 - (void) verifyInfoNgenSucceeded
 {
-	infoNgenStatusLabel.textColor=[UIColor blueColor];
+	infoNgenStatusLabel.textColor=[UIColor colorWithRed:25.0/255.0 green:76.0/255.0 blue:127.0/255.0 alpha:1.0];
 	infoNgenStatusLabel.text=@"Verfied";
 	num_succeeded++;
 	[self maybeDone];
@@ -256,7 +204,7 @@
 
 - (void) verifyTwitterSucceeded
 {
-	twitterStatusLabel.textColor=[UIColor blueColor];
+	twitterStatusLabel.textColor=[UIColor colorWithRed:25.0/255.0 green:76.0/255.0 blue:127.0/255.0 alpha:1.0];
 	twitterStatusLabel.text=@"Verfied";
 	num_succeeded++;
 	[self maybeDone];
@@ -264,7 +212,7 @@
 
 - (void) verifyGoogleSucceeded
 {
-	googleReaderStatusLabel.textColor=[UIColor blueColor];
+	googleReaderStatusLabel.textColor=[UIColor colorWithRed:25.0/255.0 green:76.0/255.0 blue:127.0/255.0 alpha:1.0];
 	googleReaderStatusLabel.text=@"Verfied";
 	num_succeeded++;
 	[self maybeDone];
@@ -317,7 +265,6 @@
 	[v addSubview:iv];
 	
 	UILabel * l=[[UILabel alloc] initWithFrame:CGRectMake(76,8, 200, 22)];
-	//l.autoresizingMask=UIViewAutoresizingFlexibleWidth;
 	l.font=[UIFont boldSystemFontOfSize:18];
 	l.textColor=[UIColor darkGrayColor];
 	l.backgroundColor=[UIColor clearColor];
@@ -427,11 +374,10 @@
 	label.backgroundColor=[UIColor clearColor];
 	
 	UITextField * textField= [[UITextField alloc] initWithFrame:CGRectMake(105,12,370,22)];
-	//textField.autoresizingMask=UIViewAutoresizingFlexibleWidth;
 	textField.backgroundColor=[UIColor clearColor];
 	textField.font=[UIFont systemFontOfSize:17];//:18];
 	textField.text=value;
-	textField.textColor=[UIColor blackColor];
+	textField.textColor=[UIColor colorWithRed:25.0/255.0 green:76.0/255.0 blue:127.0/255.0 alpha:1.0];
 	textField.delegate=self;
 	textField.clearButtonMode=UITextFieldViewModeWhileEditing;
 	
@@ -515,14 +461,16 @@
     return YES;
 }
 
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
-}
 - (void)viewDidLoad 
 {
+	self.navigationItem.title=@"Account Settings";
+	
+	self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)] autorelease];
+	self.cancelButton=self.navigationItem.leftBarButtonItem;
+	
+	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)] autorelease];
+	self.doneButton=self.navigationItem.rightBarButtonItem;
+	
 	googleReaderUsername=[UserSettings getSetting:@"googlereader.username"];
 	googleReaderPassword=[UserSettings getSetting:@"googlereader.password"];
 	infoNgenUsername=[UserSettings getSetting:@"infongen.username"];
@@ -530,145 +478,25 @@
 	twitterUsername=[UserSettings getSetting:@"twitter.username"];
 	twitterPassword=[UserSettings getSetting:@"twitter.password"];
 	
-	UIEdgeInsets insets=tableView.contentInset;
+	UIEdgeInsets insets=self.tableView.contentInset;
 	
 	insets.top=20;
 	
-	tableView.contentInset=insets;
-	
-    // Register notification when the keyboard will be show
-    [[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(keyboardWillShow:)
-												 name:UIKeyboardWillShowNotification
-											   object:nil];
-	
-    // Register notification when the keyboard will be hide
-    [[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(keyboardWillHide:)
-												 name:UIKeyboardWillHideNotification
-											   object:nil];
+	self.tableView.contentInset=insets;
 }
 
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-	
-[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-	
-}
-
-// To be link with your TextField event "Editing Did Begin"
-//  memoryze the current TextField
 - (IBAction)textFieldDidBeginEditing:(UITextField *)textField
 {
     self.activeTextField = textField;
-	//[self removeAlertLabel:textField];
 }
 
-// To be link with your TextField event "Editing Did End"
-//  release current TextField
 - (IBAction)textFieldDidEndEditing:(UITextField *)textField
 {
-    //self.activeTextField = nil;
-}
-
-CGRect IASKCGRectSwap(CGRect rect) {
-	CGRect newRect;
-	newRect.origin.x = rect.origin.y;
-	newRect.origin.y = rect.origin.x;
-	newRect.size.width = rect.size.height;
-	newRect.size.height = rect.size.width;
-	return newRect;
-}
-
-- (void)keyboardWillShow:(NSNotification*)notification {
-     
-	NSDictionary* userInfo = [notification userInfo];
-	
-	// we don't use SDK constants here to be universally compatible with all SDKs ≥ 3.0
-	NSValue* keyboardFrameValue = [userInfo objectForKey:@"UIKeyboardBoundsUserInfoKey"];
-	if (!keyboardFrameValue) 
-	{
-		keyboardFrameValue = [userInfo objectForKey:@"UIKeyboardFrameEndUserInfoKey"];
-	}
-	
-	CGRect keyboardFrame=[keyboardFrameValue CGRectValue];
-	
-	keyboardHeight=keyboardFrame.size.height;
-	
-	keyboardVisible=YES;
-	
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
-	[UIView setAnimationCurve:[[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue]];
-	
-	[self adjustTableViewHeightForKeyboard];
-	
-	[UIView commitAnimations];
-	
-	// iOS 3 sends hide and show notifications right after each other
-	// when switching between textFields, so cancel -scrollToOldPosition requests
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	
-	[tableView scrollToRowAtIndexPath:[tableView indexPathForCell:self.activeTextField.superview.superview] atScrollPosition:UITableViewScrollPositionTop animated:YES];
-}
-
-- (void)keyboardWillHide:(NSNotification*)notification 
-{
-	NSDictionary* userInfo = [notification userInfo];
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
-	[UIView setAnimationCurve:[[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue]];
-	
-	CGRect rect = self.view.bounds;
-	rect.size.
-	height-=44;
-	rect.origin.y=44;
-	self.tableView.frame=rect;
-	
-	[UIView commitAnimations];
-	
-	keyboardVisible=NO;
-	keyboardHeight=0;
-	
-	
-}  
-
-- (void) adjustTableViewHeightForKeyboard
-{
-	CGRect frame=self.tableView.frame;
-
-	CGRect screenBounds = [[UIScreen mainScreen] bounds];
-	if (UIInterfaceOrientationLandscapeLeft == self.interfaceOrientation ||UIInterfaceOrientationLandscapeRight == self.interfaceOrientation ) 
-	{
-		screenBounds = IASKCGRectSwap(screenBounds);
-	}
-	
-	CGFloat screenHeight=screenBounds.size.height;
-	
-	if(screenHeight - keyboardHeight < (self.tableView.frame.size.height+64))
-	{
-		frame.size.height=(screenHeight - keyboardHeight) - 64;
-		self.tableView.frame=frame;
-	}
-}
-
-- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-	if(keyboardVisible)
-	{
-		[self adjustTableViewHeightForKeyboard];
-	}
+   
 }
 
 - (void)dealloc 
 {
-	[tableView release];
-	
-	[navBar release];
-	
 	[googleReaderUsernameTextField release];
 	[googleReaderPasswordTextField release];
 	[infoNgenUsernameTextField release];
