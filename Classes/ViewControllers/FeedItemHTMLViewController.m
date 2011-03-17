@@ -87,6 +87,11 @@
 		FeedItem * tmp_item=[fetcher itemAtIndex:itemIndex];
 	
 		[tmp_item markAsRead];
+		
+		// send notification to refresh unread count in feeds view...
+		//[[NSNotificationCenter defaultCenter] 
+		// postNotificationName:@"ReloadData"
+		// object:nil];
 	
 		self.item=tmp_item;
 	}
@@ -567,7 +572,11 @@
 			}
 		}
 	}
+	[[NSNotificationCenter defaultCenter] 
+	 postNotificationName:@"ReloadData"
+	 object:nil];
 	[self.parentViewController dismissModalViewControllerAnimated:YES];
+	
 }
 
 - (void) attacheSwipeGesturesToWebView:(UIWebView*)wv

@@ -2125,7 +2125,7 @@
 	newsletter.titleFont=[[[Font alloc] initWithFamily:@"Arial" weight:@"bold" style:@"normal" size:@"x-large" color:@"black"] autorelease];
 	newsletter.commentsFont=[[[Font alloc] initWithFamily:@"Arial" weight:@"bold" style:@"italic" size:@"medium" color:@"red"] autorelease];
 	newsletter.sectionFont=[[[Font alloc] initWithFamily:@"Arial" weight:@"bold" style:@"normal" size:@"x-large" color:@"black"] autorelease];
-	newsletter.headlineFont=[[[Font alloc] initWithFamily:@"Arial" weight:@"bold" style:@"normal" size:@"large" color:@"darkblue"] autorelease];
+	newsletter.headlineFont=[[[Font alloc] initWithFamily:@"Arial" weight:@"bold" style:@"normal" size:@"large" color:@"blue"] autorelease];
 	newsletter.bodyFont=[[[Font alloc] initWithFamily:@"Arial" weight:@"normal" style:@"normal" size:@"medium" color:@"black"] autorelease];
 	newsletter.summaryFont=[[[Font alloc] initWithFamily:@"Georgia" weight:@"normal" style:@"normal" size:@"medium" color:@"grey"] autorelease];
 	newsletter.dateFont=[[[Font alloc] initWithFamily:@"Arial" weight:@"normal" style:@"normal" size:@"medium" color:@"grey"] autorelease];
