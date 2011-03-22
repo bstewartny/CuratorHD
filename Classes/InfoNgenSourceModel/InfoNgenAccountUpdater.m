@@ -106,7 +106,9 @@
 	allItemsFeed.feedType=@"01InfoNgen";
 	allItemsFeed.feedCategory=@"_all";
 	allItemsFeed.url=@"infongen://all";
-	allItemsFeed.image=[UIImage imageNamed:@"32-infongen.png"];
+	allItemsFeed.image=[UIImage imageNamed:@"gray_infongen.png"];
+	allItemsFeed.imageName=@"gray_infongen.png";
+	allItemsFeed.highlightedImageName=@"green_infongen.png";
 	
 	
 	NSMutableArray * allFeeds=[NSMutableArray arrayWithArray:feeds];
@@ -129,6 +131,8 @@
 			newFeed.feedCategory=[feed feedCategory];
 			newFeed.url=[feed url];
 			newFeed.image=[feed image];
+			newFeed.imageName=[feed imageName];
+			newFeed.highlightedImageName=[feed highlightedImageName];
 			
 			newFeed.account=contextAccount;
 			
@@ -146,6 +150,9 @@
 				existingFeed.feedType=[feed feedType];
 				existingFeed.feedCategory=[feed feedCategory];
 				existingFeed.image=[feed image];
+				existingFeed.imageName=[feed imageName];
+				existingFeed.highlightedImageName=[feed highlightedImageName];
+				
 				//[existingFeed save];
 				
 				updated=YES;

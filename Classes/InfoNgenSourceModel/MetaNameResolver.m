@@ -60,6 +60,8 @@
 	NSError *err;
 	NSUInteger count = [managedObjectContext countForFetchRequest:request error:&err];
 	
+	[request release];
+	
 	if(count == NSNotFound) 
 	{
 		//Handle error
@@ -70,7 +72,7 @@
 		return count;
 	}
 
-	[request release];
+	//[request release];
 }
 
 
@@ -201,6 +203,8 @@
 	
 	NSArray *array = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
 	
+	[fetchRequest release];
+	
 	if (array == nil || [array count]==0)
 	{
 		
@@ -223,9 +227,9 @@
 		return [result autorelease];
 	}
 
-	[fetchRequest release];
+	//[fetchRequest release];
 	
-	return nil;
+	//return nil;
 }
 
 - (NSArray*) lookupByName:(NSString*)name displayValue:(NSString*)displayValue

@@ -4,7 +4,7 @@
 #import "ItemFetcher.h"
 
 @implementation TempFeed
-@synthesize name,feedType,url,image,htmlUrl,feedId,feedCategory;
+@synthesize name,feedType,url,image,htmlUrl,feedId,feedCategory,imageName,highlightedImageName;
 
 
 - (void) save
@@ -32,17 +32,19 @@
 	[image release];
 	[htmlUrl release];
 	[feedId	 release];
+	[imageName release];
+	[highlightedImageName release];
 	[super dealloc];
 }
 
 @end
 
 @implementation Feed
-@dynamic lastUpdated,summary,name,feedType,url,image,htmlUrl,feedId,unreadCount,feedCategory; //,image,itemFetcher;
+@dynamic lastUpdated,summary,name,feedType,url,image,htmlUrl,feedId,unreadCount,feedCategory,imageName,highlightedImageName; //,image,itemFetcher;
 
 - (void) updateUnreadCount
 {
-	NSLog(@"Feed.updateUnreadCount");
+	NSLog(@"Feed.updateUnreadCount - you need to implement this in subclass!!!");
 }
 
 - (int) entityCount:(NSString*)entityName predicate:(NSPredicate*)predicate
@@ -73,7 +75,7 @@
 
 - (void) save
 {
-	NSLog(@"Feed.save");
+	////NSLog(@"Feed.save");
 	NSError * error=nil;
 	NSManagedObjectContext * moc=[self managedObjectContext];
 	if(![moc save:&error])
@@ -108,7 +110,7 @@
 
 - (NSNumber*) currentUnreadCount
 {
-	NSLog(@"Feed.currentUnreadCount");
+	//NSLog(@"Feed.currentUnreadCount");
 	return [self unreadCount];
 }
 

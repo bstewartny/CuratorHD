@@ -9,6 +9,7 @@
 #define kShareSelectedTextActionSheet 1003
 #define kShareImageActionSheet 1004
 #define kSetItemImageActionSheet 1005
+@class FeedItemHTMLRenderer;
 
 @interface FeedItemHTMLViewController : ItemViewController <UIActionSheetDelegate, UIPopoverControllerDelegate, UISplitViewControllerDelegate, MFMailComposeViewControllerDelegate> {
 	NSInteger itemIndex;
@@ -38,6 +39,8 @@
 	UIMenuItem *shareSelectedTextItem;
 	NSString * shareText;
 	BOOL sharingText;
+	
+	FeedItemHTMLRenderer * renderer;//=[[[FeedItemHTMLRenderer alloc ]init] autorelease];
 	
 }
 

@@ -484,8 +484,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     
-	[[NSURLCache sharedURLCache] setMemoryCapacity:0];
-	[[NSURLCache sharedURLCache] setDiskCapacity:0];
+	NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0 diskCapacity:0 diskPath:nil];
+	[NSURLCache setSharedURLCache:sharedCache];
+	[sharedCache release];
+	
+	
+	
+	//[[NSURLCache sharedURLCache] setMemoryCapacity:0];
+	//[[NSURLCache sharedURLCache] setDiskCapacity:0];
 
 	NSAutoreleasePool * pool=[[NSAutoreleasePool alloc] init];
 	
@@ -873,8 +879,10 @@
 		}*/
 	}
 }
-- (void) updateSingleAccountFromScroll:(NSString*)accountName
+
+- (void) updateSingleAccountFromScroll:(NSString*)accountName forCategory:(NSString*)category
 {
+	NSLog(@"updateSingleAccountFromScroll: %@ forCategory:%@",accountName,category);
 	if(!updating)
 	{
 		if([self hasInternetConnection])
@@ -905,7 +913,7 @@
 				}
 				else 
 				{
-					[self performSelectorInBackground:@selector(update_start_account:) withObject:accountName];
+					[self performSelectorInBackground:@selector(update_start_account:) withObject:[NSArray arrayWithObjects:accountName,category,nil]];
 				}
 			}
 		}
@@ -916,9 +924,9 @@
 	}
 }
 
-- (void) updateSingleAccount:(NSString*)accountName
+- (void) updateSingleAccount:(NSString*)accountName forCategory:(NSString*)category
 {
-	NSLog(@"AppDelegate.updateSingleAccount: %@",accountName);
+	NSLog(@"AppDelegate.updateSingleAccount: %@ forCategory: %@",accountName,category);
 	if(!updating)
 	{
 		if([self hasInternetConnection])
@@ -947,7 +955,7 @@
 				}
 				else 
 				{
-					[self performSelectorInBackground:@selector(update_start_account:) withObject:accountName];
+					[self performSelectorInBackground:@selector(update_start_account:) withObject:[NSArray arrayWithObjects:accountName,category,nil]];
 				}
 			}
 		}
@@ -1164,14 +1172,24 @@
 	}
 }
 
-
-- (void) update_start_account:(NSString*)accountName
+- (void) update_start_account:(NSArray*)args
 {
-	NSLog(@"AppDelegate.update_start_account: %@",accountName);
+	if([args count]>1)
+	{
+		[self update_start_account_ex:[args objectAtIndex:0] forCategory:[args objectAtIndex:1]];
+	}
+	else 
+	{
+		[self update_start_account_ex:[args objectAtIndex:0] forCategory:nil];
+	}
+}
+- (void) update_start_account_ex:(NSString*)accountName forCategory:(NSString*)category
+{
+	NSLog(@"AppDelegate.update_start_account: %@ forCategory:%@",accountName,category);
 	updating=YES;
 	@try 
 	{
-		[self updateSingleAccountImpl:accountName];
+		[self updateSingleAccountImpl:accountName forCategory:category];
 	}
 	@catch (NSException * e) 
 	{
@@ -1231,7 +1249,7 @@
 }
 
 
-- (void) updateSingleAccountImpl:(NSString*)accountName
+- (void) updateSingleAccountImpl:(NSString*)accountName forCategory:(NSString*)category
 {
 	NSLog(@"AppDelegate.updateSingleAccountImpl: %@",accountName);
 	
@@ -1251,7 +1269,7 @@
 				if(updating==NO) break;
 			
 				accountFound=YES;
-				[self updateAccount:account updateFeeds:YES];
+				[self updateAccount:account updateFeeds:YES forCategory:category];
 			}
 		}
 		
@@ -1282,7 +1300,7 @@
 	 object:accountName];
 }
 
-- (void) updateAccount:(FeedAccount*)account updateFeeds:(BOOL)updateFeeds
+- (void) updateAccount:(FeedAccount*)account updateFeeds:(BOOL)updateFeeds forCategory:(NSString*)category
 {
 	NSLog(@"updateAccount: %@",[account name]);
 	
@@ -1314,11 +1332,21 @@
 			{
 				if(hasConnection && updateFeeds)
 				{
-					[updater willUpdateFeeds:moc];
+					[updater willUpdateFeeds:moc forCategory:category];
 					
-					AccountUpdatableFeedFetcher * feedFetcher=[[AccountUpdatableFeedFetcher alloc] init];
-					
-					feedFetcher.accountName=account.name;
+					AccountFeedFetcher * feedFetcher;
+					if(category==nil)
+					{
+						feedFetcher=[[AccountUpdatableFeedFetcher alloc] init];
+						feedFetcher.accountName=account.name;
+					}
+					else 
+					{
+						feedFetcher=[[CategoryFeedFetcher alloc] init];
+						feedFetcher.accountName=account.name;
+						[feedFetcher setFeedCategory:category];
+					}
+
 					feedFetcher.managedObjectContext=moc;
 					
 					[feedFetcher performFetch];
@@ -1364,7 +1392,7 @@
 		{
 			if(updating==NO) break;
 			
-			[self updateAccount:account updateFeeds:NO];
+			[self updateAccount:account updateFeeds:NO forCategory:nil];
 		}
 		
 		if(updating==YES)
@@ -1652,11 +1680,11 @@
 	// get accounts from db
 	FeedAccount * account;
 	
-	[self fetchOrCreateAccount:@"Google Reader" sortName:@"01" prefix:@"googlereader" image:[UIImage imageNamed:@"32-googlreader.png"]];
+	[self fetchOrCreateAccount:@"Google Reader" sortName:@"01" prefix:@"googlereader" image:[UIImage imageNamed:@"gray_googlreader.png"]];
 	
-	[self fetchOrCreateAccount:@"Twitter" sortName:@"02" prefix:@"twitter" image:[UIImage imageNamed:@"32-twitter.png"]];
+	[self fetchOrCreateAccount:@"Twitter" sortName:@"02" prefix:@"twitter" image:[UIImage imageNamed:@"gray_twitter.png"]];
 	
-	[self fetchOrCreateAccount:@"InfoNgen" sortName:@"03" prefix:@"infongen" image:[UIImage imageNamed:@"32-infongen.png"]];
+	[self fetchOrCreateAccount:@"InfoNgen" sortName:@"03" prefix:@"infongen" image:[UIImage imageNamed:@"gray_infongen.png"]];
 	
 	// verify twitter has saved userId/screenName, otherwise logout from twitter
 	// we need this in case user has previously saved twitter account in keychain
@@ -2141,7 +2169,7 @@
 	int numFolders=[newFolder entityCount:@"Folder" predicate:nil];
 
 	newFolder.name=name;
-	newFolder.image=[UIImage imageNamed:@"32-folderclosed.png"];
+	newFolder.image=[UIImage imageNamed:@"gray_folderclosed.png"];
 	newFolder.displayOrder=[NSNumber numberWithInt:numFolders];
 	
 	[newFolder save];

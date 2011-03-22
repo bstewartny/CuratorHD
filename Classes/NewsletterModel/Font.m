@@ -46,7 +46,7 @@
 - (NSString*) cssStyle
 {
 	NSString * css= [NSString stringWithFormat:@"font-family:%@; font-style:%@; font-weight:%@; font-size:%@; color:%@; ",family,style,weight,size,color];
-	NSLog(css);
+	//NSLog(css);
 	return css;
 }
 

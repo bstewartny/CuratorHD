@@ -363,7 +363,7 @@ static NSString * gaeCookie;
 				
 				if(comment && [comment length]>0)
 				{
-					result.notes=[stripper stripMarkup:comment] ;//[comment flattenHTML];
+					result.notes=[stripper stripMarkup:comment] ; 
 				}
 				
 				[tmp addObject:result];
@@ -566,7 +566,6 @@ static NSString * gaeCookie;
 					
 					result.date=theDate;
 					
-					//result.headline=[FeedItem normalizeHeadline:[item objectForKey:@"title"]];
 					result.headline=[stripper stripMarkup:[item objectForKey:@"title"]];
 					
 					NSArray * categories=[item objectForKey:@"categories"];
@@ -622,9 +621,7 @@ static NSString * gaeCookie;
 							
 							if (notes && [notes length]>0) 
 							{
-								result.notes=[stripper stripMarkup:notes];//[notes flattenHTML];
-								
-								//result.notes=[self flattenHTML:notes trimWhiteSpace:YES];
+								result.notes=[stripper stripMarkup:notes]; 
 							}
 						}
 					}
@@ -795,7 +792,7 @@ static NSString * gaeCookie;
 	BOOL requiresFaviconDownload=NO;
 	if(results)
 	{
-		MarkupStripper * stripper=[[[MarkupStripper alloc] init] autorelease];
+		//MarkupStripper * stripper=[[[MarkupStripper alloc] init] autorelease];
 		NSArray * subscriptions=[results objectForKey:@"subscriptions"];
 		
 		if(subscriptions)

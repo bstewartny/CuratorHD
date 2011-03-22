@@ -475,9 +475,21 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	
 	cell.textLabel.text=feed.name;
 	
-	if(feed.image)
+	if(feed.imageName)
 	{
-		cell.imageView.image=feed.image;
+		cell.imageView.image=[UIImage imageNamed:feed.imageName];
+		
+		if(feed.highlightedImageName)
+		{
+			cell.imageView.highlightedImage=[UIImage imageNamed:feed.highlightedImageName];
+		}
+	}
+	else 
+	{
+		if(feed.image)
+		{
+			cell.imageView.image=feed.image;
+		}
 	}
 }
 
@@ -702,23 +714,27 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	if([fetcher isKindOfClass:[FeedItemFetcher class]])
 	{
 		[[[UIApplication sharedApplication] delegate] updateSingleFromScroll:[fetcher feed]];
-		return;
 	}
 	else 
 	{
-		if([fetcher isKindOfClass:[AccountFeedFetcher class]]  ||
-		   [fetcher isKindOfClass:[CategoryFeedFetcher class]])
+		if ([fetcher isKindOfClass:[CategoryFeedFetcher class]]) 
 		{
-			[[[UIApplication sharedApplication] delegate] updateSingleAccountFromScroll:[fetcher accountName]];
-			return;
+			[[[UIApplication sharedApplication] delegate] updateSingleAccountFromScroll:[fetcher accountName] forCategory:[fetcher feedCategory]];
 		}
 		else 
 		{
-			[self performSelector:@selector(stopLoading) withObject:nil afterDelay:0.3];
+			if([fetcher isKindOfClass:[AccountFeedFetcher class]])
+			{
+				[[[UIApplication sharedApplication] delegate] updateSingleAccountFromScroll:[fetcher accountName] forCategory:nil];
+			}
+			else 
+			{
+				[self performSelector:@selector(stopLoading) withObject:nil afterDelay:0.3];
+			}
 		}
 	}
 }
-
+/*
 - (void) refreshButtonTouch:(id)sender
 {
 	UIBarButtonItem * button=(UIBarButtonItem*)sender;
@@ -741,7 +757,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 			[[[UIApplication sharedApplication] delegate] update];
 		}
 	}
-}
+}*/
 
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

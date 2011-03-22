@@ -12,6 +12,41 @@
 @implementation UpdatableViewController
 @synthesize activityIndicatorView,activityView,updatable;
 
+/*
+- (NSString*) shortDisplayDate:(NSDate*)date
+{
+	if(dateFormatter==nil)
+	{
+		dateFormatter = [[NSDateFormatter alloc] init];
+		[dateFormatter setDateFormat:@"MMM d"];
+	}
+	if(timeFormatter==nil)
+	{
+		timeFormatter = [[NSDateFormatter alloc] init];
+		[timeFormatter setDateFormat:@"h:mm a"];
+	}
+	
+	NSTimeInterval timeInterval = [date timeIntervalSinceNow];
+	
+	if(timeInterval>0.0)
+	{
+		return [timeFormatter stringFromDate:[NSDate date]];
+	}
+	else 
+	{
+		timeInterval=-timeInterval;
+		
+		if(timeInterval < 24*60*60)
+		{
+			return [timeFormatter stringFromDate:date];
+		}
+		else 
+		{
+			return [dateFormatter stringFromDate:date];
+		}
+	}
+}*/
+
 - (BOOL) isUpdating
 {
 	return updating;
@@ -140,6 +175,8 @@
 {
 	[activityIndicatorView release];
 	[activityView release];
+	//[dateFormatter release];
+	//[timeFormatter release];
     [super dealloc];
 }
 

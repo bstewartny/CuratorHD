@@ -42,7 +42,12 @@
   
 - (NSString*) getDefaultItemHTML:(FeedItem*)item
 {
-	NSString * html=[self getTemplateContents:@"FeedItemDocument"];
+	if(defaultItemTemplateContents==nil)
+	{
+		defaultItemTemplateContents=[[self getTemplateContents:@"FeedItemDocument"] retain];
+	}
+
+	NSString * html=defaultItemTemplateContents;//[self getTemplateContents:@"FeedItemDocument"];
 	
 	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{item.headline}}" withString:item.headline];
 	

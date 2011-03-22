@@ -20,6 +20,20 @@
     return self;
 }
 
+-(void) setHighlighted:(BOOL)highlighted animated:(BOOL)animated
+{
+	if(highlighted)
+	{
+		NSLog(@"setHighlighted:YES");
+		
+	}
+	else {
+		NSLog(@"setHighlighted:NO");
+	}
+
+	//self.imageView.highlighted=highlighted;
+	[super setHighlighted:highlighted animated:animated];
+}
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     
@@ -33,6 +47,7 @@
 		//self.backgroundView.alpha=1.0;
 		//self.backgroundColor=[UIColor clearColor];
 		self.textLabel.textColor=[UIColor lightGrayColor];
+		self.imageView.highlighted=NO;
 	}
 	else 
 	{
@@ -42,8 +57,14 @@
 		//self.backgroundColor=[UIColor blackColor];
 		self.textLabel.textColor=[UIColor whiteColor];
 		//self.layer.opacity=0.4;
+		self.imageView.highlighted=YES;
 	}
 
+	
+	
+	
+	
+	
 	[super setSelected:selected animated:animated];
     
     // Configure the view for the selected state.

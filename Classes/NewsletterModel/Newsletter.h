@@ -23,6 +23,7 @@
 @property(nonatomic,retain) NSString * summary;
 @property(nonatomic,retain) NSNumber * displayOrder;
 @property(nonatomic,retain) UIImage * image;
+
 @property(nonatomic,retain) NSNumber * isFavorite;
 
 @property(nonatomic,retain) Font * titleFont;

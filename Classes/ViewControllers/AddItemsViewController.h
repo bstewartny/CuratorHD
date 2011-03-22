@@ -14,6 +14,7 @@
 		ItemFetcher * newslettersFetcher;
 		ItemFetcher * foldersFetcher;
 		id delegate;
+		NSIndexPath * selectedIndexPath;
 	}
 	
 	@property(nonatomic,retain)IBOutlet UITableView * tableView;

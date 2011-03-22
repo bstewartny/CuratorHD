@@ -5,6 +5,7 @@
 	IBOutlet UITableView * tableView;
 	Newsletter * newsletter;
 	id delegate;
+	NSIndexPath * selectedIndexPath;
 }
 
 @property(nonatomic,retain)IBOutlet UITableView * tableView;

@@ -18,6 +18,8 @@
 	NSString * feedId;
 	UIImage	 * image;
 	NSString * feedCategory;
+	NSString * imageName;
+	NSString * highlightedImageName;
 }
 @property(nonatomic,retain) NSString * name;
 @property(nonatomic,retain) NSString * feedType;
@@ -26,6 +28,8 @@
 @property(nonatomic,retain) NSString * feedCategory;
 @property(nonatomic,retain) NSString * htmlUrl;
 @property(nonatomic,retain) NSString * feedId;
+@property(nonatomic,retain) NSString * imageName;
+@property(nonatomic,retain) NSString * highlightedImageName;
 
 - (void) save;
 - (void) delete;
@@ -39,6 +43,8 @@
 @property(nonatomic,retain) NSString * name;
 @property(nonatomic,retain) NSDate * lastUpdated;
 @property(nonatomic,retain) UIImage * image;
+@property(nonatomic,retain) NSString * imageName;
+@property(nonatomic,retain) NSString * highlightedImageName;
 @property(nonatomic,retain) NSString * summary;
 @property(nonatomic,retain) NSString * feedType;
 @property(nonatomic,retain) NSString * feedCategory;

@@ -138,9 +138,9 @@
 	
 	cell.textLabel.textColor=[UIColor whiteColor];
 	
-	NSString * value;
+	NSString * value=nil;
 	FontValue * fontValue;
-	int numValues;
+	int numValues=0;
 	
 	switch (indexPath.section) 
 	{
@@ -177,7 +177,7 @@
 	}
 	else 
 	{
-		if(indexPath.row==numValues-1)
+		if(indexPath.row==(numValues-1))
 		{
 			[cell.backgroundView setPosition:CustomCellBackgroundViewPositionBottom];
 		}

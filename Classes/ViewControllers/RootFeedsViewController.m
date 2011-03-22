@@ -288,10 +288,24 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		cell.accessoryType=UITableViewCellAccessoryNone;
 	}
 	
-	if(feed.image)
-	{
-		cell.imageView.image=feed.image;
-	}
+	//if(![feed isKindOfClass:[Newsletter class]])
+	//{
+	//	if(feed.imageName)
+	//	{
+	//		cell.imageView.image=[UIImage imageNamed:feed.imageName];
+	//		if(feed.highlightedImageName)
+	//		{
+	//			cell.imageView.highlightedImage=[UIImage imageNamed:feed.highlightedImageName];
+	//		}
+	//	}
+	//	else 
+	//	{
+			if(feed.image)
+			{
+				cell.imageView.image=feed.image;  
+			}
+	//	}
+	//}
 
 	if([feed isKindOfClass:[RssFeed class]])
 	{
@@ -308,19 +322,22 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	}
 	else 
 	{	
+		
 		if([feed isKindOfClass:[Newsletter class]])
 		{
-			int count=[feed itemCount];
 			[cell setBadgeString:[NSString stringWithFormat:@"%d",[feed itemCount]]];
-			cell.imageView.image=[UIImage imageNamed:@"32-newsletter.png"];
+		
+			cell.imageView.image=[UIImage imageNamed:@"gray_newsletter.png"];
+			cell.imageView.highlightedImage=[UIImage imageNamed:@"green_newsletter.png"];
 		}
 		else 
 		{
 			if([feed isKindOfClass:[Folder class]])
 			{
-				int count=[feed itemCount];
 				[cell setBadgeString:[NSString stringWithFormat:@"%d",[feed itemCount]]];
-				cell.imageView.image=[UIImage imageNamed:@"32-folderclosed.png"];
+				
+				cell.imageView.image=[UIImage imageNamed:@"gray_folderclosed.png"];
+				cell.imageView.highlightedImage=[UIImage imageNamed:@"green_folderopen.png"];
 			}
 		}
 	}

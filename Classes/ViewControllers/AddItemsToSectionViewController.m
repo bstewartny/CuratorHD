@@ -83,10 +83,6 @@
 	cell.textLabel.shadowColor=[UIColor blackColor];
 	cell.textLabel.shadowOffset=CGSizeMake(0, 1);
 	
-	
-	
-	
-	
 	if([sortedSections count]<=indexPath.row)
 	{
 		cell.textLabel.textColor=[UIColor lightGrayColor];
@@ -103,7 +99,18 @@
 		
 		[cell setBadgeString:[NSString stringWithFormat:@"%d",[section itemCount]]];
 		
-		cell.imageView.image=[UIImage imageNamed:@"32-folderopen.png"];
+		cell.imageView.image=[UIImage imageNamed:@"green_folderopen.png"];
+		cell.imageView.highlightedImage=[UIImage imageNamed:@"green_folderdoc.png"];
+		
+		// total hack, but dont know any other way to keep selection state when reloading a cell...
+		if(selectedIndexPath)
+		{
+			if(indexPath.section==selectedIndexPath.section &&
+			   indexPath.row==selectedIndexPath.row)
+			{
+				cell.imageView.image=[UIImage imageNamed:@"green_folderdoc.png"];
+			}
+		}
 	}
 }
 
@@ -196,6 +203,8 @@
 
 		[delegate addToSection:section];
 		
+		selectedIndexPath=[indexPath retain];
+		
 		[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 		
 		[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.5];
@@ -215,6 +224,7 @@
 
 - (void)dealloc {
 	[newsletter release];
+	[selectedIndexPath release];
 	[super dealloc];
 }
 

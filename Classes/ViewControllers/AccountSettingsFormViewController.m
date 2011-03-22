@@ -280,7 +280,7 @@
 	switch (section) 
 	{
 		case 0:
-			iv.image=[UIImage imageNamed:@"32-googlreader.png"];
+			iv.image=[UIImage imageNamed:@"gray_googlreader.png"];
 			l.text=@"Google Reader";
 			if(googleReaderStatusLabel)
 			{
@@ -291,7 +291,7 @@
 			googleReaderStatusLabel=[s retain];
 			break;
 		case 1:
-			iv.image=[UIImage imageNamed:@"32-twitter.png"];
+			iv.image=[UIImage imageNamed:@"gray_twitter.png"];
 			l.text=@"Twitter";
 			if(twitterStatusLabel)
 			{
@@ -302,7 +302,7 @@
 			twitterStatusLabel=[s retain];
 			break;
 		case 2:
-			iv.image=[UIImage imageNamed:@"32-infongen.png"];
+			iv.image=[UIImage imageNamed:@"gray_infongen.png"];
 			l.text=@"InfoNgen";
 			if(infoNgenStatusLabel)
 			{

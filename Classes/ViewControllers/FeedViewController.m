@@ -19,10 +19,8 @@
 #import "FastTweetTableViewCell.h"
 #import "AddItemsViewController.h"
 
-//#define REFRESH_HEADER_HEIGHT 60.0f
-
 @implementation FeedViewController
-@synthesize folderMode,fetcher,dateFormatter,itemDelegate,favoritesMode,editable;
+@synthesize folderMode,fetcher,itemDelegate,favoritesMode,editable;
 @synthesize  origTitle, navPopoverController;
 @synthesize twitter;
 
@@ -82,8 +80,6 @@
 				[alert show];
 				[alert release];
 				
-				//[self.fetcher performFetch];
-				//[tableView reloadData];
 			}
 		}
 	}
@@ -102,9 +98,6 @@
 				
 				[alert show];
 				[alert release];
-				
-				//[self.fetcher performFetch];
-				//[tableView reloadData];
 			}
 		}
 	}
@@ -166,6 +159,11 @@
 
 - (void) cancelOrganize
 {
+	if(editButton)
+	{
+		editButton.enabled=YES;
+	}
+	
 	self.navigationItem.title=self.origTitle;
 	
 	[self setOrganizeRightBarButtonItem];
@@ -203,6 +201,8 @@
 {
 	if([fetcher count]==0) return;
 	
+	editButton.enabled=NO;
+	
 	// enter edit mode and show message
 	self.origTitle=self.navigationItem.title;
 	
@@ -218,8 +218,6 @@
 	
 	AddItemsViewController * feedsView=[[AddItemsViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
 	feedsView.navigationItem.title=@"Add Selected Items";
-	//feedsView.title=@"Add Items";
-	//feedsView.navigationItem.title=@"Add Items";
 	
 	[feedsView setFoldersFetcher:foldersFetcher];
 	[feedsView setNewslettersFetcher:newslettersFetcher];
@@ -247,7 +245,10 @@
 	
 	[toolBarItems addObject:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease]];
 	
-	[toolBarItems addObject:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(organize:)] autorelease]];
+	[organizeButton release];
+	organizeButton=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(organize:)];
+	
+	[toolBarItems addObject:organizeButton];
 	
 	UIBarButtonItem * space=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil] autorelease];
 	space.width=20;
@@ -256,13 +257,13 @@
 	
 	if(editable)
 	{
-		UIBarButtonItem * editButton=[[UIBarButtonItem alloc] init];
+		[editButton release];
+		editButton=[[UIBarButtonItem alloc] init];
 		editButton.title=@"Edit";
 		editButton.target=self;
 		editButton.action=@selector(toggleEditMode:) ;
 		editButton.style = UIBarButtonItemStyleBordered;
 		[toolBarItems addObject:editButton];
-		[editButton release];
 	}
 	else 
 	{
@@ -282,31 +283,7 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad 
 {
-	
 	self.tableView.backgroundColor=[UIColor colorWithRed:(247.0/255.0) green:(247.0/255.0) blue:(247.0/255.0) alpha:1.0];
-	//self.view.backgroundColor=[UIColor lightGrayColor];
-	
-	//[self.tableView setBackgroundView:nil];
-	//[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
-	
-	//self.tableView.backgroundColor=[UIColor groupTableViewBackgroundColor];
-	
-	//CGRect f=self.tableView.frame;
-	//f.origin.x+=1;
-	//f.size.width-=1;
-	//self.tableView.frame=f;
-	
-	//self.parentViewController.view.clipsToBounds=NO;
-	//self.view.clipsToBounds=NO;
-	//self.tableView.clipsToBounds=NO;
-	
-	//self.view.clipsToBounds=NO;
-	//self.view.layer.shadowColor=[UIColor blackColor].CGColor;
-	//self.view.layer.shadowOpacity=0.8;
-	//self.view.layer.shadowRadius=8.0;
-	//self.view.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.tableView.layer.bounds].CGPath;
-	//self.tableView.layer.borderColor=[UIColor grayColor].CGColor;
-	//self.tableView.layer.borderWidth=1;
 	
 	[self setOrganizeRightBarButtonItem];
 	
@@ -354,74 +331,13 @@
 	 name:@"AccountUpdateFailed"
 	 object:nil];
 	
-	
 	[[NSNotificationCenter defaultCenter]
 	 addObserver:self
 	 selector:@selector(handleNotification:)
 	 name:@"UpdateFeedView"
 	 object:nil];
 	
-	NSDateFormatter *format = [[NSDateFormatter alloc] init];
-	[format setDateFormat:@"MMM d, yyyy h:mm a"];
-	self.dateFormatter=format;
-	[format release];
-	/*
-	NSMutableArray * toolbaritems=[[NSMutableArray alloc] init];
-	
-	refreshButton=[[UIBarButtonItem	alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshButtonTouch:)];
-	
-	[toolbaritems addObject:refreshButton];
-	
-	activityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
-    activityIndicatorView.activityIndicatorViewStyle=UIActivityIndicatorViewStyleGray;
-	
-	UIBarButtonItem * activityIndicatorItem=[[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
-	
-	[toolbaritems addObject:activityIndicatorItem];
-	
-	[activityIndicatorItem release];
-
-	UIBarButtonItem * spacer;
-	
-	statusLabel=[[UILabel alloc] init];
-	statusLabel.backgroundColor=[UIColor clearColor];
-	statusLabel.font=[UIFont systemFontOfSize:11];
-	statusLabel.textColor=[UIColor grayColor];
-	statusLabel.frame=CGRectMake(0, 0, 180, 20);
-	
-	UIBarButtonItem * statusLabelItem=[[UIBarButtonItem alloc] initWithCustomView:statusLabel];
-	
-	[toolbaritems addObject:statusLabelItem];
-	
-	[statusLabelItem release];
-	
-	spacer= [[UIBarButtonItem alloc]
-			 initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-	
-	[toolbaritems addObject:spacer];
-	[spacer release];
-	
-	if(editable)
-	{
-		UIBarButtonItem * editButton=[[UIBarButtonItem alloc] init];
-		editButton.title=@"Edit";
-		editButton.target=self;
-		editButton.action=@selector(toggleEditMode:) ;
-		editButton.style = UIBarButtonItemStyleBordered;
-		[toolbaritems addObject:editButton];
-		[editButton release];
-	}
-	else 
-	{
-		UIBarButtonItem * actionButton=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTouched:)];
-		[toolbaritems addObject:actionButton];
-		[actionButton release];
-	}
-
-	[self.toolbar setItems:toolbaritems];
-	
-	[toolbaritems release];
-	*/
+	 
 	
 	[fetcher performFetch];
 	
@@ -443,32 +359,6 @@
 {
 	// TODO
 }
-/*
-- (void)addPullToRefreshHeader 
-{
-	self.textPull=@"Pull down to refresh...";
-	self.textRelease=@"Release to refresh...";
-	self.textLoading=@"Loading new items...";
-	
-    refreshLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 0-REFRESH_HEADER_HEIGHT, 320-80, REFRESH_HEADER_HEIGHT)];
-    refreshLabel.backgroundColor = [UIColor clearColor];
-    refreshLabel.font = [UIFont boldSystemFontOfSize:14.0];
-	refreshLabel.textColor=[UIColor lightGrayColor];
-    refreshLabel.textAlignment = UITextAlignmentLeft;
-	
-    refreshArrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow_down.png"]];
-    refreshArrow.frame = CGRectMake(2,
-                                    ((REFRESH_HEADER_HEIGHT - 48) / 2)-REFRESH_HEADER_HEIGHT,
-                                    48, 48);
-	
-    refreshSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    refreshSpinner.frame = CGRectMake(16, ((REFRESH_HEADER_HEIGHT - 20) / 2)-REFRESH_HEADER_HEIGHT, 20, 20);
-    refreshSpinner.hidesWhenStopped = YES;
-	
-    [tableView addSubview:refreshLabel];
-    [tableView addSubview:refreshArrow];
-    [tableView addSubview:refreshSpinner];
-}*/  
 
 - (void) actionButtonTouched:(id)sender
 {
@@ -613,7 +503,6 @@
 
 - (IBAction) toggleEditMode:(id)sender
 {
-	
 	UIBarButtonItem * buttonItem=(UIBarButtonItem*)sender;
 	
 	if(self.tableView.editing)
@@ -623,6 +512,9 @@
 		buttonItem.style=UIBarButtonItemStyleBordered;
 		buttonItem.title=@"Edit";
 		editMode=NO;
+		
+		organizeButton.enabled=YES;
+		
 		[self.tableView reloadData];
 	}
 	else
@@ -630,6 +522,9 @@
 		if([fetcher count]>0)
 		{
 			editMode=YES;
+			
+			organizeButton.enabled=NO;
+			
 			[self.tableView setEditing:YES animated:YES];
 		
 			buttonItem.style=UIBarButtonItemStyleDone;
@@ -680,14 +575,9 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	}
 }
 
-
 - (void) redraw
 {
-	NSLog(@"redraw");
 	[self.tableView reloadData];
-	/*[[NSNotificationCenter defaultCenter] 
-	 postNotificationName:@"ReloadData"
-	 object:nil];*/
 }
 
 - (void) redraw:(FeedItem*)item
@@ -772,21 +662,10 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 	
 	cell.backgroundColor=[UIColor clearColor];
 	
-	//CustomCellBackgroundView * gbView=[[[CustomCellBackgroundView alloc] initWithFrame:CGRectZero] autorelease];
-	
-	//cell.backgroundView=gbView;
-	
-	//gbView.fillColor=[UIColor blackColor]; 
-	//gbView.borderColor=[UIColor grayColor];
-	
-	//cell.backgroundView.alpha=0.5;
-	
 	cell.textLabel.textColor=[UIColor lightGrayColor];
 	
 	cell.textLabel.textAlignment=UITextAlignmentCenter;
 
-	//[cell.backgroundView setPosition:CustomCellBackgroundViewPositionSingle];
-	
 	if(fetcher)
 	{
 		if(folderMode)
@@ -805,50 +684,7 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 
 	return cell;
 }
-/*
-- (UITableViewCell *) tweetCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
-{
-	static NSString * identifier=@"TweetItemCellIdentifier";
-	
-	TweetTableViewCell * cell=[tableView dequeueReusableCellWithIdentifier:identifier];
-	
-	if(cell==nil)
-	{
-		cell=[[[TweetTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier] autorelease];
-	}
-	
-	cell.selectionStyle=UITableViewCellSelectionStyleGray;
-	
-	if(item.image)
-	{
-		cell.itemImageView.image=item.image;
-	}
-	else 
-	{
-		cell.itemImageView.image=[UIImage imageNamed:@"profileplaceholder.png"];
-	}
 
-	cell.tweetLabel.text=item.headline;
-	cell.dateLabel.text=[item shortDisplayDate];
-	cell.sourceLabel.text=item.origin;
-	
-	return cell;
-}*/
-/*
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView 
-{
-	if (folderMode) {
-		return;
-	}
-    if (isLoading) 
-	{	
-		return;
-	}
-	else 
-	{
-		isDragging = YES;
-	}
-}*/
 - (UITableViewCell *) tweetCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
 {
 	static NSString * identifier=@"TweetItemCellIdentifier";
@@ -876,132 +712,6 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 
 	return cell;
 }
-/*
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-	
-	if(folderMode)
-	{
-		return;
-	}
-    if (isLoading) 
-	{
-        // Update the content inset, good for section headers
-        if (scrollView.contentOffset.y > 0)
-		{
-            self.tableView.contentInset = UIEdgeInsetsZero;
-        }
-		else if (scrollView.contentOffset.y >= -REFRESH_HEADER_HEIGHT)
-		{
-            self.tableView.contentInset = UIEdgeInsetsMake(-scrollView.contentOffset.y, 0, 0, 0);
-		}
-    } 
-	else 
-	{
-		if (isDragging && scrollView.contentOffset.y < 0) 
-		{
-			// Update the arrow direction and label
-			[UIView beginAnimations:nil context:NULL];
-			if (scrollView.contentOffset.y < -REFRESH_HEADER_HEIGHT) 
-			{
-				// User is scrolling above the header
-				refreshLabel.text = self.textRelease;
-				[refreshArrow layer].transform = CATransform3DMakeRotation(-M_PI, 0, 0, 1);
-			} 
-			else 
-			{ 
-				// User is scrolling somewhere within the header
-				refreshLabel.text = self.textPull;
-				[refreshArrow layer].transform = CATransform3DMakeRotation(-M_PI * 2, 0, 0, 1);
-			}
-			[UIView commitAnimations];
-		}
-		else 
-		{
-			if(scrollView.contentSize.height > tableView.frame.size.height)
-			{
-				if(scrollView.contentOffset.y > ((scrollView.contentSize.height - tableView.frame.size.height) + REFRESH_HEADER_HEIGHT))
-				{
-					[self backfill];
-				}
-			}
-			else 
-			{
-				if(scrollView.contentOffset.y > REFRESH_HEADER_HEIGHT)
-				{
-					[self backfill];
-				}
-			}
-		}
-	}
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if(!folderMode)
-	{
-	if (isLoading) 
-	{
-		return;
-	}
-    isDragging = NO;
-    if (scrollView.contentOffset.y <= -REFRESH_HEADER_HEIGHT) 
-	{
-        // Released above the header
-        [self startLoading];
-    }
-	}
-}
-
-- (void)startLoading 
-{
-    isLoading = YES;
-	
-    // Show the header
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.3];
-    self.tableView.contentInset = UIEdgeInsetsMake(REFRESH_HEADER_HEIGHT, 0, 0, 0);
-    refreshLabel.text = self.textLoading;
-    refreshArrow.hidden = YES;
-    [refreshSpinner startAnimating];
-    [UIView commitAnimations];
-	
-    // Refresh action!
-    //[self refresh];
-	[self performSelector:@selector(refresh) withObject:nil afterDelay:0.1];
-}
-
-- (void)stopLoading 
-{	
-	if(isLoading)
-	{
-		isLoading = NO;
-		
-		@try 
-		{
-			// Hide the header
-			[UIView beginAnimations:nil context:NULL];
-			[UIView setAnimationDelegate:self];
-			[UIView setAnimationDuration:0.3];
-			[UIView setAnimationDidStopSelector:@selector(stopLoadingComplete:finished:context:)];
-			[self.tableView setContentInset:UIEdgeInsetsMake(0, 0, 0, 0)];
-			//self.tableView.contentInset = UIEdgeInsetsZero;
-			[refreshArrow layer].transform = CATransform3DMakeRotation(M_PI * 2, 0, 0, 1);
-			[UIView commitAnimations];
-		}
-		@catch (NSException * e) 
-		{
-		}
-		@finally 
-		{
-		}
-	}
-}
-
-- (void)stopLoadingComplete:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
-    // Reset the header
-    refreshLabel.text = self.textPull;
-    refreshArrow.hidden = NO;
-    [refreshSpinner stopAnimating];
-}*/
 
 - (void)refresh 
 {
@@ -1031,7 +741,7 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 		{
 			NSLog(@"updating single category");
 			// for now update entire account because it is simpler (we still may need to implement per-category at some point)
-			[[[UIApplication sharedApplication] delegate] updateSingleAccountFromScroll:[fetcher accountName]];
+			[[[UIApplication sharedApplication] delegate] updateSingleAccountFromScroll:[fetcher accountName] forCategory:[fetcher feedCategory]];
 			
 			return;
 		}
@@ -1039,7 +749,7 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 		if([fetcher isKindOfClass:[AccountItemFetcher class]])
 		{
 			NSLog(@"updating single account");
-			[[[UIApplication sharedApplication] delegate] updateSingleAccountFromScroll:[fetcher accountName]];
+			[[[UIApplication sharedApplication] delegate] updateSingleAccountFromScroll:[fetcher accountName] forCategory:nil];
 			return;
 		}
 		else 
@@ -1064,9 +774,16 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 	}
 	else 
 	{
-		if([fetcher isKindOfClass:[AccountItemFetcher class]])
+		if([fetcher isKindOfClass:[CategoryItemFetcher class]])
 		{
-			[[[UIApplication sharedApplication] delegate] updateSingleAccountFromScroll:[fetcher accountName]];
+			[[[UIApplication sharedApplication] delegate] updateSingleAccountFromScroll:[fetcher accountName] forCategory:[fetcher feedCategory]];
+		}
+		else 
+		{
+			if([fetcher isKindOfClass:[AccountItemFetcher class]])
+			{
+				[[[UIApplication sharedApplication] delegate] updateSingleAccountFromScroll:[fetcher accountName] forCategory:nil];
+			}
 		}
 	}
 }
@@ -1115,7 +832,6 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 	{
 		if([[item synopsis] length]==0)
 		{
-			//item.synopsis=[stripper stripMarkup:[item origSynopsis]];
 			// faster to just strip up to what we need to display...
 			item.synopsis=[stripper stripMarkupSummary:[item origSynopsis] maxLength: 300];
 		}
@@ -1157,39 +873,11 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 		return 3;
 	}
 }
-
-- (void) refreshButtonTouch:(id)sender
-{
-	UIBarButtonItem * button=(UIBarButtonItem*)sender;
-	
-	if([[[UIApplication sharedApplication] delegate] isUpdating])
-	{
-		[[[UIApplication sharedApplication] delegate] cancelUpdate];
-	}
-	else 
-	{
-		if([fetcher isKindOfClass:[FeedItemFetcher class]])
-		{
-			[[[UIApplication sharedApplication] delegate] updateSingle:[fetcher feed]];
-		}
-		else 
-		{
-			if([fetcher isKindOfClass:[AccountItemFetcher class]])
-			{
-				[[[UIApplication sharedApplication] delegate] updateSingleAccount:[fetcher accountName]];
-			}
-			else 
-			{
-				[[[UIApplication sharedApplication] delegate] update];
-			}
-		}
-	}
-}
-
 - (void)dealloc {
 	[origTitle release];
 	[fetcher release];
-	[dateFormatter release];
+	[organizeButton release];
+	[editButton release];
 	[navPopoverController release];
 	[stripper release];
     [super dealloc];

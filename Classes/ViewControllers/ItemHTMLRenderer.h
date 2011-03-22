@@ -17,6 +17,7 @@
 	int maxSynopsisSize;
 	BOOL includeSynopsis;
 	BOOL useOriginalSynopsis;
+	NSDateFormatter * format;
 }
 @property(nonatomic,retain) Newsletter * newsletter;
 @property(nonatomic) BOOL embedImageData;

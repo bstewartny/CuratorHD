@@ -17,20 +17,20 @@
 
 - (NSString*) applyDefaultStyles:(NSString*)html
 {
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{titleStyle}}" withString:[[[[Font alloc] initWithFamily:@"Arial" weight:@"bold" style:@"normal" size:@"x-large" color:@"black"] autorelease] cssStyle]];
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{titleStyle}}" withString:@"font-family:Arial; font-style:bold; font-weight:normal; font-size:x-large; color:black; "];
 	
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{summaryStyle}}" withString:[[[[Font alloc] initWithFamily:@"Georgia" weight:@"normal" style:@"normal" size:@"medium" color:@"grey"] autorelease] cssStyle]];
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{summaryStyle}}" withString:@"font-family:Georgia; font-style:normal; font-weight:normal; font-size:medium; color:grey; "];
 	
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{headlineStyle}}" withString:[[[[Font alloc] initWithFamily:@"Arial" weight:@"bold" style:@"normal" size:@"x-large" color:@"black"] autorelease] cssStyle]];
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{headlineStyle}}" withString:@"font-family:Arial; font-style:bold; font-weight:normal; font-size:x-large; color:black; "];
 	
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{sectionStyle}}" withString:[[[[Font alloc] initWithFamily:@"Arial" weight:@"bold" style:@"normal" size:@"large" color:@"black"] autorelease] cssStyle]];
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{sectionStyle}}" withString:@"font-family:Arial; font-style:bold; font-weight:normal; font-size:large; color:black; "];
 	
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{commentsStyle}}" withString:[[[[Font alloc] initWithFamily:@"Arial" weight:@"bold" style:@"italic" size:@"medium" color:@"red"] autorelease] cssStyle]];
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{commentsStyle}}" withString:@"font-family:Arial; font-style:bold; font-weight:italic; font-size:medium; color:red; "];
 	
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{bodyStyle}}" withString:[[[[Font alloc] initWithFamily:@"Arial" weight:@"normal" style:@"normal" size:@"large" color:@"black"] autorelease] cssStyle]];
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{bodyStyle}}" withString:@"font-family:Arial; font-style:normal; font-weight:normal; font-size:normal; color:black; "];
 	
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{dateStyle}}" withString:[[[[Font alloc] initWithFamily:@"Arial" weight:@"normal" style:@"normal" size:@"medium" color:@"grey"] autorelease] cssStyle]];
-
+	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{dateStyle}}" withString:@"font-family:Arial; font-style:normal; font-weight:normal; font-size:medium; color:grey; "];
+	
 	return html;
 }
 
@@ -75,6 +75,7 @@
 {
 	[newsletter release];
 	newsletter=nil;
+	[format release];
 	[super dealloc];
 }
 - (id)initWithMaxSynopsisSize:(int)maxSynopsisSize includeSynopsis:(BOOL)includeSynopsis useOriginalSynopsis:(BOOL)useOriginalSynopsis embedImageData:(BOOL)embedImageData
@@ -85,6 +86,12 @@
 		self.includeSynopsis=includeSynopsis;
 		self.embedImageData=embedImageData;
 		self.useOriginalSynopsis=useOriginalSynopsis;
+		
+		format = [[NSDateFormatter alloc] init];
+		[format setDateFormat:@"MMM d, yyyy h:mm a"];
+
+		
+		
 	}
 	return self;
 }
@@ -529,10 +536,10 @@
 }
 - (NSString*) formatDate:(NSDate*)date
 {
-	NSDateFormatter *format = [[NSDateFormatter alloc] init];
-	[format setDateFormat:@"MMM d, yyyy h:mm a"];
+	//NSDateFormatter *format = [[NSDateFormatter alloc] init];
+	//[format setDateFormat:@"MMM d, yyyy h:mm a"];
 	NSString * dateString=[format stringFromDate:date];
-	[format release];
+	//[format release];
 	return dateString;
 }
 

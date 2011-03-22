@@ -30,13 +30,24 @@
 	}
 }
 
-+ (NSDate*) maxDateWithAccountName:(NSString*)accountName withManagedObjectContext:(NSManagedObjectContext*)moc
++ (NSDate*) maxDateWithAccountName:(NSString*)accountName forCategory:(NSString*)category withManagedObjectContext:(NSManagedObjectContext*)moc
 {
 	NSFetchRequest *request = [[NSFetchRequest alloc] init];
 	
 	[request setEntity:[NSEntityDescription entityForName:@"RssFeedItem" inManagedObjectContext:moc]];
 	
-	[request setPredicate:[NSPredicate predicateWithFormat:@"feed.account.name==%@",accountName]];
+	if(category)
+	{
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:
+								  @"feed.account.name == %@ AND feed.feedCategory CONTAINS %@", accountName,[NSString stringWithFormat:@"|%@|",category]];
+		
+		[request setPredicate:predicate];
+	}
+	else 
+	{
+		[request setPredicate:[NSPredicate predicateWithFormat:@"feed.account.name==%@",accountName]];
+	}
+
 	
 	[request setFetchBatchSize:0];
 	[request setFetchLimit:1];
@@ -67,7 +78,7 @@
 
 - (NSDate*) maxDate
 {
-	return [RssFeed maxDateWithAccountName:self.account.name withManagedObjectContext:[self managedObjectContext]];
+	return [RssFeed maxDateWithAccountName:self.account.name forCategory:nil withManagedObjectContext:[self managedObjectContext]];
 }
 
 - (NSNumber *) currentUnreadCount
@@ -198,12 +209,12 @@
 
 - (void) updateUnreadCount
 {
-	NSLog(@"RssFeed.updateUnreadCount");
+	//NSLog(@"RssFeed.updateUnreadCount");
 	// get number of items with isRead=NO from this feed...
 	
 	int count=[self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(isRead==0) AND (feed==%@)",self]];
 	
-	NSLog(@"Got %d as unread count for feed",count);
+	//NSLog(@"Got %d as unread count for feed",count);
 	
 	if(count!=[self.unreadCount intValue])
 	{

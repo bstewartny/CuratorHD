@@ -50,7 +50,9 @@
 	feed.name=@"Twitter Timeline";
 	feed.feedType=@"02TwitterFeed";
 	feed.feedCategory=@"_twitter_friends";
-	feed.image=[UIImage imageNamed:@"32-twitter.png"];
+	feed.image=[UIImage imageNamed:@"gray_twitter.png"];
+	feed.imageName=@"gray_twitter.png";
+	feed.highlightedImageName=@"green_twitter.png";
 	
 	[feeds addObject:feed];
 	
@@ -62,6 +64,7 @@
 	feed.feedType=@"03TwitterFeed";
 	feed.feedCategory=@"_twitter_favorites";
 	feed.image=[UIImage imageNamed:@"starred.png"];
+	feed.imageName=@"starred.png";
 	
 	[feeds addObject:feed];
 	
@@ -82,6 +85,7 @@
 	feed.feedType=@"04TwitterFeed";
 	feed.feedCategory=@"_twitter_mentions";
 	feed.image=[UIImage imageNamed:@"person_icon.gif"];
+	feed.imageName=@"person_icon.gif";
 	
 	[feeds addObject:feed];
 	
@@ -93,6 +97,7 @@
 	feed.feedType=@"05TwitterFeed";
 	feed.feedCategory=@"_twitter_direct";
 	feed.image=[UIImage imageNamed:@"letter_icon.gif"];
+	feed.imageName=@"letter_icon.gif";
 	
 	[feeds addObject:feed];
 	
@@ -125,7 +130,9 @@
 		
 		feed.feedCategory=@"_twitter_list";
 		ordinal++;
-		feed.image=[UIImage imageNamed:@"32-folderclosed.png"];
+		feed.image=[UIImage imageNamed:@"gray_folderclosed.png"];
+		feed.imageName=@"gray_folderclosed.png";
+		feed.highlightedImageName=@"green_folderopen.png";
 		
 		[feeds addObject:feed];
 		
@@ -193,6 +200,9 @@
 			{
 				existingFeed.name=[feed name];
 				existingFeed.image=[feed image];
+				existingFeed.imageName=[feed imageName];
+				existingFeed.highlightedImageName=[feed highlightedImageName];
+				
 				existingFeed.htmlUrl=[feed htmlUrl];
 				existingFeed.feedId=[feed feedId];
 				existingFeed.feedType=[feed feedType];
@@ -216,6 +226,9 @@
 			
 			newFeed.url=[feed url];
 			newFeed.image=[feed image];
+			newFeed.imageName=[feed imageName];
+			newFeed.highlightedImageName=[feed highlightedImageName];
+			
 			newFeed.htmlUrl=[feed htmlUrl];
 			newFeed.feedId=[feed feedId];
 			

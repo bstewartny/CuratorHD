@@ -13,10 +13,14 @@
 	UIView * activityView;
 	UIActivityIndicatorView * activityIndicatorView;
 	BOOL updatable;
+	//NSDateFormatter * dateFormatter;
+	//NSDateFormatter * timeFormatter;
 }
 @property(nonatomic,retain) UIActivityIndicatorView * activityIndicatorView;
 @property(nonatomic,retain) UIView * activityView;
 @property(nonatomic) BOOL updatable;
+
+//- (NSString*) shortDisplayDate;
 - (BOOL) isUpdating;
 - (IBAction) update;
 - (void) doUpdate;

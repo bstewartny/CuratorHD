@@ -154,25 +154,32 @@
 		
 		cell.textLabel.text=feed.name;
 		
+		[cell setBadgeString:[NSString stringWithFormat:@"%d",[feed itemCount]]];
+		
 		if([feed isKindOfClass:[Folder class]])
 		{
-			cell.imageView.image=[UIImage imageNamed:@"32-folderopen.png"];
-			int count=[feed itemCount];
-			[cell setBadgeString:[NSString stringWithFormat:@"%d",count ]];
-			//[cell setBadgeString:[NSString stringWithFormat:@"%d",[[feed currentUnreadCount] intValue]]];
+			cell.imageView.image=[UIImage imageNamed:@"green_folderopen.png"];
+			cell.imageView.highlightedImage=[UIImage imageNamed:@"green_folderdoc.png"];
+			
+			// total hack, but dont know any other way to keep selection state when reloading a cell...
+			if(selectedIndexPath)
+			{
+				if(indexPath.section==selectedIndexPath.section &&
+				   indexPath.row==selectedIndexPath.row)
+				{
+					cell.imageView.image=[UIImage imageNamed:@"green_folderdoc.png"];
+					
+				}
+			}
 			
 		}
-		if([feed isKindOfClass:[Newsletter class]])
+		else 
 		{
-			cell.imageView.image=[UIImage imageNamed:@"32-newsletter.png"];
-			
-			int count=[feed itemCount];
-			/*for(NewsletterSection * section in [feed sections])
+			if([feed isKindOfClass:[Newsletter class]])
 			{
-				count+=[[section items] count];
-			}*/
-			[cell setBadgeString:[NSString stringWithFormat:@"%d",count]];
-			cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+				cell.imageView.image=[UIImage imageNamed:@"green_newsletter.png"];
+				cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+			}
 		}
 	}
 }
@@ -310,6 +317,9 @@
 			[delegate addToFolder:feed];
 			
 			[self.foldersFetcher performFetch];
+			
+			selectedIndexPath=[indexPath retain];
+			
 			[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 			
 			[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.5];
@@ -341,6 +351,7 @@
 }
 
 - (void)dealloc {
+	[selectedIndexPath release];
 	[tableView release];
 	[newslettersFetcher release];
 	[foldersFetcher release];

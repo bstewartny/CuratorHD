@@ -32,9 +32,9 @@
 	return self;
 }
 
-- (void) willUpdateFeeds:(NSManagedObjectContext*)moc
+- (void) willUpdateFeeds:(NSManagedObjectContext*)moc forCategory:(NSString*)category
 {
-	[self fillReadingListFeedCache:moc];
+	[self fillReadingListFeedCache:moc forCategory:category];
 }
 
 - (BOOL) isAccountValid
@@ -57,7 +57,10 @@
 	feed.name=@"All Google Reader Items";
 	feed.feedType=@"01GoogleFeed";
 	feed.feedCategory=@"_all";
-	feed.image=[UIImage imageNamed:@"32-googlreader.png"];
+	feed.image=[UIImage imageNamed:@"gray_googlreader.png"];
+	feed.imageName=@"gray_googlreader.png";
+	feed.highlightedImageName=@"green_googlreader.png";
+	
 	
 	[feeds addObject:feed];
 	
@@ -69,6 +72,7 @@
 	feed.feedType=@"02GoogleFeed";
 	feed.feedCategory=@"_starred";
 	feed.image=[UIImage imageNamed:@"28-star.png"];
+	feed.imageName=@"28-star.png";
 	
 	[feeds addObject:feed];
 	
@@ -81,6 +85,7 @@
 	feed.feedType=@"03GoogleFeed";
 	feed.feedCategory=@"_shared";
 	feed.image=[UIImage imageNamed:@"yourshared.gif"];
+	feed.imageName=@"yourshared.gif";
 	
 	[feeds addObject:feed];
 	
@@ -93,6 +98,7 @@
 	feed.feedType=@"04GoogleFeed";
 	feed.feedCategory=@"_notes";
 	feed.image=[UIImage imageNamed:@"notes.png"];
+	feed.imageName=@"notes.png";
 	
 	[feeds addObject:feed];
 	
@@ -105,6 +111,7 @@
 	feed.feedType=@"05GoogleFeed";
 	feed.feedCategory=@"_shared";
 	feed.image=[UIImage imageNamed:@"shared.gif"];
+	feed.imageName=@"shared.gif";
 	
 	[feeds addObject:feed];
 	
@@ -132,8 +139,10 @@
 
 		feed.feedCategory=@"_category";
 		ordinal++;
-		feed.image=[UIImage imageNamed:@"32-folderclosed.png"];
-	
+		feed.image=[UIImage imageNamed:@"gray_folderclosed.png"];
+		feed.imageName=@"gray_folderclosed.png";
+		feed.highlightedImageName=@"green_folderopen.png";
+		
 		[feeds addObject:feed];
 		
 		[feed release];
@@ -146,7 +155,9 @@
 		feed.feedType=@"0"; // for sorting...
 		feed.feedCategory=[NSString stringWithFormat:@"|%@|",tag];
 		
-		feed.image=[UIImage imageNamed:@"32-folderclosed.png"];
+		feed.image=[UIImage imageNamed:@"gray_folderclosed.png"];
+		feed.imageName=@"gray_folderclosed.png";
+		feed.highlightedImageName=@"green_folderopen.png";
 		
 		[feeds addObject:feed];
 		
@@ -165,7 +176,7 @@
 	return feeds;
 }
 
-- (void) fillReadingListFeedCache:(NSManagedObjectContext*)moc
+- (void) fillReadingListFeedCache:(NSManagedObjectContext*)moc forCategory:(NSString*)category
 {	
 	[readingListFeedCache release];
 	
@@ -176,7 +187,16 @@
 	
 	TempFeed * readingListFeed=[[TempFeed alloc] init];
 	
-	readingListFeed.url=[client getUrlForType:GoogleReaderFeedTypeAllItems tag:nil];
+	if(category)
+	{
+		readingListFeed.url=[client getUrlForType:GoogleReaderFeedTypeTaggedItems tag:category];
+	}
+	else 
+	{
+		readingListFeed.url=[client getUrlForType:GoogleReaderFeedTypeAllItems tag:nil];
+	}
+
+	//readingListFeed.url=[client getUrlForType:GoogleReaderFeedTypeAllItems tag:nil];
 	
 	// we only want new unread items
 	int localItemCount=[self numberOfItemsForAccount:moc];
@@ -208,7 +228,7 @@
 	
 	readingListFeed.name=@"AllItems";
 	
-	NSDate * minDate=[RssFeed maxDateWithAccountName:self.account.name withManagedObjectContext:moc];
+	NSDate * minDate=[RssFeed maxDateWithAccountName:self.account.name forCategory:category withManagedObjectContext:moc];
 	
 	NSArray * items=[self getMostRecentReaderItems:readingListFeed maxItems:max minDate:minDate];
 	
@@ -315,7 +335,9 @@
 		// no such folder, create it...
 		readLaterFolder=[Folder createInContext:moc];
 		readLaterFolder.name=@"Read Later";
-		readLaterFolder.image=[UIImage imageNamed:@"32-folderclosed.png"];
+		readLaterFolder.image=[UIImage imageNamed:@"gray_folderclosed.png"];
+		readLaterFolder.imageName=@"gray_folderclosed.png";
+		readLaterFolder.highlightedImageName=@"green_folderopen.png";
 		[readLaterFolder save];
 	}
 	
@@ -495,6 +517,8 @@
 				{
 					existingFeed.image=feed.image;
 				}
+				existingFeed.imageName=feed.imageName;
+				existingFeed.highlightedImageName=feed.highlightedImageName;
 				existingFeed.htmlUrl=[feed htmlUrl];
 				existingFeed.feedId=[feed feedId];
 				existingFeed.feedType=[feed feedType];
@@ -516,6 +540,8 @@
 			
 			newFeed.url=[feed url];
 			newFeed.image=[feed image];
+			newFeed.imageName=[feed imageName];
+			newFeed.highlightedImageName=[feed highlightedImageName];
 			
 			if(newFeed.image==nil)
 			{
@@ -934,7 +960,7 @@
 							
 							if (notes && [notes length]>0) 
 							{
-								tmp.notes=[stripper stripMarkup:notes]; //[notes flattenHTML];
+								tmp.notes=[stripper stripMarkup:notes];  
 							}
 						}
 					//}

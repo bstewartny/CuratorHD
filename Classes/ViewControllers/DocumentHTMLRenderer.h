@@ -16,6 +16,7 @@
 
 @interface FeedItemHTMLRenderer:ItemHTMLRenderer
 {
+	NSString * defaultItemTemplateContents;
 }
 
 @end

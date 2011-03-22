@@ -21,7 +21,7 @@ static UIFont * commentsFont;
 	
 	[super drawContentView:r];
 	
-	CGContextRef context = UIGraphicsGetCurrentContext();
+	//CGContextRef context = UIGraphicsGetCurrentContext();
 	UIColor *commentsColor;
 	UIColor *sourceColor;
 	if(self.selected)

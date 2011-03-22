@@ -32,7 +32,7 @@
 //- (int) numIterations;
 //- (int) maxItemsForIteration:(int)iteration;
 
-- (void) willUpdateFeeds:(NSManagedObjectContext*)moc;
+- (void) willUpdateFeeds:(NSManagedObjectContext*)moc forCategory:(NSString*)category;
 - (BOOL) isAccountValid;
 
 - (void) authorize;

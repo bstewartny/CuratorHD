@@ -53,6 +53,7 @@
 @class FeedViewController;
 @class Folder;
 @class FeedAccount; 
+@class CategoryFeedFetcher;
 
 //@class MGSplitViewController;
 @interface AppDelegate : NSObject <UIApplicationDelegate,MGSplitViewControllerDelegate> 

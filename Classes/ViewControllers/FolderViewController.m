@@ -76,25 +76,6 @@
 	return cell;
 }
 
-/*- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	if(tableView.editing)
-	{
-		[super tableView:tableView didSelectRowAtIndexPath:indexPath];
-	}
-	else
-	{
-		if([fetcher count]>0)
-		{
-			
-			[itemDelegate showItemHtml:indexPath.row itemFetcher:fetcher allowComments:YES];
-			
-			
-			 
-		}
-	}
-}*/
-
 - (UITableViewCell *) tweetCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
 {
 	static NSString * identifier=@"TweetItemCellIdentifier";
@@ -125,35 +106,5 @@
 	return cell;
 }
 
-/*
-- (UITableViewCell *) tweetCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
-{
-	static NSString * identifier=@"TweetItemCellIdentifier";
-	
-	FolderTweetTableViewCell * cell=[tableView dequeueReusableCellWithIdentifier:identifier];
-	
-	if(cell==nil)
-	{
-		cell=[[[FolderTweetTableViewCell alloc] initWithReuseIdentifier:identifier] autorelease];
-	}
-	
-	if(tableView.editing)
-	{
-		cell.selectionStyle=3;
-	}
-	else 
-	{
-		cell.selectionStyle=UITableViewCellSelectionStyleNone;
-	}
-	
-	cell.item=item;
-	
-	cell.sourceLabel.text=item.origin;
-	cell.dateLabel.text=[item shortDisplayDate];
-	cell.headlineLabel.text=item.headline;
-	cell.commentLabel.text=item.notes;  
-	
-	return cell;
-}*/
 
 @end

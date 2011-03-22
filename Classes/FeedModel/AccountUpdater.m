@@ -18,7 +18,7 @@
 	return self;
 }
 
-- (void) willUpdateFeeds:(NSManagedObjectContext*)moc
+- (void) willUpdateFeeds:(NSManagedObjectContext*)moc  forCategory:(NSString*)category
 {
 }
 

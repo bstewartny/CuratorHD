@@ -59,14 +59,11 @@
 
 - (void) renderItem
 {
-	NSLog(@"renderItem");
 	[self renderItemAnimated:NO swipeDirection:nil];
 }
 
 - (void) renderItemAnimated:(BOOL)animated swipeDirection:(NSString*)transitionDirection;
 {
-	NSLog(@"renderItemAnimated");
-	
 	int count=[fetcher count];
 	
 	sharingText=NO;
@@ -82,17 +79,38 @@
 		itemIndex=0;
 	}
 
+	// if we modified comments on previous item, save comments...
+	if(item)
+	{
+		if(allowComments)
+		{
+			if([item.notes length]>0)
+			{
+				if(![item.notes isEqualToString:self.commentTextView.text])
+				{
+					item.notes=self.commentTextView.text;
+					[item save];
+				}
+			}
+			else 
+			{
+				if([self.commentTextView.text length]>0)
+				{
+					item.notes=self.commentTextView.text;
+					[item save];
+				}
+			}
+
+		}
+	}
+	
+	
 	if(count>0)
 	{
 		FeedItem * tmp_item=[fetcher itemAtIndex:itemIndex];
 	
 		[tmp_item markAsRead];
 		
-		// send notification to refresh unread count in feeds view...
-		//[[NSNotificationCenter defaultCenter] 
-		// postNotificationName:@"ReloadData"
-		// object:nil];
-	
 		self.item=tmp_item;
 	}
 	else 
@@ -131,11 +149,14 @@
 	
 	if(tmpWebView)
 	{
+		NSLog(@"tmpWebView!=null, remove and stop...");
 		if(tmpWebView.superview)
 		{
+			NSLog(@"stop tmpWebView and remove from superview");
 			[self removeSwipeGesturesFromWebView:tmpWebView];
 			[tmpWebView stopLoading];
 			[tmpWebView removeFromSuperview];
+			// TODO: release and set to nil here???
 		}
 	}
 	
@@ -166,10 +187,11 @@
 		if([transitionDirection isEqualToString:kCATransitionFromRight])
 		{
 			// go next
-			//
+			
 			[contentView bringSubviewToFront:nextWebView];
 			
 			[[contentView layer] addAnimation:animation forKey:@"myanimationkey"];
+			
 			id tmp=prevWebView;
 			
 			prevWebView=webView;
@@ -181,16 +203,14 @@
 			
 			webViewToClear=nextWebView;
 			
-			[nextWebView loadHTMLString:@"<html><body></body></html>" baseURL:baseUrl];
-			
 			[webView setNeedsDisplay];
-			//[nextWebView setNeedsDisplay];
 		}
 		else 
 		{
 			// go prev
-			//
+			
 			[contentView bringSubviewToFront:prevWebView];
+			
 			[[contentView layer] addAnimation:animation forKey:@"myanimationkey"];
 		
 			id tmp=nextWebView;
@@ -203,10 +223,8 @@
 			prevWebView=tmp;
 			
 			webViewToClear=prevWebView;
-			//[prevWebView loadHTMLString:@"<html><body></body></html>" baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
 			
 			[webView setNeedsDisplay];
-			//[prevWebView setNeedsDisplay];
 		}
 
 		[CATransaction commit];
@@ -396,6 +414,8 @@
 {
 	[super viewDidLoad];
 	
+	renderer=[[FeedItemHTMLRenderer alloc ]init];
+	
 	webView=[[UIWebView alloc] init];
 	webView.delegate=self;
 	webView.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
@@ -414,10 +434,6 @@
 	nextWebView.frame=self.contentView.bounds;
 	[self.contentView addSubview:nextWebView];
 	
-	webView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
-	prevWebView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
-	nextWebView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
-	
 	contentView.contentMode=UIViewContentModeRedraw;
 	
 	[contentView setNeedsLayout];
@@ -430,23 +446,15 @@
 	[contentView bringSubviewToFront:webView];
 
 	// use swipes left and right to navigate up/down through feed items...
-	if(![webView isEqual:tmpWebView])
-	{
-		[self attacheSwipeGesturesToWebView:webView];
-		[self attacheLongPressGestureToWebView:webView];
-	}
 	
-	if(![prevWebView isEqual:tmpWebView])
-	{
-		[self attacheSwipeGesturesToWebView:prevWebView];
-		[self attacheLongPressGestureToWebView:prevWebView];
-	}
+	[self attacheSwipeGesturesToWebView:webView];
+	[self attacheLongPressGestureToWebView:webView];
 	
-	if(![nextWebView isEqual:tmpWebView])
-	{
-		[self attacheSwipeGesturesToWebView:nextWebView];
-		[self attacheLongPressGestureToWebView:nextWebView];
-	}
+	[self attacheSwipeGesturesToWebView:prevWebView];
+	[self attacheLongPressGestureToWebView:prevWebView];
+	
+	[self attacheSwipeGesturesToWebView:nextWebView];
+	[self attacheLongPressGestureToWebView:nextWebView];
 }
 
 - (void) setupToolbar
@@ -648,8 +656,6 @@
 			
 			if([src length]>0)
 			{
-				NSLog(@"image src=%@",src);
-				
 				self.selectedImageSource=src;
 				
 				self.selectedImageLink=href;
@@ -1121,7 +1127,7 @@
 				else 
 				{
 					// alert to user there is no email support
-					UIAlertView * alertView=[[UIAlertView alloc] initWithTitle:@"Cannot send mail" message:@"Curator HD cannot send mail at this time.  Please verify mail settings on your iPad." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+					UIAlertView * alertView=[[UIAlertView alloc] initWithTitle:@"Cannot send mail" message:@"Cannot send mail at this time." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 					[alertView show];
 					[alertView release];
 				}
@@ -1201,7 +1207,7 @@
 					else 
 					{
 						// alert to user there is no email support
-						UIAlertView * alertView=[[UIAlertView alloc] initWithTitle:@"Cannot send mail" message:@"Curator HD cannot send mail at this time.  Please verify mail settings on your iPad." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+						UIAlertView * alertView=[[UIAlertView alloc] initWithTitle:@"Cannot send mail" message:@"Cannot send mail at this time." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 						[alertView show];
 						[alertView release];
 					}
@@ -1282,7 +1288,7 @@
 					else 
 					{
 						// alert to user there is no email support
-						UIAlertView * alertView=[[UIAlertView alloc] initWithTitle:@"Cannot send mail" message:@"Curator HD cannot send mail at this time.  Please verify mail settings on your iPad." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+						UIAlertView * alertView=[[UIAlertView alloc] initWithTitle:@"Cannot send mail" message:@"Cannot send mail at this time." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 						[alertView show];
 						[alertView release];
 					}
@@ -1464,18 +1470,14 @@
 
 - (void) viewDidAppear:(BOOL)animated
 {
-	NSLog(@"viewDidAppear");
 	[super viewDidAppear:animated];
 	[self renderItem];
 }
 
 - (NSString*) getHtml:(FeedItem*)item 
 {
-	NSLog(@"getHtml");
-	
 	if(item==nil) return @"";
 	
-	FeedItemHTMLRenderer * renderer=[[[FeedItemHTMLRenderer alloc ]init] autorelease];
 	return [renderer getItemHTML:item];
 }
  
@@ -1489,7 +1491,6 @@
 //Sent before a web view begins loading content.
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-	NSLog(@"shouldStartLoadWithRequest");
 	if ([request.URL.scheme isEqualToString:@"mailto"]) 
 	{
 		// make sure this device is setup to send email
@@ -1520,7 +1521,7 @@
 		else 
 		{
 			// alert to user there is no email support
-			UIAlertView * alertView=[[UIAlertView alloc] initWithTitle:@"Cannot send mail" message:@"Curator HD cannot send mail at this time.  Please verify mail settings on your iPad." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+			UIAlertView * alertView=[[UIAlertView alloc] initWithTitle:@"Cannot send mail" message:@"Cannot send mail at this time." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
 			[alertView show];
 			[alertView release];
 		}
@@ -1554,9 +1555,7 @@
 			
 			tmpWebView=[[UIWebView alloc] init];
 			tmpWebView.frame=webView.frame;
-			tmpWebView.clipsToBounds=YES;
 			tmpWebView.scalesPageToFit=YES;
-			tmpWebView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
 			
 			[self attacheLongPressGestureToWebView:tmpWebView];
 			
@@ -1578,10 +1577,14 @@
 	return YES;
 }
 
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+	NSLog(@"didFailLoadWithError: %@",[error userInfo]);
+	
+}
+
 - (void)webViewDidStartLoad:(UIWebView *)webView 
 {
-	NSLog(@"webViewDidStartLoad");
-	
 	UIApplication* app = [UIApplication sharedApplication]; 
     app.networkActivityIndicatorVisible = YES;
 	[activityView startAnimating];
@@ -1600,11 +1603,11 @@
 	";
 
 	[webView stringByEvaluatingJavaScriptFromString:js];	
+	
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {	
-	NSLog(@"webViewDidFinishLoad");
 	UIApplication* app = [UIApplication sharedApplication]; 
     app.networkActivityIndicatorVisible = NO;
 	[activityView stopAnimating];
@@ -1642,7 +1645,6 @@
  
 - (void)dealloc 
 {
-	NSLog(@"dealloc");
 	self.webView.delegate=nil;
 	self.tmpWebView.delegate=nil;
 	self.nextWebView.delegate=nil;
@@ -1676,6 +1678,7 @@
 	[imageListPopover release];
 	[tmpWebView release];
 	[shareText release];
+	[renderer release];
     [super dealloc];
 }
 

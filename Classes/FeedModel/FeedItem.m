@@ -25,8 +25,9 @@
 
 - (NSString *)flattenHTML 
 {
-	MarkupStripper * stripper=[[[MarkupStripper alloc] init] autorelease];
+	MarkupStripper * stripper=[[MarkupStripper alloc] init];
 	NSString * tmp=[stripper stripMarkup:self];
+	[stripper release];
 	return tmp;
 }
 
@@ -197,7 +198,6 @@
 							initWithCalendarIdentifier:NSGregorianCalendar];
 	
 	NSDateComponents * today_components=[gregorian components:(NSDayCalendarUnit|NSWeekCalendarUnit) fromDate:todayDate];
-	
 	
 	NSDateComponents * item_components=[gregorian components:(NSDayCalendarUnit|NSWeekCalendarUnit) fromDate:self.date];
 	

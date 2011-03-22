@@ -491,7 +491,7 @@
 	NSLog(@"fbDidLogin");
 	if (pendingFacebookAction == SHKFacebookPendingLogin)
 	{
-		[[[UIApplication sharedApplication] delegate] updateSingleAccount:@"Facebook"];
+		[[[UIApplication sharedApplication] delegate] updateSingleAccount:@"Facebook" forCategory:nil];
 	}
 	[super fbDidLogin];
 }
