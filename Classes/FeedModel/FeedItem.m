@@ -328,12 +328,9 @@
 	[super dealloc];
 }
 
-
-
 @end
 					  
 @implementation ImageToDataTransformer
-
 
 + (BOOL)allowsReverseTransformation {
   return YES;
@@ -343,12 +340,10 @@
   return [NSData class];
 }
 
-
 - (id)transformedValue:(id)value {
   NSData *data = UIImagePNGRepresentation(value);
   return data;
 }
-
 
 - (id)reverseTransformedValue:(id)value {
   UIImage *uiImage = [[UIImage alloc] initWithData:value];

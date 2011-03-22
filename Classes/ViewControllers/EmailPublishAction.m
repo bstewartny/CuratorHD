@@ -226,7 +226,7 @@
 	
 	if([items count]>1 && (emailType==EmailTypeText))
 	{
-		maxSynopsisSize=500;
+		maxSynopsisSize=100;
 		// make sure flattened synopsis exists for each item
 		for(FeedItem * item in items)
 		{

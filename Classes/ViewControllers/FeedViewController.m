@@ -28,9 +28,9 @@
 {
 	[self performSelectorOnMainThread:@selector(handleNotificationUI:) withObject:pNotification waitUntilDone:YES];
 }
+
 -(void)handleNotificationUI:(NSNotification *)pNotification
 {
-	 
 	if([pNotification.name isEqualToString:@"UpdateFeedView"])
 	{
 		[self.fetcher performFetch];
@@ -61,7 +61,6 @@
 			}
 		}
 	}
-	
 	if([pNotification.name isEqualToString:@"AccountUpdateFailed"])
 	{
 		NSArray * array=[pNotification object];
@@ -79,7 +78,6 @@
 				
 				[alert show];
 				[alert release];
-				
 			}
 		}
 	}
@@ -101,7 +99,6 @@
 			}
 		}
 	}
-	   
 	if([pNotification.name isEqualToString:@"FeedUpdated"] ||
 	   [pNotification.name isEqualToString:@"FeedUpdateFinished"])
 	{
@@ -179,9 +176,11 @@
 	
 	for(FeedItem * item in selectedItems.items)
 	{
+		// get original synopsis because we need to override the short version we used to optimize scrolling...
+		item.synopsis=[item.origSynopsis flattenHTML];
 		[folder addFeedItem:item];
-		
 	}
+	
 	[folder save];
 }
 
@@ -192,6 +191,8 @@
 	// add selected items to folder...
 	for(FeedItem * item in selectedItems.items)
 	{
+		// get original synopsis because we need to override the short version we used to optimize scrolling...
+		item.synopsis=[item.origSynopsis flattenHTML];
 		[section addFeedItem:item];
 	}
 	[section save]; 
@@ -584,7 +585,6 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 {
 	[self redraw];
 }
-
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

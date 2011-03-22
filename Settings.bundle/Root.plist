@@ -12,80 +12,6 @@
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
-			<string>Google Reader Account</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSTextFieldSpecifier</string>
-			<key>Title</key>
-			<string>Username:</string>
-			<key>Key</key>
-			<string>googlereader.username</string>
-			<key>IsSecure</key>
-			<false/>
-			<key>KeyboardType</key>
-			<string>EmailAddress</string>
-			<key>AutocapitalizationType</key>
-			<string>None</string>
-			<key>AutocorrectionType</key>
-			<string>No</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSTextFieldSpecifier</string>
-			<key>Title</key>
-			<string>Password:</string>
-			<key>Key</key>
-			<string>googlereader.password</string>
-			<key>IsSecure</key>
-			<true/>
-			<key>KeyboardType</key>
-			<string>Alphabet</string>
-			<key>AutocapitalizationType</key>
-			<string>None</string>
-			<key>AutocorrectionType</key>
-			<string>No</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-			<key>Title</key>
-			<string>InfoNgen Account</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSTextFieldSpecifier</string>
-			<key>Title</key>
-			<string>Username:</string>
-			<key>Key</key>
-			<string>infongen.username</string>
-			<key>KeyboardType</key>
-			<string>EmailAddress</string>
-			<key>AutocapitalizationType</key>
-			<string>None</string>
-			<key>AutocorrectionType</key>
-			<string>No</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSTextFieldSpecifier</string>
-			<key>Title</key>
-			<string>Password:</string>
-			<key>Key</key>
-			<string>infongen.password</string>
-			<key>IsSecure</key>
-			<true/>
-			<key>AutocapitalizationType</key>
-			<string>None</string>
-			<key>AutocorrectionType</key>
-			<string>No</string>
-			<key>KeyboardType</key>
-			<string>Alphabet</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-			<key>Title</key>
 			<string>Preferences</string>
 		</dict>
 		<dict>
@@ -100,61 +26,29 @@
 		</dict>
 		<dict>
 			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>Refresh on startup</string>
-			<key>Key</key>
-			<string>refreshOnStart</string>
-			<key>DefaultValue</key>
-			<true/>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSMultiValueSpecifier</string>
-			<key>Title</key>
-			<string>Newsletter Format</string>
-			<key>Key</key>
-			<string>newsletterFormat</string>
-			<key>DefaultValue</key>
-			<string>wide</string>
-			<key>Titles</key>
-			<array>
-				<string>Wide Format</string>
-				<string>Narrow Format</string>
-			</array>
-			<key>Values</key>
-			<array>
-				<string>wide</string>
-				<string>narrow</string>
-			</array>
-		</dict>
-		<dict>
-			<key>Type</key>
 			<string>PSMultiValueSpecifier</string>
 			<key>Title</key>
 			<string>Newsletter Item Size</string>
 			<key>Key</key>
 			<string>maxNewsletterSynopsisLength</string>
 			<key>DefaultValue</key>
-			<string>2000</string>
+			<string>200</string>
 			<key>Titles</key>
 			<array>
 				<string>No Synopsis (Links only)</string>
-				<string>First 150 Characters</string>
-				<string>First 250 Characters</string>
-				<string>First 500 Characters</string>
-				<string>First 1000 Characters</string>
-				<string>First 2000 Characters</string>
+				<string>First 50 Words</string>
+				<string>First 100 Words</string>
+				<string>First 200 Words</string>
+				<string>First 500 Words</string>
 				<string>Unlimited Synopsis Size</string>
 			</array>
 			<key>Values</key>
 			<array>
 				<string>0</string>
-				<string>150</string>
-				<string>250</string>
+				<string>50</string>
+				<string>100</string>
+				<string>200</string>
 				<string>500</string>
-				<string>1000</string>
-				<string>2000</string>
 				<string>10000</string>
 			</array>
 		</dict>

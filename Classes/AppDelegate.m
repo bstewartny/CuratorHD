@@ -344,15 +344,15 @@
 	
 	[self loadAccounts];
 	
-	self.newsletterFormat=[UserSettings getSetting:@"newsletterFormat"];
+	//self.newsletterFormat=[UserSettings getSetting:@"newsletterFormat"];
 	
-	if(self.newsletterFormat==nil)
-	{
-		self.newsletterFormat=@"wide";
-	}
+	//if(self.newsletterFormat==nil)
+	//{
+	//	self.newsletterFormat=@"wide";
+	//}
 	
 	self.clearOnPublish=[[UserSettings getSetting:@"clearOnPublish"] boolValue];
-	self.refreshOnStart=[[UserSettings getSetting:@"refreshOnStart"] boolValue];
+	//self.refreshOnStart=[[UserSettings getSetting:@"refreshOnStart"] boolValue];
 	
 	self.maxNewsletterSynopsisLength=[[UserSettings getSetting:@"maxNewsletterSynopsisLength"] intValue];
 }

@@ -11,6 +11,7 @@
 #import "Base64.h"
 #import "Newsletter.h"
 #import "Font.h"
+#import "Summarizer.h"
 
 @implementation ItemHTMLRenderer
 @synthesize embedImageData,newsletter,includeSynopsis,maxSynopsisSize,useOriginalSynopsis;
@@ -317,11 +318,14 @@
 			
 		if(maxSynopsisSize>0)
 		{
+			synopsis=[Summarizer shortenToMaxWords:maxSynopsisSize text:synopsis];
+			/*
+			
 			// limit synopsis length...
 			if([synopsis length]>maxSynopsisSize)
 			{
 				synopsis=[[synopsis substringToIndex:maxSynopsisSize] stringByAppendingString:@"..."];
-			}
+			}*/
 		}
 		
 		html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{item.synopsis}}" withString:synopsis];
@@ -619,11 +623,13 @@
 				synopsis=item.synopsis;
 			}
 			
+			synopsis=[Summarizer shortenToMaxWords:maxSynopsisSize text:synopsis];
+			/*
 			// limit synopsis length...
 			if([synopsis length]>maxSynopsisSize)
 			{
 				synopsis=[[synopsis substringToIndex:maxSynopsisSize] stringByAppendingString:@"..."];
-			}
+			}*/
 		}
 		
 		html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{item.synopsis}}" withString:synopsis];

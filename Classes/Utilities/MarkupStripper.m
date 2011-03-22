@@ -99,12 +99,12 @@
 		
 		if([m length]>maxLength)
 		{
-			return [m substringToIndex:maxLength];
+			m=[NSString stringWithFormat:@"%@...",[m substringToIndex:maxLength]];
 		}
-		else 
-		{
-			return m;
-		}
+		
+		
+		return m;
+		
 	}
 }
 

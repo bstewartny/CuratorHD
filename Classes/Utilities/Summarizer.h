@@ -24,5 +24,6 @@
 
 - (NSString*) summarizeText:(NSString*)text keyWords:(NSArray*)keyWords;
 
++ (NSString*) shortenToMaxWords:(int)maxWords text:(NSString*)text;
 
 @end

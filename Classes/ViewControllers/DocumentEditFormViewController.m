@@ -4,6 +4,14 @@
 #import "NewsletterItemContentView.h"
 #import "Summarizer.h"
 #import "BlankToolbar.h"
+#import "FeedFetcher.h"
+#import "AddItemsViewController.h"
+#import "Folder.h"
+#import "NewsletterSection.h"
+#import "SHK.h"
+#import "MarkupStripper.h"
+
+
 
 #define kCommentsViewHeight 120
 #define kHeadlineViewHeight 30
@@ -15,6 +23,138 @@
 - (IBAction) cancel:(id)sender
 {
 	[[self parentViewController] dismissModalViewControllerAnimated:YES];
+}
+
+
+- (void) organizeTouch:(id)sender
+{
+	if(item==nil) return;
+	
+	FolderFetcher * foldersFetcher=[[FolderFetcher alloc] init];
+	
+	NewsletterFetcher * newslettersFetcher=[[NewsletterFetcher alloc] init];
+	
+	AddItemsViewController * feedsView=[[AddItemsViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
+	feedsView.navigationItem.title=@"Add Item to...";
+	
+	[feedsView setFoldersFetcher:foldersFetcher];
+	[feedsView setNewslettersFetcher:newslettersFetcher];
+	
+	feedsView.delegate=self;
+	
+	UINavigationController * navController=[[UINavigationController alloc] initWithRootViewController:feedsView];
+	
+	organizePopover=[[UIPopoverController alloc] initWithContentViewController:navController];
+	
+	[organizePopover presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+	
+	[navController release];
+	[feedsView release];
+	
+	[foldersFetcher release];
+	[newslettersFetcher release];
+}
+
+- (void) addToFolder:(Folder*)folder
+{
+	[folder addFeedItem:item];
+	[folder save];
+	
+	[[NSNotificationCenter defaultCenter] 
+	 postNotificationName:@"ReloadData"
+	 object:nil];
+}
+
+- (void) addToSection:(NewsletterSection*)section
+{
+	[section addFeedItem:item];
+	[section save];
+	
+	[[NSNotificationCenter defaultCenter] 
+	 postNotificationName:@"ReloadData"
+	 object:nil];
+}
+
+- (void) cancelOrganize
+{
+	[organizePopover dismissPopoverAnimated:YES];
+}
+
+- (IBAction) composeTouch:(id)sender
+{
+	UIActionSheet * actionSheet=[[UIActionSheet alloc] initWithTitle:@"Modify Synopsis" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"Delete Synopsis" otherButtonTitles:@"Replace with original", @"Shorten to 50 words",@"Shorten to 100 words",@"Shorten to 200 words",nil];
+	
+	[actionSheet showFromBarButtonItem:sender animated:YES];
+	
+	[actionSheet release];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+	int max_words=-1;
+	
+	switch(buttonIndex)
+	{
+		case 0: // delete
+			self.synopsisTextView.text=nil;
+			return;
+		
+		case 1:
+			// original
+			if([item.origSynopsis length]>0)
+			{
+				MarkupStripper * stripper=[[MarkupStripper alloc] init];
+			
+				self.synopsisTextView.text=[stripper stripMarkup:item.origSynopsis];
+				
+				[stripper release];
+			}
+			else 
+			{
+				self.synopsisTextView.text=nil;
+			}
+
+			return;
+			
+		case 2:  
+			max_words=50;
+			break;
+			
+		case 3:  
+			max_words=100;
+			break;
+			
+		case 4:  
+			max_words=200;
+			break;
+	}
+	
+	if(max_words>0)
+	{
+		NSString * synopsis=self.synopsisTextView.text;
+	
+		if([synopsis length]>0)
+		{
+			synopsis=[Summarizer shortenToMaxWords:max_words text:synopsis];
+		
+			self.synopsisTextView.text=synopsis;
+		}
+	}
+}
+
+- (IBAction) actionTouch:(id)sender
+{
+	if(item==nil) return;
+	
+	// Create the item to share (in this example, a url)
+	
+	SHKItem *share_item = [SHKItem URL:[NSURL URLWithString:item.url] title:item.headline];
+	
+	// Get the ShareKit action sheet
+	SHKActionSheet *actionSheet = [SHKActionSheet actionSheetForItem:share_item];
+	
+	// Display the action sheet
+	[actionSheet showFromBarButtonItem:sender animated:YES];
 }
 
 - (IBAction) done:(id)sender
@@ -38,29 +178,18 @@
 {
     [super viewDidLoad];
 	
-	//self.headlineTextColor=[NewsletterItemContentView colorWithHexString:@"336699"];
-	//self.synopsisTextColor=[NewsletterItemContentView colorWithHexString:@"666666"];
-	//self.commentsTextColor=[NewsletterItemContentView colorWithHexString:@"b00027"];
 	self.headlineTextColor=[UIColor blackColor];
-	self.synopsisTextColor=[UIColor grayColor];
-	//self.commentsTextColor=[UIColor redColor];
+	self.synopsisTextColor=[UIColor blackColor];
 	
-	// Observe keyboard hide and show notifications to resize the text view appropriately.
-    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 	self.contentView.backgroundColor=[UIColor whiteColor];
 	
-	UITextField * textField=[[UITextField alloc] initWithFrame:CGRectMake(10,0,self.contentView.bounds.size.width-20,24)];
+	UITextField * textField=[[UITextField alloc] initWithFrame:CGRectMake(18,4,self.contentView.bounds.size.width-36,24)];
 	textField.backgroundColor=[UIColor whiteColor];
 	textField.text=self.item.headline;
 	textField.placeholder=@"Item headline";
-	textField.font=[UIFont boldSystemFontOfSize:17]; 
+	textField.font=[UIFont boldSystemFontOfSize:20]; 
 	textField.textColor=self.headlineTextColor;
 	textField.autoresizingMask=UIViewAutoresizingFlexibleWidth;
-	
-	//textField.borderStyle=UITextBorderStyleRoundedRect;
-	
-	//textField.layer.cornerRadius=4;
 	
 	self.headlineTextField=textField;
 	
@@ -68,26 +197,16 @@
 	
 	[textField release];
 	
-	UITextView * textView=[[UITextView alloc] initWithFrame:CGRectMake(10,24+5, self.contentView.bounds.size.width-20, self.contentView.bounds.size.height-(24+10))];  
+	UITextView * textView=[[UITextView alloc] initWithFrame:CGRectMake(10,28+5, self.contentView.bounds.size.width-20, self.contentView.bounds.size.height-(28+10))];  
 	textView.backgroundColor=[UIColor whiteColor];
-	textView.font=[UIFont systemFontOfSize:14];
+	textView.font=[UIFont systemFontOfSize:16];
 	textView.textColor=self.synopsisTextColor;
 	textView.text=self.item.synopsis;
-	//textView.layer.cornerRadius=4;
 	self.synopsisTextView=textView;
 	textView.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
 	[self.contentView  addSubview:textView];
 	
 	[textView release];
-	
-	//self.commentsView=[self createNewCommentsView:CGRectMake(10,(self.view.bounds.size.height-(kCommentsViewHeight+10)) / 2, self.view.bounds.size.width-20, kCommentsViewHeight)];
-	
-	//[self.view addSubview:commentsView];
-	
-	
-	// create a toolbar to have two buttons in the right
-	//BlankToolbar* tools = [[BlankToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width,44)];
-	//tools.autoresizingMask=UIViewAutoresizingFlexibleWidth;
 	
 	toolbar.backgroundColor=[UIColor clearColor];
 	toolbar.opaque=NO;
@@ -109,65 +228,54 @@
 	[buttons addObject:bi];
 	[bi release];
 	
+	
+	bi= [[UIBarButtonItem alloc]
+		 initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeTouch:)];
+	
+	[buttons addObject:bi];
+	[bi release];
+	
+	
+	bi= [[UIBarButtonItem alloc]
+		 initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+	
+	bi.width=25;
+	
+	[buttons addObject:bi];
+	[bi release];
+	
+	
+	bi= [[UIBarButtonItem alloc]
+		 initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(organizeTouch:)];
+	
+	[buttons addObject:bi];
+	[bi release];
+	
+	bi= [[UIBarButtonItem alloc]
+		 initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+	
+	bi.width=25;
+	
+	[buttons addObject:bi];
+	[bi release];
+	
+	bi= [[UIBarButtonItem alloc]
+		 initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionTouch:)];
+	
+	[buttons addObject:bi];
+	[bi release];
+	
+	bi= [[UIBarButtonItem alloc]
+		 initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+	
+	bi.width=25;
+	
+	[buttons addObject:bi];
+	[bi release];
+	
 	bi=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
 	[buttons addObject:bi];
 	[bi release];
-	
-	
-	
-	
-	
-	/*activityView=[[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
-	activityView.hidden=YES;
-	activityView.activityIndicatorViewStyle=UIActivityIndicatorViewStyleGray;
-	
-	bi = [[UIBarButtonItem alloc] initWithCustomView:activityView];
-	
-	[buttons addObject:bi];
-	[bi release];
-	
-	// create a spacer
-	bi = [[UIBarButtonItem alloc]
-		  initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-	bi.width=10;
-	
-	[buttons addObject:bi];
-	[bi release];
-	
-	// create a back button
-	bi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_arrow_left.png"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonTouch:)];
-	[buttons addObject:bi];
-	bi.enabled=NO;
-	self.backButton=bi;
-	[bi release];
-	
-	// create a spacer
-	bi = [[UIBarButtonItem alloc]
-		  initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-	bi.width=10;
-	[buttons addObject:bi];
-	[bi release];
-	
-	// create a forward button
-	bi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_arrow_right.png"] style:UIBarButtonItemStylePlain target:self action:@selector(forwardButtonTouch:)];
-	[buttons addObject:bi];
-	bi.enabled=NO;
-	self.forwardButton=bi;
-	[bi release];
-	
-	// create a spacer
-	bi = [[UIBarButtonItem alloc]
-		  initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-	bi.width=10;
-	[buttons addObject:bi];
-	[bi release];
-	
-	bi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionTouch:)];
-	[buttons addObject:bi];
-	bi.enabled=YES;
-	
-	[bi release];
-	*/
 	
 	// stick the buttons in the toolbar
 	[toolbar setItems:buttons animated:NO];
@@ -181,31 +289,15 @@
 }
 
 
-/*
-- (void)viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
-	
-	[self setTextViewFrames];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-	[super viewDidAppear:animated];
-	
-	[self.commentsTextView setNeedsDisplay];
-}*/
-
 - (void)dealloc 
 {
 	[item release];
 	[headlineTextField release];
+	[organizePopover release];
+	organizePopover=nil;
 	[synopsisTextView release];
-	//[commentsTextView release];
 	[headlineTextColor release];
-	//[commentsView release];
 	[synopsisTextColor release];
-	//[commentsTextColor release];
     [super dealloc];
 }
 

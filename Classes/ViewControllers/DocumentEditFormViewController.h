@@ -17,6 +17,7 @@
 	//UIColor * commentsTextColor;
 	//BOOL _keyboardVisible;
 	//CGFloat _keyboardHeight;
+	UIPopoverController * organizePopover;
 }
 @property(nonatomic,retain) FeedItem * item;
 @property(nonatomic,retain) UITextField * headlineTextField;

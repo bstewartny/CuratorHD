@@ -11,7 +11,7 @@
 #import "ItemFetcher.h"
 #import "NewsletterItem.h"
 #import "Newsletter.h"
-
+#import "Summarizer.h"
 @implementation NewsletterSection
 
 @dynamic newsletter;
@@ -62,15 +62,17 @@
 	if(maxSynopsisLength>0)
 	{
 		// generate normalized synopsis...
-		if (newItem.synopsis==nil || [newItem.synopsis length]==0 || ([newItem.synopsis length]<maxSynopsisLength))
+		if (newItem.synopsis==nil || [newItem.synopsis length]==0) // || ([newItem.synopsis length]<maxSynopsisLength))
 		{
 			newItem.synopsis=[newItem.origSynopsis flattenHTML];
 		}
 		
+		newItem.synopsis=[Summarizer shortenToMaxWords:maxSynopsisLength text:newItem.synopsis];
+		/*
 		if([newItem.synopsis length]>maxSynopsisLength)
 		{
 			newItem.synopsis=[[newItem.synopsis substringToIndex:maxSynopsisLength] stringByAppendingString:@"..."];
-		}
+		}*/
 	}
 	else 
 	{

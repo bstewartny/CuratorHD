@@ -810,7 +810,10 @@
 
 - (void) addToFolder:(Folder*)folder
 {
-	[folder addFeedItem:[self currentItem]];
+	FeedItem * tmp=[self currentItem];
+	tmp.synopsis=[item.origSynopsis flattenHTML];
+	
+	[folder addFeedItem:tmp];
 	[folder save];
 	
 	[[NSNotificationCenter defaultCenter] 
@@ -820,7 +823,10 @@
 
 - (void) addToSection:(NewsletterSection*)section
 {
-	[section addFeedItem:[self currentItem]];
+	FeedItem * tmp=[self currentItem];
+	tmp.synopsis=[item.origSynopsis flattenHTML];
+
+	[section addFeedItem:tmp];
 	[section save];
 	
 	[[NSNotificationCenter defaultCenter] 
