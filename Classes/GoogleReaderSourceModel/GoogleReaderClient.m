@@ -834,21 +834,20 @@ static NSString * gaeCookie;
 						
 						if(label && [label length]>0)
 						{
+							feed.feedCategory=label;
+							break;
+							/*
 							if([feedCategory length]==0)
 							{
 								[feedCategory appendString:@"|"];
 							}
 							
-							[feedCategory appendFormat:@"%@|",label];
+							[feedCategory appendFormat:@"%@|",label];*/
 						}
 					}
 				}
 				
-				if([feedCategory length]>0)
-				{
-					feed.feedCategory=feedCategory;
-				}
-				else 
+				if([feed.feedCategory length]==0)
 				{
 					feed.feedCategory=@"_none"; // not categorized into a folder...
 				}

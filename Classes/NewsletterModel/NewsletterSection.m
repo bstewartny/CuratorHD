@@ -45,8 +45,6 @@
 	//int numItems=[self.items count];
 	int numItems=[self entityCount:@"NewsletterItem" predicate:[NSPredicate predicateWithFormat:@"section==%@",self]];
 	
-	NSLog(@"Adding item with displayOrder: %d",numItems);
-	
 	newItem.displayOrder=[NSNumber numberWithInt:numItems];
 	
 	return newItem;

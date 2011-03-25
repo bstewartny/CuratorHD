@@ -319,13 +319,6 @@
 		if(maxSynopsisSize>0)
 		{
 			synopsis=[Summarizer shortenToMaxWords:maxSynopsisSize text:synopsis];
-			/*
-			
-			// limit synopsis length...
-			if([synopsis length]>maxSynopsisSize)
-			{
-				synopsis=[[synopsis substringToIndex:maxSynopsisSize] stringByAppendingString:@"..."];
-			}*/
 		}
 		
 		html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{item.synopsis}}" withString:synopsis];
@@ -624,12 +617,7 @@
 			}
 			
 			synopsis=[Summarizer shortenToMaxWords:maxSynopsisSize text:synopsis];
-			/*
-			// limit synopsis length...
-			if([synopsis length]>maxSynopsisSize)
-			{
-				synopsis=[[synopsis substringToIndex:maxSynopsisSize] stringByAppendingString:@"..."];
-			}*/
+			
 		}
 		
 		html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{item.synopsis}}" withString:synopsis];

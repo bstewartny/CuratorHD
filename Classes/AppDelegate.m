@@ -85,20 +85,7 @@
 
 - (NSString*) newsletterTemplateName
 {
-	 
-	/*if(newsletterFormat==nil)
-	{
-		newsletterFormat=@"wide";
-	}
-	
-	if([newsletterFormat isEqualToString:@"narrow"])
-	{
-		return @"NewsletterDocumentTwoColumn";
-	}
-	else 
-	{*/
-		return @"NewsletterDocumentOneColumn";
-	//}
+	 return @"NewsletterDocumentOneColumn";
 }
 
 - (FeedItem*) currentItem
@@ -125,28 +112,6 @@
 	}
 }
 
-/*- (UIImage*) shareImage
-{
-	if([detailNavController.topViewController isEqual:itemHtmlViewNoNav])
-	{
-		return [itemHtmlViewNoNav shareImage];
-	}
-	else 
-	{
-		return [itemHtmlView shareImage];
-	}
-}*/
-
-
-/*- (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc 
-{
-    barButtonItem.title = @"Sources";
-	
-	[[self.detailNavController topViewController].navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
-	
-	//[self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
-    self.navPopoverController = pc;
-}*/
 - (void)splitViewController:(MGSplitViewController*)svc 
 	 willHideViewController:(UIViewController *)aViewController 
 		  withBarButtonItem:(UIBarButtonItem*)barButtonItem 
@@ -248,95 +213,7 @@
 	
 	[itemHtml release];
 }
-/*
-- (UIViewController*) controllerForFetcher:(ItemFetcher*)fetcher
-{
-	UIViewController * controller=nil;
-	
-	if([fetcher isKindOfClass:[AccountItemFetcher class]])
-	{
-		controller=[[FeedViewController alloc] initWithNibName:@"FeedView" bundle:nil];
-		controller.title=@"All Items";
-		controller.navigationItem.title=@"All Items";
-		[controller setEditable:NO];
-		[controller setItemDelegate:self];
-		[controller setFetcher:fetcher];
-		return [controller autorelease];
-	}
-	
-	if([fetcher isKindOfClass:[AccountFeedFetcher class]])
-	{
-		controller=[[FeedsViewController alloc] initWithNibName:@"FeedsView" bundle:nil];
-		controller.title=[fetcher accountName];
-		controller.navigationItem.title=[fetcher accountName];
-		[controller setEditable:NO];
-		[controller setItemDelegate:self];
-		[controller setFetcher:fetcher];
-		return [controller autorelease];
-	}
-	if([fetcher isKindOfClass:[NewsletterFetcher class]])
-	{
-		controller=[[FeedsViewController alloc] initWithNibName:@"FeedsView" bundle:nil];
-		controller.title=@"Newsletters";
-		controller.navigationItem.title=@"Newsletters";
-		[controller setEditable:YES];
-		[controller setItemDelegate:self];
-		[controller setFetcher:fetcher];
-		return [controller autorelease];
-	}
-	if([fetcher isKindOfClass:[NewsletterSectionFetcher class]])
-	{
-		controller=[[FeedsViewController alloc] initWithNibName:@"FeedsView" bundle:nil];
-		controller.title=@"Sections";
-		controller.navigationItem.title=@"Sections";
-		[controller setEditable:YES];
-		[controller setItemDelegate:self];
-		[controller setFetcher:fetcher];
-		return [controller autorelease];
-	}
-	if([fetcher isKindOfClass:[NewsletterItemFetcher class]])
-	{
-		controller=[[FeedViewController alloc] initWithNibName:@"FeedView" bundle:nil];
-		controller.title=[[fetcher section] name];
-		controller.navigationItem.title=[[fetcher section] name];
-		[controller setEditable:YES];
-		[controller setItemDelegate:self];
-		[controller setFetcher:fetcher];
-		return [controller autorelease];
-	}
-	if([fetcher isKindOfClass:[FolderFetcher class]])
-	{
-		controller=[[FeedsViewController alloc] initWithNibName:@"FeedsView" bundle:nil];
-		controller.title=@"Folders";
-		controller.navigationItem.title=@"Folders";
-		[controller setEditable:YES];
-		[controller setItemDelegate:self];
-		[controller setFetcher:fetcher];
-		return [controller autorelease];
-	}
-	if([fetcher isKindOfClass:[FolderItemFetcher class]])
-	{
-		controller=[[FeedViewController alloc] initWithNibName:@"FeedView" bundle:nil];
-		controller.title=[[fetcher folder] name];
-		controller.navigationItem.title=[[fetcher folder] name];
-		[controller setEditable:YES];
-		[controller setItemDelegate:self];
-		[controller setFetcher:fetcher];
-		return [controller autorelease];
-	}
-	if([fetcher isKindOfClass:[FeedItemFetcher class]])
-	{
-		controller=[[FeedViewController alloc] initWithNibName:@"FeedView" bundle:nil];
-		controller.title=[[fetcher feed] name];
-		controller.navigationItem.title=[[fetcher feed] name];
-		[controller setEditable:NO];
-		[controller setItemDelegate:self];
-		[controller setFetcher:fetcher];
-		return [controller autorelease];
-	}
-	return nil;
-}
-*/
+
 - (void) reconfigure
 {
 	NSLog(@"reconfigure");
@@ -344,15 +221,7 @@
 	
 	[self loadAccounts];
 	
-	//self.newsletterFormat=[UserSettings getSetting:@"newsletterFormat"];
-	
-	//if(self.newsletterFormat==nil)
-	//{
-	//	self.newsletterFormat=@"wide";
-	//}
-	
 	self.clearOnPublish=[[UserSettings getSetting:@"clearOnPublish"] boolValue];
-	//self.refreshOnStart=[[UserSettings getSetting:@"refreshOnStart"] boolValue];
 	
 	self.maxNewsletterSynopsisLength=[[UserSettings getSetting:@"maxNewsletterSynopsisLength"] intValue];
 }
@@ -488,11 +357,6 @@
 	[NSURLCache setSharedURLCache:sharedCache];
 	[sharedCache release];
 	
-	
-	
-	//[[NSURLCache sharedURLCache] setMemoryCapacity:0];
-	//[[NSURLCache sharedURLCache] setDiskCapacity:0];
-
 	NSAutoreleasePool * pool=[[NSAutoreleasePool alloc] init];
 	
 	queue=[[NSOperationQueue alloc] init];
@@ -770,17 +634,6 @@
 	{
 		[self showAccountSettingsForm];
 	}
-	else 
-	{
-		/*if(self.refreshOnStart)
-		{
-			//[self validateAccounts];
-			if([self hasInternetConnection])
-			{
-				[self update];
-			}
-		}*/
-	}
 	
 	[pool drain];
 }
@@ -841,42 +694,13 @@
 		updating=YES;
 		
 		BOOL needAuthorization=NO;
-		
-		/*if([self hasInternetConnection])
-		{
-			// enumerate accounts on main thread for accounts which require user input on validation (such as OAuth accounts)
-			for(FeedAccount * account in [self accounts])
-			{
-				if(![account isValid])
-				{
-					needAuthorization=YES;
-					break;
-				}
-			}
-		}*/
-		
-		//if(!needAuthorization)
-		//{
-			// send notification that update is starting
-			[[NSNotificationCenter defaultCenter] 
-			postNotificationName:@"UpdateStarting"
-			object:nil];
+				
+		// send notification that update is starting
+		[[NSNotificationCenter defaultCenter] 
+		postNotificationName:@"UpdateStarting"
+		object:nil];
 	
-			[self performSelectorInBackground:@selector(update_start) withObject:nil];
-		/*}
-		else 
-		{
-			updating=NO;
-			[self update_end];
-			for(FeedAccount * account in [self accounts])
-			{
-				if(![account isValid])
-				{
-					[account authorize];
-					return;
-				}
-			}
-		}*/
+		[self performSelectorInBackground:@selector(update_start) withObject:nil];
 	}
 }
 
@@ -1241,11 +1065,7 @@
 - (void) cancelUpdate
 {
 	NSLog(@"AppDelegate.cancelUpdate");
-	/*
-	// stop updating...
-	updating=NO;
 	
-	[queue cancelAllOperations];*/
 }
 
 
@@ -1563,10 +1383,6 @@
 				
 				[google release];
 			}
-			else 
-			{
-				//NSLog(@"Failed to find account by name: %@",[[[item feed] account] name]);
-			}
 		}
 	}
 	@catch (NSException * e) 
@@ -1651,13 +1467,6 @@
 	@try 
 	{
 		[updater backFillFeed:feed withContext:[feed managedObjectContext]];
-		
-		//if([updater backFillFeed:feed withContext:[feed managedObjectContext]])
-		//{
-		///	[[NSNotificationCenter defaultCenter] 
-		//	 postNotificationName:@"FeedUpdated"
-		//	 object:[NSArray arrayWithObjects:updater.account.name,feed.url,nil]];
-		//}
 	}
 	@catch (NSException * e) 
 	{
@@ -1824,10 +1633,6 @@
 			[[NSNotificationCenter defaultCenter] 
 			 postNotificationName:@"ReloadData"
 			 object:nil];
-			
-			/*[[NSNotificationCenter defaultCenter] 
-			 postNotificationName:@"ReloadActionData"
-			 object:nil];*/
 		}
 		return;
 	}
@@ -1843,10 +1648,6 @@
 			[[NSNotificationCenter defaultCenter] 
 			 postNotificationName:@"ReloadData"
 			 object:nil];
-			
-			/*[[NSNotificationCenter defaultCenter] 
-			 postNotificationName:@"ReloadActionData"
-			 object:nil];*/
 		}
 		self.tmpFolder=nil;
 		return;
@@ -1863,10 +1664,6 @@
 			[[NSNotificationCenter defaultCenter] 
 			 postNotificationName:@"ReloadData"
 			 object:nil];
-			
-			/*[[NSNotificationCenter defaultCenter] 
-			 postNotificationName:@"ReloadActionData"
-			 object:nil];*/
 		}
 		self.tmpNewsletter=nil;
 		return;
@@ -1883,9 +1680,6 @@
 			[[NSNotificationCenter defaultCenter] 
 			 postNotificationName:@"ReloadData"
 			 object:nil];
-			/*[[NSNotificationCenter defaultCenter] 
-			 postNotificationName:@"ReloadActionData"
-			 object:nil];*/
 		}
 	}
 }
@@ -1913,71 +1707,16 @@
 	[detailNavController presentModalViewController:formView animated:YES];
 	
 	[formView release];
-	
-	
-	
-	/*
-	UIAlertView *prompt = [[UIAlertView alloc] initWithTitle:@"Create New Folder" 
-													 message:@"\n\n" // IMPORTANT
-													delegate:self 
-										   cancelButtonTitle:@"Cancel" 
-										   otherButtonTitles:@"Ok", nil];
-	
-	prompt.tag=kAddFolderAlertViewTag;
-	
-	UITextField * textField = [[UITextField alloc] initWithFrame:CGRectMake(17.0, 50.0, 250.0, 25.0)]; 
-	[textField setBackgroundColor:[UIColor whiteColor]];
-	[textField setPlaceholder:@"Enter folder name"];
-	textField.tag=kAddFolderAlertViewNameTag;
-	[prompt addSubview:textField];
-	
-	// set place
-	[prompt setTransform:CGAffineTransformMakeTranslation(0.0, 110.0)];
-	[prompt show];
-    [prompt release];
-	
-	[textField release];*/
 }
 
 - (void) addNewsletter
 {
-	
 	FormViewController * formView=[[FormViewController alloc] initWithTitle:@"Add newsletter" tag:kAddNewsletterAlertViewTag delegate:self names:[NSArray arrayWithObjects:@"Newsletter name",@"Section name",nil] andValues:nil];
 	[detailNavController presentModalViewController:formView animated:YES];
 	
 	[formView release];
-	
-	/*
-	// prompt for name
-	UIAlertView *prompt = [[UIAlertView alloc] initWithTitle:@"Create New Newsletter" 
-													 message:@"\n\n\n" // IMPORTANT
-													delegate:self 
-										   cancelButtonTitle:@"Cancel" 
-										   otherButtonTitles:@"Ok", nil];
-	
-	prompt.tag=kAddNewsletterAlertViewTag;
-	
-	UITextField * textField = [[UITextField alloc] initWithFrame:CGRectMake(17.0, 50.0, 250.0, 25.0)]; 
-	[textField setBackgroundColor:[UIColor whiteColor]];
-	[textField setPlaceholder:@"Enter newsletter name"];
-	textField.tag=kAddNewsletterAlertViewNameTag;
-	[prompt addSubview:textField];
-	
-	[textField release];
-	
-	textField = [[UITextField alloc] initWithFrame:CGRectMake(17.0, 82.0, 250.0, 25.0)]; 
-	[textField setBackgroundColor:[UIColor whiteColor]];
-	[textField setPlaceholder:@"Enter section name"];
-	textField.tag=kAddNewsletterAlertViewSectionNameTag;
-	[prompt addSubview:textField];
-	
-	// set place
-	[prompt setTransform:CGAffineTransformMakeTranslation(0.0, 110.0)];
-	[prompt show];
-    [prompt release];
-	
-	[textField release];*/
 }
+
 - (void) addNewsletterSection:(Newsletter*)newsletter
 {
 	currentNewsletter=newsletter;
@@ -2115,18 +1854,12 @@
 {
 	NSManagedObjectContext * moc=[self managedObjectContext];
 	
-	/*NewsletterFetcher * newsletterFetcher=[[NewsletterFetcher alloc] init];
-	int numNewsletters=[newsletterFetcher.items count];
-	[newsletterFetcher release];
-	*/
-	
 	Newsletter * newNewsletter=[Newsletter createInContext:moc];
 	
 	int numNewsletters=[newNewsletter entityCount:@"Newsletter" predicate:nil];
 
-	//newNewsletter.maxSynopsisLength=self.maxNewsletterSynopsisLength;
 	newNewsletter.name=name;
-	//newNewsletter.logoImage=[UIImage imageNamed:@"32-newsletter.png"];
+	
 	newNewsletter.displayOrder=[NSNumber numberWithInt:numNewsletters];
 	
 	NewsletterSection * section=[newNewsletter addSection];
@@ -2268,16 +2001,6 @@
 			NSKeyedUnarchiver * unarchiver = [[NSKeyedUnarchiver alloc]
 										  initForReadingWithData:data];
 		
-			self.feedImageCache=[unarchiver decodeObjectForKey:@"feedImageCache"];
-					
-			self.selectedItems=[unarchiver decodeObjectForKey:@"selectedItems"];
-			
-			self.fetchers=[unarchiver decodeObjectForKey:@"fetchers"];
-			
-			self.fetcher =[unarchiver decodeObjectForKey:@"fetcher"];
-			self.itemIndex=[unarchiver decodeIntForKey:@"itemIndex"]; 
-			self.sharingPublishActions=[unarchiver decodeObjectForKey:@"sharingPublishActions"];
-			
 			BOOL isNotFirstRun= [unarchiver decodeBoolForKey:@"isNotFirstRun"];
 			
 			if(!isNotFirstRun)
@@ -2442,33 +2165,7 @@
 		{
 			NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
 		
-			if(feedImageCache!=nil)
-			{
-				[archiver encodeObject:feedImageCache forKey:@"feedImageCache"];
-			}
-			if(selectedItems!=nil)
-			{
-				[archiver encodeObject:selectedItems forKey:@"selectedItems"];
-				
-			}
-			if(fetchers!=nil)
-			{
-				[archiver encodeObject:fetchers	 forKey:@"fetchers"];
-			}
-			
-			//if(itemHtmlView!=nil)
-			//{
-				[archiver encodeObject:self.fetcher forKey:@"fetcher"];
-				[archiver encodeInt:self.itemIndex forKey:@"itemIndex"];
-			//}
-			if(self.sharingPublishActions)
-			{
-				[archiver encodeObject:self.sharingPublishActions forKey:@"sharingPublishActions"];
-			}
-			
-			
 			[archiver encodeBool:YES forKey:@"isNotFirstRun"];
-			
 			
 			[archiver finishEncoding];
 		
@@ -2495,21 +2192,6 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     NSLog(@"applicationWillTerminate");
-	
-	// get current navigation stack...
-	NSArray * viewControllers=[[self masterNavController] viewControllers];
-	
-	self.fetchers=nil;
-	fetchers=[NSMutableArray new];
-	
-	for(int i=1;i<[viewControllers count];i++)
-	{
-		UIViewController * controller = [viewControllers objectAtIndex:i];
-		
-		ItemFetcher * fetcher=[controller fetcher];
-		
-		[fetchers addObject:fetcher];
-	}
 	
 	// Save data if appropriate
 	[self saveData];
@@ -2553,11 +2235,7 @@
     if (managedObjectContext != nil) {
         return managedObjectContext;
     }
-	//managedObjectContext=[self createNewManagedObjectContext:NSMergeByPropertyStoreTrumpMergePolicy];
 	managedObjectContext=[self createNewManagedObjectContext:NSOverwriteMergePolicy];
-	
-	//managedObjectContext=[self createNewManagedObjectContext:NSRollbackMergePolicy];
-	
 	return managedObjectContext;
 }
 
@@ -2569,11 +2247,6 @@
 	  moc = [[NSManagedObjectContext alloc] init];
 	  [moc setPersistentStoreCoordinator: coordinator];
 	  [moc setMergePolicy:mergePolicy];
-	  //[moc setMergePolicy:NSMergeByPropertyObjectTrumpMergePolicy];
-	  //[moc setMergePolicy:NSMergeByPropertyStoreTrumpMergePolicy];
-	  
-	  
-	  
   }
   return moc;
 }					   
@@ -2591,7 +2264,6 @@
     [window release];
 	[feedImageCache release];
 	[headlineColor release];
-	//[accounts release];
 	[newsletterFormat release];
 	[detailNavController release];
 	[itemHtmlView  release];
@@ -2611,8 +2283,7 @@
 	[tmpViewController release];
 	[tmpFolder release];
 	[tmpNewsletter release];
-	//[feedView release];
-    [super dealloc];
+	[super dealloc];
 }
 
 @end

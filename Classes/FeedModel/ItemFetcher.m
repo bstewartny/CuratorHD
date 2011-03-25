@@ -15,6 +15,7 @@
 
 - (void) performFetch
 {
+	//NSLog(@"[ItemFetcher performFetch]");
 	NSError *error = nil;
 	
 	[[self fetchedResultsController] performFetch:&error];
@@ -79,6 +80,7 @@
 
 - (NSArray*) items
 {
+	//NSLog(@"[ItemFetcher items]");
 	[self performFetch];
 	//return [[self fetchedResultsController] fetchedObjects];
 	return [NSArray arrayWithArray:[[self fetchedResultsController] fetchedObjects]];
@@ -131,6 +133,7 @@
 
 - (int) count
 {
+	//NSLog(@"[ItemFetcher count]");
 	id <NSFetchedResultsSectionInfo> sectionInfo = nil;
 	sectionInfo = [[[self fetchedResultsController] sections] objectAtIndex:0];
 	return [sectionInfo numberOfObjects];
@@ -604,8 +607,13 @@
 	if (fetchedResultsController) return fetchedResultsController;
 	
 	
+	//NSPredicate *predicate = [NSPredicate predicateWithFormat:
+	//						  @"feed.account.name == %@ AND feed.feedCategory CONTAINS %@", accountName,[NSString stringWithFormat:@"|%@|",feedCategory]];
+	//
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:
-							  @"feed.account.name == %@ AND feed.feedCategory CONTAINS %@", accountName,[NSString stringWithFormat:@"|%@|",feedCategory]];
+							  @"feed.account.name == %@ AND feed.feedCategory==%@", accountName,feedCategory];
+	
+	
 	
 	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" 
 																   ascending:NO];

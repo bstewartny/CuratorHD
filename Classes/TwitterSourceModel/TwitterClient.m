@@ -16,6 +16,7 @@
 #import "UserSettings.h"
 #import "MarkupStripper.h"
 #import "UIImage+RoundedCorner.h"
+#import "ImageFetcher.h"
 
 @implementation TwitterClient
 @synthesize userId,screenName,username,password,verifyDelegate;
@@ -46,7 +47,6 @@
 		
 		if(json)
 		{
-			//NSLog(@"%@",json);
 			return [json JSONValue];
 		}
 		else 
@@ -107,13 +107,6 @@
 
 	[oRequest setHTTPMethod:httpMethod];
 
-	/*OARequestParameter *statusParam = [[OARequestParameter alloc] initWithName:@"status"
-																	 value:[item customValueForKey:@"status"]];
-	 NSArray *params = [NSArray arrayWithObjects:statusParam, nil];
-	 [oRequest setParameters:params];
-	 [statusParam release];
-	 */
-
 	if(responseData!=nil)
 	{
 		[responseData release];
@@ -157,11 +150,6 @@
 		{
 			if(![t isKindOfClass:[NSDictionary class]]) continue;
 			[items addObject:t];
-			
-			//NSString * text=[t objectForKey:@"name"];
-//			NSString * item_id=[t objectForKey:@"id"];
-//			
-//			[items addObject:text];
 		}
 	}
 	
@@ -193,16 +181,12 @@
 	{
 		[verifyDelegate didSucceed];
 		
-		NSLog(@"ticket.didSucceed=YES");
-		
 		if(data)
 		{
 			NSString *responseBody = [[NSString alloc] initWithData:data
 													   encoding:NSUTF8StringEncoding];
 			if([responseBody length]>0)
 			{
-				NSLog(@"responseBody=%@",responseBody);
-				
 				NSArray *pairs = [responseBody componentsSeparatedByString:@"&"];
 				
 				for (NSString *pair in pairs) 
@@ -240,10 +224,6 @@
 	{
 		[super tokenAccessTicket:ticket didFinishWithData:data];	
 	}
-	/*if(ticket.didSucceed)
-	{
-		[[[UIApplication sharedApplication] delegate] updateSingleAccount:@"Twitter"];
-	}*/
 }
 
 - (NSString*) screenName
@@ -276,13 +256,13 @@
 	
 	NSLocale *enUS = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
 	
-	// <published>2010-08-30T15:33:02Z</published><updated>2010-08-30T15:33:02Z</updated>
-	
 	[formatter setLocale:enUS];
 	[enUS release];
-	//[formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+	
 	[formatter setDateFormat:@"EEE MMM dd HH:mm:ss ZZ yyyy"];
-	NSMutableDictionary * imageCache=[[[UIApplication sharedApplication] delegate] feedImageCache];
+	NSMutableDictionary * profile_image_urls=[[NSMutableDictionary alloc] init];
+	
+	//NSMutableDictionary * imageCache=[[[UIApplication sharedApplication] delegate] feedImageCache];
 	MarkupStripper * stripper=[[[MarkupStripper alloc] init] autorelease];
 	if ([json isKindOfClass:[NSArray class]]) 
 	{
@@ -295,7 +275,6 @@
 			NSString * created_at=[t objectForKey:@"created_at"];
 			
 			NSDate * date=[formatter dateFromString:created_at];
-			
 			
 			NSDictionary * user=[t objectForKey:@"user"];
 			
@@ -313,9 +292,15 @@
 			tmp.origin=user_name;
 			tmp.imageUrl=profile_image_url;
 			
+			
 			// see if image is already cached, if not download it and add to the cache...
 			if([profile_image_url length]>0)
 			{
+				if([profile_image_urls objectForKey:profile_image_url]==nil)
+				{
+					[profile_image_urls setObject:profile_image_url forKey:profile_image_url];
+				}
+				/*
 				if(imageCache)
 				{
 					@synchronized(imageCache)
@@ -331,7 +316,7 @@
 							{
 								img = [[[UIImage alloc] initWithData:data] autorelease];
 								
-								img=[img roundedCornerImage:8 borderSize:0];
+								//img=[img roundedCornerImage:8 borderSize:0];
 							}
 						}
 					
@@ -345,7 +330,7 @@
 					
 						tmp.image=img;
 					}
-				}
+				}*/
 			}
 			
 			tmp.uid=item_id;
@@ -353,19 +338,13 @@
 			tmp.originUrl=user_screenname;
 			tmp.date=date; 		
 			tmp.url=[NSString stringWithFormat:@"http://twitter.com/%@/status/%@",user_id,item_id];
+			
 			tmp.headline=[[stripper stripMarkup:text] stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+			
 			tmp.origSynopsis=[self getTweetHtml:text];
-			
-			//NSString * user_html=[NSString stringWithFormat:@"<br><img src=\"%@\"><a href=\"http://twitter.com/%@\">%@</a>",profile_image_url,user_screenname,user_screenname];
-			
-			//tmp.origSynopsis=[tmp.origSynopsis stringByAppendingString:user_html];
-			
 			
 			tmp.synopsis=tmp.headline;
 				
-			
-			//NSLog(@"%@",tmp.headline);
-			
 			[items addObject:tmp];
 			
 			[tmp release];
@@ -373,6 +352,31 @@
 	}
 	
 	[formatter release];
+	
+	// get profile images
+	if([profile_image_urls count]>0)
+	{
+		// fetch images from web (from local disk cache if exists)
+		NSArray * urls=[profile_image_urls allKeys];
+		
+		ImageFetcher * imageFetcher=[[ImageFetcher alloc] init];
+		
+		NSDictionary * dict=[imageFetcher fetchImages:urls];
+		
+		// attach images to items
+		for(FeedItem * item in items)
+		{
+			NSString * profile_image_url=item.imageUrl;
+			if([profile_image_url length]>0)
+			{
+				UIImage * img=[dict objectForKey:profile_image_url];
+				if (img) 
+				{
+					item.image=img;
+				}
+			}
+		}
+	}
 	
 	return items;
 }
@@ -388,13 +392,6 @@
 	NSLog(@"retweet: %@",tweetId);
 	
 	if(tweetId==nil) return;
-	
-	/*if (![self validate])
-	{
-		NSLog(@"Failed to validate");
-		[self show];
-		return;
-	}*/
 	
 	NSString * url=[NSString stringWithFormat:@"http://api.twitter.com/1/statuses/retweet/%@.json",tweetId];
 	
@@ -434,9 +431,6 @@
 	// if we just logged in from sources update - then continue to update the twitter source...
 	NSLog(@"TwitterClient.show");
 
-
-	
-	
 	[super show];
 }	
 
@@ -497,25 +491,11 @@
 	 
 }
 
-
-
-
 - (void) addToFavorites:(NSString*)tweetId
 {
 	NSLog(@"addToFavorites: %@",tweetId);
 	
-	
-	
-	
 	if(tweetId==nil) return;
-	
-	/*if (![self validate])
-	{
-		NSLog(@"Failed to validate");
-		[self show];
-		return;
-	}*/
-	
 	
 	NSString * url=[NSString stringWithFormat:@"http://api.twitter.com/1/favorites/create/%@.json",tweetId];
 	
@@ -534,9 +514,6 @@
 										  										 didFinishSelector:@selector(sendStatusTicket:didFinishWithData:)
 																				   didFailSelector:@selector(sendStatusTicket:didFailWithError:)];
 	
-
-	
-	
 	[fetcher start];
 	[oRequest release];
 	
@@ -552,7 +529,6 @@
 	}
 
 	return  [self getListsFromJson:[self getJson:[NSString stringWithFormat:@"http://api.twitter.com/1/%@/lists.json",self.userId]]];
-	
 }
 
 - (NSArray*) getMostRecentMentions:(int)maxItems sinceId:(NSString*)sinceId
@@ -589,11 +565,6 @@
 		return nil;
 	}
 	 
-	//if (maxItems==0) 
-	//{
-	////	maxItems=20;
-	//}
-	
 	if(sinceId)
 	{
 		return [self getItems:[NSString stringWithFormat:@"http://api.twitter.com/1/%@/lists/%@/statuses.json?since_id=%@",self.userId,list_id,sinceId]];
@@ -602,9 +573,6 @@
 	{
 		return [self getItems:[NSString stringWithFormat:@"http://api.twitter.com/1/%@/lists/%@/statuses.json",self.userId,list_id]];
 	}
-	
-	
-	
 }
 
 - (NSArray*) getMostRecentHomeTimeline:(int)maxItems sinceId:(NSString*)sinceId
@@ -674,8 +642,6 @@
 	{
 		return [self getItems:[NSString stringWithFormat:@"http://twitter.com/direct_messages.json?count=%d",maxItems]];
 	} 
-	
-	
 }
 
 - (NSArray*) getMostRecentFavorites:(int)maxItems sinceId:(NSString*)sinceId
@@ -687,18 +653,7 @@
 	}
 	
 	return [self getItems:@"http://twitter.com/favorites.json"];
-	
-		
-	
 }
-
-
-
-
-
-
-
-
 
 - (NSArray*) getMoreOldMentions:(int)maxItems maxId:(NSString*)maxId
 {
@@ -733,11 +688,6 @@
 	{
 		return nil;
 	}
-	
-	//if (maxItems==0) 
-	//{
-	//	maxItems=20;
-	//}
 	
 	if(maxId)
 	{
@@ -828,12 +778,10 @@
 	
 	return [self getItems:@"http://twitter.com/favorites.json"];
 }
+
 - (void)tokenAccess:(BOOL)refresh
 {
-	//if (!refresh)
-	//	[[SHKActivityIndicator currentIndicator] displayActivity:SHKLocalizedString(@"Authenticating...")];
-	
-    OAMutableURLRequest *oRequest = [[OAMutableURLRequest alloc] initWithURL:accessURL
+	OAMutableURLRequest *oRequest = [[OAMutableURLRequest alloc] initWithURL:accessURL
 																	consumer:consumer
 																	   token:(refresh ? accessToken : requestToken)
 																	   realm:nil   // our service provider doesn't specify a realm
@@ -857,12 +805,9 @@
 
 - (BOOL) isAuthorized
 {
-	//NSLog(@"TwitterClient.isAuthorized");
 	if(![super isAuthorized])
 	{
 		NSLog(@"User is not currenlty authorized for twitter");
-		
-		//[self promptAuthorization];
 		
 		return NO;
 	}
@@ -893,27 +838,19 @@
 - (NSString*) wrap_hashtag_with_link:(NSString*)text
 {
 	//Replace #hashtag with <a href="http://twitter.com/search?q=hashtag">#hashtag</a>"""
-	//return re.sub(r'(^|[^\w])#(\w+)\b', r'\1<a href="http://twitter.com/search?q=\2">#\2</a>', text)
 	NSString * searchString=@"(^|[^\\w])#(\\w+)\\b";
 	NSString * replaceString=@"$1<a href=\"http://twitter.com/search?q=$2\">#$2</a>";
 	
 	return [text stringByReplacingOccurrencesOfRegex:searchString withString:replaceString];
-	
-
-
 }
 
 - (NSString*) wrap_http_with_link:(NSString*)text
 {
 	//Replace http://foo with <a href="http://foo">http://foo</a>"""
-	//return re.sub(r'(^|[^\w])(http://[^\s]+)', r'\1<a href="\2">\2</a>', text)
-
 	NSString * searchString=@"(^|[^\\w])(http://[^\\s]+)";
 	NSString * replaceString=@"$1<a href=\"$2\">$2</a>";
 	
 	return [text stringByReplacingOccurrencesOfRegex:searchString withString:replaceString];
-	
-
 }						  
 					/*
 - (NSString*) embed_tweet_html:(tweet_url, extra_css=None):

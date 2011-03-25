@@ -20,6 +20,6 @@
 - (id) initWithTemplateName:(NSString*)templateName maxSynopsisSize:(int)maxSynopsisSize embedImageData:(BOOL)embedImageData;
 
 - (NSString*) getHTML:(Newsletter*)newsletter;
-
+- (NSString*) getHTMLPreview:(Newsletter*) newsletter maxItems:(int)maxItems;
 
 @end

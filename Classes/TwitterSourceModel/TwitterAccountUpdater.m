@@ -46,7 +46,9 @@
 	[feed release];
 	*/
 	feed=[TempFeed new];
-	feed.url=@"http://twitter.com/statuses/friends_timeline.json";
+	
+	feed.url=@"http://twitter.com/statuses/home_timeline.json";
+	//feed.url=@"http://twitter.com/statuses/friends_timeline.json";
 	feed.name=@"Twitter Timeline";
 	feed.feedType=@"02TwitterFeed";
 	feed.feedCategory=@"_twitter_friends";

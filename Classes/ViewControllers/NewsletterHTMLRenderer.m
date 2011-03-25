@@ -11,6 +11,7 @@
 #import "NewsletterSection.h"
 #import "NewsletterItem.h"
 #import "Base64.h"
+//#import "UIDeviceAdditions.h"
 
 
 @implementation NewsletterHTMLRenderer
@@ -25,9 +26,16 @@
 	return self;
 }
 
+
 - (NSString*) getHTML:(Newsletter*) newsletter
 {
+	return [self getHTMLPreview:newsletter maxItems:-1];
+}
+- (NSString*) getHTMLPreview:(Newsletter*) newsletter maxItems:(int)maxItems
+{
 	if(newsletter==nil) return @"";
+	
+	NSAutoreleasePool * htmlPool=[[NSAutoreleasePool alloc] init];
 	
 	self.newsletter=newsletter;
 	
@@ -43,23 +51,6 @@
 	}
 	
 	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{pageWidth}}" withString:[NSString stringWithFormat:@"%d",pageWidth]];
-	
-	// append newsletter header...
-		
-	//html=[self applyNewsletterStyles:newsletter toHtml:html];
-	
-	// replace styles in template...
-	/*html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{titleFont}}" withString:newsletter.titleFont];
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{titleColor}}" withString:newsletter.titleColor];
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{commentsFont}}" withString:newsletter.commentsFont];
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{commentsColor}}" withString:newsletter.commentsColor];
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{sectionFont}}" withString:newsletter.sectionFont];
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{sectionColor}}" withString:newsletter.sectionColor];
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{headlineFont}}" withString:newsletter.headlineFont];
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{headlineColor}}" withString:newsletter.headlineColor];
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{bodyFont}}" withString:newsletter.bodyFont];
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{bodyColor}}" withString:newsletter.bodyColor];
-	*/
 	
 	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{newsletter.name}}" withString:newsletter.name];
 	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{newsletter.summary}}" withString:[newsletter.summary stringByReplacingOccurrencesOfString:@"\n" withString:@"<BR />"]];
@@ -135,12 +126,16 @@
 	sectionTemplate=[self getTemplateSection:html sectionName:@"newsletter.sections.right"];
 	
 	sections=[[NSMutableString alloc] init];
-	
+	int itemCount=0;
+		
 	if(sortedSections && [sortedSections count]>0)
 	{
 		int i=0;
+		
 		for (NewsletterSection * section in sortedSections)
 		{	
+			NSAutoreleasePool * sectionPool=[[NSAutoreleasePool alloc] init];
+			
 			NSArray * sortedItems=[section sortedItems];
 			
 			if(sortedItems==nil || [sortedItems count]==0)
@@ -156,17 +151,28 @@
 			
 			i++;
 			
-			//NSString * tmpTemplate=[self getTemplateSection:tmp sectionName:@"section.items"];
-			
 			NSMutableString * items=[[NSMutableString alloc] init];
 			
 			for(FeedItem * item in sortedItems)
 			{
+				NSAutoreleasePool * itemPool=[[NSAutoreleasePool alloc] init];
+				
 				NSString * itemHtml=[itemRenderer getItemHTML:item];
 				
 				if(itemHtml)
 				{
 					[items appendString:itemHtml];
+					itemCount++;
+				}
+				
+				[itemPool drain];
+				
+				if(maxItems>0)
+				{
+					if(itemCount>=maxItems)
+					{
+						break;
+					}
 				}
 			}
 			
@@ -175,14 +181,39 @@
 			[sections appendString:tmp];
 			
 			[items release];
+			
+			[sectionPool drain];
+			
+			if(maxItems>0)
+			{
+				if(itemCount>=maxItems)
+				{
+					break;
+				}
+			}
 		}
 	}
 	
-	html=[self replaceTemplateSection:html sectionName:@"newsletter.sections.right" withContent:sections];
+	if(maxItems>0)
+	{
+		if(itemCount>=maxItems)
+		{
+			int totalCount=[newsletter itemCount];
+			
+			// show message to user that we limited the preview...
+			NSString * message=[NSString stringWithFormat:@"Newsletter preview contains %d of %d total items.<br> Published newsletter will contain all items.",itemCount,totalCount];
+		
+			html=[html stringByReplacingOccurrencesOfStringIfExists:@"<!--preview.message-->" withString:message];
+		}
+	}
+	
+	html=[[self replaceTemplateSection:html sectionName:@"newsletter.sections.right" withContent:sections] retain];
 	
 	[sections release];
 	
-	return html;
+	[htmlPool drain];
+	
+	return [html autorelease];
 }
 
 - (void) dealloc

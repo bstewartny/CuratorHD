@@ -7,14 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MBProgressHUD.h"
 
 @class ItemFetcher;
-@interface AddItemsViewController : UIViewController {
+ 
+@interface AddItemsViewController : UIViewController<MBProgressHUDDelegate> {
 		IBOutlet UITableView * tableView;
 		ItemFetcher * newslettersFetcher;
 		ItemFetcher * foldersFetcher;
 		id delegate;
 		NSIndexPath * selectedIndexPath;
+	MBProgressHUD * HUD;
 	}
 	
 	@property(nonatomic,retain)IBOutlet UITableView * tableView;

@@ -7,10 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MBProgressHUD.h"
+
+#define kAdjustSynopsisActionSheet 9996
+
+
 @class Newsletter;
 
-@interface NewsletterBaseViewController : UIViewController {
+@interface NewsletterBaseViewController : UIViewController <MBProgressHUDDelegate,UIActionSheetDelegate>{
 	Newsletter * newsletter;
+	MBProgressHUD * HUD;
 }
 @property(nonatomic,retain) Newsletter * newsletter;
 

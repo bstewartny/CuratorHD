@@ -24,9 +24,12 @@
 #import "NewsletterSynopsisItemCell.h"
 #import "FastFolderTableViewCell.h"
 #import "FastTweetFolderTableViewCell.h"
+#import "Summarizer.h"
+#import "MarkupStripper.h"
 
 #define kEditSectionTag 1001
 #define kAddSectionTag 1002
+
 
 @implementation NewsletterViewController
 @synthesize newsletterTableView,editActionToolbar,addImageButton,imagePickerPopover;
@@ -120,13 +123,24 @@
 	[buttons addObject:bi];
 	[bi release];
 	
+	bi=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeTouch:)];
+	
+	[buttons addObject:bi];
+	
+	[bi release];
+	
+	bi=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:self action:nil];
+	bi.width=25;
+	[buttons addObject:bi];
+	[bi release];
+	
 	bi = [[UIBarButtonItem alloc] initWithTitle:@"Preview" style:UIBarButtonItemStyleDone target:self action:@selector(preview:)];
 	[buttons addObject:bi];
 	[bi release];
 	
 	// create a spacer
 	bi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-	bi.width=30;
+	bi.width=5;
 	[buttons addObject:bi];
 	[bi release];
 	 
@@ -212,6 +226,66 @@
 	 name:@"ReloadActionData"
 	 object:nil];
 }
+/*
+- (IBAction) composeTouch:(id)sender
+{
+	UIActionSheet * actionSheet=[[UIActionSheet alloc] initWithTitle:@"Adjust Synopsis Length" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"Delete All Synopsis" otherButtonTitles:@"Use original text", @"Shorten to 50 words",@"Shorten to 100 words",@"Shorten to 200 words",nil];
+	actionSheet.tag=kAdjustSynopsisActionSheet;
+	[actionSheet showFromBarButtonItem:sender animated:YES];
+	
+	[actionSheet release];
+}
+
+- (void) deleteAllSynopsis
+{
+	// prompt to be sure...
+	for(NewsletterSection * section in self.newsletter.sections)
+	{
+		for(NewsletterItem * item in section.items)
+		{
+			item.synopsis=nil;
+		}
+	}
+}
+
+- (void) replaceAllOriginalSynopsis
+{
+	MarkupStripper * stripper=[[MarkupStripper alloc] init];
+	for(NewsletterSection * section in self.newsletter.sections)
+	{
+		for(NewsletterItem * item in section.items)
+		{
+			item.synopsis=[stripper stripMarkup:item.origSynopsis];
+		}
+	}
+	[stripper release];
+}
+
+- (void) shortenAllSynopsis50
+{
+	[self shortenAllSynopsis:50];
+}
+
+- (void) shortenAllSynopsis100
+{
+	[self shortenAllSynopsis:100];
+}
+
+- (void) shortenAllSynopsis200
+{
+	[self shortenAllSynopsis:200];
+}
+
+- (void) shortenAllSynopsis:(int)maxWords
+{
+	for(NewsletterSection * section in self.newsletter.sections)
+	{
+		for(NewsletterItem * item in section.items)
+		{
+			item.synopsis=[Summarizer shortenToMaxWords:maxWords text:item.synopsis];
+		}
+	}
+}*/
 
 -(void)handleNotification:(NSNotification *)pNotification
 {
@@ -228,6 +302,7 @@
 	viewMode=[sender selectedSegmentIndex];
 	[newsletterTableView reloadData];
 }
+
 
 - (void) preview:(id)sender
 {
@@ -267,7 +342,53 @@
 			
 			[self.newsletterTableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]]     withRowAnimation:UITableViewRowAnimationNone];
 		}
+		return;
 	}
+	else 
+	{
+		[super actionSheet:actionSheet clickedButtonAtIndex:buttonIndex];
+	}
+/*	if(actionSheet.tag==kAdjustSynopsisActionSheet)
+	{
+		// The hud will dispable all input on the view
+		HUD = [[MBProgressHUD alloc] initWithView:self.view.window];
+		
+		// Add HUD to screen
+		[self.view.window addSubview:HUD];
+		
+		// Regisete for HUD callbacks so we can remove it from the window at the right time
+		HUD.delegate = self;
+		
+		switch(buttonIndex)
+		{
+			case 0: // delete
+				
+				HUD.labelText=@"Deleting synopsis text...";
+				[HUD showWhileExecuting:@selector(deleteAllSynopsis) onTarget:self withObject:nil animated:YES];
+				return;
+				
+			case 1:
+				// original
+				HUD.labelText=@"Setting original synopsis text...";
+				[HUD showWhileExecuting:@selector(replaceAllOriginalSynopsis) onTarget:self withObject:nil animated:YES];
+				return;
+				
+			case 2:  
+				HUD.labelText=@"Shortening synopsis text...";
+				[HUD showWhileExecuting:@selector(shortenAllSynopsis50) onTarget:self withObject:nil animated:YES];
+				return;
+				
+			case 3:  
+				HUD.labelText=@"Shortening synopsis text...";
+				[HUD showWhileExecuting:@selector(shortenAllSynopsis100) onTarget:self withObject:nil animated:YES];
+				return;
+				
+			case 4:  
+				HUD.labelText=@"Shortening synopsis text...";
+				[HUD showWhileExecuting:@selector(shortenAllSynopsis200) onTarget:self withObject:nil animated:YES];
+				return;
+		}
+	}*/
 }
 
 - (void) deleteSelectedRowsUsingIndexPaths:(NSArray*)selectedRows
@@ -669,7 +790,7 @@
 {
 	// subtract 1 for newsletter header...
 	// TODO: cache this or make sure we dont call it too frequently
-	NSLog(@"fetching all sections from database...");
+	//NSLog(@"fetching all sections from database...");
 	return [[self.newsletter sortedSections] objectAtIndex:section-1];
 }
 
@@ -776,7 +897,7 @@
 	
 	CGFloat cellWidth=self.newsletterTableView.frame.size.width;
 	
-	NSLog(@"newsletterTableView.frame=%@",NSStringFromCGRect(self.newsletterTableView.frame));
+	//NSLog(@"newsletterTableView.frame=%@",NSStringFromCGRect(self.newsletterTableView.frame));
 	
 	cellWidth=cellWidth-110;
 

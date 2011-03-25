@@ -33,15 +33,38 @@
 		
 		newSection.name=sectionName;
 		
-		[delegate addToSection:newSection];
+		if([self selectedItemCount]>10)
+		{
+			// The hud will dispable all input on the view
+			HUD = [[MBProgressHUD alloc] initWithView:self.view.window];
+			
+			// Add HUD to screen
+			[self.view.window addSubview:HUD];
+			
+			// Regisete for HUD callbacks so we can remove it from the window at the right time
+			HUD.delegate = self;
+			
+			HUD.labelText=@"Adding selected items...";
+			
+			// Show the HUD while the provided method executes in a new thread
+			[HUD showWhileExecuting:@selector(addToSection:) onTarget:delegate withObject:newSection animated:YES];
+		}
+		else 
+		{
+			[delegate addToSection:newSection];
 		
-		[self.tableView reloadData];
+			[self.tableView reloadData];
 		
-		[delegate cancelOrganize];
+			[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.5];
+		}
 	}
 }
 	 
-	
+- (int) selectedItemCount
+{
+	return [[[[UIApplication sharedApplication] delegate] selectedItems] count];
+}
+
 - (void) viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
@@ -57,12 +80,10 @@
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
-	//self.tableView.separatorColor=[UIColor darkGrayColor];
 	
 	[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
 	self.tableView.backgroundView.backgroundColor=[UIColor blackColor];
 	self.tableView.backgroundView.alpha=0.5;
-	//self.navigationItem.title=@"Add Selected Items";
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -190,6 +211,8 @@
 
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
+	[selectedIndexPath release];
+	selectedIndexPath=nil;
 	NSArray * sortedSections=[newsletter sortedSections];
 	
 	if([sortedSections count]<=indexPath.row)
@@ -201,14 +224,54 @@
 	{
 		NewsletterSection * section=[[newsletter sortedSections] objectAtIndex:indexPath.row];
 
-		[delegate addToSection:section];
-		
 		selectedIndexPath=[indexPath retain];
 		
-		[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 		
-		[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.5];
+		if([self selectedItemCount]>10)
+		{
+			// The hud will dispable all input on the view
+			HUD = [[MBProgressHUD alloc] initWithView:self.view.window];
+			
+			// Add HUD to screen
+			[self.view.window addSubview:HUD];
+			
+			// Regisete for HUD callbacks so we can remove it from the window at the right time
+			HUD.delegate = self;
+			
+			HUD.labelText=@"Adding selected items...";
+			
+			// Show the HUD while the provided method executes in a new thread
+			[HUD showWhileExecuting:@selector(addToSection:) onTarget:delegate withObject:section animated:YES];
+			
+		}
+		else 
+		{
+			[delegate addToSection:section];
+		
+			[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+		
+			[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.5];
+		}
 	}
+}
+
+- (void)hudWasHidden:(MBProgressHUD *)hud {
+	NSLog(@"Hud: %@", hud);
+    // Remove HUD from screen when the HUD was hidded
+    [HUD removeFromSuperview];
+    [HUD release];
+	
+	if(selectedIndexPath)
+	{
+		[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:selectedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+	}
+	else 
+	{
+		[self.tableView reloadData];
+	}
+	
+	[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.5];
+	
 }
 
 - (void) cancelOrganize

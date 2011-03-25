@@ -9,15 +9,17 @@
 #define kEditLogoImageActionSheet 4
 #define kPublishPreviewActionSheet 5
 
+
+
 #define kViewModeSections 0
 #define kViewModeHeadlines 1
 //#define kViewModeSynopsis 2
-
+//#import "MBProgressHUD.h"
 @class Newsletter;
 @class NewsletterHTMLPreviewViewController;
 @class NewsletterSection;
 
-@interface NewsletterViewController : NewsletterBaseViewController< UITextFieldDelegate,UITextViewDelegate,UITableViewDelegate,UITableViewDataSource,UIActionSheetDelegate,MFMailComposeViewControllerDelegate> {
+@interface NewsletterViewController : NewsletterBaseViewController<UITextFieldDelegate,UITextViewDelegate,UITableViewDelegate,UITableViewDataSource,UIActionSheetDelegate,MFMailComposeViewControllerDelegate> {
 	IBOutlet UITableView * newsletterTableView;
 	UIButton * addImageButton;
 	BOOL updating;
@@ -28,7 +30,7 @@
 	NewsletterSection * tmpEditSection;
 	
 	NSArray * cachedItems;
-	
+	//MBProgressHUD * HUD;
 }
 
 @property(nonatomic,retain) IBOutlet UITableView * newsletterTableView;

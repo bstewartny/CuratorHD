@@ -32,6 +32,19 @@
 		B028397012A56DB900D01F61 /* FBLoginDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = B028396712A56DB900D01F61 /* FBLoginDialog.m */; };
 		B028397112A56DB900D01F61 /* FBDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = B028396912A56DB900D01F61 /* FBDialog.m */; };
 		B028397212A56DB900D01F61 /* FBDialog.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B028396B12A56DB900D01F61 /* FBDialog.bundle */; };
+		B02A417B133B92570089EC47 /* ImageFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A417A133B92570089EC47 /* ImageFetcher.m */; };
+		B02A4199133B94FA0089EC47 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A4186133B94FA0089EC47 /* ASINetworkQueue.m */; };
+		B02A419A133B94FA0089EC47 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A4188133B94FA0089EC47 /* ASIInputStream.m */; };
+		B02A419B133B94FA0089EC47 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A418C133B94FA0089EC47 /* ASIHTTPRequest.m */; };
+		B02A419C133B94FA0089EC47 /* ASIFormDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A418E133B94FA0089EC47 /* ASIFormDataRequest.m */; };
+		B02A419D133B94FA0089EC47 /* ASIDownloadCache.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A4190133B94FA0089EC47 /* ASIDownloadCache.m */; };
+		B02A419E133B94FA0089EC47 /* ASIDataDecompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A4192133B94FA0089EC47 /* ASIDataDecompressor.m */; };
+		B02A419F133B94FA0089EC47 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A4194133B94FA0089EC47 /* ASIDataCompressor.m */; };
+		B02A41A0133B94FA0089EC47 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A4197133B94FA0089EC47 /* ASIAuthenticationDialog.m */; };
+		B02A420D133B95580089EC47 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B02A420C133B95580089EC47 /* CFNetwork.framework */; };
+		B02A4211133B95740089EC47 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B02A4210133B95740089EC47 /* MobileCoreServices.framework */; };
+		B02A4213133B95990089EC47 /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B02A4212133B95990089EC47 /* libz.1.2.3.dylib */; };
+		B02A4287133BA7E10089EC47 /* UIDeviceAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A4286133BA7E10089EC47 /* UIDeviceAdditions.m */; };
 		B02EAE69132F94FA0090B00C /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = B02EAE68132F94FA0090B00C /* MBProgressHUD.m */; };
 		B02F24C3116CF8AB008A0200 /* NewsletterUpdateFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B02F24C2116CF8AB008A0200 /* NewsletterUpdateFormView.xib */; };
 		B02F25F5116D152B008A0200 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = B02F25F4116D152B008A0200 /* blank.png */; };
@@ -524,7 +537,7 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		1D6058910D05DD3D006BFB54 /* Curator HD Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Curator HD Debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D6058910D05DD3D006BFB54 /* Newsletter Publisher Testing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Newsletter Publisher Testing.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28A0AAE50D9B0CCF005BE974 /* Curator_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Curator_Prefix.pch; sourceTree = "<group>"; };
@@ -564,6 +577,33 @@
 		B028396B12A56DB900D01F61 /* FBDialog.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = FBDialog.bundle; sourceTree = "<group>"; };
 		B028396C12A56DB900D01F61 /* FBConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBConnect.h; sourceTree = "<group>"; };
 		B028396D12A56DB900D01F61 /* Facebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Facebook.h; sourceTree = "<group>"; };
+		B02A4179133B92570089EC47 /* ImageFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFetcher.h; sourceTree = "<group>"; };
+		B02A417A133B92570089EC47 /* ImageFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageFetcher.m; sourceTree = "<group>"; };
+		B02A4185133B94FA0089EC47 /* ASIProgressDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIProgressDelegate.h; sourceTree = "<group>"; };
+		B02A4186133B94FA0089EC47 /* ASINetworkQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASINetworkQueue.m; sourceTree = "<group>"; };
+		B02A4187133B94FA0089EC47 /* ASINetworkQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASINetworkQueue.h; sourceTree = "<group>"; };
+		B02A4188133B94FA0089EC47 /* ASIInputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIInputStream.m; sourceTree = "<group>"; };
+		B02A4189133B94FA0089EC47 /* ASIInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIInputStream.h; sourceTree = "<group>"; };
+		B02A418A133B94FA0089EC47 /* ASIHTTPRequestDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIHTTPRequestDelegate.h; sourceTree = "<group>"; };
+		B02A418B133B94FA0089EC47 /* ASIHTTPRequestConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIHTTPRequestConfig.h; sourceTree = "<group>"; };
+		B02A418C133B94FA0089EC47 /* ASIHTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIHTTPRequest.m; sourceTree = "<group>"; };
+		B02A418D133B94FA0089EC47 /* ASIHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIHTTPRequest.h; sourceTree = "<group>"; };
+		B02A418E133B94FA0089EC47 /* ASIFormDataRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIFormDataRequest.m; sourceTree = "<group>"; };
+		B02A418F133B94FA0089EC47 /* ASIFormDataRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIFormDataRequest.h; sourceTree = "<group>"; };
+		B02A4190133B94FA0089EC47 /* ASIDownloadCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIDownloadCache.m; sourceTree = "<group>"; };
+		B02A4191133B94FA0089EC47 /* ASIDownloadCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIDownloadCache.h; sourceTree = "<group>"; };
+		B02A4192133B94FA0089EC47 /* ASIDataDecompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIDataDecompressor.m; sourceTree = "<group>"; };
+		B02A4193133B94FA0089EC47 /* ASIDataDecompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIDataDecompressor.h; sourceTree = "<group>"; };
+		B02A4194133B94FA0089EC47 /* ASIDataCompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIDataCompressor.m; sourceTree = "<group>"; };
+		B02A4195133B94FA0089EC47 /* ASIDataCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIDataCompressor.h; sourceTree = "<group>"; };
+		B02A4196133B94FA0089EC47 /* ASICacheDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASICacheDelegate.h; sourceTree = "<group>"; };
+		B02A4197133B94FA0089EC47 /* ASIAuthenticationDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIAuthenticationDialog.m; sourceTree = "<group>"; };
+		B02A4198133B94FA0089EC47 /* ASIAuthenticationDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIAuthenticationDialog.h; sourceTree = "<group>"; };
+		B02A420C133B95580089EC47 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		B02A4210133B95740089EC47 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		B02A4212133B95990089EC47 /* libz.1.2.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.3.dylib; path = usr/lib/libz.1.2.3.dylib; sourceTree = SDKROOT; };
+		B02A4285133BA7E10089EC47 /* UIDeviceAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDeviceAdditions.h; sourceTree = "<group>"; };
+		B02A4286133BA7E10089EC47 /* UIDeviceAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIDeviceAdditions.m; sourceTree = "<group>"; };
 		B02EAE67132F94FA0090B00C /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		B02EAE68132F94FA0090B00C /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		B02F24C2116CF8AB008A0200 /* NewsletterUpdateFormView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsletterUpdateFormView.xib; sourceTree = "<group>"; };
@@ -1266,6 +1306,9 @@
 				C49ABC3811D93A8C00F56D66 /* libsqlite3.dylib in Frameworks */,
 				C44EAAF4121DD27000528DCD /* Security.framework in Frameworks */,
 				B0B59739128B772C0080DF12 /* libicucore.dylib in Frameworks */,
+				B02A420D133B95580089EC47 /* CFNetwork.framework in Frameworks */,
+				B02A4211133B95740089EC47 /* MobileCoreServices.framework in Frameworks */,
+				B02A4213133B95990089EC47 /* libz.1.2.3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1293,7 +1336,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1D6058910D05DD3D006BFB54 /* Curator HD Debug.app */,
+				1D6058910D05DD3D006BFB54 /* Newsletter Publisher Testing.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1311,6 +1354,7 @@
 				C4513705113DA3FF0067B421 /* AddressBook.framework */,
 				C4513709113DA4030067B421 /* AddressBookUI.framework */,
 				C4A981D711AC44F200AB75AF /* SystemConfiguration.framework */,
+				B02A4210133B95740089EC47 /* MobileCoreServices.framework */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -1356,6 +1400,8 @@
 				C49ABC3711D93A8C00F56D66 /* libsqlite3.dylib */,
 				C44EAAF3121DD27000528DCD /* Security.framework */,
 				B0B59738128B772C0080DF12 /* libicucore.dylib */,
+				B02A420C133B95580089EC47 /* CFNetwork.framework */,
+				B02A4212133B95990089EC47 /* libz.1.2.3.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1363,6 +1409,8 @@
 		B023D4341138578100C15747 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				B02A4285133BA7E10089EC47 /* UIDeviceAdditions.h */,
+				B02A4286133BA7E10089EC47 /* UIDeviceAdditions.m */,
 				B0D65CB313097F8F00BA5684 /* UIImage+RoundedCorner.m */,
 				B0D65CB413097F8F00BA5684 /* UIImage+RoundedCorner.h */,
 				B0D65CB513097F8F00BA5684 /* UIImage+Alpha.m */,
@@ -1427,6 +1475,8 @@
 				B093290212F74A8100013B15 /* UIColorAdditions.m */,
 				B078AD0912F7981400525497 /* CustomCellBackgroundView.h */,
 				B078AD0A12F7981400525497 /* CustomCellBackgroundView.m */,
+				B02A4179133B92570089EC47 /* ImageFetcher.h */,
+				B02A417A133B92570089EC47 /* ImageFetcher.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1457,6 +1507,33 @@
 				B028396D12A56DB900D01F61 /* Facebook.h */,
 			);
 			path = FBConnect;
+			sourceTree = "<group>";
+		};
+		B02A417E133B94DC0089EC47 /* ASIHttpRequest */ = {
+			isa = PBXGroup;
+			children = (
+				B02A4185133B94FA0089EC47 /* ASIProgressDelegate.h */,
+				B02A4186133B94FA0089EC47 /* ASINetworkQueue.m */,
+				B02A4187133B94FA0089EC47 /* ASINetworkQueue.h */,
+				B02A4188133B94FA0089EC47 /* ASIInputStream.m */,
+				B02A4189133B94FA0089EC47 /* ASIInputStream.h */,
+				B02A418A133B94FA0089EC47 /* ASIHTTPRequestDelegate.h */,
+				B02A418B133B94FA0089EC47 /* ASIHTTPRequestConfig.h */,
+				B02A418C133B94FA0089EC47 /* ASIHTTPRequest.m */,
+				B02A418D133B94FA0089EC47 /* ASIHTTPRequest.h */,
+				B02A418E133B94FA0089EC47 /* ASIFormDataRequest.m */,
+				B02A418F133B94FA0089EC47 /* ASIFormDataRequest.h */,
+				B02A4190133B94FA0089EC47 /* ASIDownloadCache.m */,
+				B02A4191133B94FA0089EC47 /* ASIDownloadCache.h */,
+				B02A4192133B94FA0089EC47 /* ASIDataDecompressor.m */,
+				B02A4193133B94FA0089EC47 /* ASIDataDecompressor.h */,
+				B02A4194133B94FA0089EC47 /* ASIDataCompressor.m */,
+				B02A4195133B94FA0089EC47 /* ASIDataCompressor.h */,
+				B02A4196133B94FA0089EC47 /* ASICacheDelegate.h */,
+				B02A4197133B94FA0089EC47 /* ASIAuthenticationDialog.m */,
+				B02A4198133B94FA0089EC47 /* ASIAuthenticationDialog.h */,
+			);
+			path = ASIHttpRequest;
 			sourceTree = "<group>";
 		};
 		B02EAE64132F94E30090B00C /* MBProgressHUD */ = {
@@ -1874,6 +1951,7 @@
 		B0A54EFD12FC58C400913912 /* Externals */ = {
 			isa = PBXGroup;
 			children = (
+				B02A417E133B94DC0089EC47 /* ASIHttpRequest */,
 				B02EAE64132F94E30090B00C /* MBProgressHUD */,
 				B03B4B7312F86B820047D5CF /* MGSplitViewController */,
 				B0B59708128B71BC0080DF12 /* RegexKitLite */,
@@ -2517,7 +2595,7 @@
 			);
 			name = InfoNgen;
 			productName = Untitled;
-			productReference = 1D6058910D05DD3D006BFB54 /* Curator HD Debug.app */;
+			productReference = 1D6058910D05DD3D006BFB54 /* Newsletter Publisher Testing.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -3063,6 +3141,16 @@
 				B009B81613299279001F459E /* PullToRefreshViewController.m in Sources */,
 				B015AAEB132A848E004458BF /* ItemViewController.m in Sources */,
 				B02EAE69132F94FA0090B00C /* MBProgressHUD.m in Sources */,
+				B02A417B133B92570089EC47 /* ImageFetcher.m in Sources */,
+				B02A4199133B94FA0089EC47 /* ASINetworkQueue.m in Sources */,
+				B02A419A133B94FA0089EC47 /* ASIInputStream.m in Sources */,
+				B02A419B133B94FA0089EC47 /* ASIHTTPRequest.m in Sources */,
+				B02A419C133B94FA0089EC47 /* ASIFormDataRequest.m in Sources */,
+				B02A419D133B94FA0089EC47 /* ASIDownloadCache.m in Sources */,
+				B02A419E133B94FA0089EC47 /* ASIDataDecompressor.m in Sources */,
+				B02A419F133B94FA0089EC47 /* ASIDataCompressor.m in Sources */,
+				B02A41A0133B94FA0089EC47 /* ASIAuthenticationDialog.m in Sources */,
+				B02A4287133BA7E10089EC47 /* UIDeviceAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3085,7 +3173,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUNDLE_IDENTIFIER = com.infongen.CuratorHD.debug;
+				BUNDLE_IDENTIFIER = com.infongen.NewsletterPublisher.debug;
 				CODE_SIGN_ENTITLEMENTS = "~/Documents/InfoNgen-iPad/Entitlements.plist";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -3097,7 +3185,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
-				PRODUCT_NAME = "Curator HD Debug";
+				PRODUCT_NAME = "Newsletter Publisher Debug";
 				TARGETED_DEVICE_FAMILY = 2;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -3107,7 +3195,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUNDLE_IDENTIFIER = com.infongen.CuratorHD.release;
+				BUNDLE_IDENTIFIER = com.infongen.NewsletterPublisher;
 				CODE_SIGN_ENTITLEMENTS = "~/Documents/InfoNgen-iPad/Entitlements.plist";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3117,7 +3205,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
-				PRODUCT_NAME = "Curator HD Release";
+				PRODUCT_NAME = "Newsletter Publisher";
 				TARGETED_DEVICE_FAMILY = 2;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -3146,7 +3234,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUNDLE_IDENTIFIER = com.infongen.CuratorHD.testing;
+				BUNDLE_IDENTIFIER = com.infongen.NewsletterPublisher.testing;
 				CODE_SIGN_ENTITLEMENTS = "~/Documents/InfoNgen-iPad/Entitlements.plist";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3156,7 +3244,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
-				PRODUCT_NAME = "Curator HD Testing";
+				PRODUCT_NAME = "Newsletter Publisher Testing";
 				TARGETED_DEVICE_FAMILY = 2;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -3221,7 +3309,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUNDLE_IDENTIFIER = com.infongen.CuratorHD;
+				BUNDLE_IDENTIFIER = com.infongen.NewsletterPublisher;
 				CODE_SIGN_ENTITLEMENTS = "~/Documents/InfoNgen-iPad/Entitlements.plist";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3231,7 +3319,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
-				PRODUCT_NAME = "Curator HD";
+				PRODUCT_NAME = "Newsletter Publisher";
 				TARGETED_DEVICE_FAMILY = 2;
 				VALIDATE_PRODUCT = YES;
 			};

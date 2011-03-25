@@ -10,10 +10,11 @@
 #import "PullToRefreshViewController.h"
 #import <MessageUI/MessageUI.h>
 #import "ItemFetcher.h"
+#import "MBProgressHUD.h"
 
 @class ItemFetcher;
 @class MarkupStripper;
-@interface FeedViewController : PullToRefreshViewController <UIActionSheetDelegate,MFMailComposeViewControllerDelegate,ItemFetcherDelegate> {
+@interface FeedViewController : PullToRefreshViewController <UIActionSheetDelegate,MBProgressHUDDelegate,MFMailComposeViewControllerDelegate,ItemFetcherDelegate> {
 	ItemFetcher * fetcher;
 	id itemDelegate;
 	BOOL favoritesMode;
@@ -26,6 +27,7 @@
 	BOOL editMode;
 	UIBarButtonItem * organizeButton;
 	UIBarButtonItem * editButton;
+	MBProgressHUD * HUD;
 }
 @property(nonatomic) BOOL folderMode;
 @property(nonatomic) BOOL twitter;

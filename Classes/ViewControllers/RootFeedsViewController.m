@@ -597,8 +597,6 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 			
 			if(feedFetcher!=nil)
 			{
-				[feedFetcher performFetch];
-				
 				NSArray * feeds=[feedFetcher items];
 				
 				Feed * firstFeed=nil;
@@ -608,9 +606,9 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 					firstFeed=[feeds objectAtIndex:0];
 				}
 				
-				
 				FeedsViewController * feedsView=[[FeedsViewController alloc] initWithNibName:@"FeedsView" bundle:nil];
 				
+				feedsView.items=feeds;
 				feedsView.editable=(indexPath.section>0);
 				feedsView.fetcher=feedFetcher;
 				feedsView.title=feed.name;
@@ -618,15 +616,14 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 				
 				[self.navigationController pushViewController:feedsView animated:YES];
 				
-				
 				if(firstFeed)
 				{
 					[feedsView.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]   animated:NO scrollPosition:UITableViewScrollPositionNone];
 					
 					[[[UIApplication sharedApplication] delegate] showFeed:firstFeed delegate:self.itemDelegate editable:NO];
 				}
-				[feedsView release];
 				
+				[feedsView release];
 			}
 			else 
 			{

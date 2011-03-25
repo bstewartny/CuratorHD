@@ -15,7 +15,9 @@
 	// naive implementation - optimize in subclasses
 	if ([self.feedCategory isEqualToString:@"_category"])
 	{
-		return [self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(feed.account.name==%@) AND (feed.feedCategory CONTAINS %@)",self.account.name,[NSString stringWithFormat:@"|%@|",self.name]]];
+		//return [self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(feed.account.name==%@) AND (feed.feedCategory CONTAINS %@)",self.account.name,[NSString stringWithFormat:@"|%@|",self.name]]];
+		return [self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(feed.account.name==%@) AND (feed.feedCategory==%@)",self.account.name,self.name]];
+		
 	}
 	else
 	{
@@ -38,8 +40,12 @@
 	
 	if(category)
 	{
+		//NSPredicate *predicate = [NSPredicate predicateWithFormat:
+		//						  @"feed.account.name == %@ AND feed.feedCategory CONTAINS %@", accountName,[NSString stringWithFormat:@"|%@|",category]];
+		//
+		
 		NSPredicate *predicate = [NSPredicate predicateWithFormat:
-								  @"feed.account.name == %@ AND feed.feedCategory CONTAINS %@", accountName,[NSString stringWithFormat:@"|%@|",category]];
+								  @"feed.account.name == %@ AND feed.feedCategory==%@", accountName,category];
 		
 		[request setPredicate:predicate];
 	}
@@ -87,7 +93,10 @@
 	if ([self.feedCategory isEqualToString:@"_category"])
 	{
 		//NSLog(@"get count from database dynamically for _category: %@",self.name);
-		int count=[self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(isRead==0) AND (feed.account.name==%@) AND (feed.feedCategory CONTAINS %@)",self.account.name,[NSString stringWithFormat:@"|%@|",self.name]]];
+		//int count=[self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(isRead==0) AND (feed.account.name==%@) AND (feed.feedCategory CONTAINS %@)",self.account.name,[NSString stringWithFormat:@"|%@|",self.name]]];
+		
+		int count=[self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(isRead==0) AND (feed.account.name==%@) AND (feed.feedCategory==%@)",self.account.name,self.name]];
+		
 		//NSLog(@"got count of %d",count);
 		return [NSNumber numberWithInt:count];
 	}

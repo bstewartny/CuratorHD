@@ -17,6 +17,8 @@
 #import "Folder.h"
 #import "Newsletter.h"
 #import "FeedsTableViewCell.h"
+//#import "MBProgressHUD.h"
+
 #define kAddFolderWithItemsTag 1001
 #define kAddNewsletterWithItemsTag 1002
 
@@ -34,25 +36,46 @@
 	if(tag==kAddFolderWithItemsTag)
 	{
 		NSString * folderName=[values objectAtIndex:0];
-		
+		 
+			
 		if([folderName length]>0)
 		{
 			NSLog(@"create folder with name: %@",folderName);
 			Folder * newFolder=[[[UIApplication sharedApplication] delegate] createNewFolder:folderName];
 			
-			[delegate addToFolder:newFolder];
-			
-			[self.foldersFetcher performFetch];
-			[self.tableView reloadData];
-			
-			[delegate cancelOrganize];
-			
+			if([self selectedItemCount]>10)
+			{
+				// The hud will dispable all input on the view
+				HUD = [[MBProgressHUD alloc] initWithView:self.view.window];
+				
+				// Add HUD to screen
+				[self.view.window addSubview:HUD];
+				
+				// Regisete for HUD callbacks so we can remove it from the window at the right time
+				HUD.delegate = self;
+				
+				HUD.labelText=@"Adding selected items...";
+				
+				// Show the HUD while the provided method executes in a new thread
+				[HUD showWhileExecuting:@selector(addToFolder:) onTarget:delegate withObject:newFolder animated:YES];
+			}
+			else 
+			{
+				[delegate addToFolder:newFolder];
+				[self.foldersFetcher performFetch];
+				[self.tableView reloadData];
+				
+				[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.5];
+			}
+
 		}
 		return;
 	}
 	
 	if(tag==kAddNewsletterWithItemsTag)
 	{
+		 
+		
 		NSString * newsletterName=[values objectAtIndex:0];
 		NSString * sectionName=[values objectAtIndex:1];
 		
@@ -67,6 +90,10 @@
 	}
 }
 
+- (int) selectedItemCount
+{
+	return [[[[UIApplication sharedApplication] delegate] selectedItems] count];
+}
 
 
 - (void) viewWillAppear:(BOOL)animated
@@ -119,30 +146,19 @@
 	cell.textLabel.shadowColor=[UIColor blackColor];
 	cell.textLabel.shadowOffset=CGSizeMake(0, 1);
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	if([fetcher count]<=indexPath.row)
 	{
 		if(indexPath.section==0)
 		{
 			cell.accessoryType=UITableViewCellAccessoryNone;
 			cell.textLabel.textColor=[UIColor lightGrayColor];
-			cell.textLabel.text=@"Add Folder";
+			cell.textLabel.text=@"Add New Folder";
 		}
 		else 
 		{
 			cell.accessoryType=UITableViewCellAccessoryNone;
 			cell.textLabel.textColor=[UIColor lightGrayColor];
-			cell.textLabel.text=@"Add Newsletter";
+			cell.textLabel.text=@"Add New Newsletter";
 		}
 	}
 	else 
@@ -171,7 +187,6 @@
 					
 				}
 			}
-			
 		}
 		else 
 		{
@@ -224,14 +239,12 @@
 	v.backgroundColor=[UIColor viewFlipsideBackgroundColor];
 	v.alpha=0.8;
 	
-	
 	UILabel * label=[[UILabel alloc] init];
 	
 	label.textColor=[UIColor whiteColor];
 	label.font=[UIFont boldSystemFontOfSize:17];
 	label.shadowColor=[UIColor blackColor];
 	label.shadowOffset=CGSizeMake(0, 1);
-	
 	
 	switch (section) 
 	{
@@ -289,6 +302,10 @@
 
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
+	
+	[selectedIndexPath release];
+	selectedIndexPath=nil;
+	
 	ItemFetcher * fetcher=[self fetcherForSection:indexPath.section];
 	
 	if([fetcher count]<=indexPath.row)
@@ -314,16 +331,34 @@
 		
 		if(indexPath.section==0)
 		{
-			[delegate addToFolder:feed];
-			
-			[self.foldersFetcher performFetch];
-			
 			selectedIndexPath=[indexPath retain];
 			
-			[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 			
-			[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.5];
+			if([self selectedItemCount]>10)
+			{
 			
+				// The hud will dispable all input on the view
+				HUD = [[MBProgressHUD alloc] initWithView:self.view.window];
+				
+				// Add HUD to screen
+				[self.view.window addSubview:HUD];
+				
+				// Regisete for HUD callbacks so we can remove it from the window at the right time
+				HUD.delegate = self;
+				
+				HUD.labelText=@"Adding selected items...";
+				
+				// Show the HUD while the provided method executes in a new thread
+				[HUD showWhileExecuting:@selector(addToFolder:) onTarget:delegate withObject:feed animated:YES];
+			}
+			else 
+			{
+				[delegate addToFolder:feed];
+				[self.foldersFetcher performFetch];
+				[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:selectedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+				[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.5];
+			}
+
 			return;
 		}
 		if(indexPath.section==1)
@@ -338,6 +373,35 @@
 		}
 	}
 }
+ 
+- (void)hudWasHidden:(MBProgressHUD *)hud {
+	NSLog(@"Hud: %@", hud);
+    // Remove HUD from screen when the HUD was hidded
+    [HUD removeFromSuperview];
+    [HUD release];
+	
+	[self.foldersFetcher performFetch];
+	
+	if(selectedIndexPath)
+	{
+		[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:selectedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+	}
+	else 
+	{
+		[self.tableView reloadData];
+	}
+
+	[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.5];
+	
+}
+
+
+
+
+
+
+
+
 
 - (void) cancelOrganize
 {

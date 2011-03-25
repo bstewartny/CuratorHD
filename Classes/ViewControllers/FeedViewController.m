@@ -161,6 +161,9 @@
 		editButton.enabled=YES;
 	}
 	
+	[[[[UIApplication sharedApplication] delegate] selectedItems] removeAllItems];
+	
+	
 	self.navigationItem.title=self.origTitle;
 	
 	[self setOrganizeRightBarButtonItem];
@@ -168,6 +171,7 @@
 	[[[UIApplication sharedApplication] delegate] hideSelectedView];
 	
 	[self.tableView setEditing:NO animated:NO];
+	[self.tableView reloadData];
 }
 
 - (void) addToFolder:(Folder*)folder
@@ -207,9 +211,39 @@
 	// enter edit mode and show message
 	self.origTitle=self.navigationItem.title;
 	
-	self.navigationItem.title=@"Tap a folder or newsletter to add selected items.";
+	//self.navigationItem.title=@"Tap a folder or newsletter to add selected items.";
 	
-	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelOrganize)] autorelease];
+	
+	BlankToolbar * tools=[[BlankToolbar alloc] initWithFrame:CGRectMake(0, 0, 250, 44)];
+	tools.opaque=NO;
+	tools.backgroundColor=[UIColor clearColor];
+	
+	NSMutableArray * buttons=[[NSMutableArray alloc] init];
+	
+	UIBarButtonItem * bi=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+	[buttons addObject:bi];
+	
+	[bi release];
+	
+	bi=[[UIBarButtonItem alloc] initWithTitle:@"Select All" style:UIBarButtonItemStyleBordered target:self action:@selector(selectAll:)];
+	
+	[buttons addObject:bi];
+	
+	[bi release];
+	
+	bi=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelOrganize)];
+	
+	[buttons addObject:bi];
+	
+	[bi release];
+	
+	[tools setItems:buttons];
+	
+	[buttons release];
+	
+	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithCustomView:tools] autorelease];
+	
+	[tools release];
 	
 	[[[[UIApplication sharedApplication] delegate] selectedItems] removeAllItems];
 	
@@ -233,6 +267,28 @@
 	[newslettersFetcher release];
 
 	[self.tableView setEditing:YES animated:YES];
+	
+	[self.tableView reloadData];
+}
+
+- (void) selectAll:(id)sender
+{
+	FeedItemDictionary * selectedItems=[[[UIApplication sharedApplication] delegate] selectedItems];
+			
+	for (int i = 0; i < [tableView numberOfSections]; i++) 
+	{
+		for (int j = 0; j < [tableView numberOfRowsInSection:i]; j++) 
+		{
+			[tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:j inSection:i]		animated:YES scrollPosition:UITableViewScrollPositionNone];
+			
+			FeedItem * item=[fetcher itemAtIndex:j];
+			
+			if(![selectedItems containsItem:item])
+			{
+				[selectedItems addItem:item];
+			}
+		}
+	}
 }
 
 - (void) setOrganizeRightBarButtonItem
@@ -356,6 +412,7 @@
 	
 	[tableView reloadData];
 }
+
 - (void)addPullToRefreshFooter
 {
 	// TODO
@@ -372,8 +429,48 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-	Feed * feed=nil;
 	
+	// The hud will dispable all input on the view
+	HUD = [[MBProgressHUD alloc] initWithView:self.view.window];
+	
+	// Add HUD to screen
+	[self.view.window addSubview:HUD];
+	
+	// Regisete for HUD callbacks so we can remove it from the window at the right time
+	HUD.delegate = self;
+	
+	switch(buttonIndex)
+	{
+		case 0:
+			HUD.labelText=@"Marking as read...";
+			break;
+			
+		case 1: // delete older than 7 days
+			HUD.labelText=@"Deleting older items...";
+			break;
+			
+		case 2: // delete older than 30 days
+			HUD.labelText=@"Deleting older items...";
+			break;
+			
+		case 3: // delete older than 90 days
+			HUD.labelText=@"Deleting older items...";
+			break;
+			
+		case 4: // delete older than 90 days
+			HUD.labelText=@"Deleting read items...";
+			break;
+	}
+	
+	// Show the HUD while the provided method executes in a new thread
+	[HUD showWhileExecuting:@selector(performFeedUpdates:) onTarget:self withObject:[NSNumber numberWithInt:buttonIndex] animated:YES];
+}	
+	
+- (void) performFeedUpdates:(NSNumber*)buttonIndexObj
+{
+	NSInteger buttonIndex=[buttonIndexObj intValue];
+	 
+	Feed * feed=nil;
 	if([fetcher isKindOfClass:[FeedItemFetcher class]])
 	{
 		feed=[fetcher feed];
@@ -463,10 +560,6 @@
 				}
 			}
 		}
-		[self.tableView reloadData];
-		[[NSNotificationCenter defaultCenter] 
-		 postNotificationName:@"UpdateFeedsView"
-		 object:nil];
 		return;
 	}
 
@@ -494,13 +587,26 @@
 			[feed deleteReadItems];
 			break;
 	}
+}
+
+
+- (void)hudWasHidden:(MBProgressHUD *)hud {
+	NSLog(@"Hud: %@", hud);
+    // Remove HUD from screen when the HUD was hidded
+    [HUD removeFromSuperview];
+    [HUD release];
+	
 	[self.tableView reloadData];
 	
-	// send notification to reload feeds view to reflect new counts...
 	[[NSNotificationCenter defaultCenter] 
 	 postNotificationName:@"UpdateFeedsView"
-	 object:nil];
+	 object:nil];	
 }
+
+
+
+
+
 
 - (IBAction) toggleEditMode:(id)sender
 {
@@ -607,6 +713,17 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	}
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+	if(tableView.editing)
+	{
+		return @"Select items and then tap folder or newsletter to add items.";
+	}
+	else {
+		return nil;
+	}
+
+}
 - (CGFloat)tableView:(UITableView*)tableView
 heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {

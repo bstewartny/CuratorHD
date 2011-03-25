@@ -46,10 +46,6 @@
 	
 	int numItems=[self entityCount:@"FolderItem" predicate:[NSPredicate predicateWithFormat:@"folder==%@",self]];
 	
-	//int numItems=[self.items count];
-	
-	NSLog(@"Adding item with displayOrder: %d",numItems);
-	
 	newItem.displayOrder=[NSNumber numberWithInt:numItems];
 	
 	return newItem;

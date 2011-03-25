@@ -82,7 +82,7 @@
 
 - (IBAction) composeTouch:(id)sender
 {
-	UIActionSheet * actionSheet=[[UIActionSheet alloc] initWithTitle:@"Modify Synopsis" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"Delete Synopsis" otherButtonTitles:@"Replace with original", @"Shorten to 50 words",@"Shorten to 100 words",@"Shorten to 200 words",nil];
+	UIActionSheet * actionSheet=[[UIActionSheet alloc] initWithTitle:@"Adjust Synopsis Length" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"Delete Synopsis" otherButtonTitles:@"Use original text", @"Shorten to 50 words",@"Shorten to 100 words",@"Shorten to 200 words",nil];
 	
 	[actionSheet showFromBarButtonItem:sender animated:YES];
 	

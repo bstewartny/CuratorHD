@@ -92,7 +92,14 @@
 	 name:@"UpdateFeedsView"
 	 object:nil];
 	
-	[self performFetch];
+	if([self.items count]>0)
+	{
+		// already fetched...
+	}
+	else 
+	{
+		[self performFetch];
+	}
 }
 
 - (void) performFetch
@@ -657,8 +664,6 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		
 			if(feedFetcher!=nil)
 			{
-				[feedFetcher performFetch];
-				
 				NSArray * feeds=[feedFetcher items];
 				
 				Feed * firstFeed=nil;
@@ -670,6 +675,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 				
 				FeedsViewController * feedsView=[[FeedsViewController alloc] initWithNibName:@"FeedsView" bundle:nil];
 			
+				feedsView.items=feeds;
 				feedsView.editable=(self.editable || [feed editable]);
 				feedsView.fetcher=feedFetcher;
 				feedsView.title=feed.name;

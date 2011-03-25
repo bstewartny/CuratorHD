@@ -46,8 +46,11 @@
 {
 	NSLog(@"CategoryFeedFetcher.markAllAsRead");
 	
+	//NSPredicate *predicate = [NSPredicate predicateWithFormat:
+	//						  @"feed.account.name == %@ AND feed.feedCategory CONTAINS[cd] %@ AND isRead==0", accountName,[NSString stringWithFormat:@"|%@|",feedCategory ]];
+	
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:
-							  @"feed.account.name == %@ AND feed.feedCategory CONTAINS[cd] %@ AND isRead==0", accountName,[NSString stringWithFormat:@"|%@|",feedCategory ]];
+							  @"feed.account.name == %@ AND feed.feedCategory==%@ AND isRead==0", accountName,feedCategory];
 	
 	NSManagedObjectContext * moc=[self managedObjectContext];
 	
@@ -72,8 +75,10 @@
 			item.isRead=[NSNumber numberWithBool:YES];
 		}
 	}
+	//predicate = [NSPredicate predicateWithFormat:
+	//			 @"account.name == %@ AND feedCategory CONTAINS[cd] %@ AND unreadCount>0", accountName, [NSString stringWithFormat:@"|%@|",feedCategory ]];
 	predicate = [NSPredicate predicateWithFormat:
-				 @"account.name == %@ AND feedCategory CONTAINS[cd] %@ AND unreadCount>0", accountName, [NSString stringWithFormat:@"|%@|",feedCategory ]];
+				 @"account.name == %@ AND feedCategory==%@ AND unreadCount>0", accountName, feedCategory];
 	
 	[fetchRequest release];
 	
@@ -125,8 +130,10 @@
 	if (fetchedResultsController) return fetchedResultsController;
 	
 	// find where feedCategory contains "|<feedCategory>|" (its a pipe-delimited list of category names)
+	//NSPredicate *predicate = [NSPredicate predicateWithFormat:
+	//						  @"account.name == %@ AND feedCategory CONTAINS[cd] %@", accountName,[NSString stringWithFormat:@"|%@|",feedCategory ]];
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:
-							  @"account.name == %@ AND feedCategory CONTAINS[cd] %@", accountName,[NSString stringWithFormat:@"|%@|",feedCategory ]];
+							  @"account.name == %@ AND feedCategory==%@", accountName,feedCategory];
 	
 	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"feedType" 
 																   ascending:YES];
@@ -275,19 +282,6 @@
 	
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:
 							  @"account.name == %@ AND (feedCategory == %@ OR feedCategory == %@ OR feedCategory==%@ OR feedCategory==%@ OR feedCategory==%@  OR feedCategory==%@ OR feedCategory==%@ OR feedCategory==%@ OR feedCategory==%@ OR feedCategory==%@ OR feedCategory==%@ OR feedCategory==%@ OR feedCategory==%@)", accountName,@"_top",@"_category",@"_all",@"_starred",@"_shared",@"_none",@"_notes",@"_twitter_home",@"_twitter_friends",@"_twitter_favorites",@"_twitter_direct",@"_twitter_list",@"_twitter_mentions"];
-	
-	
-	
-	
-	/*NSArray * topLevelCategories=[NSArray arrayWithObjects:@"_top",@"_category",@"_all",@"_starred",@"_shared",@"_none",@"_notes",@"_twitter_home",@"_twitter_friends",@"_twitter_favorites",@"_twitter_direct",@"_twitter_list",nil];
-	
-	
-	
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:
-							  @"account.name == %@ AND feedCategory IN %@",topLevelCategories]; //(feedCategory == %@ OR feedCategory == %@ OR feedCategory==%@ OR feedCategory==%@ OR feedCategory==%@  OR feedCategory==%@ OR feedCategory==%@)", accountName,@"_top",@"_category",@"_all",@"_starred",@"_shared",@"_none",@"_notes"];
-	
-	*/
-	
 	
 	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"feedType" 
 																   ascending:YES];

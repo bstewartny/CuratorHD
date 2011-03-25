@@ -1,11 +1,12 @@
 #import <UIKit/UIKit.h>
-
+#import "MBProgressHUD.h"
 @class Newsletter;
-@interface AddItemsToSectionViewController : UIViewController {
+@interface AddItemsToSectionViewController : UIViewController<MBProgressHUDDelegate> {
 	IBOutlet UITableView * tableView;
 	Newsletter * newsletter;
 	id delegate;
 	NSIndexPath * selectedIndexPath;
+	MBProgressHUD * HUD;
 }
 
 @property(nonatomic,retain)IBOutlet UITableView * tableView;

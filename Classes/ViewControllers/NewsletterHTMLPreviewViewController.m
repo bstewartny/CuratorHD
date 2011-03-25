@@ -9,61 +9,94 @@
 #import <QuartzCore/QuartzCore.h>
 #import "BlankToolbar.h"
 #import <MessageUI/MessageUI.h>
+#import "MarkupStripper.h"
+#import "Summarizer.h"
+#import "NewsletterItem.h"
 
 @implementation NewsletterHTMLPreviewViewController
 @synthesize webView,activityIndicatorView,activityView,activityStatusViewController,activityTitleLabel,activityStatusLabel,activityProgressView;
 
 - (void) renderNewsletter
 {
-	int maxSynopsisSize=[[[UIApplication sharedApplication] delegate] maxNewsletterSynopsisLength];
-	
-	NewsletterHTMLRenderer * renderer=[[[NewsletterHTMLRenderer alloc] initWithTemplateName:[[[UIApplication sharedApplication] delegate] newsletterTemplateName] maxSynopsisSize:maxSynopsisSize embedImageData:YES] autorelease];
-	
-	renderer.pageWidth=640;
-	
-	NSString   *html= [renderer getHTML:self.newsletter];
-	//self.webView.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.webView.layer.bounds].CGPath;
-	
+	if(self.view==nil || self.view.window==nil)
+	{
+		[self renderHtml];
+		[self displayHtml];	
+	}
+	else 
+	{
+		if(!renderingHtml)
+		{
+			renderingHtml=YES;
+			
+			// The hud will dispable all input on the view
+			HUD = [[MBProgressHUD alloc] initWithView:self.view.window];
+			
+			// Add HUD to screen
+			[self.view.window addSubview:HUD];
+			
+			// Regisete for HUD callbacks so we can remove it from the window at the right time
+			HUD.delegate = self;
+			
+			HUD.labelText=@"Generating Preview...";
+			
+			[HUD showWhileExecuting:@selector(renderHtml) onTarget:self withObject:nil animated:YES];
+		}
+		else 
+		{
+			renderingHtml=NO;
+			
+			[self displayHtml];
+		}
+	}
+}
+
+- (void) displayHtml
+{
 	self.webView.scalesPageToFit=NO;
 	
-	[self.webView loadHTMLString:html baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
+	if([html length]>0)
+	{
+		[self.webView loadHTMLString:html baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
+	}
+	else 
+	{
+		[self.webView loadHTMLString:@"<html><body></body></html>" baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
+	}
 	
 	[self.webView setNeedsDisplay];	
 }
+
+- (void) renderHtml
+{
+	[html release];
+	html=nil;
+	
+	int maxSynopsisSize=0;
+	
+	NewsletterHTMLRenderer * renderer=[[NewsletterHTMLRenderer alloc] initWithTemplateName:[[[UIApplication sharedApplication] delegate] newsletterTemplateName] maxSynopsisSize:maxSynopsisSize embedImageData:YES];
+	
+	renderer.pageWidth=640;
+	
+	html = [[renderer getHTMLPreview:self.newsletter maxItems:50] retain];
+	
+	[renderer release];
+}
+
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-	//self.webView.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.webView.layer.bounds].CGPath;
 	
 }
 
-- (void) viewDidAppear:(BOOL)animated
-{
-	//self.webView.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.webView.layer.bounds].CGPath;
-	
-	[super viewDidAppear:animated];
-}
 - (void)viewDidLoad
 {
 	self.view.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
 	
-	/*self.webView.frame=CGRectMake(20, 20, self.view.bounds.size.width-40,self.view.bounds.size.height-20);
-	
-	self.webView.autoresizingMask=UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	
-	self.webView.layer.shadowColor=[UIColor blackColor].CGColor;
-	self.webView.layer.shadowRadius=8;
-	self.webView.layer.shadowOpacity=0.8;
-	self.webView.layer.shadowOffset=CGSizeZero;
-	self.webView.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.webView.layer.bounds].CGPath;
-	*/
 	self.webView.backgroundColor=[UIColor viewFlipsideBackgroundColor];
 	
-	//self.webView.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
-	
-	self.navigationItem.title=newsletter.name; //@"Newsletter Preview";
+	self.navigationItem.title=newsletter.name;
 	
 	[self.navigationItem setLeftBarButtonItem:[[[UIBarButtonItem alloc] initWithCustomView:[[UIView new] autorelease]] autorelease]];
-	
 	
 	BlankToolbar * toolbar=[[BlankToolbar alloc] initWithFrame:CGRectMake(0, 0, 250, 44)];
 	toolbar.opaque=NO;
@@ -71,9 +104,19 @@
 	
 	NSMutableArray * tools=[[NSMutableArray alloc] init];
 	
-	
 	UIBarButtonItem * spacer=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
 	 
+	[tools addObject:spacer];
+	[spacer release];
+	
+	UIBarButtonItem * composeButton=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeTouch:)];
+	
+	[tools addObject:composeButton];
+	
+	[composeButton release];
+	
+	spacer=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:self action:nil];
+	spacer.width=25;
 	[tools addObject:spacer];
 	[spacer release];
 	
@@ -88,10 +131,8 @@
 	[tools addObject:spacer];
 	[spacer release];
 	
-	
 	UIBarButtonItem * leftButton=[[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(popNavigationItem)];
 	
-	//self.navigationItem.rightBarButtonItem=leftButton;
 	[tools addObject:leftButton];
 	 
 	[leftButton release];
@@ -104,28 +145,17 @@
 	
 	[tools release];
 	
-	/*UIBarButtonItem * rightButton=[[UIBarButtonItem alloc] initWithTitle:@"Publish" style:UIBarButtonItemStyleDone target:self action:@selector(publish)];
-	
-	self.navigationItem.rightBarButtonItem=rightButton;
-	
-	[rightButton release];
-	*/
-	
-	 
 	// add formatter to side nav...
 	UINavigationController * masterNavController=  [[[UIApplication sharedApplication] delegate] masterNavController];
 	
 	oldTopViewController=[[masterNavController topViewController] retain];
 	
-	//if(![masterNavController isKindOfClass:[NewsletterFormattingViewController class]])
-	//{
-		NewsletterFormattingViewController * formatter=[[NewsletterFormattingViewController alloc] initWithNibName:@"NewsletterFormattingView" bundle:nil];
-		formatter.newsletter=self.newsletter;
-		formatter.delegate=self;
-		
-		[masterNavController pushViewController:formatter animated:YES];
-		[formatter release];
-	//}
+	NewsletterFormattingViewController * formatter=[[NewsletterFormattingViewController alloc] initWithNibName:@"NewsletterFormattingView" bundle:nil];
+	formatter.newsletter=self.newsletter;
+	formatter.delegate=self;
+	
+	[masterNavController pushViewController:formatter animated:YES];
+	[formatter release];
 }
 
 - (void) updateProgress:(NSNumber*) progress
@@ -136,22 +166,21 @@
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
 { 
 	// did user send email? if so mark last published date of newsletter to now...
+	[self dismissModalViewControllerAnimated:YES];
 	
 	if(result==MFMailComposeResultSent)
 	{
 		self.newsletter.lastPublished=[NSDate date]; // not sure if we need to convert timezone here...
 		
 		// if user setting is to clear newsletter after publish, then clear the newsletter of all items...
-		/*if([[[UIApplication sharedApplication] delegate] clearOnPublish])
+		if([[[UIApplication sharedApplication] delegate] clearOnPublish])
 		{
 			[self.newsletter clearAllItems];
-			
-			[self.newsletterTableView reloadData];
-		}*/
+		}
+		
 		[self.newsletter save];
+		[self renderNewsletter];
 	}
-	
-	[self dismissModalViewControllerAnimated:YES];
 }
 
 - (void) publish:(id)sender
@@ -226,7 +255,6 @@
 	[activityView removeFromSuperview];
 }
 
-
 - (void) publishStart
 {
 	// upload images if required
@@ -265,12 +293,11 @@
 	[picker setSubject:newsletter.name];
 	
 	// Fill out the email body text
-	int maxSynopsisSize=[[[UIApplication sharedApplication] delegate] maxNewsletterSynopsisLength];
+	int maxSynopsisSize=0;// [[[UIApplication sharedApplication] delegate] maxNewsletterSynopsisLength];
 	
 	NewsletterHTMLRenderer * renderer=[[[NewsletterHTMLRenderer alloc] initWithTemplateName:[[[UIApplication sharedApplication] delegate] newsletterTemplateName] maxSynopsisSize:maxSynopsisSize embedImageData:NO] autorelease];
 	
 	NSString   *emailBody= [renderer getHTML:self.newsletter];
-	
 	
 	[picker setMessageBody:emailBody isHTML:YES]; // depends. Mostly YES, unless you want to send it as plain text (boring)
 	
@@ -281,13 +308,6 @@
 	[picker release];
 }
 
-
-
-
-
-
-
-
 - (void) popNavigationItem
 {
 	[self.navigationController popViewControllerAnimated:NO];
@@ -295,8 +315,6 @@
 	// pop away formatting control as well...
 	
 	UINavigationController * masterNavController=  [[[UIApplication sharedApplication] delegate] masterNavController];
-	
-	//UIViewController * topMasterNav=[masterNavController topViewController];
 	
 	if(oldTopViewController)
 	{
@@ -306,36 +324,17 @@
 	{
 		[masterNavController popToRootViewControllerAnimated:YES];
 	}
-
-	/*if([topMasterNav isKindOfClass:[NewsletterFormattingViewController class]])
-	{
-		[masterNavController popViewControllerAnimated:NO];
-	}*/
 }
 
-- (void)viewWillAppear:(BOOL)animated
+/*- (void)viewWillAppear:(BOOL)animated
 {
 	[self renderNewsletter];
 	[super viewWillAppear:animated];
-}
-
-+ (NSString*) newsletterTemplateName
+}*/
+- (void) viewDidAppear:(BOOL)animated
 {
-	NSString * newsletterFormat=[[[UIApplication sharedApplication] delegate] newsletterFormat];
-	
-	if(newsletterFormat==nil)
-	{
-		newsletterFormat=@"wide";
-	}
-	
-	if([newsletterFormat isEqualToString:@"narrow"])
-	{
-		return @"NewsletterDocumentTwoColumn";
-	}
-	else 
-	{
-		return @"NewsletterDocumentOneColumn";
-	}
+	[super viewDidAppear:animated];
+	[self renderNewsletter];
 }
 
 // Override to allow orientations other than the default portrait orientation.
@@ -345,33 +344,25 @@
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {	
+	NSLog(@"didFailLoadWithError");
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-	//return NO;
+	NSLog(@"shouldStartLoadWithRequest");
 	return YES;
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {	
-}
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
-}
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
+	NSLog(@"webViewDidFinishLoad");	
 }
 
 - (void)dealloc 
 {
+	[html release];
+	html=nil;
+	
 	[oldTopViewController release];
 	oldTopViewController=nil;
 	
@@ -402,7 +393,6 @@
 	
 	[activityProgressView release];
 	activityProgressView=nil;
-	
 	
 	[super dealloc];
 }

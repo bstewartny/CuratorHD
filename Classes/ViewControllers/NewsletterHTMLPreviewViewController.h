@@ -4,7 +4,7 @@
 
 @class Newsletter ;
 @class ActivityStatusViewController;
-@interface NewsletterHTMLPreviewViewController : NewsletterBaseViewController <UIWebViewDelegate,UIActionSheetDelegate>{
+@interface NewsletterHTMLPreviewViewController : NewsletterBaseViewController <MBProgressHUDDelegate,UIWebViewDelegate,UIActionSheetDelegate>{
 	IBOutlet UIWebView * webView;
 	UIViewController * oldTopViewController;
 	UIActivityIndicatorView * activityIndicatorView;
@@ -15,7 +15,8 @@
 	UILabel * activityTitleLabel;
 	UILabel * activityStatusLabel;
 	UIProgressView * activityProgressView;
-	
+	BOOL renderingHtml;
+	NSString * html;
 }
 @property(nonatomic,retain) IBOutlet UIWebView * webView;
 @property(nonatomic,retain) UIActivityIndicatorView * activityIndicatorView;

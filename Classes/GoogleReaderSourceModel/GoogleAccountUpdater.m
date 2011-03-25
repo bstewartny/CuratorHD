@@ -153,7 +153,8 @@
 		feed.url=[NSString stringWithFormat:@"category://%@",tag];//[client getUrlForType:GoogleReaderFeedTypeTaggedItems tag:tag];
 		feed.name=[NSString stringWithFormat:@"All %@ Items",tag];
 		feed.feedType=@"0"; // for sorting...
-		feed.feedCategory=[NSString stringWithFormat:@"|%@|",tag];
+		feed.feedCategory=tag;
+		//feed.feedCategory=[NSString stringWithFormat:@"|%@|",tag];
 		
 		feed.image=[UIImage imageNamed:@"gray_folderclosed.png"];
 		feed.imageName=@"gray_folderclosed.png";
@@ -955,7 +956,7 @@
 						
 						if([annotations count]>0)
 						{
-							NSLog(@"get annotations");
+							//NSLog(@"get annotations");
 							NSString * notes=[[annotations objectAtIndex:0] objectForKey:@"content"];
 							
 							if (notes && [notes length]>0) 

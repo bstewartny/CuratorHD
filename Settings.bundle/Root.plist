@@ -28,19 +28,19 @@
 			<key>Type</key>
 			<string>PSMultiValueSpecifier</string>
 			<key>Title</key>
-			<string>Newsletter Item Size</string>
+			<string>Newsletter Synopsis Size</string>
 			<key>Key</key>
 			<string>maxNewsletterSynopsisLength</string>
 			<key>DefaultValue</key>
 			<string>200</string>
 			<key>Titles</key>
 			<array>
-				<string>No Synopsis (Links only)</string>
+				<string>None (Publish Links Only)</string>
 				<string>First 50 Words</string>
 				<string>First 100 Words</string>
 				<string>First 200 Words</string>
 				<string>First 500 Words</string>
-				<string>Unlimited Synopsis Size</string>
+				<string>Original Size</string>
 			</array>
 			<key>Values</key>
 			<array>
