@@ -3185,7 +3185,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
-				PRODUCT_NAME = "Newsletter Publisher Debug";
+				PRODUCT_NAME = "Newsletter Publisher";
 				TARGETED_DEVICE_FAMILY = 2;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -3225,7 +3225,7 @@
 				OTHER_LDFLAGS = "-lxml2";
 				PREBINDING = NO;
 				PRODUCT_NAME = InfoNgen;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A72FDFD9-1C42-483A-94C9-47256ABDCF8F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "63DE9AA1-FD72-4EBB-BFBB-5946C581F58F";
 				SDKROOT = iphoneos4.2;
 			};
 			name = AdHocDistribution;
@@ -3263,7 +3263,7 @@
 				OTHER_LDFLAGS = "-lxml2";
 				PREBINDING = NO;
 				PRODUCT_NAME = InfoNgen;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "331E2A42-3E87-4333-BF41-A55660C42A27";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "53A34F64-2F0F-4B21-B89D-7A46C7FAF8D7";
 				SDKROOT = iphoneos4.2;
 			};
 			name = Debug;

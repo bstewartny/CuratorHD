@@ -92,7 +92,7 @@
 {
 	self.view.backgroundColor=[UIColor scrollViewTexturedBackgroundColor];
 	
-	self.webView.backgroundColor=[UIColor viewFlipsideBackgroundColor];
+	self.webView.backgroundColor=[UIColor blackColor];
 	
 	self.navigationItem.title=newsletter.name;
 	
