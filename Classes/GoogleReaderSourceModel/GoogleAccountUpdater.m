@@ -56,7 +56,9 @@
 	feed.url=[client getUrlForType:GoogleReaderFeedTypeAllItems tag:nil];
 	feed.name=@"All Google Reader Items";
 	feed.feedType=@"01GoogleFeed";
-	feed.feedCategory=@"_all";
+	[feed setSingleCategory:@"_all"];
+	
+	
 	feed.image=[UIImage imageNamed:@"gray_googlreader.png"];
 	feed.imageName=@"gray_googlreader.png";
 	feed.highlightedImageName=@"green_googlreader.png";
@@ -70,7 +72,8 @@
 	feed.url=[client getUrlForType:GoogleReaderFeedTypeStarredItems tag:nil];
 	feed.name=@"Starred Items";
 	feed.feedType=@"02GoogleFeed";
-	feed.feedCategory=@"_starred";
+	[feed setSingleCategory:@"_starred"];
+	
 	feed.image=[UIImage imageNamed:@"28-star.png"];
 	feed.imageName=@"28-star.png";
 	
@@ -83,7 +86,8 @@
 	feed.url=[client getUrlForType:GoogleReaderFeedTypeSharedItems tag:nil];
 	feed.name=@"Your Shared Items";
 	feed.feedType=@"03GoogleFeed";
-	feed.feedCategory=@"_shared";
+	[feed setSingleCategory:@"_shared"];
+	
 	feed.image=[UIImage imageNamed:@"yourshared.gif"];
 	feed.imageName=@"yourshared.gif";
 	
@@ -96,7 +100,8 @@
 	feed.url=[client getUrlForType:GoogleReaderFeedTypeNotes tag:nil];
 	feed.name=@"Your Notes";
 	feed.feedType=@"04GoogleFeed";
-	feed.feedCategory=@"_notes";
+	[feed setSingleCategory:@"_notes"];
+	
 	feed.image=[UIImage imageNamed:@"notes.png"];
 	feed.imageName=@"notes.png";
 	
@@ -109,7 +114,8 @@
 	feed.url=[client getUrlForType:GoogleReaderFeedTypeFollowingItems tag:nil];
 	feed.name=@"People You Follow";
 	feed.feedType=@"05GoogleFeed";
-	feed.feedCategory=@"_shared";
+	[feed setSingleCategory:@"_shared"];
+	
 	feed.image=[UIImage imageNamed:@"shared.gif"];
 	feed.imageName=@"shared.gif";
 	
@@ -137,7 +143,8 @@
 			feed.feedType=[NSString stringWithFormat:@"%dGoogleFeed",ordinal];
 		}
 
-		feed.feedCategory=@"_category";
+		[feed setSingleCategory:@"_category"];
+		
 		ordinal++;
 		feed.image=[UIImage imageNamed:@"gray_folderclosed.png"];
 		feed.imageName=@"gray_folderclosed.png";
@@ -153,8 +160,8 @@
 		feed.url=[NSString stringWithFormat:@"category://%@",tag];//[client getUrlForType:GoogleReaderFeedTypeTaggedItems tag:tag];
 		feed.name=[NSString stringWithFormat:@"All %@ Items",tag];
 		feed.feedType=@"0"; // for sorting...
-		feed.feedCategory=tag;
-		//feed.feedCategory=[NSString stringWithFormat:@"|%@|",tag];
+		[feed setSingleCategory:tag];
+		
 		
 		feed.image=[UIImage imageNamed:@"gray_folderclosed.png"];
 		feed.imageName=@"gray_folderclosed.png";
@@ -509,9 +516,7 @@
 		if(existingFeed!=nil)
 		{
 			// see if name changed or feedType changed...
-			if((![existingFeed.name isEqualToString:[feed name]]) || 
-			   (![existingFeed.feedType isEqualToString:[feed feedType]]) ||
-			   (![existingFeed.feedCategory isEqualToString:[feed feedCategory]]))
+			if(![Feed haveSameProperties:feed b:existingFeed])
 			{
 				existingFeed.name=[feed name];
 				if(feed.image)
@@ -523,7 +528,8 @@
 				existingFeed.htmlUrl=[feed htmlUrl];
 				existingFeed.feedId=[feed feedId];
 				existingFeed.feedType=[feed feedType];
-				existingFeed.feedCategory=[feed feedCategory];
+			
+				[existingFeed setFeedCategories:[feed feedCategory]];
 				
 				[existingFeed save];
 				
@@ -537,7 +543,7 @@
 			
 			newFeed.name=[feed name];
 			newFeed.feedType=[feed feedType];
-			newFeed.feedCategory=[feed feedCategory];
+			[newFeed setFeedCategories:[feed feedCategory]];
 			
 			newFeed.url=[feed url];
 			newFeed.image=[feed image];
@@ -623,16 +629,17 @@
 {
 	if(feed.url==nil) return nil;
 	
-	if([feed.feedCategory isEqualToString:@"_all"] ||
-	   [feed.feedCategory isEqualToString:@"_category"])
+	if([feed isCategory] || [feed isAllItems])
 	{
+	 
 		return nil;
 	}
 	
-	if([feed.feedCategory isEqualToString:@"_starred"] ||
-	   [feed.feedCategory isEqualToString:@"_shared"] ||
-	   [feed.feedCategory isEqualToString:@"_notes"])
-	{
+	if([feed isSingleCategory:@"_starred"] ||
+	   [feed isSingleCategory:@"_shared"] ||
+	   [feed isSingleCategory:@"_notes"])
+	{ 
+	 
 		return [self getMostRecentReaderItems:feed maxItems:maxItems minDate:nil];
 	}
 	

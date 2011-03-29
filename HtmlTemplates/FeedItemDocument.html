@@ -4,19 +4,22 @@
 	{
 		max-width:708px;
 		overflow:hidden;
-		font-family:"arial" !important;
+		font-family:"Helvetica" !important;
 		font-size:18px !important;
 		padding:20px;
 		text-align: justify;
-		color:#000000 !important;
+		color:#333333 !important;
+		background-color:#F7F7F7 !important;
+		
 	}
 	
 	div
 	{
-		font-family:"arial" !important;
+		font-family:"Georgia" !important;
 		font-size:18px !important;
 		text-align: justify;
-		color:#000000 !important;
+		color:#333333 !important;
+		background-color:#F7F7F7 !important;
 	}
 	
 	pre
@@ -29,10 +32,10 @@
 	
 	p
 	{
-		font-family:"arial" !important;
+		font-family:"Georgia" !important;
 		text-align: justify;
 		font-size:18px !important;
-		color:#000000 !important;
+		color:#333333 !important;
 	}
 	
 	a {max-width:600px; overflow:hidden;text-overflow:ellipsis;}
@@ -46,16 +49,16 @@
 	
 </style>
 <body>
-	<table width="100%" cellpadding="4" cellspacing="0" bgcolor="#FFFFFF">
+	<table width="100%" cellpadding="4" cellspacing="0" bgcolor="#F7F7F7">
 		<tr>
-			<td bgcolor="#FFFFFF" valign="top">
+			<td bgcolor="#F7F7F7" valign="top">
 				<a style="text-decoration: none;color:black;font-family:Helvetica;font-weight:bold;font-size:22px" href="{{item.url}}">
-					<span style="color:black;font-family:Helvetica;font-weight:bold;font-size:22px">{{item.headline}}</span>
+					<span style="font-family:Helvetica;font-weight:bold;font-size:24px">{{item.headline}}</span>
 				</a>
 				<br>
 				<span style="font-size:16px;font-weight:normal;color:#666666;font-family:arial;">{{item.date}}</span>
 				<br>
-				<p style="text-align:justify">
+				<p style="text-align:justify;font-family:Georgia">
 					{{item.synopsis}}
 				</p>
 			</td>

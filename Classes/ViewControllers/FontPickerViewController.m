@@ -35,8 +35,10 @@
 		
 		self.colors=[NSArray arrayWithObjects:[FontValue withName:@"Black" andValue:@"black"],
 					 [FontValue withName:@"Grey" andValue:@"grey"],
+					 [FontValue withName:@"Dark Grey" andValue:@"#333333"],
 					 [FontValue withName:@"Red" andValue:@"red"],
-					 [FontValue withName:@"Blue" andValue:@"blue"],nil];
+					 [FontValue withName:@"Blue" andValue:@"blue"],
+					 [FontValue withName:@"Dark Blue" andValue:@"darkblue"],nil];
 	}
 	return self;
 }

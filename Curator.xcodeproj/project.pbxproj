@@ -171,6 +171,8 @@
 		B08AD1CF1191D54800DD4BB6 /* MetaName.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = B08AD1CE1191D54800DD4BB6 /* MetaName.xcdatamodel */; };
 		B08AD1E41191D66900DD4BB6 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B08AD1E31191D66900DD4BB6 /* CoreData.framework */; };
 		B08BC367112C4CDC00851E7A /* UserSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = B08BC366112C4CDC00851E7A /* UserSettings.m */; };
+		B08C62E71340C30300B580DC /* FeedCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = B08C62E61340C30300B580DC /* FeedCategory.m */; };
+		B08C643A134107EF00B580DC /* 32-infongen-new.png in Resources */ = {isa = PBXBuildFile; fileRef = B08C6439134107EF00B580DC /* 32-infongen-new.png */; };
 		B08E22A811AF2B840017583F /* html_email_basic_template.html in Resources */ = {isa = PBXBuildFile; fileRef = B08E22A611AF2B840017583F /* html_email_basic_template.html */; };
 		B08E22A911AF2B840017583F /* html_email_newsletter_template_a.html in Resources */ = {isa = PBXBuildFile; fileRef = B08E22A711AF2B840017583F /* html_email_newsletter_template_a.html */; };
 		B08E233711AF481F0017583F /* html_email_basic_template2.html in Resources */ = {isa = PBXBuildFile; fileRef = B08E233611AF481F0017583F /* html_email_basic_template2.html */; };
@@ -802,6 +804,9 @@
 		B08AD1E31191D66900DD4BB6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		B08BC365112C4CDC00851E7A /* UserSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSettings.h; sourceTree = "<group>"; };
 		B08BC366112C4CDC00851E7A /* UserSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSettings.m; sourceTree = "<group>"; };
+		B08C62E51340C30300B580DC /* FeedCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedCategory.h; sourceTree = "<group>"; };
+		B08C62E61340C30300B580DC /* FeedCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedCategory.m; sourceTree = "<group>"; };
+		B08C6439134107EF00B580DC /* 32-infongen-new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "32-infongen-new.png"; sourceTree = "<group>"; };
 		B08E22A611AF2B840017583F /* html_email_basic_template.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = html_email_basic_template.html; sourceTree = "<group>"; };
 		B08E22A711AF2B840017583F /* html_email_newsletter_template_a.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = html_email_newsletter_template_a.html; sourceTree = "<group>"; };
 		B08E233611AF481F0017583F /* html_email_basic_template2.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = html_email_basic_template2.html; sourceTree = "<group>"; };
@@ -2195,6 +2200,7 @@
 		C444AC6911C1719C007C96F0 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				B08C6439134107EF00B580DC /* 32-infongen-new.png */,
 				B05D908C1338E169004C6032 /* gray_googlreader.png */,
 				B05D908D1338E169004C6032 /* gray_infongen.png */,
 				B05D908E1338E169004C6032 /* gray_twitter.png */,
@@ -2440,6 +2446,8 @@
 				C44DCDA31208AAD100C2BFA6 /* AccountUpdater.m */,
 				B0F5FBB3120C7E45003C6E1B /* OrderedFeed.h */,
 				B0F5FBB4120C7E45003C6E1B /* OrderedFeed.m */,
+				B08C62E51340C30300B580DC /* FeedCategory.h */,
+				B08C62E61340C30300B580DC /* FeedCategory.m */,
 			);
 			path = FeedModel;
 			sourceTree = "<group>";
@@ -2924,6 +2932,7 @@
 				B05D90A51338E169004C6032 /* green_newsletter.png in Resources */,
 				B05D90A61338E169004C6032 /* green_folderopen.png in Resources */,
 				B05D90A71338E169004C6032 /* green_folderdoc.png in Resources */,
+				B08C643A134107EF00B580DC /* 32-infongen-new.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3151,6 +3160,7 @@
 				B02A419F133B94FA0089EC47 /* ASIDataCompressor.m in Sources */,
 				B02A41A0133B94FA0089EC47 /* ASIAuthenticationDialog.m in Sources */,
 				B02A4287133BA7E10089EC47 /* UIDeviceAdditions.m in Sources */,
+				B08C62E71340C30300B580DC /* FeedCategory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

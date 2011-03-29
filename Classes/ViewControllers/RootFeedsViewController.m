@@ -112,6 +112,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+	//return 0;
 	return 3;
 }
 

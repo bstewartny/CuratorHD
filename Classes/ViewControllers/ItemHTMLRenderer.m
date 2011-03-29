@@ -88,11 +88,24 @@
 		self.embedImageData=embedImageData;
 		self.useOriginalSynopsis=useOriginalSynopsis;
 		
-		format = [[NSDateFormatter alloc] init];
-		[format setDateFormat:@"MMM d, yyyy h:mm a"];
+		if(format==nil)
+		{
+			format = [[NSDateFormatter alloc] init];
+			[format setDateFormat:@"MMM d, yyyy h:mm a"];
+		}
+	}
+	return self;
+}
 
-		
-		
+- (id) init
+{
+	if(self=[super init])
+	{
+		if(format==nil)
+		{
+			format = [[NSDateFormatter alloc] init];
+			[format setDateFormat:@"MMM d, yyyy h:mm a"];
+		}
 	}
 	return self;
 }
@@ -202,6 +215,7 @@
 	if(item==nil) return @"";
 	
 	NSString   *html = [self getTemplateContents:@"DefaultItem"];
+	//NSString   *html = [self getTemplateContents:@"TwitterItem"];
 	
 	//NSString * userlink=[NSString stringWithFormat:@"<a style=\"text-decoration:none\" href=\"http://twitter.com/%@\">%@</a>",item.originUrl,item.originUrl];
 	

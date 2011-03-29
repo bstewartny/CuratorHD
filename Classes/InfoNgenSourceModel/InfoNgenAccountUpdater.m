@@ -104,7 +104,9 @@
 	
 	allItemsFeed.name=@"All InfoNgen Items";
 	allItemsFeed.feedType=@"01InfoNgen";
-	allItemsFeed.feedCategory=@"_all";
+	//allItemsFeed.feedCategories=[NSArray arrayWithObject:@"_all"];
+	[allItemsFeed setSingleCategory:@"_all"];
+	
 	allItemsFeed.url=@"infongen://all";
 	allItemsFeed.image=[UIImage imageNamed:@"gray_infongen.png"];
 	allItemsFeed.imageName=@"gray_infongen.png";
@@ -128,7 +130,7 @@
 			
 			newFeed.name=[feed name];
 			newFeed.feedType=[feed feedType];
-			newFeed.feedCategory=[feed feedCategory];
+			[newFeed setFeedCategories:[feed feedCategory]];
 			newFeed.url=[feed url];
 			newFeed.image=[feed image];
 			newFeed.imageName=[feed imageName];
@@ -142,13 +144,12 @@
 		}
 		else 
 		{
-			if((![existingFeed.name isEqualToString:[feed name]]) ||
-			   (![existingFeed.feedType isEqualToString:[feed feedType]]) ||
-			   (![existingFeed.feedCategory isEqualToString:[feed feedCategory]]))
+			if(![Feed haveSameProperties:feed b:existingFeed])
 			{
+			
 				existingFeed.name=[feed name];
 				existingFeed.feedType=[feed feedType];
-				existingFeed.feedCategory=[feed feedCategory];
+				[existingFeed setFeedCategories:[feed feedCategory]];
 				existingFeed.image=[feed image];
 				existingFeed.imageName=[feed imageName];
 				existingFeed.highlightedImageName=[feed highlightedImageName];
@@ -189,7 +190,7 @@
 	 postNotificationName:@"UpdateStatus"
 	 object:[NSString stringWithFormat:@"Updating \"%@\"...",feed.name]];
 
-	if([feed.feedCategory isEqualToString:@"_all"])
+	if([feed isAllItems])
 	{
 		// get all items from database...?
 		return nil;

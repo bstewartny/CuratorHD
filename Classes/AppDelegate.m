@@ -141,8 +141,6 @@
 	feedView.title=feed.name;
 	feedView.navigationItem.title=feed.name;
 	
-	feedView.twitter=[feed.feedCategory hasPrefix:@"_twitter"];
-	
 	feedView.fetcher=[feed itemFetcher];
 	
 	[self setDetailViewController:feedView];
@@ -296,7 +294,7 @@
 	[foldersFetcher release];
 	[newslettersFetcher release];
 }
-
+/*
 - (void) createSampleNewsletter
 {
 	Newsletter * newsletter=[self createNewNewsletter:@"Curation News" sectionName:@"Curated Curation News"];
@@ -349,7 +347,7 @@
 	}
 	[folderFetcher release];
 
-}
+}*/
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     
@@ -375,7 +373,7 @@
 	
 	if(isFirstRun)
 	{
-		[self createHelpObjects];
+		//[self createHelpObjects];
 	}
 	
 	splitView=[[MGSplitViewController alloc] init];
@@ -608,6 +606,14 @@
 	}
 	
 	[pool drain];
+	
+	
+	// if no accounts exist, show account settings form...
+	/*if([[self accounts]count]==0)
+	{
+		[self showAccountSettingsForm];
+	}*/
+	
 }
 
 - (void) finishStartup

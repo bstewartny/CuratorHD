@@ -823,7 +823,7 @@ static NSString * gaeCookie;
 				feed.feedType=@"RssFeed";
 				
 				NSArray * categories=[subscription objectForKey:@"categories"];
-				NSMutableString * feedCategory=[[NSMutableString alloc] init];
+				NSMutableSet * feedCategories=[[NSMutableSet alloc] init];
 				
 				if(categories && [categories count]>0)
 				{
@@ -834,26 +834,31 @@ static NSString * gaeCookie;
 						
 						if(label && [label length]>0)
 						{
-							feed.feedCategory=label;
-							break;
-							/*
-							if([feedCategory length]==0)
-							{
-								[feedCategory appendString:@"|"];
-							}
+							TempFeedCategory * tmp=[[TempFeedCategory alloc] init];
+							tmp.name=label;
+							[feedCategories addObject:tmp];
+							[tmp release];
 							
-							[feedCategory appendFormat:@"%@|",label];*/
+							
 						}
 					}
 				}
 				
-				if([feed.feedCategory length]==0)
+				if([feedCategories count]==0)
 				{
-					feed.feedCategory=@"_none"; // not categorized into a folder...
+					TempFeedCategory * tmp=[[TempFeedCategory alloc] init];
+					tmp.name=@"_none"; // not categorized, need to flag with _none so it comes up on top level view
+					[feedCategories addObject:tmp];
+					[tmp release];
 				}
-
 				
-				[feedCategory release];
+				feed.feedCategory=feedCategories;
+				
+				 
+				
+
+				[feedCategories release];
+				
 				
 				[feeds addObject:feed];
 				

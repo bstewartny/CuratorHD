@@ -51,7 +51,7 @@
 	//feed.url=@"http://twitter.com/statuses/friends_timeline.json";
 	feed.name=@"Twitter Timeline";
 	feed.feedType=@"02TwitterFeed";
-	feed.feedCategory=@"_twitter_friends";
+	[feed setSingleCategory:@"_twitter_home"];
 	feed.image=[UIImage imageNamed:@"gray_twitter.png"];
 	feed.imageName=@"gray_twitter.png";
 	feed.highlightedImageName=@"green_twitter.png";
@@ -64,7 +64,7 @@
 	feed.url=@"http://twitter.com/favorites.json";
 	feed.name=@"Favorites";
 	feed.feedType=@"03TwitterFeed";
-	feed.feedCategory=@"_twitter_favorites";
+	[feed setSingleCategory:@"_twitter_favorites"];
 	feed.image=[UIImage imageNamed:@"starred.png"];
 	feed.imageName=@"starred.png";
 	
@@ -85,7 +85,7 @@
 	}
 
 	feed.feedType=@"04TwitterFeed";
-	feed.feedCategory=@"_twitter_mentions";
+	 [feed setSingleCategory:@"_twitter_mentions"];
 	feed.image=[UIImage imageNamed:@"person_icon.gif"];
 	feed.imageName=@"person_icon.gif";
 	
@@ -97,7 +97,7 @@
 	feed.url=@"http://twitter.com/direct_messages.json";
 	feed.name=@"Direct Messages";
 	feed.feedType=@"05TwitterFeed";
-	feed.feedCategory=@"_twitter_direct";
+	[feed setSingleCategory:@"_twitter_direct"];
 	feed.image=[UIImage imageNamed:@"letter_icon.gif"];
 	feed.imageName=@"letter_icon.gif";
 	
@@ -130,7 +130,7 @@
 			feed.feedType=[NSString stringWithFormat:@"%dTwitterFeed",ordinal];
 		}
 		
-		feed.feedCategory=@"_twitter_list";
+		[feed setSingleCategory:@"_twitter_list"];
 		ordinal++;
 		feed.image=[UIImage imageNamed:@"gray_folderclosed.png"];
 		feed.imageName=@"gray_folderclosed.png";
@@ -196,9 +196,7 @@
 		if(existingFeed!=nil)
 		{
 			// see if name changed or feedType changed...
-			if((![existingFeed.name isEqualToString:[feed name]]) || 
-			   (![existingFeed.feedType isEqualToString:[feed feedType]]) ||
-			   (![existingFeed.feedCategory isEqualToString:[feed feedCategory]]))
+			if(![Feed haveSameProperties:existingFeed b:feed])
 			{
 				existingFeed.name=[feed name];
 				existingFeed.image=[feed image];
@@ -208,7 +206,7 @@
 				existingFeed.htmlUrl=[feed htmlUrl];
 				existingFeed.feedId=[feed feedId];
 				existingFeed.feedType=[feed feedType];
-				existingFeed.feedCategory=[feed feedCategory];
+				[existingFeed setFeedCategories:[feed feedCategory]];
 				
 				[existingFeed save];
 				
@@ -224,7 +222,7 @@
 			
 			newFeed.name=[feed name];
 			newFeed.feedType=[feed feedType];
-			newFeed.feedCategory=[feed feedCategory];
+			[newFeed setFeedCategories:[feed feedCategory]];
 			
 			newFeed.url=[feed url];
 			newFeed.image=[feed image];
@@ -273,27 +271,27 @@
 {
 	NSLog(@"TwitterAccountUpdater.getMostRecentItems: %d",maxItems);
 	
-	if([feed.feedCategory isEqualToString:@"_twitter_home"])
+	if([feed isSingleCategory:@"_twitter_home"])
 	{
 		return [self getMostRecentHomeTimeline:feed maxItems:maxItems];
 	}
-	if([feed.feedCategory isEqualToString:@"_twitter_friends"])
+	if([feed isSingleCategory:@"_twitter_friends"])
 	{
 		return [self getMostRecentFriendsTimeline:feed maxItems:maxItems];
 	}
-	if([feed.feedCategory isEqualToString:@"_twitter_favorites"])
+	if([feed isSingleCategory:@"_twitter_favorites"])
 	{
 		return [self getMostRecentFavorites:feed maxItems:maxItems];
 	}
-	if([feed.feedCategory isEqualToString:@"_twitter_direct"])
+	if([feed isSingleCategory:@"_twitter_direct"])
 	{
 		return [self getMostRecentDirectMessages:feed maxItems:maxItems];
 	}
-	if([feed.feedCategory isEqualToString:@"_twitter_list"])
+	if([feed isSingleCategory:@"_twitter_list"])
 	{
 		return [self getMostRecentListItems:feed maxItems:maxItems];
 	}
-	if([feed.feedCategory isEqualToString:@"_twitter_mentions"])
+	if([feed isSingleCategory:@"_twitter_mentions"])
 	{
 		return [self getMostRecentMentions:feed maxItems:maxItems];
 	}
@@ -303,27 +301,27 @@
 - (NSArray*) getMoreOldItems:(RssFeed *)feed maxItems:(int)maxItems
 {
 	NSLog(@"TwitterAccountUpdater.getMoreOldItems: %d",maxItems);
-	if([feed.feedCategory isEqualToString:@"_twitter_home"])
+	if([feed isSingleCategory:@"_twitter_home"])
 	{
 		return [self getMoreOldHomeTimeline:feed maxItems:maxItems];
 	}
-	if([feed.feedCategory isEqualToString:@"_twitter_friends"])
+	if([feed isSingleCategory:@"_twitter_friends"])
 	{
 		return [self getMoreOldFriendsTimeline:feed maxItems:maxItems];
 	}
-	if([feed.feedCategory isEqualToString:@"_twitter_favorites"])
+	if([feed isSingleCategory:@"_twitter_favorites"])
 	{
 		return [self getMoreOldFavorites:feed maxItems:maxItems];
 	}
-	if([feed.feedCategory isEqualToString:@"_twitter_direct"])
+	if([feed isSingleCategory:@"_twitter_direct"])
 	{
 		return [self getMoreOldDirectMessages:feed maxItems:maxItems];
 	}
-	if([feed.feedCategory isEqualToString:@"_twitter_list"])
+	if([feed isSingleCategory:@"_twitter_list"])
 	{
 		return [self getMoreOldListItems:feed maxItems:maxItems];
 	}
-	if([feed.feedCategory isEqualToString:@"_twitter_mentions"])
+	if([feed isSingleCategory:@"_twitter_mentions"])
 	{
 		return [self getMoreOldMentions:feed maxItems:maxItems];
 	}

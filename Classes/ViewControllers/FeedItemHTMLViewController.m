@@ -416,6 +416,8 @@
 	
 	renderer=[[FeedItemHTMLRenderer alloc ]init];
 	
+	renderer.embedImageData=YES; // embed twitter image inline instead of loading via http
+	
 	webView=[[UIWebView alloc] init];
 	webView.delegate=self;
 	webView.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;

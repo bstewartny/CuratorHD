@@ -98,6 +98,7 @@
 	}
 	else 
 	{
+		
 		[self performFetch];
 	}
 }
@@ -314,8 +315,7 @@
 				{
 					Feed  * feed=[feeds objectAtIndex:i];
 					
-					if([feed.feedCategory isEqualToString:@"_all"] ||
-					   [feed.feedCategory isEqualToString:@"_category"])
+					if([feed isCategory] || [feed isAllItems])
 					{
 						[self reloadTableRow:i];
 					}
@@ -456,7 +456,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	cell.textLabel.shadowColor=[UIColor blackColor];
 	cell.textLabel.shadowOffset=CGSizeMake(0, 1);
 	
-	if([feed.feedCategory isEqualToString:@"_category"])
+	if([feed isCategory])
 	{
 		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 	}

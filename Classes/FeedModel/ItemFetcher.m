@@ -72,11 +72,11 @@
 		[self save];
 	}
 }
-
+/*
 - (NSManagedObject*) newItem
 {
 	NSLog(@"You must implement newItem in sub-class!!!");
-}
+}*/
 
 - (NSArray*) items
 {
@@ -85,7 +85,7 @@
 	//return [[self fetchedResultsController] fetchedObjects];
 	return [NSArray arrayWithArray:[[self fetchedResultsController] fetchedObjects]];
 }
-
+/*
 - (void) addItem:(id)item
 {
 	NSManagedObject * newObj = [self newItem];
@@ -94,7 +94,8 @@
 	[self setManagedObjectAttributes:item managedObject:newObj];
 	
 	[self save];
-}
+}*/
+/*
 
 - (void) addItems:(NSArray*)items
 {
@@ -108,7 +109,7 @@
 	
 	[self save];
 }
-
+*//*
 - (void) setManagedObjectAttributes:(id)item managedObject:(NSManagedObject*)obj	
 {
 	[obj setValue:[item headline] forKey:@"headline"];
@@ -122,7 +123,7 @@
 	[obj setValue:[item imageUrl] forKey:@"imageUrl"];
 	[obj setValue:[item notes] forKey:@"notes"];
 	[obj setValue:[item url] forKey:@"url"];
-}
+}*/
 
 - (id) itemAtIndex:(int)index
 {
@@ -322,7 +323,7 @@
 
 @implementation FeedItemFetcher:ItemFetcher
 @synthesize feed;
-
+/*
 - (NSManagedObject*) newItem
 {
 	NSManagedObject * newObj= [NSEntityDescription insertNewObjectForEntityForName:@"RssFeedItem" inManagedObjectContext:[self managedObjectContext]];
@@ -331,7 +332,7 @@
 
 	return newObj;
 }
-
+*/
 - (NSFetchedResultsController*)fetchedResultsController 
 {
 	if (fetchedResultsController) return fetchedResultsController;
@@ -384,14 +385,14 @@
 
 @implementation FolderItemFetcher:ItemFetcher
 @synthesize folder;
-
+/*
 - (NSManagedObject*) newItem
 {
 	NSManagedObject * newObj= [NSEntityDescription insertNewObjectForEntityForName:@"FolderItem" inManagedObjectContext:[self managedObjectContext]];
 	[newObj setFolder:folder];
 	
 	return newObj;
-}
+}*/
 
 - (NSFetchedResultsController*)fetchedResultsController 
 {
@@ -445,7 +446,7 @@
 
 @implementation NewsletterItemFetcher:ItemFetcher
 @synthesize section;
-
+/*
 - (NSManagedObject*) newItem
 {
 	NSManagedObject * newObj= [NSEntityDescription insertNewObjectForEntityForName:@"NewsletterItem" inManagedObjectContext:[self managedObjectContext]];
@@ -453,7 +454,7 @@
 	[newObj	setSection:section];
 	
 	return newObj;
-}
+}*/
 
 - (NSFetchedResultsController*)fetchedResultsController 
 {
@@ -606,14 +607,8 @@
 {
 	if (fetchedResultsController) return fetchedResultsController;
 	
-	
-	//NSPredicate *predicate = [NSPredicate predicateWithFormat:
-	//						  @"feed.account.name == %@ AND feed.feedCategory CONTAINS %@", accountName,[NSString stringWithFormat:@"|%@|",feedCategory]];
-	//
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:
-							  @"feed.account.name == %@ AND feed.feedCategory==%@", accountName,feedCategory];
-	
-	
+							  @"feed.account.name == %@ AND (ANY feed.feedCategory.name==%@)", accountName,feedCategory];
 	
 	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" 
 																   ascending:NO];

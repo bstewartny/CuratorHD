@@ -46,7 +46,8 @@
 	feed.feedId=@"facebook.feed";
 	feed.name=@"Wall";
 	feed.feedType=@"01FacebookFeed";
-	feed.feedCategory=@"_twitter_home";
+	 
+	[feed setSingleCategory:@"_twitter_home"];
 	feed.image=[UIImage imageNamed:@"person_icon.gif"];
 	
 	[feeds addObject:feed];
@@ -58,7 +59,8 @@
 	feed.feedId=@"facebook.home";
 	feed.name=@"News feed";
 	feed.feedType=@"02FacebookFeed";
-	feed.feedCategory=@"_twitter_home";
+	
+	[feed setSingleCategory:@"_twitter_home"];
 	feed.image=[UIImage imageNamed:@"shared.gif"];
 	
 	[feeds addObject:feed];
@@ -202,16 +204,16 @@
 		if(existingFeed!=nil)
 		{
 			// see if name changed or feedType changed...
-			if((![existingFeed.name isEqualToString:[feed name]]) || 
-			   (![existingFeed.feedType isEqualToString:[feed feedType]]) ||
-			   (![existingFeed.feedCategory isEqualToString:[feed feedCategory]]))
+			if(![Feed haveSameProperties:existingFeed b:feed])
 			{
+			 
 				existingFeed.name=[feed name];
 				existingFeed.image=[feed image];
 				existingFeed.htmlUrl=[feed htmlUrl];
 				existingFeed.feedId=[feed feedId];
 				existingFeed.feedType=[feed feedType];
-				existingFeed.feedCategory=[feed feedCategory];
+				[existingFeed setFeedCategories:[feed feedCategory]];
+				
 				
 				[existingFeed save];
 				
@@ -227,7 +229,8 @@
 			
 			newFeed.name=[feed name];
 			newFeed.feedType=[feed feedType];
-			newFeed.feedCategory=[feed feedCategory];
+			
+			[newFeed setFeedCategories:[feed feedCategory]];
 			
 			newFeed.url=[feed url];
 			newFeed.image=[feed image];

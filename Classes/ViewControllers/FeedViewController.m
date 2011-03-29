@@ -727,15 +727,15 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 - (CGFloat)tableView:(UITableView*)tableView
 heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
-	if(twitter)
-	{
-		return 76;
-	}
-	else 
-	{
+	//if(twitter)
+	//{
+	//	return 76;
+	//}
+	//else 
+	//{
 		return 84; 
 		//return tableView.rowHeight;
-	}
+	//}
 }
 
 - (BOOL) tableView:(UITableView*)tableView
@@ -787,16 +787,16 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 	{
 		if(folderMode)
 		{
-			cell.textLabel.text=@"No items in folder. Add items from source feeds.";
+			cell.textLabel.text=@"Add items from source feeds.";
 		}
 		else 
 		{
-			cell.textLabel.text=@"No items loaded. Pull down to load latest feed items.";
+			cell.textLabel.text=@"Pull down to load the latest feed items.";
 		}
 	}
 	else 
 	{
-		cell.textLabel.text=@"No feed selected. Select a source feed from the sources menu.";
+		//cell.textLabel.text=@"Select a feed from the sources menu.";
 	}
 
 	return cell;

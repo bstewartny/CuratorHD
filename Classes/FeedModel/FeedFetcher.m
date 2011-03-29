@@ -12,20 +12,20 @@
 
 // get all accounts
 @implementation AccountFetcher
-
+/*
 - (NSManagedObject*) newItem
 {
 	NSManagedObject * newObj= [NSEntityDescription insertNewObjectForEntityForName:@"FeedAccount" inManagedObjectContext:[self managedObjectContext]];
 	
 	return newObj;
-}
-
+}*/
+/*
 - (void) setManagedObjectAttributes:(id)item managedObject:(NSManagedObject*)obj
 {
 	[obj setName:[item name]];
 	[obj setUsername:[item username]];
 	[obj setPassword:[item password]];
-}
+}*/
 
 - (NSFetchedResultsController*)fetchedResultsController 
 {
@@ -46,11 +46,8 @@
 {
 	NSLog(@"CategoryFeedFetcher.markAllAsRead");
 	
-	//NSPredicate *predicate = [NSPredicate predicateWithFormat:
-	//						  @"feed.account.name == %@ AND feed.feedCategory CONTAINS[cd] %@ AND isRead==0", accountName,[NSString stringWithFormat:@"|%@|",feedCategory ]];
-	
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:
-							  @"feed.account.name == %@ AND feed.feedCategory==%@ AND isRead==0", accountName,feedCategory];
+							  @"feed.account.name == %@ AND (ANY feed.feedCategory.name==%@) AND isRead==0", accountName,feedCategory];
 	
 	NSManagedObjectContext * moc=[self managedObjectContext];
 	
@@ -75,10 +72,9 @@
 			item.isRead=[NSNumber numberWithBool:YES];
 		}
 	}
-	//predicate = [NSPredicate predicateWithFormat:
-	//			 @"account.name == %@ AND feedCategory CONTAINS[cd] %@ AND unreadCount>0", accountName, [NSString stringWithFormat:@"|%@|",feedCategory ]];
+	
 	predicate = [NSPredicate predicateWithFormat:
-				 @"account.name == %@ AND feedCategory==%@ AND unreadCount>0", accountName, feedCategory];
+				 @"account.name == %@ AND (ANY feedCategory.name==%@) AND unreadCount>0", accountName, feedCategory];
 	
 	[fetchRequest release];
 	
@@ -115,25 +111,13 @@
 	}
 }
 
-- (NSManagedObject*) newItem
-{
-	NSManagedObject * newObj= [NSEntityDescription insertNewObjectForEntityForName:@"RssFeed" inManagedObjectContext:[self managedObjectContext]];
-	
-	[newObj setAccount:[self accountObject]];
-	[newObj setFeedCategory:feedCategory];
-	
-	return newObj;
-}
 
 - (NSFetchedResultsController*)fetchedResultsController 
 {
 	if (fetchedResultsController) return fetchedResultsController;
 	
-	// find where feedCategory contains "|<feedCategory>|" (its a pipe-delimited list of category names)
-	//NSPredicate *predicate = [NSPredicate predicateWithFormat:
-	//						  @"account.name == %@ AND feedCategory CONTAINS[cd] %@", accountName,[NSString stringWithFormat:@"|%@|",feedCategory ]];
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:
-							  @"account.name == %@ AND feedCategory==%@", accountName,feedCategory];
+							  @"account.name == %@ AND (ANY feedCategory.name==%@)", accountName,feedCategory];
 	
 	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"feedType" 
 																   ascending:YES];
@@ -253,14 +237,14 @@
 	}
 }
 
-
+/*
 - (NSManagedObject*) newItem
 {
 	NSManagedObject * newObj= [NSEntityDescription insertNewObjectForEntityForName:@"RssFeed" inManagedObjectContext:[self managedObjectContext]];
 	
 	[newObj setAccount:[self accountObject]];
 	return newObj;
-}
+}*/
 
 - (NSManagedObject*) accountObject
 {
@@ -268,20 +252,16 @@
 														 @"name == %@", accountName]];
 }
 
-- (void) setManagedObjectAttributes:(id)item managedObject:(NSManagedObject*)obj
-{
-	[obj setName:[item name]];
-	[obj setUrl:[item url]];
-	[obj setFeedType:[item feedType]];
-	[obj setFeedCategory:[item feedCategory]];
-}
-
 - (NSFetchedResultsController*)fetchedResultsController 
 {
 	if (fetchedResultsController) return fetchedResultsController;
 	
+	
+	NSArray * topLevelCategories=[NSArray arrayWithObjects:@"_top",@"_category",@"_all",@"_starred",@"_shared",@"_none",@"_notes",@"_twitter_home",@"_twitter_friends",@"_twitter_favorites",@"_twitter_direct",@"_twitter_list",@"_twitter_mentions",nil];
+	
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:
-							  @"account.name == %@ AND (feedCategory == %@ OR feedCategory == %@ OR feedCategory==%@ OR feedCategory==%@ OR feedCategory==%@  OR feedCategory==%@ OR feedCategory==%@ OR feedCategory==%@ OR feedCategory==%@ OR feedCategory==%@ OR feedCategory==%@ OR feedCategory==%@ OR feedCategory==%@)", accountName,@"_top",@"_category",@"_all",@"_starred",@"_shared",@"_none",@"_notes",@"_twitter_home",@"_twitter_friends",@"_twitter_favorites",@"_twitter_direct",@"_twitter_list",@"_twitter_mentions"];
+							  @"(account.name == %@) AND (ANY feedCategory.name IN %@)", accountName,topLevelCategories] ;
+	
 	
 	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"feedType" 
 																   ascending:YES];
@@ -357,18 +337,18 @@
 
 // get all folders
 @implementation FolderFetcher 
- 
+ /*
 - (NSManagedObject*) newItem
 {
 	NSManagedObject * newObj= [NSEntityDescription insertNewObjectForEntityForName:@"Folder" inManagedObjectContext:[self managedObjectContext]];
 	
 	return newObj;
-}
-
+}*/
+/*
 - (void) setManagedObjectAttributes:(id)item managedObject:(NSManagedObject*)obj
 {
 	[obj setName:[item name]];
-}
+}*/
 
 - (NSFetchedResultsController*)fetchedResultsController 
 {
@@ -392,18 +372,18 @@
 
 // get all newsletters
 @implementation NewsletterFetcher  
-
+/*
 - (NSManagedObject*) newItem
 {
 	NSManagedObject * newObj= [NSEntityDescription insertNewObjectForEntityForName:@"Newsletter" inManagedObjectContext:[self managedObjectContext]];
 	
 	return newObj;
-}
-
+}*/
+/*
 - (void) setManagedObjectAttributes:(id)item managedObject:(NSManagedObject*)obj
 {
 	[obj setName:[item name]];
-}
+}*/
 
 - (NSFetchedResultsController*)fetchedResultsController 
 {
@@ -428,7 +408,7 @@
 // get sections for newsletter
 @implementation NewsletterSectionFetcher 
 @synthesize newsletter;
-
+/*
 - (NSManagedObject*) newItem
 {
 	NSManagedObject * newObj= [NSEntityDescription insertNewObjectForEntityForName:@"NewsletterSection" inManagedObjectContext:[self managedObjectContext]];
@@ -437,12 +417,12 @@
 	[newObj setNewsletter:newsletter];
 	
 	return newObj;
-}
-
+}*/
+/*
 - (void) setManagedObjectAttributes:(id)item managedObject:(NSManagedObject*)obj
 {
 	[obj setName:[item name]];
-}
+}*/
 
 - (NSFetchedResultsController*)fetchedResultsController 
 {

@@ -13,15 +13,14 @@
 - (int) itemCount
 {
 	// naive implementation - optimize in subclasses
-	if ([self.feedCategory isEqualToString:@"_category"])
+	if([self isCategory])
 	{
-		//return [self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(feed.account.name==%@) AND (feed.feedCategory CONTAINS %@)",self.account.name,[NSString stringWithFormat:@"|%@|",self.name]]];
-		return [self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(feed.account.name==%@) AND (feed.feedCategory==%@)",self.account.name,self.name]];
+		return [self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(feed.account.name==%@) AND (ANY feed.feedCategory.name==%@)",self.account.name,self.name]];
 		
 	}
 	else
 	{
-		if ([self.feedCategory isEqualToString:@"_all"])
+		if([self isAllItems])
 		{
 			return [self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"feed.account.name==%@",self.account.name]];  
 		}
@@ -32,6 +31,7 @@
 	}
 }
 
+
 + (NSDate*) maxDateWithAccountName:(NSString*)accountName forCategory:(NSString*)category withManagedObjectContext:(NSManagedObjectContext*)moc
 {
 	NSFetchRequest *request = [[NSFetchRequest alloc] init];
@@ -40,12 +40,8 @@
 	
 	if(category)
 	{
-		//NSPredicate *predicate = [NSPredicate predicateWithFormat:
-		//						  @"feed.account.name == %@ AND feed.feedCategory CONTAINS %@", accountName,[NSString stringWithFormat:@"|%@|",category]];
-		//
-		
 		NSPredicate *predicate = [NSPredicate predicateWithFormat:
-								  @"feed.account.name == %@ AND feed.feedCategory==%@", accountName,category];
+								  @"feed.account.name == %@ AND (ANY feed.feedCategory.name==%@)", accountName,category];
 		
 		[request setPredicate:predicate];
 	}
@@ -89,29 +85,21 @@
 
 - (NSNumber *) currentUnreadCount
 {
-	//NSLog(@"RssFeed.currentUnreadCount");
-	if ([self.feedCategory isEqualToString:@"_category"])
+	if([self isCategory])
 	{
-		//NSLog(@"get count from database dynamically for _category: %@",self.name);
-		//int count=[self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(isRead==0) AND (feed.account.name==%@) AND (feed.feedCategory CONTAINS %@)",self.account.name,[NSString stringWithFormat:@"|%@|",self.name]]];
+		int count=[self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(isRead==0) AND (feed.account.name==%@) AND (ANY feed.feedCategory.name==%@)",self.account.name,self.name]];
 		
-		int count=[self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(isRead==0) AND (feed.account.name==%@) AND (feed.feedCategory==%@)",self.account.name,self.name]];
-		
-		//NSLog(@"got count of %d",count);
 		return [NSNumber numberWithInt:count];
 	}
 	else
 	{
-		if ([self.feedCategory isEqualToString:@"_all"])
+		if([self isAllItems])
 		{
-			//NSLog(@"get count from database dynamically for _all category of account");
 			int count=[self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(isRead==0) AND (feed.account.name==%@)",self.account.name]];  
-			//NSLog(@"got count of %d",count);
 			return [NSNumber numberWithInt:count];
 		}
 		else
 		{
-			//NSLog(@"get unreadCount from object");
 			return [self unreadCount];
 		}
 	}
@@ -119,7 +107,7 @@
 
 - (void) markAllAsRead
 {
-	NSLog(@"markAllAsRead");
+	//NSLog(@"markAllAsRead");
 	
 	NSManagedObjectContext * moc=[self managedObjectContext];
 	
@@ -142,13 +130,13 @@
 
 	if(![moc save:&error])
 	{
-		NSLog(@"Failed to save changes in RssFeed.markAllAsRead: %@",[error userInfo]);
+		//NSLog(@"Failed to save changes in RssFeed.markAllAsRead: %@",[error userInfo]);
 	}
 }
 
 - (void) deleteOlderThan:(int)days
 {
-	NSLog(@"deleteOlderThan: %d",days);
+	//NSLog(@"deleteOlderThan: %d",days);
 	
 	int seconds=days * 60 * 60 * 24;
 	
@@ -169,7 +157,7 @@
 		}
 	}
 	
-	NSLog(@"Deleted %d items from feed",num_deleted);
+	//NSLog(@"Deleted %d items from feed",num_deleted);
 	
 	if(num_deleted>0)
 	{
@@ -185,7 +173,7 @@
 }
 - (void) deleteReadItems
 {
-	NSLog(@"deleteReadItems");
+	//NSLog(@"deleteReadItems");
 	NSManagedObjectContext * moc=[self managedObjectContext];
 	
 	ItemFetcher * fetcher=[self itemFetcher];
@@ -201,7 +189,7 @@
 		}
 	}
 	
-	NSLog(@"Deleted %d items from feed",num_deleted);
+	//NSLog(@"Deleted %d items from feed",num_deleted);
 	
 	if(num_deleted>0)
 	{
@@ -264,7 +252,7 @@
 
 - (ItemFetcher*) feedFetcher
 {
-	if([self.feedCategory isEqualToString:@"_category"])
+	if([self isCategory])
 	{
 		CategoryFeedFetcher * feedFetcher=[[CategoryFeedFetcher alloc] init];
 		feedFetcher.accountName=self.account.name;
@@ -288,7 +276,8 @@
 		
 		return [itemFetcher autorelease]; 
 	}
-	if([self.feedCategory isEqualToString:@"_category"])
+	
+	if([self isCategory])
 	{
 		CategoryItemFetcher * itemFetcher = [[CategoryItemFetcher alloc] init];
 		
@@ -298,7 +287,8 @@
 		return [itemFetcher autorelease]; 
 	}
 	
-	if([self.feedCategory isEqualToString:@"_all"])
+	
+	if([self isAllItems])
 	{
 		AccountItemFetcher * itemFetcher = [[AccountItemFetcher alloc] init];
 		
