@@ -26,6 +26,10 @@
 	
 	[self.tableView reloadData];
 }
+- (void) showHomeScreen:(id)sender
+{
+	[[[UIApplication sharedApplication] delegate] showHomeScreen];
+}
 
 - (void)viewDidLoad 
 {
@@ -39,8 +43,14 @@
 	self.tableView.backgroundView.backgroundColor=[UIColor blackColor];
 	self.tableView.backgroundView.alpha=0.5;
 	
-	self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(toggleEditMode:)] autorelease];
-				[[NSNotificationCenter defaultCenter]
+	//self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(toggleEditMode:)] autorelease];
+	
+	self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStylePlain target:self action:@selector(showHomeScreen:)] autorelease];
+	
+	
+	
+	
+	[[NSNotificationCenter defaultCenter]
 	 addObserver:self
 	 selector:@selector(handleReloadData:)
 	 name:@"ReloadData"

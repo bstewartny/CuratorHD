@@ -64,6 +64,7 @@
 		B03B4B8712F86BAD0047D5CF /* MGSplitDividerView.m in Sources */ = {isa = PBXBuildFile; fileRef = B03B4B8212F86BAD0047D5CF /* MGSplitDividerView.m */; };
 		B03B4B8812F86BAD0047D5CF /* MGSplitCornersView.m in Sources */ = {isa = PBXBuildFile; fileRef = B03B4B8412F86BAD0047D5CF /* MGSplitCornersView.m */; };
 		B03CFA6B116FAA4C002FEC08 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B03CFA6A116FAA4C002FEC08 /* MessageUI.framework */; };
+		B0423BB11342697A008BE32F /* additem.png in Resources */ = {isa = PBXBuildFile; fileRef = B0423BB01342697A008BE32F /* additem.png */; };
 		B0463BB11326959400690BC1 /* Font.m in Sources */ = {isa = PBXBuildFile; fileRef = B0463BB01326959400690BC1 /* Font.m */; };
 		B047D006113F073A00E50884 /* icon_add.png in Resources */ = {isa = PBXBuildFile; fileRef = B047D005113F073A00E50884 /* icon_add.png */; };
 		B047D00A113F076200E50884 /* icon_arrow_right.png in Resources */ = {isa = PBXBuildFile; fileRef = B047D009113F076200E50884 /* icon_arrow_right.png */; };
@@ -89,6 +90,31 @@
 		B055C0F01295B092000865A9 /* home_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B055C0ED1295B092000865A9 /* home_icon.png */; };
 		B055C1341295B7BF000865A9 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = B055C1331295B7BF000865A9 /* iTunesArtwork */; };
 		B055C1451295B8FA000865A9 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = B055C13C1295B80D000865A9 /* Entitlements.plist */; };
+		B056B21713422A73007B9EA1 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B21613422A73007B9EA1 /* Appirater.m */; };
+		B056B25313422B86007B9EA1 /* UIColor+AQGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B23C13422B86007B9EA1 /* UIColor+AQGridView.m */; };
+		B056B25413422B86007B9EA1 /* NSIndexSet+AQIsSetContiguous.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B23E13422B86007B9EA1 /* NSIndexSet+AQIsSetContiguous.m */; };
+		B056B25513422B86007B9EA1 /* NSIndexSet+AQIndexesOutsideSet.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B24013422B86007B9EA1 /* NSIndexSet+AQIndexesOutsideSet.m */; };
+		B056B25613422B86007B9EA1 /* AQGridViewUpdateItem.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B24213422B86007B9EA1 /* AQGridViewUpdateItem.m */; };
+		B056B25713422B86007B9EA1 /* AQGridViewUpdateInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B24413422B86007B9EA1 /* AQGridViewUpdateInfo.m */; };
+		B056B25813422B86007B9EA1 /* AQGridViewData.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B24613422B86007B9EA1 /* AQGridViewData.m */; };
+		B056B25913422B86007B9EA1 /* AQGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B24813422B86007B9EA1 /* AQGridViewController.m */; };
+		B056B25A13422B86007B9EA1 /* AQGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B24B13422B86007B9EA1 /* AQGridViewCell.m */; };
+		B056B25B13422B86007B9EA1 /* AQGridViewAnimatorItem.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B24D13422B86007B9EA1 /* AQGridViewAnimatorItem.m */; };
+		B056B25C13422B86007B9EA1 /* AQGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B25113422B86007B9EA1 /* AQGridView.m */; };
+		B056B26113422C0B007B9EA1 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B26013422C0B007B9EA1 /* HomeViewController.m */; };
+		B056B2BC134239F5007B9EA1 /* HomeSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B2BB134239F5007B9EA1 /* HomeSplitViewController.m */; };
+		B056B3B913424ABC007B9EA1 /* 64-googlreader.png in Resources */ = {isa = PBXBuildFile; fileRef = B056B3B513424ABC007B9EA1 /* 64-googlreader.png */; };
+		B056B3BA13424ABC007B9EA1 /* 64-infongen.png in Resources */ = {isa = PBXBuildFile; fileRef = B056B3B613424ABC007B9EA1 /* 64-infongen.png */; };
+		B056B3BB13424ABC007B9EA1 /* 64-twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = B056B3B713424ABC007B9EA1 /* 64-twitter.png */; };
+		B056B3BC13424ABC007B9EA1 /* 64-folderclosed.png in Resources */ = {isa = PBXBuildFile; fileRef = B056B3B813424ABC007B9EA1 /* 64-folderclosed.png */; };
+		B056B3FD134250DC007B9EA1 /* PFGridViewSection+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B3EE134250DC007B9EA1 /* PFGridViewSection+Internal.m */; };
+		B056B3FE134250DC007B9EA1 /* PFGridViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B3F0134250DC007B9EA1 /* PFGridViewSection.m */; };
+		B056B3FF134250DC007B9EA1 /* PFGridViewLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B3F2134250DC007B9EA1 /* PFGridViewLabelCell.m */; };
+		B056B400134250DC007B9EA1 /* PFGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B3F4134250DC007B9EA1 /* PFGridViewCell.m */; };
+		B056B401134250DC007B9EA1 /* PFGridView+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B3F6134250DC007B9EA1 /* PFGridView+Internal.m */; };
+		B056B402134250DC007B9EA1 /* PFGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B3F8134250DC007B9EA1 /* PFGridView.m */; };
+		B056B403134250DC007B9EA1 /* PFGridIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B3FB134250DC007B9EA1 /* PFGridIndexPath.m */; };
+		B056B470134258DB007B9EA1 /* 64-newsletter.png in Resources */ = {isa = PBXBuildFile; fileRef = B056B46F134258DB007B9EA1 /* 64-newsletter.png */; };
 		B05D909A1338E169004C6032 /* gray_googlreader.png in Resources */ = {isa = PBXBuildFile; fileRef = B05D908C1338E169004C6032 /* gray_googlreader.png */; };
 		B05D909B1338E169004C6032 /* gray_infongen.png in Resources */ = {isa = PBXBuildFile; fileRef = B05D908D1338E169004C6032 /* gray_infongen.png */; };
 		B05D909C1338E169004C6032 /* gray_twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = B05D908E1338E169004C6032 /* gray_twitter.png */; };
@@ -539,7 +565,7 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		1D6058910D05DD3D006BFB54 /* Newsletter Publisher Testing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Newsletter Publisher Testing.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D6058910D05DD3D006BFB54 /* Newsletter Publisher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Newsletter Publisher.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28A0AAE50D9B0CCF005BE974 /* Curator_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Curator_Prefix.pch; sourceTree = "<group>"; };
@@ -635,6 +661,7 @@
 		B03B4B8412F86BAD0047D5CF /* MGSplitCornersView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGSplitCornersView.m; sourceTree = "<group>"; };
 		B03B4B8512F86BAD0047D5CF /* MGSplitCornersView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGSplitCornersView.h; sourceTree = "<group>"; };
 		B03CFA6A116FAA4C002FEC08 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		B0423BB01342697A008BE32F /* additem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = additem.png; sourceTree = "<group>"; };
 		B0463BAF1326959400690BC1 /* Font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Font.h; sourceTree = "<group>"; };
 		B0463BB01326959400690BC1 /* Font.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Font.m; sourceTree = "<group>"; };
 		B047D005113F073A00E50884 /* icon_add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_add.png; sourceTree = "<group>"; };
@@ -662,6 +689,55 @@
 		B055C0ED1295B092000865A9 /* home_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_icon.png; sourceTree = "<group>"; };
 		B055C1331295B7BF000865A9 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
 		B055C13C1295B80D000865A9 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
+		B056B21513422A73007B9EA1 /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appirater.h; sourceTree = "<group>"; };
+		B056B21613422A73007B9EA1 /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appirater.m; sourceTree = "<group>"; };
+		B056B23C13422B86007B9EA1 /* UIColor+AQGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+AQGridView.m"; sourceTree = "<group>"; };
+		B056B23D13422B86007B9EA1 /* UIColor+AQGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+AQGridView.h"; sourceTree = "<group>"; };
+		B056B23E13422B86007B9EA1 /* NSIndexSet+AQIsSetContiguous.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexSet+AQIsSetContiguous.m"; sourceTree = "<group>"; };
+		B056B23F13422B86007B9EA1 /* NSIndexSet+AQIsSetContiguous.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexSet+AQIsSetContiguous.h"; sourceTree = "<group>"; };
+		B056B24013422B86007B9EA1 /* NSIndexSet+AQIndexesOutsideSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexSet+AQIndexesOutsideSet.m"; sourceTree = "<group>"; };
+		B056B24113422B86007B9EA1 /* NSIndexSet+AQIndexesOutsideSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexSet+AQIndexesOutsideSet.h"; sourceTree = "<group>"; };
+		B056B24213422B86007B9EA1 /* AQGridViewUpdateItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQGridViewUpdateItem.m; sourceTree = "<group>"; };
+		B056B24313422B86007B9EA1 /* AQGridViewUpdateItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQGridViewUpdateItem.h; sourceTree = "<group>"; };
+		B056B24413422B86007B9EA1 /* AQGridViewUpdateInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQGridViewUpdateInfo.m; sourceTree = "<group>"; };
+		B056B24513422B86007B9EA1 /* AQGridViewUpdateInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQGridViewUpdateInfo.h; sourceTree = "<group>"; };
+		B056B24613422B86007B9EA1 /* AQGridViewData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQGridViewData.m; sourceTree = "<group>"; };
+		B056B24713422B86007B9EA1 /* AQGridViewData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQGridViewData.h; sourceTree = "<group>"; };
+		B056B24813422B86007B9EA1 /* AQGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQGridViewController.m; sourceTree = "<group>"; };
+		B056B24913422B86007B9EA1 /* AQGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQGridViewController.h; sourceTree = "<group>"; };
+		B056B24A13422B86007B9EA1 /* AQGridViewCell+AQGridViewCellPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AQGridViewCell+AQGridViewCellPrivate.h"; sourceTree = "<group>"; };
+		B056B24B13422B86007B9EA1 /* AQGridViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQGridViewCell.m; sourceTree = "<group>"; };
+		B056B24C13422B86007B9EA1 /* AQGridViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQGridViewCell.h; sourceTree = "<group>"; };
+		B056B24D13422B86007B9EA1 /* AQGridViewAnimatorItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQGridViewAnimatorItem.m; sourceTree = "<group>"; };
+		B056B24E13422B86007B9EA1 /* AQGridViewAnimatorItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQGridViewAnimatorItem.h; sourceTree = "<group>"; };
+		B056B24F13422B86007B9EA1 /* AQGridView+CellLocationDelegation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AQGridView+CellLocationDelegation.h"; sourceTree = "<group>"; };
+		B056B25013422B86007B9EA1 /* AQGridView+CellLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AQGridView+CellLayout.h"; sourceTree = "<group>"; };
+		B056B25113422B86007B9EA1 /* AQGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQGridView.m; sourceTree = "<group>"; };
+		B056B25213422B86007B9EA1 /* AQGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQGridView.h; sourceTree = "<group>"; };
+		B056B25F13422C0B007B9EA1 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
+		B056B26013422C0B007B9EA1 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		B056B2BA134239F5007B9EA1 /* HomeSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeSplitViewController.h; sourceTree = "<group>"; };
+		B056B2BB134239F5007B9EA1 /* HomeSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeSplitViewController.m; sourceTree = "<group>"; };
+		B056B3B513424ABC007B9EA1 /* 64-googlreader.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "64-googlreader.png"; sourceTree = "<group>"; };
+		B056B3B613424ABC007B9EA1 /* 64-infongen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "64-infongen.png"; sourceTree = "<group>"; };
+		B056B3B713424ABC007B9EA1 /* 64-twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "64-twitter.png"; sourceTree = "<group>"; };
+		B056B3B813424ABC007B9EA1 /* 64-folderclosed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "64-folderclosed.png"; sourceTree = "<group>"; };
+		B056B3EE134250DC007B9EA1 /* PFGridViewSection+Internal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PFGridViewSection+Internal.m"; sourceTree = "<group>"; };
+		B056B3EF134250DC007B9EA1 /* PFGridViewSection+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PFGridViewSection+Internal.h"; sourceTree = "<group>"; };
+		B056B3F0134250DC007B9EA1 /* PFGridViewSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFGridViewSection.m; sourceTree = "<group>"; };
+		B056B3F1134250DC007B9EA1 /* PFGridViewSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFGridViewSection.h; sourceTree = "<group>"; };
+		B056B3F2134250DC007B9EA1 /* PFGridViewLabelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFGridViewLabelCell.m; sourceTree = "<group>"; };
+		B056B3F3134250DC007B9EA1 /* PFGridViewLabelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFGridViewLabelCell.h; sourceTree = "<group>"; };
+		B056B3F4134250DC007B9EA1 /* PFGridViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFGridViewCell.m; sourceTree = "<group>"; };
+		B056B3F5134250DC007B9EA1 /* PFGridViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFGridViewCell.h; sourceTree = "<group>"; };
+		B056B3F6134250DC007B9EA1 /* PFGridView+Internal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PFGridView+Internal.m"; sourceTree = "<group>"; };
+		B056B3F7134250DC007B9EA1 /* PFGridView+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PFGridView+Internal.h"; sourceTree = "<group>"; };
+		B056B3F8134250DC007B9EA1 /* PFGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFGridView.m; sourceTree = "<group>"; };
+		B056B3F9134250DC007B9EA1 /* PFGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFGridView.h; sourceTree = "<group>"; };
+		B056B3FA134250DC007B9EA1 /* PFGridView-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PFGridView-Prefix.pch"; sourceTree = "<group>"; };
+		B056B3FB134250DC007B9EA1 /* PFGridIndexPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFGridIndexPath.m; sourceTree = "<group>"; };
+		B056B3FC134250DC007B9EA1 /* PFGridIndexPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFGridIndexPath.h; sourceTree = "<group>"; };
+		B056B46F134258DB007B9EA1 /* 64-newsletter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "64-newsletter.png"; sourceTree = "<group>"; };
 		B05D908C1338E169004C6032 /* gray_googlreader.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gray_googlreader.png; sourceTree = "<group>"; };
 		B05D908D1338E169004C6032 /* gray_infongen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gray_infongen.png; sourceTree = "<group>"; };
 		B05D908E1338E169004C6032 /* gray_twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gray_twitter.png; sourceTree = "<group>"; };
@@ -1341,7 +1417,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1D6058910D05DD3D006BFB54 /* Newsletter Publisher Testing.app */,
+				1D6058910D05DD3D006BFB54 /* Newsletter Publisher.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1547,7 +1623,7 @@
 				B02EAE67132F94FA0090B00C /* MBProgressHUD.h */,
 				B02EAE68132F94FA0090B00C /* MBProgressHUD.m */,
 			);
-			name = MBProgressHUD;
+			path = MBProgressHUD;
 			sourceTree = "<group>";
 		};
 		B03B4B7312F86B820047D5CF /* MGSplitViewController */ = {
@@ -1561,6 +1637,67 @@
 				B03B4B8512F86BAD0047D5CF /* MGSplitCornersView.h */,
 			);
 			path = MGSplitViewController;
+			sourceTree = "<group>";
+		};
+		B056B20B13422A49007B9EA1 /* Appirater */ = {
+			isa = PBXGroup;
+			children = (
+				B056B21513422A73007B9EA1 /* Appirater.h */,
+				B056B21613422A73007B9EA1 /* Appirater.m */,
+			);
+			path = Appirater;
+			sourceTree = "<group>";
+		};
+		B056B21813422ACD007B9EA1 /* AQGridView */ = {
+			isa = PBXGroup;
+			children = (
+				B056B23C13422B86007B9EA1 /* UIColor+AQGridView.m */,
+				B056B23D13422B86007B9EA1 /* UIColor+AQGridView.h */,
+				B056B23E13422B86007B9EA1 /* NSIndexSet+AQIsSetContiguous.m */,
+				B056B23F13422B86007B9EA1 /* NSIndexSet+AQIsSetContiguous.h */,
+				B056B24013422B86007B9EA1 /* NSIndexSet+AQIndexesOutsideSet.m */,
+				B056B24113422B86007B9EA1 /* NSIndexSet+AQIndexesOutsideSet.h */,
+				B056B24213422B86007B9EA1 /* AQGridViewUpdateItem.m */,
+				B056B24313422B86007B9EA1 /* AQGridViewUpdateItem.h */,
+				B056B24413422B86007B9EA1 /* AQGridViewUpdateInfo.m */,
+				B056B24513422B86007B9EA1 /* AQGridViewUpdateInfo.h */,
+				B056B24613422B86007B9EA1 /* AQGridViewData.m */,
+				B056B24713422B86007B9EA1 /* AQGridViewData.h */,
+				B056B24813422B86007B9EA1 /* AQGridViewController.m */,
+				B056B24913422B86007B9EA1 /* AQGridViewController.h */,
+				B056B24A13422B86007B9EA1 /* AQGridViewCell+AQGridViewCellPrivate.h */,
+				B056B24B13422B86007B9EA1 /* AQGridViewCell.m */,
+				B056B24C13422B86007B9EA1 /* AQGridViewCell.h */,
+				B056B24D13422B86007B9EA1 /* AQGridViewAnimatorItem.m */,
+				B056B24E13422B86007B9EA1 /* AQGridViewAnimatorItem.h */,
+				B056B24F13422B86007B9EA1 /* AQGridView+CellLocationDelegation.h */,
+				B056B25013422B86007B9EA1 /* AQGridView+CellLayout.h */,
+				B056B25113422B86007B9EA1 /* AQGridView.m */,
+				B056B25213422B86007B9EA1 /* AQGridView.h */,
+			);
+			path = AQGridView;
+			sourceTree = "<group>";
+		};
+		B056B3EC134250BB007B9EA1 /* PFGridView */ = {
+			isa = PBXGroup;
+			children = (
+				B056B3EE134250DC007B9EA1 /* PFGridViewSection+Internal.m */,
+				B056B3EF134250DC007B9EA1 /* PFGridViewSection+Internal.h */,
+				B056B3F0134250DC007B9EA1 /* PFGridViewSection.m */,
+				B056B3F1134250DC007B9EA1 /* PFGridViewSection.h */,
+				B056B3F2134250DC007B9EA1 /* PFGridViewLabelCell.m */,
+				B056B3F3134250DC007B9EA1 /* PFGridViewLabelCell.h */,
+				B056B3F4134250DC007B9EA1 /* PFGridViewCell.m */,
+				B056B3F5134250DC007B9EA1 /* PFGridViewCell.h */,
+				B056B3F6134250DC007B9EA1 /* PFGridView+Internal.m */,
+				B056B3F7134250DC007B9EA1 /* PFGridView+Internal.h */,
+				B056B3F8134250DC007B9EA1 /* PFGridView.m */,
+				B056B3F9134250DC007B9EA1 /* PFGridView.h */,
+				B056B3FA134250DC007B9EA1 /* PFGridView-Prefix.pch */,
+				B056B3FB134250DC007B9EA1 /* PFGridIndexPath.m */,
+				B056B3FC134250DC007B9EA1 /* PFGridIndexPath.h */,
+			);
+			path = PFGridView;
 			sourceTree = "<group>";
 		};
 		B05E6EE7128AFF6F00F00E05 /* TwitterSourceModel */ = {
@@ -1956,6 +2093,9 @@
 		B0A54EFD12FC58C400913912 /* Externals */ = {
 			isa = PBXGroup;
 			children = (
+				B056B3EC134250BB007B9EA1 /* PFGridView */,
+				B056B21813422ACD007B9EA1 /* AQGridView */,
+				B056B20B13422A49007B9EA1 /* Appirater */,
 				B02A417E133B94DC0089EC47 /* ASIHttpRequest */,
 				B02EAE64132F94E30090B00C /* MBProgressHUD */,
 				B03B4B7312F86B820047D5CF /* MGSplitViewController */,
@@ -2166,6 +2306,10 @@
 				B009B81513299279001F459E /* PullToRefreshViewController.m */,
 				B015AAE9132A848E004458BF /* ItemViewController.h */,
 				B015AAEA132A848E004458BF /* ItemViewController.m */,
+				B056B25F13422C0B007B9EA1 /* HomeViewController.h */,
+				B056B26013422C0B007B9EA1 /* HomeViewController.m */,
+				B056B2BA134239F5007B9EA1 /* HomeSplitViewController.h */,
+				B056B2BB134239F5007B9EA1 /* HomeSplitViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -2200,6 +2344,12 @@
 		C444AC6911C1719C007C96F0 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				B0423BB01342697A008BE32F /* additem.png */,
+				B056B46F134258DB007B9EA1 /* 64-newsletter.png */,
+				B056B3B513424ABC007B9EA1 /* 64-googlreader.png */,
+				B056B3B613424ABC007B9EA1 /* 64-infongen.png */,
+				B056B3B713424ABC007B9EA1 /* 64-twitter.png */,
+				B056B3B813424ABC007B9EA1 /* 64-folderclosed.png */,
 				B08C6439134107EF00B580DC /* 32-infongen-new.png */,
 				B05D908C1338E169004C6032 /* gray_googlreader.png */,
 				B05D908D1338E169004C6032 /* gray_infongen.png */,
@@ -2603,7 +2753,7 @@
 			);
 			name = InfoNgen;
 			productName = Untitled;
-			productReference = 1D6058910D05DD3D006BFB54 /* Newsletter Publisher Testing.app */;
+			productReference = 1D6058910D05DD3D006BFB54 /* Newsletter Publisher.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -2933,6 +3083,12 @@
 				B05D90A61338E169004C6032 /* green_folderopen.png in Resources */,
 				B05D90A71338E169004C6032 /* green_folderdoc.png in Resources */,
 				B08C643A134107EF00B580DC /* 32-infongen-new.png in Resources */,
+				B056B3B913424ABC007B9EA1 /* 64-googlreader.png in Resources */,
+				B056B3BA13424ABC007B9EA1 /* 64-infongen.png in Resources */,
+				B056B3BB13424ABC007B9EA1 /* 64-twitter.png in Resources */,
+				B056B3BC13424ABC007B9EA1 /* 64-folderclosed.png in Resources */,
+				B056B470134258DB007B9EA1 /* 64-newsletter.png in Resources */,
+				B0423BB11342697A008BE32F /* additem.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3161,6 +3317,26 @@
 				B02A41A0133B94FA0089EC47 /* ASIAuthenticationDialog.m in Sources */,
 				B02A4287133BA7E10089EC47 /* UIDeviceAdditions.m in Sources */,
 				B08C62E71340C30300B580DC /* FeedCategory.m in Sources */,
+				B056B21713422A73007B9EA1 /* Appirater.m in Sources */,
+				B056B25313422B86007B9EA1 /* UIColor+AQGridView.m in Sources */,
+				B056B25413422B86007B9EA1 /* NSIndexSet+AQIsSetContiguous.m in Sources */,
+				B056B25513422B86007B9EA1 /* NSIndexSet+AQIndexesOutsideSet.m in Sources */,
+				B056B25613422B86007B9EA1 /* AQGridViewUpdateItem.m in Sources */,
+				B056B25713422B86007B9EA1 /* AQGridViewUpdateInfo.m in Sources */,
+				B056B25813422B86007B9EA1 /* AQGridViewData.m in Sources */,
+				B056B25913422B86007B9EA1 /* AQGridViewController.m in Sources */,
+				B056B25A13422B86007B9EA1 /* AQGridViewCell.m in Sources */,
+				B056B25B13422B86007B9EA1 /* AQGridViewAnimatorItem.m in Sources */,
+				B056B25C13422B86007B9EA1 /* AQGridView.m in Sources */,
+				B056B26113422C0B007B9EA1 /* HomeViewController.m in Sources */,
+				B056B2BC134239F5007B9EA1 /* HomeSplitViewController.m in Sources */,
+				B056B3FD134250DC007B9EA1 /* PFGridViewSection+Internal.m in Sources */,
+				B056B3FE134250DC007B9EA1 /* PFGridViewSection.m in Sources */,
+				B056B3FF134250DC007B9EA1 /* PFGridViewLabelCell.m in Sources */,
+				B056B400134250DC007B9EA1 /* PFGridViewCell.m in Sources */,
+				B056B401134250DC007B9EA1 /* PFGridView+Internal.m in Sources */,
+				B056B402134250DC007B9EA1 /* PFGridView.m in Sources */,
+				B056B403134250DC007B9EA1 /* PFGridIndexPath.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

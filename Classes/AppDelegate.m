@@ -53,6 +53,9 @@
 #import "FormViewController.h"
 #import "MGSplitViewController.h"
 #import "Font.h"
+#import "HomeViewController.h"
+#import "HomeSplitViewController.h"
+
 
 @interface AppDelegate (CoreDataPrivate)
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
@@ -259,7 +262,7 @@
 	
 	NewsletterFetcher * newslettersFetcher=[[NewsletterFetcher alloc] init];
 	
-	if(masterNavController!=nil)
+	/*if(masterNavController!=nil)
 	{
 		[sourcesFetcher performFetch];
 		[foldersFetcher performFetch];
@@ -274,7 +277,7 @@
 		[rootFeedsView.tableView reloadData];
 	}
 	else 
-	{
+	{*/
 		RootFeedsViewController * feedsView=[[RootFeedsViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
 		
 		[feedsView setSourcesFetcher:sourcesFetcher];
@@ -288,7 +291,7 @@
 		rootFeedsView=[feedsView retain];
 		
 		[feedsView release];
-	}
+	//}
 	
 	[sourcesFetcher release];
 	[foldersFetcher release];
@@ -376,12 +379,60 @@
 		//[self createHelpObjects];
 	}
 	
-	splitView=[[MGSplitViewController alloc] init];
+	//splitView=[[MGSplitViewController alloc] init];
+	splitView=[[HomeSplitViewController alloc] init];
+	
 	splitView.dividerStyle=MGSplitViewDividerStyleNone;
 	splitView.delegate=self;
 	
-	[self setUpSourcesView];
+	ArrayFetcher * sourcesFetcher=[[ArrayFetcher alloc] init];
+	
+	sourcesFetcher.array=[self accounts];
+	
+	FolderFetcher * foldersFetcher=[[FolderFetcher alloc] init];
+	
+	NewsletterFetcher * newslettersFetcher=[[NewsletterFetcher alloc] init];
+	
+	RootFeedsViewController * feedsView=[[RootFeedsViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
+	
+	[feedsView setSourcesFetcher:sourcesFetcher];
+	[feedsView setFoldersFetcher:foldersFetcher];
+	[feedsView setNewslettersFetcher:newslettersFetcher];
+	
+	feedsView.itemDelegate=self;
+	
+	masterNavController=[[UINavigationController alloc] initWithRootViewController:feedsView];
+	
+	rootFeedsView=[feedsView retain];
+	
+	[feedsView release];
+	
+	HomeViewController * homeView=[[HomeViewController alloc] init];
+	
+	UINavigationController * homeNav=[[UINavigationController alloc] initWithRootViewController:homeView];
+	
+	[homeView setSourcesFetcher:sourcesFetcher];
+	[homeView setFoldersFetcher:foldersFetcher];
+	[homeView setNewslettersFetcher:newslettersFetcher];
+	
+	[homeView release];
+	
+	splitView.homeViewController=homeNav;
+	
+	[homeNav release];
+	
+	
+	[sourcesFetcher release];
+	[foldersFetcher release];
+	[newslettersFetcher release];
+	
+	
+	
 
+	
+	
+	
+	
 	FeedViewController * feedView=[[FeedViewController alloc] initWithNibName:@"FeedView" bundle:nil];
 	
 	detailNavController=[[UINavigationController alloc] initWithRootViewController:feedView];
@@ -401,6 +452,8 @@
 	splitView.viewControllers=[NSArray arrayWithObjects:masterNavController,detailNavController,nil];
 	
 	[window addSubview:splitView.view];
+	
+	//[self showHomeScreen];
 	
 	[window makeKeyAndVisible];
 	
@@ -613,6 +666,18 @@
 	{
 		[self showAccountSettingsForm];
 	}*/
+	
+}
+
+- (void) showHomeScreen
+{
+	// add subview to window...	
+	[splitView showHomeView];
+}
+
+- (void) hideHomeScreen
+{
+	[splitView hideHomeView];
 	
 }
 
@@ -2289,6 +2354,7 @@
 	[tmpViewController release];
 	[tmpFolder release];
 	[tmpNewsletter release];
+	//[homeNav release];
 	[super dealloc];
 }
 

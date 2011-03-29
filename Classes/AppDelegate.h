@@ -54,6 +54,7 @@
 @class Folder;
 @class FeedAccount; 
 @class CategoryFeedFetcher;
+@class HomeSplitViewController;
 
 //@class MGSplitViewController;
 @interface AppDelegate : NSObject <UIApplicationDelegate,MGSplitViewControllerDelegate> 
@@ -110,11 +111,13 @@
 	FeedsViewController * accountFeedsView;
 	RootFeedsViewController * rootFeedsView;
 	BOOL isFirstRun;
-	MGSplitViewController	* splitView;
+	//MGSplitViewController	* splitView;
+	HomeSplitViewController * splitView;
 	//UISplitViewController * splitView;
 	UIPopoverController * navPopoverController;
 	Folder * tmpFolder;
 	Newsletter * tmpNewsletter;
+	//UINavigationController * homeNav;
 }
 @property(nonatomic,retain) NSString * statusText;
 @property(nonatomic,retain) Folder * tmpFolder;
