@@ -13,7 +13,7 @@
 }
 
 @property (nonatomic, readonly) NSUInteger width;
-@property (nonatomic, assign) NSString *badgeString;
+@property (nonatomic, retain) NSString *badgeString;
 @property (nonatomic, assign) UITableViewCell *parent;
 @property (nonatomic, retain) UIColor *badgeColor;
 @property (nonatomic, retain) UIColor *badgeColorHighlighted;

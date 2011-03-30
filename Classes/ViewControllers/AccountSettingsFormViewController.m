@@ -97,7 +97,7 @@
 			[cancelButton setEnabled:YES];
 			[doneButton setEnabled:YES];
 			
-			self.navigationItem.title=@"Account Settings";
+			self.navigationItem.title=@"Source Accounts";
 			
 			UIAlertView * alertView=[[UIAlertView alloc] initWithTitle:@"Login Failed" message:@"Failed to validate accounts. Please verify username and password." delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil];
 			
@@ -464,7 +464,7 @@
 
 - (void)viewDidLoad 
 {
-	self.navigationItem.title=@"Account Settings";
+	self.navigationItem.title=@"Source Accounts";
 	
 	self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)] autorelease];
 	self.cancelButton=self.navigationItem.leftBarButtonItem;

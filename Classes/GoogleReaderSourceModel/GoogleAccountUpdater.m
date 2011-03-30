@@ -74,8 +74,9 @@
 	feed.feedType=@"02GoogleFeed";
 	[feed setSingleCategory:@"_starred"];
 	
-	feed.image=[UIImage imageNamed:@"28-star.png"];
-	feed.imageName=@"28-star.png";
+	feed.image=[UIImage imageNamed:@"gray_star.png"];
+	feed.imageName=@"gray_star.png";
+	feed.highlightedImageName=@"green_star.png";
 	
 	[feeds addObject:feed];
 	
@@ -88,8 +89,9 @@
 	feed.feedType=@"03GoogleFeed";
 	[feed setSingleCategory:@"_shared"];
 	
-	feed.image=[UIImage imageNamed:@"yourshared.gif"];
-	feed.imageName=@"yourshared.gif";
+	feed.image=[UIImage imageNamed:@"gray_rss.png"];
+	feed.imageName=@"gray_rss.png";
+	feed.highlightedImageName=@"green_rss.png";
 	
 	[feeds addObject:feed];
 	
@@ -102,8 +104,9 @@
 	feed.feedType=@"04GoogleFeed";
 	[feed setSingleCategory:@"_notes"];
 	
-	feed.image=[UIImage imageNamed:@"notes.png"];
-	feed.imageName=@"notes.png";
+	feed.image=[UIImage imageNamed:@"gray_notes.png"];
+	feed.imageName=@"gray_notes.png";
+	feed.highlightedImageName=@"green_notes.png";
 	
 	[feeds addObject:feed];
 	
@@ -116,8 +119,9 @@
 	feed.feedType=@"05GoogleFeed";
 	[feed setSingleCategory:@"_shared"];
 	
-	feed.image=[UIImage imageNamed:@"shared.gif"];
-	feed.imageName=@"shared.gif";
+	feed.image=[UIImage imageNamed:@"gray_2people.png"];
+	feed.imageName=@"gray_2people.png";
+	feed.highlightedImageName=@"green_2people.png";
 	
 	[feeds addObject:feed];
 	

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
  
 #import "AQGridView.h"
+#import "AQGridViewCell.h"
 
 @class ItemFetcher;
 
@@ -19,6 +20,13 @@
 	id itemDelegate;
 	//IBOutlet AQGridView * gridView;
 	IBOutlet UITableView * tableView;
+	AQGridViewCell * _draggingCell;
+	
+	NSUInteger _emptyCellIndex;
+    AQGridView * _draggingGridView;
+	
+    NSUInteger _dragOriginIndex;
+    CGPoint _dragOriginCellOrigin;
 }
 //@property (nonatomic, retain) IBOutlet AQGridView * gridView;
 @property (nonatomic, retain) IBOutlet UITableView * tableView;
@@ -29,5 +37,6 @@
 @property(nonatomic,assign) id itemDelegate;
 
 - (CGFloat) heightForSection:(NSInteger)section width:(CGFloat)width;
+- (int) numberOfItemsInSection:(NSInteger)section;
 
 @end

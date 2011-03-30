@@ -25,6 +25,22 @@
 	return self;	
 }
 
+- (void) sizeToFit
+{
+	NSString *countString = self.badgeString;
+	
+	CGSize numberSize = [countString sizeWithFont: font];
+	
+	self.width = numberSize.width + 16;
+	
+	CGRect f=self.frame;
+	
+	f.size.width=self.width;
+	f.size.height=18;
+	
+	self.frame=f;
+}
+
 - (void) drawRect:(CGRect)rect
 {	
 	NSString *countString = self.badgeString;
@@ -33,7 +49,7 @@
 	
 	self.width = numberSize.width + 16;
 	
-	CGRect bounds = CGRectMake(0 , 0, numberSize.width + 16 , 18);
+	CGRect bounds = CGRectMake(0 , 0, self.width , 18);
 	
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	float radius = bounds.size.height / 2.0;
@@ -74,7 +90,7 @@
 - (void) dealloc
 {
 	parent = nil;
-	
+	[badgeString release];
 	[font release];
 	[badgeColor release];
 	[badgeColorHighlighted release];

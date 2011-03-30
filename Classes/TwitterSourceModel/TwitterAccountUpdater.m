@@ -65,8 +65,9 @@
 	feed.name=@"Favorites";
 	feed.feedType=@"03TwitterFeed";
 	[feed setSingleCategory:@"_twitter_favorites"];
-	feed.image=[UIImage imageNamed:@"starred.png"];
-	feed.imageName=@"starred.png";
+	feed.image=[UIImage imageNamed:@"gray_star.png"];
+	feed.imageName=@"gray_star.png";
+	feed.highlightedImageName=@"green_star.png";
 	
 	[feeds addObject:feed];
 	
@@ -86,8 +87,9 @@
 
 	feed.feedType=@"04TwitterFeed";
 	 [feed setSingleCategory:@"_twitter_mentions"];
-	feed.image=[UIImage imageNamed:@"person_icon.gif"];
-	feed.imageName=@"person_icon.gif";
+	feed.image=[UIImage imageNamed:@"gray_person.png"];
+	feed.imageName=@"gray_person.png";
+	feed.highlightedImageName=@"green_person.png";
 	
 	[feeds addObject:feed];
 	
@@ -98,8 +100,9 @@
 	feed.name=@"Direct Messages";
 	feed.feedType=@"05TwitterFeed";
 	[feed setSingleCategory:@"_twitter_direct"];
-	feed.image=[UIImage imageNamed:@"letter_icon.gif"];
-	feed.imageName=@"letter_icon.gif";
+	feed.image=[UIImage imageNamed:@"gray_email.png"];
+	feed.imageName=@"gray_email.png";
+	feed.highlightedImageName=@"green_email.png";
 	
 	[feeds addObject:feed];
 	

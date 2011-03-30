@@ -1,7 +1,6 @@
 #import "RootFeedsViewController.h"
 #import "Feed.h"
 #import "FeedGroup.h"
-//#import "AddFeedViewController.h"
 #import "FeedViewController.h"
 #import "Newsletter.h"
 #import "ItemFetcher.h"
@@ -26,6 +25,7 @@
 	
 	[self.tableView reloadData];
 }
+
 - (void) showHomeScreen:(id)sender
 {
 	[[[UIApplication sharedApplication] delegate] showHomeScreen];
@@ -45,8 +45,20 @@
 	
 	//self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(toggleEditMode:)] autorelease];
 	
-	self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStylePlain target:self action:@selector(showHomeScreen:)] autorelease];
+	//self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStylePlain target:self action:@selector(showHomeScreen:)] autorelease];
 	
+	
+	UIButton * button=[UIButton buttonWithType:UIButtonTypeCustom];
+	
+	[button setImage:[UIImage imageNamed:@"53-house.png"] forState:UIControlStateNormal];
+	[button addTarget:self action:@selector(showHomeScreen:) forControlEvents:UIControlEventTouchUpInside];
+	
+	 [button sizeToFit];
+	
+	self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
+	
+	
+										   
 	
 	
 	
@@ -299,25 +311,11 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		cell.accessoryType=UITableViewCellAccessoryNone;
 	}
 	
-	//if(![feed isKindOfClass:[Newsletter class]])
-	//{
-	//	if(feed.imageName)
-	//	{
-	//		cell.imageView.image=[UIImage imageNamed:feed.imageName];
-	//		if(feed.highlightedImageName)
-	//		{
-	//			cell.imageView.highlightedImage=[UIImage imageNamed:feed.highlightedImageName];
-	//		}
-	//	}
-	//	else 
-	//	{
-			if(feed.image)
-			{
-				cell.imageView.image=feed.image;  
-			}
-	//	}
-	//}
-
+	if(feed.image)
+	{
+		cell.imageView.image=feed.image;  
+	}
+	
 	if([feed isKindOfClass:[RssFeed class]])
 	{
 		int unreadCount=[[feed currentUnreadCount] intValue]; 
@@ -333,7 +331,6 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	}
 	else 
 	{	
-		
 		if([feed isKindOfClass:[Newsletter class]])
 		{
 			[cell setBadgeString:[NSString stringWithFormat:@"%d",[feed itemCount]]];
@@ -604,10 +601,13 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	{
 		if([feed respondsToSelector:@selector(feedFetcher)])
 		{
+			NSLog(@"yes has feedFetcher");
 			ItemFetcher * feedFetcher=[feed feedFetcher];
 			
 			if(feedFetcher!=nil)
 			{
+				NSLog(@"feed fetcher != nil");
+				
 				NSArray * feeds=[feedFetcher items];
 				
 				Feed * firstFeed=nil;

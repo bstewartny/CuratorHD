@@ -31,7 +31,8 @@
 {
 	if (fetchedResultsController) return fetchedResultsController;
 	
-	fetchedResultsController=[self createFetchedResultsController:@"FeedAccount"  predicate:nil sortDescriptors:nil];
+	fetchedResultsController=[self createFetchedResultsController:@"FeedAccount"  predicate:nil sortDescriptors:[NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"sortName" 
+																																									  ascending:YES] autorelease]]];
 
 	[fetchedResultsController setDelegate:self];
 	

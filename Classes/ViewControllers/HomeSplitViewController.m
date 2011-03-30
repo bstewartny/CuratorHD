@@ -1,4 +1,5 @@
 #import "HomeSplitViewController.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation HomeSplitViewController
 @synthesize homeViewController;
@@ -7,10 +8,21 @@
 {
 	if(homeViewController)
 	{
+		
+		CATransition* transition = [CATransition animation];
+		transition.duration = 0.3;
+		transition.type = kCATransitionFade;
+		transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+		
+		[self.view 
+		 addAnimation:transition forKey:kCATransition];
+		
 		[self.view addSubview:homeViewController.view];
 		[self.view bringSubviewToFront:homeViewController.view];
 		[self layoutSubviews];
+		
 		[homeViewController viewDidAppear:NO];
+	
 	}
 }
 
@@ -18,8 +30,20 @@
 {
 	if(homeViewController)
 	{
+		CATransition* transition = [CATransition animation];
+		transition.duration = 0.3;
+		transition.type = kCATransitionFade;
+		transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+		
+		[self.view 
+		 addAnimation:transition forKey:kCATransition];
+		
 		[homeViewController.view removeFromSuperview];
 		[self layoutSubviews];
+		
+		/*[[NSNotificationCenter defaultCenter] 
+		 postNotificationName:@"ReloadData"
+		 object:nil];*/
 	}
 }
 
@@ -86,6 +110,7 @@
 	if([self isShowingHomeView])
 	{
 		CGSize fullSize = [self splitViewSizeForOrientation:theOrientation];
+		
 		float width = fullSize.width;
 		float height = fullSize.height;
 		
@@ -93,6 +118,13 @@
 	}
 	else 
 	{
+		CGSize fullSize = [self splitViewSizeForOrientation:theOrientation];
+		
+		float width = fullSize.width;
+		float height = fullSize.height;
+		
+		homeViewController.view.frame=CGRectMake(0, 0, width, height);
+		
 		[super layoutSubviewsForInterfaceOrientation:theOrientation withAnimation:animate];
 	}
 }

@@ -249,36 +249,19 @@
 	
 	[masterNavController pushViewController:controller animated:YES];
 }
-
+/*
 - (void) setUpSourcesView
 {
 	NSLog(@"setUpSourcesView");
 	
-	ArrayFetcher * sourcesFetcher=[[ArrayFetcher alloc] init];
+	AccountFetcher * sourcesFetcher=[[AccountFetcher alloc] init];
 	
-	sourcesFetcher.array=[self accounts];
 	
 	FolderFetcher * foldersFetcher=[[FolderFetcher alloc] init];
 	
 	NewsletterFetcher * newslettersFetcher=[[NewsletterFetcher alloc] init];
 	
-	/*if(masterNavController!=nil)
-	{
-		[sourcesFetcher performFetch];
-		[foldersFetcher performFetch];
-		[newslettersFetcher performFetch];
-		
-		[rootFeedsView setSourcesFetcher:sourcesFetcher];
-		[rootFeedsView setFoldersFetcher:foldersFetcher];
-		[rootFeedsView setNewslettersFetcher:newslettersFetcher];
-		
-		[masterNavController popToViewController:rootFeedsView animated:YES];
-		
-		[rootFeedsView.tableView reloadData];
-	}
-	else 
-	{*/
-		RootFeedsViewController * feedsView=[[RootFeedsViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
+			RootFeedsViewController * feedsView=[[RootFeedsViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
 		
 		[feedsView setSourcesFetcher:sourcesFetcher];
 		[feedsView setFoldersFetcher:foldersFetcher];
@@ -291,12 +274,12 @@
 		rootFeedsView=[feedsView retain];
 		
 		[feedsView release];
-	//}
+	
 	
 	[sourcesFetcher release];
 	[foldersFetcher release];
 	[newslettersFetcher release];
-}
+}*/
 /*
 - (void) createSampleNewsletter
 {
@@ -385,9 +368,9 @@
 	splitView.dividerStyle=MGSplitViewDividerStyleNone;
 	splitView.delegate=self;
 	
-	ArrayFetcher * sourcesFetcher=[[ArrayFetcher alloc] init];
+	AccountFetcher * sourcesFetcher=[[AccountFetcher alloc] init];
 	
-	sourcesFetcher.array=[self accounts];
+	//sourcesFetcher.array=[self accounts];
 	
 	FolderFetcher * foldersFetcher=[[FolderFetcher alloc] init];
 	
@@ -622,19 +605,11 @@
 	
 	[self reconfigure];
 	
-	NSArray * accounts=[self accounts];
+	[[NSNotificationCenter defaultCenter] 
+	 postNotificationName:@"ReloadData"
+	 object:nil];
 	
-	ArrayFetcher * sourcesFetcher=[[ArrayFetcher alloc] init];
-	
-	sourcesFetcher.array=accounts;
-		
-	[rootFeedsView setSourcesFetcher:sourcesFetcher];
-	
-	[sourcesFetcher release];
-	
-	[rootFeedsView.tableView reloadData];
-		
-	if([accounts count]>0)
+	if([[self accounts] count]>0)
 	{
 		[self update];
 	}
