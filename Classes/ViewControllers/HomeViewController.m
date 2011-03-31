@@ -6,13 +6,13 @@
 #import "FeedAccount.h"
 #import "Feed.h"
 #import "BadgeView.h"
+#import "FeedFetcher.h"
 
 #define gridViewCellWidth 84.0
 #define gridViewCellHeight 124.0
 
 @implementation HomeViewController
 @synthesize sourcesFetcher,newslettersFetcher,foldersFetcher;
-//@synthesize gridView;
 @synthesize tableView;
 
 - (id) init
@@ -70,11 +70,12 @@
 		if ( [gridView indexForItemAtPoint: location] < numItems )
 		{
 			[self startEditMode:gridView];
-			return ( YES );
+			return YES;
 		}
     }
+	
     // touch is outside the bounds of any icon cells, so don't start the gesture
-    return ( NO );
+    return NO;
 }
 
 - (void) startEditMode:(AQGridView*)gridView
@@ -97,7 +98,6 @@
 	
 	if(gridView==nil)
 	{
-		NSLog(@"recognizer.view is nil!");
 		return;
 	}
 	
@@ -105,42 +105,11 @@
     {
         default:
         case UIGestureRecognizerStateFailed:
-            // do nothing
-            break;
-            
         case UIGestureRecognizerStatePossible:
         case UIGestureRecognizerStateCancelled:
-        {
-			NSLog(@"No implementation for UIGestureRecognizerStateCancelled!!!");
-            /*[gridView beginUpdates];
-            
-            if ( _emptyCellIndex != _dragOriginIndex )
-            {
-                [gridView moveItemAtIndex: _emptyCellIndex toIndex: _dragOriginIndex withAnimation: AQGridViewItemAnimationFade];
-            }
-            
-            _emptyCellIndex = _dragOriginIndex;
-            
-            // move the cell back to its origin
-            [UIView beginAnimations: @"SnapBack" context: NULL];
-            [UIView setAnimationCurve: UIViewAnimationCurveEaseOut];
-            [UIView setAnimationDuration: 0.5];
-            [UIView setAnimationDelegate: self];
-            [UIView setAnimationDidStopSelector: @selector(finishedSnap:finished:context:)];
-            
-            CGRect f = _draggingCell.frame;
-            f.origin = _dragOriginCellOrigin;
-            _draggingCell.frame = f;
-			NSLog(@"set draggingCell.frame=%@",NSStringFromCGRect(_draggingCell.frame));
-            
-            [UIView commitAnimations];
-            
-            [gridView endUpdates];
-            */
-            break;
-        }
-            
-        case UIGestureRecognizerStateEnded:
+        	break;
+        
+		case UIGestureRecognizerStateEnded:
         {
             CGPoint p = [recognizer locationInView: gridView];
             NSUInteger index = [gridView indexForItemAtPoint: p];
@@ -160,21 +129,9 @@
             
 			if(_dragOriginIndex!=index)
 			{
-				// update the data store
-				switch (gridView.tag) 
-				{
-					case 0:
-						[sourcesFetcher moveItemFromIndex:_dragOriginIndex toIndex:index];
-						break;
-					case 1:
-						[foldersFetcher moveItemFromIndex:_dragOriginIndex toIndex:index];
-						break;
-					case 2:
-						[newslettersFetcher moveItemFromIndex:_dragOriginIndex toIndex:index];
-						break;
-				}
-			}
-            
+				[[self fetcherForSection:gridView.tag] moveItemFromIndex:_dragOriginIndex toIndex:index];
+			}    
+			
 			if ( index != _emptyCellIndex )
             {
                 [gridView beginUpdates];
@@ -274,9 +231,6 @@
 			
             if ( index != _emptyCellIndex )
             {
-                NSLog( @"Moving empty cell from %u to %u", _emptyCellIndex, index );
-                
-                // batch the movements
                 [gridView beginUpdates];
                 
                 // move everything else out of the way
@@ -284,7 +238,6 @@
                 {
                     for ( NSUInteger i = index; i < _emptyCellIndex; i++ )
                     {
-                        NSLog( @"Moving %u to %u", i, i+1 );
                         [gridView moveItemAtIndex: i toIndex: i+1 withAnimation: AQGridViewItemAnimationFade];
                     }
                 }
@@ -292,7 +245,6 @@
                 {
                     for ( NSUInteger i = index; i > _emptyCellIndex; i-- )
                     {
-                        NSLog( @"Moving %u to %u", i, i-1 );
                         [gridView moveItemAtIndex: i toIndex: i-1 withAnimation: AQGridViewItemAnimationFade];
                     }
                 }
@@ -336,7 +288,7 @@
 {
     [super viewDidLoad];
 	
-	 _emptyCellIndex = NSNotFound;
+	_emptyCellIndex = NSNotFound;
 
 	self.tableView.backgroundColor=[UIColor viewFlipsideBackgroundColor];
 	[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
@@ -423,16 +375,7 @@
 
 - (int) numberOfItemsInSection:(NSInteger)section
 {
-	switch (section) 
-	{
-		case 0:
-			return [sourcesFetcher count]+1;
-		case 1:
-			return [foldersFetcher count]+1;
-		case 2:
-			return [newslettersFetcher count]+1;
-	}
-	return 0;
+	return [[self fetcherForSection:section] count]+1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -512,6 +455,8 @@
 
 - (void) configureGridViewCell:(AQGridViewCell*)cell forIndex:(NSUInteger)index inSection:(int)section editing:(BOOL)isEditing
 {
+	NSLog(@"configureGridViewCell:forIndex:%d inSection:%d",index,section);
+	
 	UIImage * image;
 	NSString * itemname;
 	int badgeCount=-1;
@@ -553,13 +498,15 @@
 				{
 					itemname=@"Cancel";
 				}
-				else {
+				else 
+				{
 					itemname=@"Add Folder";
 				}
 				image=[UIImage imageNamed:@"additem.png"];
 				showDeleteButton=NO;
 			}
-			else {
+			else 
+			{
 				badgeCount=[[[self foldersFetcher] itemAtIndex:index] itemCount];
 				itemname=[[foldersFetcher itemAtIndex:index] name];
 				image=[UIImage imageNamed:@"64-folderclosed.png"];
@@ -573,14 +520,16 @@
 				{
 					itemname=@"Cancel";
 				}
-				else {
+				else 
+				{
 					itemname=@"Add Newsletter";
 				}
 				
 				image=[UIImage imageNamed:@"additem.png"];
 				showDeleteButton=NO;
 			}
-			else {
+			else 
+			{
 				badgeCount=[[[self newslettersFetcher] itemAtIndex:index] itemCount];
 				itemname=[[newslettersFetcher itemAtIndex:index] name];
 				image=[UIImage imageNamed:@"64-newsletter.png"];
@@ -608,7 +557,6 @@
 	[cell.contentView addSubview:name];
 	if(badgeCount>-1)
 	{
-		
 		BadgeView * badge=[[BadgeView alloc] initWithFrame:CGRectMake(cell.frame.size.width-30, 0, 30, 20)];
 		badge.badgeString=[NSString stringWithFormat:@"%d",badgeCount];
 		[badge sizeToFit];
@@ -618,7 +566,6 @@
 		[cell.contentView addSubview:badge];
 		
 		[badge release];
-		
 	}
 	
 	if(showDeleteButton)
@@ -628,62 +575,91 @@
 		[deleteButton addTarget:self action:@selector(deleteItem:) forControlEvents:UIControlEventTouchUpInside];
 		[deleteButton sizeToFit];
 		deleteButton.tag=index;
-		deleteButton.backgroundColor=[UIColor clearColor];
-		
+		deleteButton.backgroundColor=[UIColor clearColor];		
 		deleteButton.frame=CGRectMake(2, 0, 29, 29);
 		[cell.contentView addSubview:deleteButton];
 	}
-	
-	
-	
+
 	[iv release];
 	[name release];
 }
 
-- (void) deleteItem:(UIButton*)sender
+- (void) showDeleteConfirm:(int)section index:(int)index
 {
-	// what item is it?
-	int index=sender.tag;
+	Feed * feed=[self feedForSection:section index:index];
+	_deleteSection=section;
+	_deleteIndex=index;
+	UIAlertView * alert=[[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Delete \"%@\"",[feed name]] message:[NSString stringWithFormat:@"Deleting \"%@\" will also delete all of its data.",[feed name]] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Delete",nil];
+	alert.tag=index;
+	[alert show];
 	
-	// what section is it?
-	AQGridView * gridView=nil;
-	 
-	UIView * v=sender;
+	[alert release];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+	if(buttonIndex==1) 
+	{
+		[self doDeleteItem:_deleteGridView section:_deleteSection index:_deleteIndex];
+	}
+}
+
+- (id) fetcherForSection:(int)section
+{
+	switch (section) 
+	{
+		case 0:
+			return sourcesFetcher;
+		case 1:
+			return foldersFetcher;
+		case 2:
+			return newslettersFetcher;
+	}
+	return nil;
+}
+
+- (Feed*) feedForSection:(int)section index:(int)index
+{
+	return [[self fetcherForSection:section] itemAtIndex:index];
+}
+- (AQGridView*) gridViewForView:(UIView*)v
+{
 	while(true)
 	{
 		UIView * s=[v superview];
 		if(s==nil) break;
 		if([s isKindOfClass:[AQGridView class]])
 		{
-			gridView=s;
-			break;
+			return s;
 		}
 		v=s;
 	}
+	return nil;
+}
+- (void) deleteItem:(UIButton*)sender
+{
+	int index=sender.tag;
 	
+	AQGridView * gridView=[self gridViewForView:sender];
+	 
 	if(gridView)
 	{
-		int section=gridView.tag;
-	 
-		switch (section) {
-			case 0:
-				[sourcesFetcher deleteItemAtIndex:index];
-				[sourcesFetcher performFetch];
-				[gridView reloadData];
-				break;
-			case 1:
-				[foldersFetcher deleteItemAtIndex:index];
-				[foldersFetcher performFetch];
-				[gridView reloadData];
-				break;
-			case 2:
-				[newslettersFetcher deleteItemAtIndex:index];
-				[newslettersFetcher performFetch];
-				[gridView reloadData];
-				break;
-		}
-		
+		_deleteGridView=gridView;
+		[self showDeleteConfirm:gridView.tag index:index];
 	}
+}
+
+- (void) doDeleteItem:(AQGridView*)gridView section:(int)section index:(int)index
+{
+	id fetcher=[self fetcherForSection:section];
+	
+	[fetcher deleteItemAtIndex:index];
+	[fetcher performFetch];
+	
+	[gridView deleteItemsAtIndices:[NSIndexSet indexSetWithIndex: index] withAnimation:AQGridViewItemAnimationFade];
+	
+	[gridView reloadData];
+	[gridView updateVisibleGridCellsNow];
 }
 
 - (AQGridViewCell *) gridView: (AQGridView *) aGridView cellForItemAtIndex: (NSUInteger) index
@@ -710,35 +686,12 @@
 	
 	if(gridView.editing)
 	{
-		switch(gridView.tag)
+		id fetcher=[self fetcherForSection:gridView.tag];
+		if(index>=[fetcher count])
 		{
-			case 0:
-				if(index>=[sourcesFetcher count])
-				{
-					// cancel editing
-					gridView.editing=NO;
-					[gridView reloadData];
-					
-				}
-				break;
-			case 1:
-				if(index>=[foldersFetcher count])
-				{
-					// cancel editing
-					gridView.editing=NO;
-					[gridView reloadData];
-				}
-				break;
-			case 2:
-				if(index>=[newslettersFetcher count])
-				{
-					// cancel editing
-					gridView.editing=NO;
-					[gridView reloadData];
-				}
-				break;
+			gridView.editing=NO;
+			[gridView reloadData];
 		}
-		
 	}
 	else 
 	{
@@ -811,7 +764,7 @@
 				if(index>=[newslettersFetcher count])
 				{
 					// add newsletter
-					[[[UIApplication sharedApplication] delegate] addNewsletter];
+					[appDelegate addNewsletter];
 				}
 				else 
 				{
