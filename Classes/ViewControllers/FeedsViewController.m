@@ -17,6 +17,7 @@
 
 - (void) viewWillAppear:(BOOL)animated
 {
+	NSLog(@"FeedsViewController.viewWillAppear");
 	[super viewWillAppear:animated];
 	
 	[self reloadTableData];
@@ -26,6 +27,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+	self.navigationItem.title=nil;
+	
 	self.tableView.showsVerticalScrollIndicator=NO;
 	self.tableView.showsHorizontalScrollIndicator=NO;
 	
@@ -243,6 +246,7 @@
 
 -(void)handleReloadDataUI:(NSNotification *)pNotification
 {
+	NSLog(@"handleReloadDataUI");
 	if([pNotification.name isEqualToString:@"UpdateFeedsView"])
 	{
 		NSLog(@"FeedsViewControler: UpdateFeedsView revd, perform fetch and reload data...");
@@ -377,9 +381,10 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+	NSLog(@"FeedsViewController.numberOfSectionsInTableView");
 	return 1;
 }
-
+/*
 - (void) tableView:(UITableView*)tableView
 commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
  forRowAtIndexPath:(NSIndexPath*)indexPath
@@ -415,7 +420,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	 object:nil];
 }
 
-
+*/
 - (CustomCellBackgroundViewPosition) cellPositionForIndexPath:(NSIndexPath*)indexPath
 {
 	int count=[self tableView:tableView numberOfRowsInSection:indexPath.section];
@@ -435,7 +440,8 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 			{
 				return CustomCellBackgroundViewPositionBottom;
 			}
-			else {
+			else 
+			{
 				return CustomCellBackgroundViewPositionMiddle;
 			}
 		}
@@ -456,7 +462,8 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	cell.textLabel.shadowColor=[UIColor blackColor];
 	cell.textLabel.shadowOffset=CGSizeMake(0, 1);
 	
-	if([feed isCategory])
+	
+	if([feed respondsToSelector:@selector(isCategory)] && [feed isCategory])
 	{
 		cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 	}
@@ -518,6 +525,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 
 - (void) reloadTableData
 {
+	NSLog(@"FeedsViewController.reloadTableData");
 	NSIndexPath *ipath = [self.tableView indexPathForSelectedRow];
 	[self.tableView reloadData];
 	if(ipath)
@@ -674,7 +682,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 				}
 				
 				FeedsViewController * feedsView=[[FeedsViewController alloc] initWithNibName:@"FeedsView" bundle:nil];
-			
+				
 				feedsView.items=feeds;
 				feedsView.editable=(self.editable || [feed editable]);
 				feedsView.fetcher=feedFetcher;
@@ -773,6 +781,7 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	 
 - (void)dealloc 
 {
+	NSLog(@"FeedsViewController.dealloc");
 	[items release];
 	[fetcher release];
 	[super dealloc];

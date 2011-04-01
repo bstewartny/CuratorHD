@@ -33,6 +33,16 @@
 	}
 }
 
+- (BOOL) isCategory
+{
+	return NO;//return [self isSingleCategory:@"_category"];
+}
+
+- (BOOL) isAllItems
+{
+	return NO; //return [self isSingleCategory:@"_all"];
+}
+
 - (void) delete	
 {
 	[[self managedObjectContext] deleteObject:self];

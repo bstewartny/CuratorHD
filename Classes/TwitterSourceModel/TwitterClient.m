@@ -248,6 +248,7 @@
 {
 	NSLog(@"getItemsFromJson");
 	NSLog(@"got %d items in json array",[json count]);
+	NSLog(@"json=%@",[json description]);
 	
 	NSMutableArray * items=[[[NSMutableArray alloc] init] autorelease];
 	
@@ -300,37 +301,6 @@
 				{
 					[profile_image_urls setObject:profile_image_url forKey:profile_image_url];
 				}
-				/*
-				if(imageCache)
-				{
-					@synchronized(imageCache)
-					{
-						UIImage * img=[imageCache objectForKey:profile_image_url];
-				
-						if(!img)
-						{
-							// TODO: push these into a queue and process all items in parallel at the end of this function...
-							NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:profile_image_url]];
-							
-							if(data)
-							{
-								img = [[[UIImage alloc] initWithData:data] autorelease];
-								
-								//img=[img roundedCornerImage:8 borderSize:0];
-							}
-						}
-					
-						if(img)
-						{
-							// TODO: resize if too big...
-							
-							// add to cache...
-							[imageCache setObject:img forKey:profile_image_url];
-						}
-					
-						tmp.image=img;
-					}
-				}*/
 			}
 			
 			tmp.uid=item_id;

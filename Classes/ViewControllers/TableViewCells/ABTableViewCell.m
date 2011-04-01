@@ -51,6 +51,7 @@
 		contentView2 = [[ABTableViewCellView alloc] initWithFrame:CGRectZero];
 		contentView2.opaque = YES;
 		contentView2.autoresizingMask=UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		contentView2.contentMode=UIViewContentModeRedraw;
 		[self.contentView addSubview:contentView2];
 		[contentView2 release];
     }

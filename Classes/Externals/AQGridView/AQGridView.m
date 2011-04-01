@@ -617,7 +617,7 @@ NSString * const AQGridViewSelectionDidChangeNotification = @"AQGridViewSelectio
 		}
 		else if ( [reuseSet member: cell] == cell )
 		{
-			NSLog( @"Warning: tried to add duplicate gridview cell" );
+			//NSLog( @"Warning: tried to add duplicate gridview cell:%d",cell.reuseIdentifier );
 			continue;
 		}		
 		
@@ -670,6 +670,8 @@ NSString * const AQGridViewSelectionDidChangeNotification = @"AQGridViewSelectio
 
 - (void) layoutSubviews
 {
+	NSLog(@"layoutSubviews");
+	
 	if ( (_flags.needsReload == 1) && (_animationCount == 0) && (_reloadingSuspendedCount == 0) )
 		[self reloadData];
 	
@@ -1073,6 +1075,7 @@ NSString * const AQGridViewSelectionDidChangeNotification = @"AQGridViewSelectio
 
 - (void) highlightItemAtIndex: (NSUInteger) index animated: (BOOL) animated scrollPosition: (AQGridViewScrollPosition) position
 {
+	//NSLog(@"highlightItemAtIndex");
 	if ( [_highlightedIndices containsIndex: index] )
 	{
 		if ( position != AQGridViewScrollPositionNone )
@@ -1120,6 +1123,7 @@ NSString * const AQGridViewSelectionDidChangeNotification = @"AQGridViewSelectio
 
 - (void) _deselectItemAtIndex: (NSUInteger) index animated: (BOOL) animated notifyDelegate: (BOOL) notifyDelegate
 {
+	//NSLog(@"_deselectItemAtIndex");
 	if ( _selectedIndex != index )
 		return;
 	
@@ -1143,6 +1147,7 @@ NSString * const AQGridViewSelectionDidChangeNotification = @"AQGridViewSelectio
 			 scrollPosition: (AQGridViewScrollPosition) position notifyDelegate: (BOOL) notifyDelegate
        numFingersTouch: (NSUInteger) numFingers
 {
+	//NSLog(@"_selectItemAtIndex");
 	if ( _selectedIndex == index )
 		return;		// already selected this item
 	
@@ -1298,6 +1303,7 @@ NSString * const AQGridViewSelectionDidChangeNotification = @"AQGridViewSelectio
 
 - (void) _gridViewDeferredTouchesBegan: (NSNumber *) indexNum
 {
+	//NSLog(@"_gridViewDeferredTouchesBegan");
 	if ( (self.dragging == NO) && (_flags.ignoreTouchSelect == 0) && (_pendingSelectionIndex != NSNotFound) )
 		[self highlightItemAtIndex: _pendingSelectionIndex animated: NO scrollPosition: AQGridViewScrollPositionNone];
 	//_pendingSelectionIndex = NSNotFound;
@@ -1305,19 +1311,32 @@ NSString * const AQGridViewSelectionDidChangeNotification = @"AQGridViewSelectio
 
 - (void) _userSelectItemAtIndex: (UserSelectItemIndexParams*) params
 {
+	//NSLog(@"_userSelectItemAtIndex");
 	NSUInteger index = params.indexNum;
-  NSUInteger numFingersCount = params.numFingers;
+   // NSLog(@"index=%u",index);
+	
+	NSUInteger numFingersCount = params.numFingers;
+	//NSLog(@"numFingersCount=%u",numFingersCount);
+	
+	
 	[self unhighlightItemAtIndex: index animated: NO];
+	
+	
+	
+	
 	if ( ([[self cellForItemAtIndex: index] isSelected]) && (self.requiresSelection == NO) )
 		[self _deselectItemAtIndex: index animated: NO notifyDelegate: YES];
 	else
 		[self _selectItemAtIndex: index animated: NO scrollPosition: AQGridViewScrollPositionNone notifyDelegate: YES
              numFingersTouch: numFingersCount];
+	
+	//NSLog(@"set _pendingSelectionIndex = NSNotFound");
 	_pendingSelectionIndex = NSNotFound;
 }
 
 - (BOOL) _gestureRecognizerIsHandlingTouches: (NSSet *) touches
 {
+	//NSLog(@"_gestureRecognizerIsHandlingTouches");
 	// see if the touch is (possibly) being tracked by a gesture recognizer
 	for ( id recognizer in self.gestureRecognizers )
 	{
@@ -1355,6 +1374,8 @@ NSString * const AQGridViewSelectionDidChangeNotification = @"AQGridViewSelectio
 
 - (void) touchesBegan: (NSSet *) touches withEvent: (UIEvent *) event
 {
+	//NSLog(@"touchesBegan");
+	
 	_flags.ignoreTouchSelect = ([self isDragging] ? 1 : 0);
   
 	UITouch * touch = [touches anyObject];
@@ -1376,6 +1397,7 @@ NSString * const AQGridViewSelectionDidChangeNotification = @"AQGridViewSelectio
 			{
 				if ( _flags.allowsSelection == 1 )
 				{
+					//NSLog(@"set _pendingSelectionIndex = %u",index);
 					_pendingSelectionIndex = index;
 					
 					// NB: In UITableView:
@@ -1384,9 +1406,20 @@ NSString * const AQGridViewSelectionDidChangeNotification = @"AQGridViewSelectio
 							   withObject: [NSNumber numberWithUnsignedInteger: index]
 							   afterDelay: 0.0];
 				}
+				
+				
+				
+
 			}
+			
+			
+
 		}
+		
+		
+
 	}
+	
 	
 	[super touchesBegan: touches withEvent: event];
 }
@@ -1408,7 +1441,10 @@ NSString * const AQGridViewSelectionDidChangeNotification = @"AQGridViewSelectio
 		if ( (cls != Nil) && ([cls instancesRespondToSelector: @selector(setNumberOfTouchesRequired:)]) )
 		{
 			if ( [self _gestureRecognizerIsHandlingTouches: touches] )
+			{
+				
 				goto passToSuper;			// I feel all icky now
+			}
 		}
 		
 		//[self _cancelContentTouchUsingEvent: event forced: NO];
@@ -1424,6 +1460,8 @@ passToSuper:
 
 - (void) touchesEnded: (NSSet *) touches withEvent: (UIEvent *) event
 {
+	
+	
   [[self class] cancelPreviousPerformRequestsWithTarget: self
 												 selector: @selector(_gridViewDeferredTouchesBegan:)
 												   object: nil];
@@ -1480,11 +1518,14 @@ passToSuper:
 	
 	if ( _pendingSelectionIndex != NSNotFound )
 		[self unhighlightItemAtIndex: _pendingSelectionIndex animated: NO];
+	
 	_pendingSelectionIndex = NSNotFound;
 }
 
 - (void) touchesCancelled: (NSSet *) touches withEvent: (UIEvent *) event
 {
+	
+	
     _pendingSelectionIndex = NSNotFound;
     [self highlightItemAtIndex: NSNotFound animated: NO scrollPosition: AQGridViewScrollPositionNone];
     [super touchesCancelled: touches withEvent: event];
@@ -1543,6 +1584,7 @@ passToSuper:
 
 - (void) updateVisibleGridCellsNow
 {
+	//NSLog(@"updateVisibleGridCellsNow");
 	if ( _reloadingSuspendedCount > 0 )
 		return;
 	
@@ -1591,7 +1633,7 @@ passToSuper:
 				
 				NSUInteger index=[shifted firstIndex];
 				while(index != NSNotFound){
-					NSLog(@"%i >= %i ?", index, [_visibleCells count]);
+					//NSLog(@"%i >= %i ?", index, [_visibleCells count]);
 					if (index >= [_visibleCells count]) {
 						[shifted removeIndex:index];
 					}					
@@ -1704,13 +1746,13 @@ passToSuper:
 					if ( [newVisibleIndices containsIndex: cell.displayIndex] == NO &&
                          [animatingDestinationIndices containsIndex: cell.displayIndex] == NO )
 					{
-						NSLog( @"Cell for index %lu is still in visible list, removing...", (unsigned long)cell.displayIndex );
+						//NSLog( @"Cell for index %lu is still in visible list, removing...", (unsigned long)cell.displayIndex );
 						[cell removeFromSuperview];
 						[toRemove addIndex: i];
 					}
 					else if ( [seen containsIndex: cell.displayIndex] )
 					{
-						NSLog( @"Multiple cells with index %lu found-- removing duplicate...", (unsigned long)cell.displayIndex );
+						//NSLog( @"Multiple cells with index %lu found-- removing duplicate...", (unsigned long)cell.displayIndex );
 						[cell removeFromSuperview];
 						[toRemove addIndex: i];
 					}
@@ -1726,7 +1768,7 @@ passToSuper:
 			
 			if ( [_visibleCells count] < [newVisibleIndices count] )
 			{
-				NSLog( @"Visible cell list is missing some items!" );
+				//NSLog( @"Visible cell list is missing some items!" );
 				
 				NSMutableIndexSet * visibleSet = [[NSMutableIndexSet alloc] init];
 				for ( AQGridViewCell * cell in _visibleCells )
@@ -1738,7 +1780,7 @@ passToSuper:
 				[missingSet removeIndexes: visibleSet];
 				[visibleSet release];
 				
-				NSLog( @"Got %lu missing indices", (unsigned long)[missingSet count] );
+				//NSLog( @"Got %lu missing indices", (unsigned long)[missingSet count] );
 				
 				NSUInteger idx = [missingSet firstIndex];
 				while ( idx != NSNotFound )

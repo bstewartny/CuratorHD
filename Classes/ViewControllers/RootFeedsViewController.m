@@ -45,8 +45,8 @@
 	
 	//self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(toggleEditMode:)] autorelease];
 	
-	//self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStylePlain target:self action:@selector(showHomeScreen:)] autorelease];
-	
+	self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStylePlain target:self action:@selector(showHomeScreen:)] autorelease];
+	/*
 	
 	UIButton * button=[UIButton buttonWithType:UIButtonTypeCustom];
 	
@@ -56,7 +56,7 @@
 	 [button sizeToFit];
 	
 	self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
-	
+	*/
 	
 										   
 	

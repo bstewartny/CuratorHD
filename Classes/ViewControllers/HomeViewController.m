@@ -7,6 +7,8 @@
 #import "Feed.h"
 #import "BadgeView.h"
 #import "FeedFetcher.h"
+#import "FoldersViewController.h"
+
 
 #define gridViewCellWidth 84.0
 #define gridViewCellHeight 124.0
@@ -51,6 +53,7 @@
 		UILongPressGestureRecognizer * gr = [[UILongPressGestureRecognizer alloc] initWithTarget: self action: @selector(moveActionGestureRecognizerStateChanged:)];
 		gr.minimumPressDuration = 0.5;
 		gr.delegate = self;
+		gr.delaysTouchesBegan=YES;
 		[gridView addGestureRecognizer: gr];
 		[gr release];
 	}
@@ -65,7 +68,7 @@
 	
 	int numItems=[self numberOfItemsInSection:gridView.tag]-1;
 	
-	if(numItems>1)
+	if(numItems>0)
 	{
 		if ( [gridView indexForItemAtPoint: location] < numItems )
 		{
@@ -74,22 +77,15 @@
 		}
     }
 	
-    // touch is outside the bounds of any icon cells, so don't start the gesture
     return NO;
 }
 
 - (void) startEditMode:(AQGridView*)gridView
 {
-	gridView.editing=YES;
-	[gridView reloadData];
-	[gridView updateVisibleGridCellsNow];
-}
-
-- (void) endEditMode:(AQGridView*)gridView
-{
-	gridView.editing=NO;
-	[gridView reloadData];
-	[gridView updateVisibleGridCellsNow];
+	if(!editMode)
+	{
+		[self toggleEditMode];
+	}
 }
 
 - (void) moveActionGestureRecognizerStateChanged: (UIGestureRecognizer *) recognizer
@@ -118,7 +114,6 @@
 			
 			if ( index == NSNotFound )
 			{
-				// index is the last available location
 				index=lastIndexToMoveTo;
 			}
 			
@@ -140,7 +135,6 @@
                 [gridView endUpdates];
             }
             
-            // move the real cell into place
             [UIView beginAnimations: @"SnapToPlace" context: NULL];
             [UIView setAnimationCurve: UIViewAnimationCurveEaseOut];
             [UIView setAnimationDuration: 0.3];
@@ -170,7 +164,6 @@
             NSUInteger index = [gridView indexForItemAtPoint: [recognizer locationInView: gridView]];
             _emptyCellIndex = index;    // we'll put an empty cell here now
             
-            // find the cell at the current point and copy it into our main view, applying some transforms
             AQGridViewCell * sourceCell = [gridView cellForItemAtIndex: index];
             CGRect frame = [self.view convertRect: sourceCell.frame fromView: gridView];
 			
@@ -178,13 +171,12 @@
 			
 			_draggingGridView=gridView;
 			
-			_draggingCell=[[AQGridViewCell alloc] initWithFrame:frame reuseIdentifier:@""];
+			_draggingCell=[[AQGridViewCell alloc] initWithFrame:frame reuseIdentifier:@"draggingCell"];
 			
-			[self configureGridViewCell:_draggingCell forIndex:index inSection:gridView.tag editing:gridView.editing];
+			[self configureGridViewCell:_draggingCell forIndex:index inSection:gridView.tag editing:editMode];
 			
 			[self.view addSubview: _draggingCell];
             
-            // grab some info about the origin of this cell
             _dragOriginCellOrigin = frame.origin;
             _dragOriginIndex = index;
             
@@ -192,16 +184,12 @@
             [UIView setAnimationDuration: 0.2];
             [UIView setAnimationCurve: UIViewAnimationCurveEaseOut];
             
-            // transformation-- larger, slightly transparent
             _draggingCell.transform = CGAffineTransformMakeScale( 1.2, 1.2 );
             _draggingCell.alpha = 0.7;
-            
-            // also make it center on the touch point
             _draggingCell.center = [recognizer locationInView: self.view];
             
             [UIView commitAnimations];
             
-            // reload the grid underneath to get the empty cell in place
             [gridView reloadItemsAtIndices: [NSIndexSet indexSetWithIndex: index]
                               withAnimation: AQGridViewItemAnimationNone];
             
@@ -210,22 +198,17 @@
             
         case UIGestureRecognizerStateChanged:
         {
-            // update draging cell location
             _draggingCell.center = [recognizer locationInView: self.view];
             
-            // don't do anything with content if grid view is in the middle of an animation block
             if ( gridView.isAnimatingUpdates )
                 break;
             
 			CGPoint location=[recognizer locationInView:gridView];
 			
-			// update empty cell to follow, if necessary
-            NSUInteger index = [gridView indexForItemAtPoint: location];
+			NSUInteger index = [gridView indexForItemAtPoint: location];
 			
-			// don't do anything if it's over an unused grid cell
 			if ( index == NSNotFound )
 			{
-				// snap back to the last possible index
 				index=[self numberOfItemsInSection:gridView.tag]-2;
 			}
 			
@@ -233,7 +216,6 @@
             {
                 [gridView beginUpdates];
                 
-                // move everything else out of the way
                 if ( index < _emptyCellIndex )
                 {
                     for ( NSUInteger i = index; i < _emptyCellIndex; i++ )
@@ -265,13 +247,9 @@
     NSIndexSet * indices = [[NSIndexSet alloc] initWithIndex: _emptyCellIndex];
     _emptyCellIndex = NSNotFound;
     
-    // load the moved cell into the grid view
-	[_draggingGridView reloadItemsAtIndices: indices withAnimation: AQGridViewItemAnimationNone];
-    
-	_draggingGridView=nil;
-	
-    // dismiss our copy of the cell
-    [_draggingCell removeFromSuperview];
+    [_draggingGridView reloadItemsAtIndices: indices withAnimation: AQGridViewItemAnimationNone];
+    _draggingGridView=nil;
+	[_draggingCell removeFromSuperview];
     [_draggingCell release];
     _draggingCell = nil;
     
@@ -298,13 +276,33 @@
 	
 	self.navigationItem.title=@"InfoNgen Newsletter Publisher";
 	
-	self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(close:)] autorelease];
-
+	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleEditMode)] autorelease];
+		
 	[[NSNotificationCenter defaultCenter]
 	 addObserver:self
 	 selector:@selector(handleReloadData:)
 	 name:@"ReloadData"
 	 object:nil];
+}
+
+- (IBAction) toggleEditMode
+{
+	UIBarButtonItem * buttonItem=self.navigationItem.rightBarButtonItem;
+	
+	if(editMode)
+	{
+		editMode=NO;
+		buttonItem.style=UIBarButtonItemStyleBordered;
+		buttonItem.title=@"Edit";
+	}
+	else
+	{
+		editMode=YES;
+		buttonItem.style=UIBarButtonItemStyleDone;
+		buttonItem.title=@"Done";
+	}
+	
+	[self reloadData];
 }
 
 -(void)handleReloadData:(NSNotification *)pNotification
@@ -455,8 +453,6 @@
 
 - (void) configureGridViewCell:(AQGridViewCell*)cell forIndex:(NSUInteger)index inSection:(int)section editing:(BOOL)isEditing
 {
-	NSLog(@"configureGridViewCell:forIndex:%d inSection:%d",index,section);
-	
 	UIImage * image;
 	NSString * itemname;
 	int badgeCount=-1;
@@ -494,14 +490,7 @@
 		case 1:
 			if(index>=[foldersFetcher count])
 			{
-				if(isEditing)
-				{
-					itemname=@"Cancel";
-				}
-				else 
-				{
-					itemname=@"Add Folder";
-				}
+				itemname=@"Add Folder";
 				image=[UIImage imageNamed:@"additem.png"];
 				showDeleteButton=NO;
 			}
@@ -516,15 +505,7 @@
 		case 2:
 			if(index>=[newslettersFetcher count])
 			{
-				if(isEditing)
-				{
-					itemname=@"Cancel";
-				}
-				else 
-				{
-					itemname=@"Add Newsletter";
-				}
-				
+				itemname=@"Add Newsletter";
 				image=[UIImage imageNamed:@"additem.png"];
 				showDeleteButton=NO;
 			}
@@ -574,7 +555,7 @@
 		[deleteButton setImage:[UIImage imageNamed:@"closebutton.png"] forState:UIControlStateNormal];
 		[deleteButton addTarget:self action:@selector(deleteItem:) forControlEvents:UIControlEventTouchUpInside];
 		[deleteButton sizeToFit];
-		deleteButton.tag=index;
+		//deleteButton.tag=index;
 		deleteButton.backgroundColor=[UIColor clearColor];		
 		deleteButton.frame=CGRectMake(2, 0, 29, 29);
 		[cell.contentView addSubview:deleteButton];
@@ -636,16 +617,37 @@
 	}
 	return nil;
 }
+
+- (AQGridViewCell*) gridViewCellForView:(UIView*)v
+{
+	while(true)
+	{
+		UIView * s=[v superview];
+		if(s==nil) break;
+		if([s isKindOfClass:[AQGridViewCell class]])
+		{
+			return s;
+		}
+		v=s;
+	}
+	return nil;
+}
+
 - (void) deleteItem:(UIButton*)sender
 {
-	int index=sender.tag;
-	
 	AQGridView * gridView=[self gridViewForView:sender];
-	 
+	
 	if(gridView)
 	{
-		_deleteGridView=gridView;
-		[self showDeleteConfirm:gridView.tag index:index];
+		AQGridViewCell * gridViewCell=[self gridViewCellForView:sender];
+	
+		if(gridViewCell)
+		{
+			int index=[gridView indexForCell:gridViewCell];
+	
+			_deleteGridView=gridView;
+			[self showDeleteConfirm:gridView.tag index:index];
+		}
 	}
 }
 
@@ -657,15 +659,12 @@
 	[fetcher performFetch];
 	
 	[gridView deleteItemsAtIndices:[NSIndexSet indexSetWithIndex: index] withAnimation:AQGridViewItemAnimationFade];
-	
-	[gridView reloadData];
-	[gridView updateVisibleGridCellsNow];
 }
 
 - (AQGridViewCell *) gridView: (AQGridView *) aGridView cellForItemAtIndex: (NSUInteger) index
 {
 	AQGridViewCell * cell = [[[AQGridViewCell alloc] initWithFrame: CGRectMake(0.0, 0.0, gridViewCellWidth, gridViewCellHeight)
-                                                reuseIdentifier: @""] autorelease];
+												   reuseIdentifier: [NSString stringWithFormat:@"cellIdentifier%d",index]] autorelease];
 	if ( index == _emptyCellIndex )
     {
         cell.hidden = YES;
@@ -675,107 +674,136 @@
 	
 	cell.selectionStyle = AQGridViewCellSelectionStyleNone;
 	
-	[self configureGridViewCell:cell forIndex:index inSection:aGridView.tag editing:aGridView.editing];
+	[self configureGridViewCell:cell forIndex:index inSection:aGridView.tag editing:editMode];
 	
 	return cell;
 }
 
 - (void) gridView: (AQGridView *) gridView didSelectItemAtIndex: (NSUInteger) index
 {
+	[gridView deselectItemAtIndex:index animated:NO];
+	
 	id appDelegate=[[UIApplication sharedApplication] delegate];
 	
-	if(gridView.editing)
+	switch(gridView.tag)
 	{
-		id fetcher=[self fetcherForSection:gridView.tag];
-		if(index>=[fetcher count])
-		{
-			gridView.editing=NO;
-			[gridView reloadData];
-		}
-	}
-	else 
-	{
-		switch(gridView.tag)
-		{
-			case 0:
-				if(index>=[sourcesFetcher count])
-				{
-					// add source
-					[appDelegate showAccountSettingsForm];
-				}
-				else 
-				{
-					FeedAccount * account=[[self sourcesFetcher] itemAtIndex:index];
-					
-					// go to source
-					ItemFetcher * feedFetcher=[account feedFetcher];
-					
-					NSArray * feeds=[feedFetcher items];
-					
-					Feed * firstFeed=nil;
-					
-					if([feeds count]>0)
-					{
-						firstFeed=[feeds objectAtIndex:0];
-					}
-					
-					FeedsViewController * feedsView=[[FeedsViewController alloc] initWithNibName:@"FeedsView" bundle:nil];
-					
-					feedsView.items=feeds;
-					feedsView.editable=NO;
-					feedsView.fetcher=feedFetcher;
-					feedsView.title=account.name;
-					feedsView.itemDelegate=appDelegate;
-					
-					// go back to root view
-					[[appDelegate masterNavController] popToRootViewControllerAnimated:NO];
-					[[appDelegate masterNavController] pushViewController:feedsView animated:YES];
-					
-					[appDelegate hideHomeScreen];
-					
-					if(firstFeed)
-					{
-						[appDelegate showFeed:firstFeed delegate:appDelegate editable:NO];
-						
-						[feedsView.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]   animated:NO scrollPosition:UITableViewScrollPositionNone];
-					}
-					
-					[feedsView release];
-					 
-				}
-				break;
+		case 0:
+			
+			if(index>=[sourcesFetcher count] || editMode)
+			{
+				// add source
+				[appDelegate showAccountSettingsForm];
+			}
+			else 
+			{
+				FeedAccount * account=[[self sourcesFetcher] itemAtIndex:index];
 				
-			case 1:
-				if(index>=[foldersFetcher count])
+				// go to source
+				ItemFetcher * feedFetcher=[account feedFetcher];
+				
+				NSArray * feeds=[feedFetcher items];
+				
+				Feed * firstFeed=nil;
+				
+				if([feeds count]>0)
 				{
-					// add folder
-					[appDelegate addFolder];
+					firstFeed=[feeds objectAtIndex:0];
 				}
-				else 
+				
+				FeedsViewController * feedsView=[[FeedsViewController alloc] initWithNibName:@"FeedsView" bundle:nil];
+				
+				feedsView.items=feeds;
+				feedsView.editable=NO;
+				feedsView.fetcher=feedFetcher;
+				feedsView.title=account.name;
+				feedsView.itemDelegate=appDelegate;
+				
+				feedsView.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:appDelegate action:@selector(showHomeScreen)] autorelease];
+				
+				[[appDelegate masterNavController] setViewControllers:[NSArray arrayWithObject:feedsView] animated:NO];
+				
+				[appDelegate hideHomeScreen];
+				
+				if(firstFeed)
 				{
-					// go to folder
+					[appDelegate showFeed:firstFeed delegate:appDelegate editable:NO];
+					
+					[feedsView.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]   animated:NO scrollPosition:UITableViewScrollPositionNone];
+				}
+				
+				[feedsView release];
+			}
+			break;
+			
+		case 1:
+			if(index>=[foldersFetcher count])
+			{
+				// add folder
+				[appDelegate addFolder];
+			}
+			else 
+			{
+				// go to folder
+				if(!editMode)
+				{
+					FoldersViewController * feedsView=[[FoldersViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
+					
+					feedsView.fetcher=foldersFetcher;
+					//feedsView.title=@"Folders";
+					feedsView.delegate=appDelegate;
+					
+					[[appDelegate masterNavController] setViewControllers:[NSArray arrayWithObject:feedsView] animated:NO];
+					
 					Folder * folder=[[self foldersFetcher] itemAtIndex:index];
 					[appDelegate hideHomeScreen];
 					[appDelegate showFolder:folder delegate:appDelegate editable:YES];
-				}
-				break;
-				
-			case 2:
-				if(index>=[newslettersFetcher count])
-				{
-					// add newsletter
-					[appDelegate addNewsletter];
+					
+					[feedsView.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]   animated:NO scrollPosition:UITableViewScrollPositionNone];
+					
+					[feedsView release];
 				}
 				else 
 				{
+					// edit folder name
+				}
+			}
+			break;
+			
+		case 2:
+			if(index>=[newslettersFetcher count])
+			{
+				// add newsletter
+				[appDelegate addNewsletter];
+			}
+			else 
+			{
+				if(!editMode)
+				{
+					FoldersViewController * feedsView=[[FoldersViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
+					
+					feedsView.fetcher=newslettersFetcher;
+					//feedsView.title=@"Newsletters";
+					feedsView.delegate=appDelegate;
+					
+					[[appDelegate masterNavController] setViewControllers:[NSArray arrayWithObject:feedsView] animated:NO];
+					
 					// go to newsletter
 					Newsletter * newsletter=[[self newslettersFetcher] itemAtIndex:index];
 					[appDelegate hideHomeScreen];
 					[appDelegate showNewsletter:newsletter delegate:appDelegate editable:YES];
+					
+					[feedsView.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]   animated:NO scrollPosition:UITableViewScrollPositionNone];
+					
+					[feedsView release];
 				}
-				break;
-		}
-	}
+				else 
+				{
+					// edit newsletter name	
+					
+				}
+			}
+			break;
+	}	 
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

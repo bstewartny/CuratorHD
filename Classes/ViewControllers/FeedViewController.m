@@ -164,7 +164,7 @@
 	[[[[UIApplication sharedApplication] delegate] selectedItems] removeAllItems];
 	
 	
-	self.navigationItem.title=self.origTitle;
+	//self.navigationItem.title=self.origTitle;
 	
 	[self setOrganizeRightBarButtonItem];
 	
@@ -209,7 +209,7 @@
 	editButton.enabled=NO;
 	
 	// enter edit mode and show message
-	self.origTitle=self.navigationItem.title;
+	//self.origTitle=self.navigationItem.title;
 	
 	//self.navigationItem.title=@"Tap a folder or newsletter to add selected items.";
 	
@@ -293,7 +293,7 @@
 
 - (void) setOrganizeRightBarButtonItem
 {
-	BlankToolbar * tools=[[BlankToolbar alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+	BlankToolbar * tools=[[BlankToolbar alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
 	
 	tools.opaque=NO;
 	tools.backgroundColor=[UIColor clearColor];
@@ -420,7 +420,7 @@
 
 - (void) actionButtonTouched:(id)sender
 {
-	UIActionSheet * actionSheet=[[UIActionSheet alloc] initWithTitle:self.navigationItem.title delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Mark All as Read",@"Delete Older Than 7 Days",@"Delete Older Than 30 Days",@"Delete Older Than 90 Days",@"Delete All Read Items",nil];
+	UIActionSheet * actionSheet=[[UIActionSheet alloc] initWithTitle:@"Feed Actions" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Mark All as Read",@"Delete Older Than 7 Days",@"Delete Older Than 30 Days",@"Delete Older Than 90 Days",@"Delete All Read Items",nil];
 	
 	[actionSheet showFromBarButtonItem:sender animated:YES];
 	
@@ -904,7 +904,7 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 		}
 	}
 }
-
+/*
 - (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc 
 {
     barButtonItem.title = @"Sources";
@@ -921,7 +921,7 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 
 - (void)splitViewController:(UISplitViewController*)svc popoverController:(UIPopoverController*)pc willPresentViewController:(UIViewController *)aViewController
 {
-}
+}*/
 
 - (UITableViewCell *) headlineCellForRowAtIndexPath:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath item:(FeedItem*)item
 {

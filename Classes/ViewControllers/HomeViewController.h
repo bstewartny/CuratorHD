@@ -25,11 +25,13 @@
 	NSUInteger _emptyCellIndex;
     AQGridView * _draggingGridView;
 	
+	
     NSUInteger _dragOriginIndex;
     CGPoint _dragOriginCellOrigin;
 	int _deleteSection;
 	int _deleteIndex;
 	AQGridView * _deleteGridView;
+	BOOL editMode;
 }
 //@property (nonatomic, retain) IBOutlet AQGridView * gridView;
 @property (nonatomic, retain) IBOutlet UITableView * tableView;

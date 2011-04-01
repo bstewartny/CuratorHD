@@ -114,26 +114,34 @@
 		return [itemHtmlView shareText];
 	}
 }
-
+/*
 - (void)splitViewController:(MGSplitViewController*)svc 
 	 willHideViewController:(UIViewController *)aViewController 
 		  withBarButtonItem:(UIBarButtonItem*)barButtonItem 
 	   forPopoverController: (UIPopoverController*)pc
 {
-	barButtonItem.title = @"Sources";
+	
+	NSString * title=[[[self.masterNavController viewControllers] objectAtIndex:0] title];
+	
+	if(title==nil) title=@"Sources";
+	
+	barButtonItem.title = title;
 	
 	[[self.detailNavController topViewController].navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
 	
 	self.navPopoverController = pc;
 }
+
 - (void)splitViewController:(MGSplitViewController*)svc 
 	 willShowViewController:(UIViewController *)aViewController 
   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
 {
 	[[self.detailNavController topViewController].navigationItem setLeftBarButtonItem:[[[UIBarButtonItem alloc] initWithCustomView:[[UIView new] autorelease]] autorelease]];
     
+
 	self.navPopoverController = nil;
 }
+*/
 
 - (void) showFeed:(Feed*)feed delegate:(id)itemDelegate editable:(BOOL)editable
 {
@@ -141,8 +149,8 @@
 	
 	feedView.editable=editable; 
 	feedView.itemDelegate=itemDelegate;
-	feedView.title=feed.name;
-	feedView.navigationItem.title=feed.name;
+	//feedView.title=feed.name;
+	//feedView.navigationItem.title=feed.name;
 	
 	feedView.fetcher=[feed itemFetcher];
 	
@@ -157,8 +165,8 @@
 	
 	folderView.editable=editable; 
 	folderView.itemDelegate=itemDelegate;
-	folderView.title=feed.name;
-	folderView.navigationItem.title=feed.name;
+	//folderView.title=feed.name;
+	//folderView.navigationItem.title=feed.name;
 	folderView.fetcher=[feed itemFetcher];
 	
 	[self setDetailViewController:folderView];
@@ -171,7 +179,7 @@
 	NewsletterViewController * newsletterView=[[NewsletterViewController alloc] initWithNibName:@"NewsletterView" bundle:nil];
 	
 	newsletterView.newsletter=feed;
-	newsletterView.title=feed.name;
+	//newsletterView.title=feed.name;
 	
 	[self setDetailViewController:newsletterView];
 	
@@ -180,6 +188,8 @@
 
 - (void) setDetailViewController:(UIViewController*)controller
 {
+	NSLog(@"setDetailViewController");
+	
 	if([detailNavController topViewController])
 	{
 		controller.navigationItem.leftBarButtonItem=[detailNavController topViewController].navigationItem.leftBarButtonItem;
@@ -193,7 +203,9 @@
 	[detailNavController.view.layer 
 	 addAnimation:transition forKey:kCATransition];
 	
+	NSLog(@"detailNavController.setViewControllers");
 	[detailNavController setViewControllers:[NSArray arrayWithObject:controller] animated:NO];
+	NSLog(@"dont with detailNavController.setViewControllers");
 }
  
 - (void) showItemHtml:(NSInteger)index itemFetcher:(ItemFetcher*)itemFetcher allowComments:(BOOL)allowComments
@@ -364,7 +376,7 @@
 	
 	//splitView=[[MGSplitViewController alloc] init];
 	splitView=[[HomeSplitViewController alloc] init];
-	
+	splitView.showsMasterInPortrait=YES;
 	splitView.dividerStyle=MGSplitViewDividerStyleNone;
 	splitView.delegate=self;
 	
@@ -376,19 +388,19 @@
 	
 	NewsletterFetcher * newslettersFetcher=[[NewsletterFetcher alloc] init];
 	
-	RootFeedsViewController * feedsView=[[RootFeedsViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
+	//RootFeedsViewController * feedsView=[[RootFeedsViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
 	
-	[feedsView setSourcesFetcher:sourcesFetcher];
-	[feedsView setFoldersFetcher:foldersFetcher];
-	[feedsView setNewslettersFetcher:newslettersFetcher];
+	//[feedsView setSourcesFetcher:sourcesFetcher];
+	//[feedsView setFoldersFetcher:foldersFetcher];
+	//[feedsView setNewslettersFetcher:newslettersFetcher];
 	
-	feedsView.itemDelegate=self;
+	//feedsView.itemDelegate=self;
 	
-	masterNavController=[[UINavigationController alloc] initWithRootViewController:feedsView];
+	masterNavController=[[UINavigationController alloc] init ];//WithRootViewController:feedsView];
 	
-	rootFeedsView=[feedsView retain];
+	//rootFeedsView=[feedsView retain];
 	
-	[feedsView release];
+	//[feedsView release];
 	
 	HomeViewController * homeView=[[HomeViewController alloc] init];
 	
@@ -404,23 +416,15 @@
 	
 	[homeNav release];
 	
-	
 	[sourcesFetcher release];
 	[foldersFetcher release];
 	[newslettersFetcher release];
-	
-	
-	
-
-	
-	
-	
 	
 	FeedViewController * feedView=[[FeedViewController alloc] initWithNibName:@"FeedView" bundle:nil];
 	
 	detailNavController=[[UINavigationController alloc] initWithRootViewController:feedView];
 	
-	detailNavController.view.layer.shadowRadius=10;
+	detailNavController.view.layer.shadowRadius=15;
 	detailNavController.view.layer.shadowOpacity=0.8;
 	detailNavController.view.layer.shadowColor=[UIColor blackColor].CGColor;
 	
@@ -434,6 +438,10 @@
 	
 	splitView.viewControllers=[NSArray arrayWithObjects:masterNavController,detailNavController,nil];
 	
+	 [splitView.view addSubview:splitView.homeViewController.view];
+	[splitView.view bringSubviewToFront:splitView.homeViewController.view];
+	[splitView layoutSubviews];
+	 
 	[window addSubview:splitView.view];
 	
 	//[self showHomeScreen];
@@ -1407,7 +1415,6 @@
 	return [tmp autorelease];
 }
 
-
 -(void) doMarkAsRead:(FeedItem*)item
 {
 	NSLog(@"AppDelegate.doMarkAsRead");
@@ -1457,7 +1464,6 @@
 	[moc release];
 }
 
-
 - (void) updateFeedWithFeed:(RssFeed*)feed updater:(AccountUpdater*)updater
 {
 	NSAutoreleasePool * pool=[[NSAutoreleasePool alloc] init];
@@ -1505,7 +1511,6 @@
 	[moc release];
 }
 
-
 - (void) backFillFeedWithFeed:(RssFeed*)feed updater:(AccountUpdater*)updater
 {
 	NSAutoreleasePool * pool=[[NSAutoreleasePool alloc] init];
@@ -1526,7 +1531,6 @@
 	 postNotificationName:@"FeedUpdated"
 	 object:[NSArray arrayWithObjects:updater.account.name,feed.url,nil]];
 }
-
 
 - (void) loadAccounts
 {
@@ -2324,13 +2328,13 @@
 	[fetcher release];
 	[sharingPublishActions release];
 	[accountFeedsView release];
-	[rootFeedsView release];
+	//[rootFeedsView release];
 	[navPopoverController release];
 	[tmpViewController release];
 	[tmpFolder release];
 	[tmpNewsletter release];
 	//[homeNav release];
-	[super dealloc];
+	[super dealloc]; 
 }
 
 @end

@@ -14,6 +14,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+	NSLog(@"UpdatableFeedViewController.viewWillAppear");
 	[super viewWillAppear:animated];
 	
 	if([[[UIApplication sharedApplication] delegate] isUpdating])

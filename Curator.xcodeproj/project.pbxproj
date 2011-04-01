@@ -32,6 +32,8 @@
 		B028397012A56DB900D01F61 /* FBLoginDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = B028396712A56DB900D01F61 /* FBLoginDialog.m */; };
 		B028397112A56DB900D01F61 /* FBDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = B028396912A56DB900D01F61 /* FBDialog.m */; };
 		B028397212A56DB900D01F61 /* FBDialog.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B028396B12A56DB900D01F61 /* FBDialog.bundle */; };
+		B029B6261344DB590021CD41 /* 44-shoebox.png in Resources */ = {isa = PBXBuildFile; fileRef = B029B6241344DB590021CD41 /* 44-shoebox.png */; };
+		B029B6271344DB590021CD41 /* 33-cabinet.png in Resources */ = {isa = PBXBuildFile; fileRef = B029B6251344DB590021CD41 /* 33-cabinet.png */; };
 		B02A417B133B92570089EC47 /* ImageFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A417A133B92570089EC47 /* ImageFetcher.m */; };
 		B02A4199133B94FA0089EC47 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A4186133B94FA0089EC47 /* ASINetworkQueue.m */; };
 		B02A419A133B94FA0089EC47 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = B02A4188133B94FA0089EC47 /* ASIInputStream.m */; };
@@ -257,6 +259,8 @@
 		B0B88CB11343836C00958528 /* AQGridSelectionGrayBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = B0B88CAC1343836C00958528 /* AQGridSelectionGrayBlue.png */; };
 		B0B88CB21343836C00958528 /* AQGridSelectionGreen.png in Resources */ = {isa = PBXBuildFile; fileRef = B0B88CAD1343836C00958528 /* AQGridSelectionGreen.png */; };
 		B0B88CB31343836C00958528 /* AQGridSelectionRed.png in Resources */ = {isa = PBXBuildFile; fileRef = B0B88CAE1343836C00958528 /* AQGridSelectionRed.png */; };
+		B0BA19041346267C0023E857 /* FoldersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BA19031346267C0023E857 /* FoldersViewController.m */; };
+		B0BA1907134626A40023E857 /* NewslettersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BA1906134626A40023E857 /* NewslettersViewController.m */; };
 		B0BA46A812EE3239000F8487 /* AddItemsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BA46A712EE3239000F8487 /* AddItemsViewController.m */; };
 		B0BB039012EF2F740020132A /* AddItemsToSectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BB038F12EF2F740020132A /* AddItemsToSectionViewController.m */; };
 		B0BB03C512EF38A20020132A /* 32-facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = B0BB03BE12EF38A20020132A /* 32-facebook.png */; };
@@ -624,6 +628,8 @@
 		B028396B12A56DB900D01F61 /* FBDialog.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = FBDialog.bundle; sourceTree = "<group>"; };
 		B028396C12A56DB900D01F61 /* FBConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBConnect.h; sourceTree = "<group>"; };
 		B028396D12A56DB900D01F61 /* Facebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Facebook.h; sourceTree = "<group>"; };
+		B029B6241344DB590021CD41 /* 44-shoebox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "44-shoebox.png"; sourceTree = "<group>"; };
+		B029B6251344DB590021CD41 /* 33-cabinet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "33-cabinet.png"; sourceTree = "<group>"; };
 		B02A4179133B92570089EC47 /* ImageFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFetcher.h; sourceTree = "<group>"; };
 		B02A417A133B92570089EC47 /* ImageFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageFetcher.m; sourceTree = "<group>"; };
 		B02A4185133B94FA0089EC47 /* ASIProgressDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIProgressDelegate.h; sourceTree = "<group>"; };
@@ -977,6 +983,10 @@
 		B0B88CAC1343836C00958528 /* AQGridSelectionGrayBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AQGridSelectionGrayBlue.png; sourceTree = "<group>"; };
 		B0B88CAD1343836C00958528 /* AQGridSelectionGreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AQGridSelectionGreen.png; sourceTree = "<group>"; };
 		B0B88CAE1343836C00958528 /* AQGridSelectionRed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AQGridSelectionRed.png; sourceTree = "<group>"; };
+		B0BA19021346267C0023E857 /* FoldersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FoldersViewController.h; sourceTree = "<group>"; };
+		B0BA19031346267C0023E857 /* FoldersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FoldersViewController.m; sourceTree = "<group>"; };
+		B0BA1905134626A40023E857 /* NewslettersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewslettersViewController.h; sourceTree = "<group>"; };
+		B0BA1906134626A40023E857 /* NewslettersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewslettersViewController.m; sourceTree = "<group>"; };
 		B0BA46A612EE3239000F8487 /* AddItemsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddItemsViewController.h; sourceTree = "<group>"; };
 		B0BA46A712EE3239000F8487 /* AddItemsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddItemsViewController.m; sourceTree = "<group>"; };
 		B0BB038E12EF2F740020132A /* AddItemsToSectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddItemsToSectionViewController.h; sourceTree = "<group>"; };
@@ -2348,6 +2358,10 @@
 				B056B26013422C0B007B9EA1 /* HomeViewController.m */,
 				B056B2BA134239F5007B9EA1 /* HomeSplitViewController.h */,
 				B056B2BB134239F5007B9EA1 /* HomeSplitViewController.m */,
+				B0BA19021346267C0023E857 /* FoldersViewController.h */,
+				B0BA19031346267C0023E857 /* FoldersViewController.m */,
+				B0BA1905134626A40023E857 /* NewslettersViewController.h */,
+				B0BA1906134626A40023E857 /* NewslettersViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -2382,6 +2396,8 @@
 		C444AC6911C1719C007C96F0 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				B029B6241344DB590021CD41 /* 44-shoebox.png */,
+				B029B6251344DB590021CD41 /* 33-cabinet.png */,
 				B0A0C4601343AC290003D2EE /* closebutton.png */,
 				B0B88CAA1343836C00958528 /* AQGridSelection.png */,
 				B0B88CAB1343836C00958528 /* AQGridSelectionGray.png */,
@@ -3165,6 +3181,8 @@
 				B0B88CB21343836C00958528 /* AQGridSelectionGreen.png in Resources */,
 				B0B88CB31343836C00958528 /* AQGridSelectionRed.png in Resources */,
 				B0A0C4611343AC290003D2EE /* closebutton.png in Resources */,
+				B029B6261344DB590021CD41 /* 44-shoebox.png in Resources */,
+				B029B6271344DB590021CD41 /* 33-cabinet.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3413,6 +3431,8 @@
 				B056B401134250DC007B9EA1 /* PFGridView+Internal.m in Sources */,
 				B056B402134250DC007B9EA1 /* PFGridView.m in Sources */,
 				B056B403134250DC007B9EA1 /* PFGridIndexPath.m in Sources */,
+				B0BA19041346267C0023E857 /* FoldersViewController.m in Sources */,
+				B0BA1907134626A40023E857 /* NewslettersViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

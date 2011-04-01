@@ -250,6 +250,7 @@
 
 - (void)layoutSubviewsForInterfaceOrientation:(UIInterfaceOrientation)theOrientation withAnimation:(BOOL)animate
 {
+	NSLog(@"layoutSubviewsForInterfaceOrientation");
 	if (_reconfigurePopup) {
 		[self reconfigureForMasterInPopover:![self shouldShowMasterForInterfaceOrientation:theOrientation]];
 	}
@@ -316,9 +317,13 @@
 			if (theView) {
 				theView.frame = masterRect;
 				if (!theView.superview) {
-					[controller viewWillAppear:NO];
-					[self.view addSubview:theView];
-					[controller viewDidAppear:NO];
+					//if([self shouldShowMaster])
+					//{
+					//	NSLog(@"calling viewWillAppear from layoutSubviewsForInterfaceOrientation");
+						[controller viewWillAppear:NO];
+						[self.view addSubview:theView];
+						[controller viewDidAppear:NO];
+					//}
 				}
 			}
 		}
@@ -391,9 +396,13 @@
 			if (theView) {
 				theView.frame = masterRect;
 				if (!theView.superview) {
-					[controller viewWillAppear:NO];
-					[self.view addSubview:theView];
-					[controller viewDidAppear:NO];
+					//if([self shouldShowMaster])
+					//{
+					//	NSLog(@"calling viewWillAppear from layoutSubviewsForInterfaceOrientation");
+						[controller viewWillAppear:NO];
+						[self.view addSubview:theView];
+						[controller viewDidAppear:NO];
+					//}
 				}
 			}
 		}

@@ -54,12 +54,15 @@
 	
 	for(id item in tmp)
 	{
+		
+		UIBarButtonSystemItemAdd;
+		
 		if([item respondsToSelector:@selector(displayOrder)])
 		{
 			NSNumber * currentOrder=[item displayOrder];
 			if([currentOrder intValue]!=displayOrder)
 			{
-				NSLog(@"Changing displayOrder form %d to %d",[currentOrder intValue],displayOrder);
+				//NSLog(@"Changing displayOrder form %d to %d",[currentOrder intValue],displayOrder);
 				[item setDisplayOrder:[NSNumber numberWithInt:displayOrder]];
 				needsSaved=YES;
 			}
