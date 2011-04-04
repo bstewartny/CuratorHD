@@ -17,20 +17,37 @@
 #import "FeedsTableViewCell.h"
 
 @implementation FoldersViewController
-@synthesize tableView,fetcher,delegate;
+@synthesize tableView,fetcher,delegate,selectedRow;
 
 - (void) viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
 	
-	[self.tableView reloadData];
+	[self reloadTableData];
 }
 
 - (void) showHomeScreen:(id)sender
 {
 	[[[UIApplication sharedApplication] delegate] showHomeScreen];
 }
-
+- (void) reloadTableData
+{
+	NSLog(@"FoldersViewController.reloadTableData");
+	NSIndexPath *ipath = [self.tableView indexPathForSelectedRow];
+	if(ipath==nil)
+	{
+		//hack to select first value when view is first opened
+		//if([items count]>0)
+		//{
+			ipath=[NSIndexPath indexPathForRow:selectedRow inSection:0];
+		//}
+	}
+	[self.tableView reloadData];
+	if(ipath)
+	{
+		[self.tableView selectRowAtIndexPath:ipath animated:NO scrollPosition:UITableViewScrollPositionNone];
+	}
+}
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
@@ -65,7 +82,7 @@
 	
 	[fetcher performFetch];
 }
-
+/*
 - (IBAction) toggleEditMode:(id)sender
 {
 	UIBarButtonItem * buttonItem=(UIBarButtonItem*)sender;
@@ -77,7 +94,7 @@
 		buttonItem.style=UIBarButtonItemStyleBordered;
 		buttonItem.title=@"Edit";
 		
-		[tableView reloadData];
+		[self reloadTableData];
 	}
 	else
 	{
@@ -86,9 +103,9 @@
 		buttonItem.style=UIBarButtonItemStyleDone;
 		buttonItem.title=@"Done";
 		
-		[tableView reloadData];
+		[self reloadTableData];
 	}
-}
+}*/
 
 -(void)handleReloadData:(NSNotification *)pNotification
 {
@@ -101,7 +118,7 @@
 	{
 		[fetcher performFetch];
 		 		
-		[tableView reloadData];
+		[self reloadTableData];
 	}
 } 
 

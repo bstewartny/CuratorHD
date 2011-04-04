@@ -8,9 +8,10 @@
 #import "BadgeView.h"
 #import "FeedFetcher.h"
 #import "FoldersViewController.h"
+#import "UserSettings.h"
 
-
-#define gridViewCellWidth 84.0
+#define gridViewCellImageWidth 64.0
+#define gridViewCellWidth 128.0
 #define gridViewCellHeight 124.0
 
 @implementation HomeViewController
@@ -72,21 +73,25 @@
 	{
 		if ( [gridView indexForItemAtPoint: location] < numItems )
 		{
-			[self startEditMode:gridView];
+			[self startEditModeForGridView:gridView];
+			//[self startEditMode:gridView];
 			return YES;
 		}
     }
 	
     return NO;
 }
-
+/*
 - (void) startEditMode:(AQGridView*)gridView
 {
 	if(!editMode)
 	{
+		editMode=YES;
+		
+		
 		[self toggleEditMode];
 	}
-}
+}*/
 
 - (void) moveActionGestureRecognizerStateChanged: (UIGestureRecognizer *) recognizer
 {
@@ -190,8 +195,9 @@
             
             [UIView commitAnimations];
             
-            [gridView reloadItemsAtIndices: [NSIndexSet indexSetWithIndex: index]
-                              withAnimation: AQGridViewItemAnimationNone];
+			[gridView reloadData];
+            //[gridView reloadItemsAtIndices: [NSIndexSet indexSetWithIndex: index]
+              //                withAnimation: AQGridViewItemAnimationNone];
             
             break;
         }
@@ -283,6 +289,24 @@
 	 selector:@selector(handleReloadData:)
 	 name:@"ReloadData"
 	 object:nil];
+}
+
+
+- (IBAction) startEditModeForGridView:(AQGridView*)gridView
+{
+	UIBarButtonItem * buttonItem=self.navigationItem.rightBarButtonItem;
+	
+	//_draggingGridView=gridView;
+	
+	if(!editMode)
+	{
+		editMode=YES;
+		buttonItem.style=UIBarButtonItemStyleDone;
+		buttonItem.title=@"Done";
+	}
+	//[gridView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+	
+	//[gridView reloadData];
 }
 
 - (IBAction) toggleEditMode
@@ -446,9 +470,9 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
 	if(section==0)
-		return 40;
+		return 60;
 	else 
-		return 80;
+		return 90;
 }
 
 - (void) configureGridViewCell:(AQGridViewCell*)cell forIndex:(NSUInteger)index inSection:(int)section editing:(BOOL)isEditing
@@ -518,12 +542,12 @@
 			break;
 	}
 	
-	UIImageView * iv=[[UIImageView alloc] initWithFrame:CGRectMake(10, 10, cell.frame.size.width-10, cell.frame.size.height-50)];
+	UIImageView * iv=[[UIImageView alloc] initWithFrame:CGRectMake((gridViewCellWidth-gridViewCellImageWidth)/2, 10, gridViewCellImageWidth, gridViewCellImageWidth)];
 	iv.image=image;
 	iv.contentMode=UIViewContentModeCenter;
 	iv.backgroundColor=[UIColor clearColor];
 	
-	UILabel * name=[[UILabel alloc] initWithFrame:CGRectMake(2,cell.frame.size.height-45, cell.frame.size.width-4,40)];
+	UILabel * name=[[UILabel alloc] initWithFrame:CGRectMake(5,gridViewCellHeight-45, gridViewCellWidth-10,40)];
 	name.font=[UIFont boldSystemFontOfSize:12];
 	name.backgroundColor=[UIColor clearColor];
 	name.numberOfLines=2;
@@ -538,11 +562,11 @@
 	[cell.contentView addSubview:name];
 	if(badgeCount>-1)
 	{
-		BadgeView * badge=[[BadgeView alloc] initWithFrame:CGRectMake(cell.frame.size.width-30, 0, 30, 20)];
+		BadgeView * badge=[[BadgeView alloc] initWithFrame:CGRectMake(gridViewCellWidth-30, 0, 30, 20)];
 		badge.badgeString=[NSString stringWithFormat:@"%d",badgeCount];
 		[badge sizeToFit];
 		
-		badge.frame=CGRectMake(cell.frame.size.width-badge.frame.size.width,0, badge.frame.size.width, badge.frame.size.height);
+		badge.frame=CGRectMake(((gridViewCellWidth-badge.frame.size.width)-((gridViewCellWidth-gridViewCellImageWidth)/2))+6,2, badge.frame.size.width, badge.frame.size.height);
 		
 		[cell.contentView addSubview:badge];
 		
@@ -557,7 +581,7 @@
 		[deleteButton sizeToFit];
 		//deleteButton.tag=index;
 		deleteButton.backgroundColor=[UIColor clearColor];		
-		deleteButton.frame=CGRectMake(2, 0, 29, 29);
+		deleteButton.frame=CGRectMake(((gridViewCellWidth-gridViewCellImageWidth)/2) - 14, 0, 29, 29);
 		[cell.contentView addSubview:deleteButton];
 	}
 
@@ -646,7 +670,11 @@
 			int index=[gridView indexForCell:gridViewCell];
 	
 			_deleteGridView=gridView;
+			
 			[self showDeleteConfirm:gridView.tag index:index];
+	
+			
+			
 		}
 	}
 }
@@ -654,6 +682,29 @@
 - (void) doDeleteItem:(AQGridView*)gridView section:(int)section index:(int)index
 {
 	id fetcher=[self fetcherForSection:section];
+	
+	if(section==0)
+	{
+		FeedAccount * account=[fetcher itemAtIndex:index];
+		
+		if([account.name isEqualToString:@"Google Reader"])
+		{
+			[UserSettings saveSetting:@"googlereader.username" value:nil];
+			[UserSettings saveSetting:@"googlereader.password" value:nil];
+		}
+		
+		if([account.name isEqualToString:@"Twitter"])
+		{
+			[UserSettings saveSetting:@"twitter.username" value:nil];
+			[UserSettings saveSetting:@"twitter.password" value:nil];
+		}
+		
+		if([account.name isEqualToString:@"InfoNgen"])
+		{
+			[UserSettings saveSetting:@"infongen.username" value:nil];
+			[UserSettings saveSetting:@"infongen.password" value:nil];
+		}
+	}
 	
 	[fetcher deleteItemAtIndex:index];
 	[fetcher performFetch];
@@ -727,8 +778,6 @@
 				if(firstFeed)
 				{
 					[appDelegate showFeed:firstFeed delegate:appDelegate editable:NO];
-					
-					[feedsView.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]   animated:NO scrollPosition:UITableViewScrollPositionNone];
 				}
 				
 				[feedsView release];
@@ -749,8 +798,8 @@
 					FoldersViewController * feedsView=[[FoldersViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
 					
 					feedsView.fetcher=foldersFetcher;
-					//feedsView.title=@"Folders";
 					feedsView.delegate=appDelegate;
+					feedsView.selectedRow=index;
 					
 					[[appDelegate masterNavController] setViewControllers:[NSArray arrayWithObject:feedsView] animated:NO];
 					
@@ -758,13 +807,16 @@
 					[appDelegate hideHomeScreen];
 					[appDelegate showFolder:folder delegate:appDelegate editable:YES];
 					
-					[feedsView.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]   animated:NO scrollPosition:UITableViewScrollPositionNone];
-					
 					[feedsView release];
 				}
 				else 
 				{
 					// edit folder name
+					
+					[[[UIApplication sharedApplication] delegate] editFolderName:[foldersFetcher itemAtIndex:index]];
+					 
+										
+					
 				}
 			}
 			break;
@@ -782,8 +834,8 @@
 					FoldersViewController * feedsView=[[FoldersViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
 					
 					feedsView.fetcher=newslettersFetcher;
-					//feedsView.title=@"Newsletters";
 					feedsView.delegate=appDelegate;
+					feedsView.selectedRow=index;
 					
 					[[appDelegate masterNavController] setViewControllers:[NSArray arrayWithObject:feedsView] animated:NO];
 					
@@ -792,13 +844,14 @@
 					[appDelegate hideHomeScreen];
 					[appDelegate showNewsletter:newsletter delegate:appDelegate editable:YES];
 					
-					[feedsView.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]   animated:NO scrollPosition:UITableViewScrollPositionNone];
-					
 					[feedsView release];
 				}
 				else 
 				{
 					// edit newsletter name	
+					// edit newsleter
+					[[[UIApplication sharedApplication] delegate] editNewsletterName:[newslettersFetcher itemAtIndex:index]];
+					
 					
 				}
 			}

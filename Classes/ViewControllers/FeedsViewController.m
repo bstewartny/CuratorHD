@@ -527,6 +527,14 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 {
 	NSLog(@"FeedsViewController.reloadTableData");
 	NSIndexPath *ipath = [self.tableView indexPathForSelectedRow];
+	if(ipath==nil)
+	{
+		//hack to select first value when view is first opened
+		if([items count]>0)
+		{
+			ipath=[NSIndexPath indexPathForRow:0 inSection:0];
+		}
+	}
 	[self.tableView reloadData];
 	if(ipath)
 	{

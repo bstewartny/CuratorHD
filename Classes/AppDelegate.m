@@ -645,10 +645,10 @@
 	
 	
 	// if no accounts exist, show account settings form...
-	/*if([[self accounts]count]==0)
+	if([[self accounts]count]==0)
 	{
 		[self showAccountSettingsForm];
-	}*/
+	}
 	
 }
 
@@ -663,7 +663,7 @@
 	[splitView hideHomeView];
 	
 }
-
+/*
 - (void) finishStartup
 {
 	NSLog(@"Verify connection and load feeds...");
@@ -691,7 +691,7 @@
 	
 	[pool drain];
 }
-
+*/
 - (void)showAccountSettingsForm
 {
 	AccountSettingsFormViewController * accountSettingsForm=[[AccountSettingsFormViewController alloc] initWithStyle:UITableViewStyleGrouped];

@@ -717,13 +717,20 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 {
 	if(tableView.editing)
 	{
-		return @"Select items and then tap folder or newsletter to add items.";
+		if(!editMode)
+		{
+			return @"Select items and then tap folder or newsletter to add items.";
+		}
+		else 
+		{
+			return nil;
+		}
 	}
 	else {
 		return nil;
 	}
-
 }
+
 - (CGFloat)tableView:(UITableView*)tableView
 heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
