@@ -1,7 +1,6 @@
 #import "AddItemsToSectionViewController.h"
 #import "Feed.h"
 #import "FeedGroup.h"
-//#import "AddFeedViewController.h"
 #import "FeedViewController.h"
 #import "Newsletter.h"
 #import "ItemFetcher.h"
@@ -14,12 +13,12 @@
 #import "FolderViewController.h"
 #import "FormViewController.h"
 #import "FeedsTableViewCell.h"
+
 @implementation AddItemsToSectionViewController
 @synthesize tableView,newsletter,delegate;
 
 - (void) formViewDidCancel:(NSInteger)tag
 {
-	
 }
 
 - (void) formViewDidFinish:(NSInteger)tag withValues:(NSArray*)values
@@ -28,12 +27,11 @@
 	
 	if([sectionName length]>0)
 	{
-		NSLog(@"create folder with name: %@",sectionName);
 		NewsletterSection * newSection=[self.newsletter addSection];
 		
 		newSection.name=sectionName;
 		
-		if([self selectedItemCount]>10)
+		/*if([self selectedItemCount]>10)
 		{
 			// The hud will dispable all input on the view
 			HUD = [[MBProgressHUD alloc] initWithView:self.view.window];
@@ -50,13 +48,13 @@
 			[HUD showWhileExecuting:@selector(addToSection:) onTarget:delegate withObject:newSection animated:YES];
 		}
 		else 
-		{
-			[delegate addToSection:newSection];
+		{*/
+			//[delegate addToSection:newSection];
 		
 			[self.tableView reloadData];
 		
-			[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.5];
-		}
+			//[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.5];
+		//}
 	}
 }
 	 
@@ -68,7 +66,6 @@
 - (void) viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-	
 	[self.tableView reloadData];
 }
 
@@ -80,7 +77,6 @@
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
-	
 	[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
 	self.tableView.backgroundView.backgroundColor=[UIColor blackColor];
 	self.tableView.backgroundView.alpha=0.5;
@@ -138,11 +134,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	FeedsTableViewCell * cell = [[[FeedsTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1  reuseIdentifier:nil] autorelease];
-	
 	cell.selectionStyle=UITableViewCellSelectionStyleNone;
-	
 	[self configureCell:cell atIndexPath:indexPath];
-	
 	return cell;
 }
 
@@ -151,15 +144,16 @@
 	return [newsletter.sections count]+1; //  [[self fetcherForSection:section] count];
 }
 
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
 	return 23;
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
 	return 44;
 }
+
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
 	UIView * v=[[UIView alloc] initWithFrame:CGRectZero];
@@ -168,13 +162,11 @@
 	return [v autorelease];
 }
 
-
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
 	UIView * v=[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, [self tableView:tableView heightForHeaderInSection:section])];
 	v.backgroundColor=[UIColor viewFlipsideBackgroundColor];
 	v.alpha=0.8;
-	
 	
 	UILabel * label=[[UILabel alloc] init];
 	
@@ -205,7 +197,6 @@
 {
 	FormViewController * formView=[[FormViewController alloc] initWithTitle:@"Add section" tag:0 delegate:self names:[NSArray arrayWithObject:@"Section name"] andValues:nil];
 	[self presentModalViewController:formView animated:YES];
-	
 	[formView release];
 }
 
@@ -226,7 +217,6 @@
 
 		selectedIndexPath=[indexPath retain];
 		
-		
 		if([self selectedItemCount]>10)
 		{
 			// The hud will dispable all input on the view
@@ -242,7 +232,6 @@
 			
 			// Show the HUD while the provided method executes in a new thread
 			[HUD showWhileExecuting:@selector(addToSection:) onTarget:delegate withObject:section animated:YES];
-			
 		}
 		else 
 		{
@@ -255,9 +244,9 @@
 	}
 }
 
-- (void)hudWasHidden:(MBProgressHUD *)hud {
-	NSLog(@"Hud: %@", hud);
-    // Remove HUD from screen when the HUD was hidded
+- (void)hudWasHidden:(MBProgressHUD *)hud 
+{
+	// Remove HUD from screen when the HUD was hidded
     [HUD removeFromSuperview];
     [HUD release];
 	
@@ -271,7 +260,6 @@
 	}
 	
 	[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.5];
-	
 }
 
 - (void) cancelOrganize
@@ -279,13 +267,13 @@
 	[delegate cancelOrganize];
 }
 
-// Override to allow orientations other than the default portrait orientation.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations
-	return YES;
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
+{
+    return YES;
 }
 
-- (void)dealloc {
+- (void)dealloc 
+{
 	[newsletter release];
 	[selectedIndexPath release];
 	[super dealloc];

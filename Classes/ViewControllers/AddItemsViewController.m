@@ -1,7 +1,6 @@
 #import "AddItemsViewController.h"
 #import "Feed.h"
 #import "FeedGroup.h"
-//#import "AddFeedViewController.h"
 #import "FeedViewController.h"
 #import "Newsletter.h"
 #import "ItemFetcher.h"
@@ -17,7 +16,6 @@
 #import "Folder.h"
 #import "Newsletter.h"
 #import "FeedsTableViewCell.h"
-//#import "MBProgressHUD.h"
 
 #define kAddFolderWithItemsTag 1001
 #define kAddNewsletterWithItemsTag 1002
@@ -27,23 +25,19 @@
 
 - (void) formViewDidCancel:(NSInteger)tag
 {
-	
 }
 
 - (void) formViewDidFinish:(NSInteger)tag withValues:(NSArray*)values
 {
-	NSLog(@"formViewDidFinish tag: %d",tag);
 	if(tag==kAddFolderWithItemsTag)
 	{
 		NSString * folderName=[values objectAtIndex:0];
 		 
-			
 		if([folderName length]>0)
 		{
-			NSLog(@"create folder with name: %@",folderName);
 			Folder * newFolder=[[[UIApplication sharedApplication] delegate] createNewFolder:folderName];
 			
-			if([self selectedItemCount]>10)
+			/*if([self selectedItemCount]>10)
 			{
 				// The hud will dispable all input on the view
 				HUD = [[MBProgressHUD alloc] initWithView:self.view.window];
@@ -60,30 +54,24 @@
 				[HUD showWhileExecuting:@selector(addToFolder:) onTarget:delegate withObject:newFolder animated:YES];
 			}
 			else 
-			{
-				[delegate addToFolder:newFolder];
+			{*/
+				//[delegate addToFolder:newFolder];
 				[self.foldersFetcher performFetch];
 				[self.tableView reloadData];
-				
-				[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.5];
-			}
-
+				//[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.5];
+			//}
 		}
 		return;
 	}
 	
 	if(tag==kAddNewsletterWithItemsTag)
 	{
-		 
-		
 		NSString * newsletterName=[values objectAtIndex:0];
 		NSString * sectionName=[values objectAtIndex:1];
 		
 		if ([newsletterName length]>0) 
 		{
 			Newsletter * newNewsletter=[[[UIApplication sharedApplication] delegate] createNewNewsletter:newsletterName sectionName:sectionName];
-			
-			
 			[newslettersFetcher performFetch];
 			[tableView reloadData];
 		}
@@ -95,11 +83,9 @@
 	return [[[[UIApplication sharedApplication] delegate] selectedItems] count];
 }
 
-
 - (void) viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
-	
 	[self.tableView reloadData];
 }
 
@@ -111,17 +97,10 @@
 - (void)viewDidLoad 
 {
     [super viewDidLoad];
-	
-	//self.tableView.separatorColor=[UIColor darkGrayColor];
-	 
 	[self.tableView setBackgroundView:[[[UIView alloc] init] autorelease]];
 	self.tableView.backgroundView.backgroundColor=[UIColor blackColor];
 	self.tableView.backgroundView.alpha=0.5;
-	
-	//self.navigationItem.title=@"Add Selected Items";
-	
 	[self.navigationItem setLeftBarButtonItem:[[[UIBarButtonItem alloc] initWithCustomView:[[UIView new] autorelease]] autorelease]];
-	
 	[newslettersFetcher performFetch];
 	[foldersFetcher performFetch];
 }
@@ -136,34 +115,27 @@
 {
 	ItemFetcher * fetcher=[self fetcherForSection:indexPath.section];
 	
-	
-	
 	cell.backgroundColor=[UIColor clearColor];
-	
 	cell.textLabel.font=[UIFont boldSystemFontOfSize:17];
-	 
 	cell.textLabel.textColor=[UIColor whiteColor];
 	cell.textLabel.shadowColor=[UIColor blackColor];
 	cell.textLabel.shadowOffset=CGSizeMake(0, 1);
 	
 	if([fetcher count]<=indexPath.row)
 	{
+		cell.accessoryType=UITableViewCellAccessoryNone;
+		cell.textLabel.textColor=[UIColor lightGrayColor];
 		if(indexPath.section==0)
 		{
-			cell.accessoryType=UITableViewCellAccessoryNone;
-			cell.textLabel.textColor=[UIColor lightGrayColor];
 			cell.textLabel.text=@"Add New Folder";
 		}
 		else 
 		{
-			cell.accessoryType=UITableViewCellAccessoryNone;
-			cell.textLabel.textColor=[UIColor lightGrayColor];
 			cell.textLabel.text=@"Add New Newsletter";
 		}
 	}
 	else 
 	{
-		
 		Feed * feed=[fetcher itemAtIndex:indexPath.row];
 		
 		cell.accessoryType=UITableViewCellAccessoryNone;
@@ -184,7 +156,6 @@
 				   indexPath.row==selectedIndexPath.row)
 				{
 					cell.imageView.image=[UIImage imageNamed:@"green_folderdoc.png"];
-					
 				}
 			}
 		}
@@ -202,11 +173,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	FeedsTableViewCell * cell = [[[FeedsTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1  reuseIdentifier:nil] autorelease];
-	
 	cell.selectionStyle=UITableViewCellSelectionStyleNone;
-	
 	[self configureCell:cell atIndexPath:indexPath];
-	
 	return cell;
 }
 
@@ -215,15 +183,16 @@
 	return [[self fetcherForSection:section] count]+1;
 }
 
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
 	return 23;
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
 	return 44;
 }
+
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
 	UIView * v=[[UIView alloc] initWithFrame:CGRectZero];
@@ -231,7 +200,6 @@
 	v.frame=CGRectMake(0,0,320,44);
 	return [v autorelease];
 }
-
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
@@ -271,7 +239,6 @@
 	return [v autorelease];
 }
 
-
 - (ItemFetcher*) fetcherForSection:(NSInteger)section
 {
 	switch (section) 
@@ -288,7 +255,6 @@
 {
 	FormViewController * formView=[[FormViewController alloc] initWithTitle:@"Add folder" tag:kAddFolderWithItemsTag delegate:self names:[NSArray arrayWithObject:@"Folder name"] andValues:nil];
 	[self presentModalViewController:formView animated:YES];
-	
 	[formView release];
 }
 
@@ -296,13 +262,11 @@
 {
 	FormViewController * formView=[[FormViewController alloc] initWithTitle:@"Add newsletter" tag:kAddNewsletterWithItemsTag delegate:self names:[NSArray arrayWithObjects:@"Newsletter name",@"Section name",nil] andValues:nil];
 	[self presentModalViewController:formView animated:YES];
-
 	[formView release];
 }
 
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	
 	[selectedIndexPath release];
 	selectedIndexPath=nil;
 	
@@ -333,10 +297,8 @@
 		{
 			selectedIndexPath=[indexPath retain];
 			
-			
 			if([self selectedItemCount]>10)
 			{
-			
 				// The hud will dispable all input on the view
 				HUD = [[MBProgressHUD alloc] initWithView:self.view.window];
 				
@@ -358,9 +320,9 @@
 				[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:selectedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
 				[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.5];
 			}
-
 			return;
 		}
+		
 		if(indexPath.section==1)
 		{
 			AddItemsToSectionViewController * sectionsView=[[AddItemsToSectionViewController alloc] initWithNibName:@"RootFeedsView" bundle:nil];
@@ -368,13 +330,13 @@
 			sectionsView.delegate=self.delegate;
 			sectionsView.newsletter=feed;
 			[self.navigationController pushViewController:sectionsView animated:YES];
-			
 			[sectionsView release];
 		}
 	}
 }
  
-- (void)hudWasHidden:(MBProgressHUD *)hud {
+- (void)hudWasHidden:(MBProgressHUD *)hud 
+{
 	NSLog(@"Hud: %@", hud);
     // Remove HUD from screen when the HUD was hidded
     [HUD removeFromSuperview];
@@ -392,26 +354,16 @@
 	}
 
 	[self performSelector:@selector(cancelOrganize) withObject:nil afterDelay:0.5];
-	
 }
-
-
-
-
-
-
-
-
 
 - (void) cancelOrganize
 {
 	[delegate cancelOrganize];
 }
 
-// Override to allow orientations other than the default portrait orientation.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations
-	return YES;
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
+{
+    return YES;
 }
 
 - (void)dealloc {
@@ -421,6 +373,5 @@
 	[foldersFetcher release];
 	[super dealloc];
 }
-
 
 @end
