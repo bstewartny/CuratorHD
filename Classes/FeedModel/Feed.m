@@ -158,6 +158,8 @@
 	NSFetchRequest *request = [[NSFetchRequest alloc] init];
 	NSManagedObjectContext * moc=[self managedObjectContext];
 	[request setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:moc]];
+	[request setIncludesSubentities:NO];
+	[request setIncludesPropertyValues:NO];
 	
 	if(predicate!=nil)
 	{
@@ -166,7 +168,11 @@
 	
 	NSError *err;
 	
+	NSDate * start=[NSDate date];
 	NSUInteger count = [moc countForFetchRequest:request error:&err];
+	NSTimeInterval elapsed=[start timeIntervalSinceNow];
+	NSLog(@"entitCount took: %f",-elapsed);
+	
 	if(count == NSNotFound) 
 	{
 		NSLog(@"countForFetchRequest returned NSNotFound");

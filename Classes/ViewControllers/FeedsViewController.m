@@ -65,11 +65,11 @@
 	 name:@"FeedUpdated"
 	 object:nil];
 	
-	[[NSNotificationCenter defaultCenter]
+	/*[[NSNotificationCenter defaultCenter]
 	 addObserver:self
 	 selector:@selector(handleReloadData:)
 	 name:@"FeedUpdateFinished"
-	 object:nil];
+	 object:nil];*/
 	
 	[[NSNotificationCenter defaultCenter]
 	 addObserver:self
@@ -246,7 +246,8 @@
 
 -(void)handleReloadDataUI:(NSNotification *)pNotification
 {
-	NSLog(@"handleReloadDataUI");
+	NSLog(@"handleReloadDataUI: %@",pNotification.name);
+	
 	if([pNotification.name isEqualToString:@"UpdateFeedsView"])
 	{
 		NSLog(@"FeedsViewControler: UpdateFeedsView revd, perform fetch and reload data...");
@@ -271,12 +272,14 @@
 			[self performFetch];
 			[self reloadTableData];
 		}
+		return;
 	}
 	if([pNotification.name isEqualToString:@"FeedsUpdated"])
 	{
 		NSLog(@"FeedsViewControler: FeedsUpdated revd, perform fetch and reload data...");
 		[self performFetch];
 		[self reloadTableData];
+		return;
 	}
 	if([pNotification.name isEqualToString:@"FeedUpdated"])
 	{
@@ -326,6 +329,7 @@
 				}
 			}
 		}
+		return;
 	}
 	
 	if([pNotification.name isEqualToString:@"AccountUpdated"])
@@ -342,6 +346,7 @@
 				[self reloadTableData];
 			}
 		}
+		return;
 	}
 	
 	if([pNotification.name isEqualToString:@"AccountUpdateFailed"])
@@ -363,6 +368,7 @@
 				[alert release];
 			}
 		}
+		return;
 	}
 } 
 

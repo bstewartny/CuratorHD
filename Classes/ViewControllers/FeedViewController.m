@@ -35,6 +35,7 @@
 	{
 		[self.fetcher performFetch];
 		[tableView reloadData];
+		return;
 	}
 	if([pNotification.name isEqualToString:@"ReloadData"])
 	{
@@ -60,6 +61,7 @@
 				[tableView reloadData];
 			}
 		}
+		return;
 	}
 	if([pNotification.name isEqualToString:@"AccountUpdateFailed"])
 	{
@@ -80,6 +82,7 @@
 				[alert release];
 			}
 		}
+		return;
 	}
 	if([pNotification.name isEqualToString:@"FeedUpdateFailed"])
 	{
@@ -98,6 +101,7 @@
 				[alert release];
 			}
 		}
+		return;
 	}
 	if([pNotification.name isEqualToString:@"FeedUpdated"] ||
 	   [pNotification.name isEqualToString:@"FeedUpdateFinished"])
@@ -116,6 +120,7 @@
 				[tableView reloadData];
 			}
 		}
+		return;
 	}	
 } 
 

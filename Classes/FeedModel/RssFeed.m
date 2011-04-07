@@ -83,11 +83,30 @@
 	return [RssFeed maxDateWithAccountName:self.account.name forCategory:nil withManagedObjectContext:[self managedObjectContext]];
 }
 
+
+
 - (NSNumber *) currentUnreadCount
 {
+	//NSLog(@"RssFeed.currentUnreadCount");
 	if([self isCategory])
 	{
-		int count=[self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(isRead==0) AND (feed.account.name==%@) AND (ANY feed.feedCategory.name==%@)",self.account.name,self.name]];
+		//NSLog(@"get unread count for category...");
+		//int count=[self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(isRead==0) AND (feed.account.name==%@) AND (ANY feed.feedCategory.name==%@)",self.account.name,self.name]];
+		//int count=[self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(ANY feed.feedCategory.name==%@) AND (isRead==0) AND (feed.account.name==%@)",self.name,self.account.name]];
+		//NSDate * start=[NSDate date];
+		// get all feeds in category and get stored unread count...
+		CategoryFeedFetcher * fetcher=[[CategoryFeedFetcher alloc] init];
+		fetcher.accountName=self.account.name;
+		fetcher.feedCategory=self.name;
+		
+		int count=0;
+		for(Feed * feed in fetcher.items)
+		{
+			int cnt=[feed.unreadCount intValue];
+			//NSLog(@"Feed %@.unreadCount=%d",feed.name,cnt);
+			count+=[feed.unreadCount intValue];
+		}
+		[fetcher release];
 		
 		return [NSNumber numberWithInt:count];
 	}
@@ -95,7 +114,32 @@
 	{
 		if([self isAllItems])
 		{
-			int count=[self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(isRead==0) AND (feed.account.name==%@)",self.account.name]];  
+			//NSLog(@"get unread count for all items...");
+			//NSDate * start=[NSDate date];
+			//int count=[self entityCount:@"RssFeedItem" predicate:[NSPredicate predicateWithFormat:@"(feed.account.name==%@) AND (isRead==0)",self.account.name]];  
+			//NSTimeInterval elapsed=[start timeIntervalSinceNow];
+			//NSLog(@"Get count using entityCount took: %f",-elapsed);
+			
+			//int sql_count=count;
+			//start=[NSDate date];
+			AccountUpdatableFeedFetcher * fetcher=[[AccountUpdatableFeedFetcher alloc] init];
+			fetcher.accountName=self.account.name;
+			int count=0;
+			for(Feed * feed in fetcher.items)
+			{
+				int cnt=[feed.unreadCount intValue];
+				//NSLog(@"Feed %@.unreadCount=%d",feed.name,cnt);
+				count+=cnt;
+			}
+			//elapsed=[start timeIntervalSinceNow];
+			//NSLog(@"Get count using fetcher took: %f",-elapsed);
+			
+			//NSLog(@"count using SQL count=%d",sql_count);
+			//NSLog(@"count using fetch=%d",count);
+			
+			
+			[fetcher release];
+			
 			return [NSNumber numberWithInt:count];
 		}
 		else

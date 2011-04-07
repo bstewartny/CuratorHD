@@ -645,10 +645,10 @@
 	
 	
 	// if no accounts exist, show account settings form...
-	if([[self accounts]count]==0)
+	/*if([[self accounts]count]==0)
 	{
 		[self showAccountSettingsForm];
-	}
+	}*/
 	
 }
 

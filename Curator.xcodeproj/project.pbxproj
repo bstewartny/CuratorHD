@@ -713,7 +713,7 @@
 		B055C0EC1295B092000865A9 /* person_icon.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = person_icon.gif; sourceTree = "<group>"; };
 		B055C0ED1295B092000865A9 /* home_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_icon.png; sourceTree = "<group>"; };
 		B055C1331295B7BF000865A9 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
-		B055C13C1295B80D000865A9 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
+		B055C13C1295B80D000865A9 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.entitlements"; sourceTree = "<group>"; };
 		B056B21513422A73007B9EA1 /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appirater.h; sourceTree = "<group>"; };
 		B056B21613422A73007B9EA1 /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appirater.m; sourceTree = "<group>"; };
 		B056B23C13422B86007B9EA1 /* UIColor+AQGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+AQGridView.m"; sourceTree = "<group>"; };
@@ -3507,7 +3507,7 @@
 				OTHER_LDFLAGS = "-lxml2";
 				PREBINDING = NO;
 				PRODUCT_NAME = InfoNgen;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "63DE9AA1-FD72-4EBB-BFBB-5946C581F58F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "48C14BA3-C173-405C-AFB7-9B841B97A101";
 				SDKROOT = iphoneos4.2;
 			};
 			name = AdHocDistribution;
@@ -3536,7 +3536,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: John Mahoney (JB2AYRQF9U)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Don't Code Sign";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -3545,7 +3545,7 @@
 				OTHER_LDFLAGS = "-lxml2";
 				PREBINDING = NO;
 				PRODUCT_NAME = InfoNgen;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "53A34F64-2F0F-4B21-B89D-7A46C7FAF8D7";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos4.2;
 			};
 			name = Debug;

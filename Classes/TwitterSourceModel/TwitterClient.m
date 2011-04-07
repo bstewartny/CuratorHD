@@ -248,7 +248,7 @@
 {
 	NSLog(@"getItemsFromJson");
 	NSLog(@"got %d items in json array",[json count]);
-	NSLog(@"json=%@",[json description]);
+	//NSLog(@"json=%@",[json description]);
 	
 	NSMutableArray * items=[[[NSMutableArray alloc] init] autorelease];
 	

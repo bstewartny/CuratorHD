@@ -48,7 +48,7 @@
 	NSLog(@"CategoryFeedFetcher.markAllAsRead");
 	
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:
-							  @"feed.account.name == %@ AND (ANY feed.feedCategory.name==%@) AND isRead==0", accountName,feedCategory];
+							  @"(ANY feed.feedCategory.name==%@) AND feed.account.name == %@ AND isRead==0", feedCategory,accountName];
 	
 	NSManagedObjectContext * moc=[self managedObjectContext];
 	
@@ -75,7 +75,7 @@
 	}
 	
 	predicate = [NSPredicate predicateWithFormat:
-				 @"account.name == %@ AND (ANY feedCategory.name==%@) AND unreadCount>0", accountName, feedCategory];
+				 @"(ANY feedCategory.name==%@) AND account.name == %@  AND unreadCount>0", feedCategory,accountName];
 	
 	[fetchRequest release];
 	
@@ -118,7 +118,7 @@
 	if (fetchedResultsController) return fetchedResultsController;
 	
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:
-							  @"account.name == %@ AND (ANY feedCategory.name==%@)", accountName,feedCategory];
+							  @"(ANY feedCategory.name==%@) AND account.name == %@", feedCategory,accountName];
 	
 	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"feedType" 
 																   ascending:YES];
