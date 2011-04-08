@@ -10,6 +10,8 @@
 #import "GoogleAppEngineAuth.h"
 #import "MarkupStripper.h"
 #import "Feed.h"
+#import "ASIHTTPRequest.h"
+#import "ASIDownloadCache.h"
 
 @implementation GoogleReaderClient
 @synthesize  username,password;
@@ -187,7 +189,7 @@ static NSString * gaeCookie;
 	}
 }
 
-- (NSData*) getData:(NSString*)url
+- (NSData*) getDataOld:(NSString*)url
 {
 	@try 
 	{
@@ -229,6 +231,73 @@ static NSString * gaeCookie;
 	{
 	}
 }
+
+- (NSData*) getData:(NSString*)url
+{
+	@try 
+	{
+		NSLog(@"getData: %@",url);
+		
+		// attempt to avoid leaking NSData from response?
+		//NSLog(@"clearing cached responses");
+		[[NSURLCache sharedURLCache] removeAllCachedResponses];
+		//NSLog(@"done clearing cached responses");
+		
+		
+		ASIHTTPRequest * request=[ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
+		
+		[request setDownloadCache:[ASIDownloadCache sharedCache]];
+		//[request setCachePolicy:ASIAskServerIfModifiedCachePolicy|ASIFallbackToCacheIfLoadFailsCachePolicy];
+		[request setSecondsToCache:60*5]; // 5 minutes
+		[request setAllowCompressedResponse:YES];
+		
+		[request addRequestHeader:@"User-Agent" value:@"InfoNgen Curator HD (gzip)"];
+		 
+		@synchronized(auth)
+		{
+			if(auth && [auth length]>0)
+			{
+				NSString * value=[NSString stringWithFormat:@"GoogleLogin auth=%@",auth];
+				
+				[request addRequestHeader:@"Authorization" value:value];
+				[request addRequestHeader:@"auth" value:auth];
+				
+			}
+		}
+		
+		[request startSynchronous];
+		
+		NSError *error = [request error];
+		if (!error) 
+		{
+			if([request didUseCachedResponse])
+			{
+				NSLog(@"Got HTTP response from cache...");
+			}
+			
+			NSData *data = [request responseData];
+			
+			return data;
+		}
+		else 
+		{
+			NSLog(@"Got error from server: %@",[error description]);
+			return nil;
+		}		
+	}
+	@catch (NSException * e) 
+	{
+		NSLog(@"Exception in getData for url: %@: %@",url,[e description]);
+		return nil;	
+	}
+	@finally 
+	{
+	}
+}
+
+
+
+
 
 - (NSDictionary*) getJson:(NSString*)url
 {

@@ -145,21 +145,21 @@
 	}
 	
 	[filter release];
-	
 	NSError * error=nil;
 	
-	if(![moc save:&error])
-	{
-		if(error)
+		if(![moc save:&error])
 		{
-			NSLog(@"Error saving in AccountUpdater.updateFeed:withContext: %@",[error userInfo]);
+			if(error)
+			{
+				NSLog(@"Error saving in AccountUpdater.updateFeed:withContext: %@",[error userInfo]);
+			}
 		}
-	}
-	
-	[moc refreshObject:feed mergeChanges:YES];
-	
+		
+		[moc refreshObject:feed mergeChanges:YES];
 	if(requiresUpdateUnreadCount)
 	{
+		
+		
 		//NSLog(@"updating feed unread count");
 		// update feed unread count
 		feed.lastUpdated=[NSDate date];
@@ -248,7 +248,7 @@
 			
 			if(numNewItems==[items count])
 			{
-				NSLog(@"Added %d new items from feed, fetching more items...",numNewItems);
+				//NSLog(@"Added %d new items from feed, fetching more items...",numNewItems);
 				// get more...
 				continue;
 			}
@@ -264,22 +264,21 @@
 	}
 	
 	[filter release];
-	
 	NSError * error=nil;
 	
-	if(![moc save:&error])
-	{
-		if(error)
+		if(![moc save:&error])
 		{
-			NSLog(@"Error saving in AccountUpdater.updateFeed:withContext: %@",[error userInfo]);
+			if(error)
+			{
+				NSLog(@"Error saving in AccountUpdater.updateFeed:withContext: %@",[error userInfo]);
+			}
 		}
-	}
-	
-	[moc refreshObject:feed mergeChanges:YES];
-	
+		
+		[moc refreshObject:feed mergeChanges:YES];
 	if(requiresUpdateUnreadCount)
 	{
-		NSLog(@"updating feed unread count");
+		
+		//NSLog(@"updating feed unread count");
 		// update feed unread count
 		feed.lastUpdated=[NSDate date];
 		[feed updateUnreadCount];
@@ -334,12 +333,14 @@
 	NSEntityDescription * entity=[NSEntityDescription entityForName:@"RssFeedItem" inManagedObjectContext:[feed managedObjectContext]];
 	
 	[request setEntity:entity];
+	
 	NSDictionary *entityProperties = [entity propertiesByName];
+	
+	[request setIncludesSubentities:NO];
 	
 	[request setPropertiesToFetch:[NSArray arrayWithObjects:[entityProperties objectForKey:@"url"],[entityProperties objectForKey:@"headline"],[entityProperties objectForKey:@"isRead"],[entityProperties objectForKey:@"isStarred"],[entityProperties objectForKey:@"isShared"],nil]];
 	
-	[request setPredicate:[NSPredicate predicateWithFormat:
-						   @"feed == %@", feed]];
+	[request setPredicate:[NSPredicate predicateWithFormat: @"feed == %@", feed]];
 	
 	NSArray * items = [[feed managedObjectContext] executeFetchRequest:request error:nil];
 	

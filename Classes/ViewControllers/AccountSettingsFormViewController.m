@@ -381,6 +381,7 @@
 	textField.textColor=[UIColor colorWithRed:25.0/255.0 green:76.0/255.0 blue:127.0/255.0 alpha:1.0];
 	textField.delegate=self;
 	textField.clearButtonMode=UITextFieldViewModeWhileEditing;
+	textField.returnKeyType=UIReturnKeyDone;
 	
 	if(isSecure)
 	{
@@ -494,6 +495,12 @@
 - (IBAction)textFieldDidEndEditing:(UITextField *)textField
 {
    
+}
+- (void) textFieldShouldReturn:(UITextField *)textField
+{
+	// user hit done key...
+	[self done];
+	
 }
 
 - (void)dealloc 

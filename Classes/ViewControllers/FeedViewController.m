@@ -418,6 +418,24 @@
 	[tableView reloadData];
 }
 
+
+- (void) viewDidAppear:(BOOL)animated
+{
+	[super viewDidAppear:animated];
+	if (!folderMode) 
+	{
+		if(fetcher)
+		{
+			if([fetcher count]==0)
+			{
+				// if no items, try to load most recent feed items (auto-pull-down)...
+				[self startLoading];
+			}
+		}
+	}
+}
+
+
 - (void)addPullToRefreshFooter
 {
 	// TODO
@@ -983,7 +1001,7 @@ canMoveRowAtIndexPath:(NSIndexPath*)indexPath
 {
 	int count= [fetcher count];
 	
-	if(!folderMode)
+	if(folderMode)
 	{
 		if(count==0) return 1; //show pull down cell
 	}

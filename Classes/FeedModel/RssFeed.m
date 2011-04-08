@@ -6,6 +6,8 @@
 #import "FeedAccount.h"
 #import "ItemFetcher.h"
 #import "FeedFetcher.h"
+#import "ASIHTTPRequest.h"
+#import "ASIDownloadCache.h"
 
 @implementation RssFeed
 @dynamic items,account,lastUpdateHash,unreadCount;
@@ -272,6 +274,48 @@
 	// attempt to avoid leaking NSData from response?
 	[[NSURLCache sharedURLCache] removeAllCachedResponses];
 
+	
+	ASIHTTPRequest * request=[ASIHTTPRequest requestWithURL:[NSURL URLWithString:self.url]];
+	
+	[request setDownloadCache:[ASIDownloadCache sharedCache]];
+	
+	//[request setCachePolicy:ASIAskServerIfModifiedCachePolicy|ASIFallbackToCacheIfLoadFailsCachePolicy];
+	[request setSecondsToCache:60*5]; // 5 minutes
+	[request setAllowCompressedResponse:YES];
+	
+	[request addRequestHeader:@"User-Agent" value:@"InfoNgen Curator HD (gzip)"];
+	[request addRequestHeader:@"GenerateRIXML" value:@"false"];
+	
+	if(self.account)
+	{
+		if (self.account.username!=nil && self.account.password!=nil && [self.account.username length]>0)
+		{
+			NSString *authString = [Base64 encode:[[NSString stringWithFormat:@"%@:%@",self.account.username,self.account.password] dataUsingEncoding:NSUTF8StringEncoding]]; 
+			[request addRequestHeader:@"Authorization" value:[NSString stringWithFormat:@"Basic %@", authString]];
+		}
+	}
+	
+	[request startSynchronous];
+	
+	NSError *error = [request error];
+	if (!error) 
+	{
+		if([request didUseCachedResponse])
+		{
+			NSLog(@"Got HTTP response from cache...");
+		}
+		
+		NSData *data = [request responseData];
+		
+		return data;
+	}
+	else 
+	{
+		NSLog(@"Got error from server: %@",[error description]);
+		return nil;
+	}								  
+	
+	/*
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.url] cachePolicy:NSURLRequestUseProtocolCachePolicy
 													   timeoutInterval:90.0];
 	// use FF user agent so server is ok with us...
@@ -291,7 +335,7 @@
 		}
 	}
 	
-	return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+	return [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];*/
 }
 
 - (ItemFetcher*) feedFetcher

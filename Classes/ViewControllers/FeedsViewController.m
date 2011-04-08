@@ -387,7 +387,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	NSLog(@"FeedsViewController.numberOfSectionsInTableView");
+	//NSLog(@"FeedsViewController.numberOfSectionsInTableView");
 	return 1;
 }
 /*
