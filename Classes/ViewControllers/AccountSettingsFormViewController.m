@@ -5,7 +5,7 @@
 #import "GoogleReaderClient.h"
 #import <QuartzCore/QuartzCore.h>
 #import "GoogleClientLogin.h"
-
+#import "BlankToolbar.h"
 @implementation AccountSettingsFormViewController
 @synthesize delegate,twitterUsernameTextField,twitterPasswordTextField,googleReaderUsernameTextField,googleReaderPasswordTextField,infoNgenUsernameTextField,infoNgenPasswordTextField;
 @synthesize doneButton;
@@ -13,6 +13,7 @@
 
 - (IBAction) cancel
 {
+	[spinner stopAnimating];
 	[delegate accountSettingsDidCancel:self];
 }
 
@@ -43,6 +44,7 @@
 	
 	if([[[UIApplication sharedApplication] delegate] hasInternetConnection])
 	{
+		NSLog(@"has internet connection");
 		operationQueue=[[NSOperationQueue alloc] init];
 		
 		operationQueue.maxConcurrentOperationCount=1;
@@ -72,6 +74,11 @@
 			[operationQueue addOperation:[[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(verifyInfoNgen) object:nil] autorelease]];
 		}
 	}
+	else 
+	{
+		NSLog(@"Has no internet connection");
+	}
+
 	
 	if(num_accounts==0)
 	{
@@ -79,6 +86,7 @@
 	}
 	else 
 	{
+		[spinner startAnimating];
 		[cancelButton setEnabled:NO];
 		[doneButton setEnabled:NO];
 		self.navigationItem.title=@"Verifying Accounts...";
@@ -96,7 +104,7 @@
 			// tell/show user we failed and they can try again or cancel
 			[cancelButton setEnabled:YES];
 			[doneButton setEnabled:YES];
-			
+			[spinner stopAnimating];
 			self.navigationItem.title=@"Source Accounts";
 			
 			UIAlertView * alertView=[[UIAlertView alloc] initWithTitle:@"Login Failed" message:@"Failed to validate accounts. Please verify username and password." delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil];
@@ -107,6 +115,8 @@
 		}
 		else 
 		{
+			[spinner stopAnimating];
+			
 			self.navigationItem.title =@"Accounts Verified";
 			
 			[self performSelector:@selector(close) withObject:nil afterDelay:0.1];
@@ -135,7 +145,13 @@
 	twitterClient.username=twitterUsernameTextField.text;
 	twitterClient.password=twitterPasswordTextField.text;
 	twitterClient.verifyDelegate=self;
-	[twitterClient restoreAccessToken];
+	
+	if(![twitterClient restoreAccessToken])
+	{
+		[self verifyTwitterFailed];
+		return;
+	}
+	
 	[twitterClient tokenAccess];
 }
 
@@ -470,8 +486,37 @@
 	self.navigationItem.leftBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)] autorelease];
 	self.cancelButton=self.navigationItem.leftBarButtonItem;
 	
-	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)] autorelease];
-	self.doneButton=self.navigationItem.rightBarButtonItem;
+	BlankToolbar * tools=[[BlankToolbar alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
+	
+	tools.opaque=NO;
+	tools.backgroundColor=[UIColor clearColor];
+	
+	NSMutableArray * tmp=[[NSMutableArray alloc] init];
+	
+	spinner=[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+	spinner.hidesWhenStopped=YES;
+	
+	[tmp addObject:[[[UIBarButtonItem alloc] initWithCustomView:spinner] autorelease]];
+	
+	UIBarButtonItem * b=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil] autorelease];
+						
+	b.width=10;
+	
+	[tmp addObject:b];
+	
+	b=[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)] autorelease];
+
+	self.doneButton=b;
+	
+	[tmp addObject:b];
+	
+	[tools setItems:tmp];
+	
+	[tmp release];
+	
+	self.navigationItem.rightBarButtonItem=[[[UIBarButtonItem alloc] initWithCustomView:tools] autorelease];
+	
+	[tools release];
 	
 	googleReaderUsername=[UserSettings getSetting:@"googlereader.username"];
 	googleReaderPassword=[UserSettings getSetting:@"googlereader.password"];
@@ -505,6 +550,7 @@
 
 - (void)dealloc 
 {
+	[spinner release];
 	[googleReaderUsernameTextField release];
 	[googleReaderPasswordTextField release];
 	[infoNgenUsernameTextField release];

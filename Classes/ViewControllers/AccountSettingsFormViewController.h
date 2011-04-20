@@ -24,6 +24,7 @@
 	UILabel * twitterStatusLabel;
 	UILabel * infoNgenStatusLabel;
 	
+	UIActivityIndicatorView * spinner;
 	
 	NSString * googleReaderUsername;
 	NSString * googleReaderPassword;

@@ -346,7 +346,9 @@
 				}
 			}
 		}
+		[imageFetcher release];
 	}
+	[profile_image_urls release];
 	
 	return items;
 }

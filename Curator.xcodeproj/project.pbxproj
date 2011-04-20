@@ -3507,7 +3507,7 @@
 				OTHER_LDFLAGS = "-lxml2";
 				PREBINDING = NO;
 				PRODUCT_NAME = InfoNgen;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "48C14BA3-C173-405C-AFB7-9B841B97A101";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "00C93EDD-A420-41F1-BA84-0A5DFD0D8CB7";
 				SDKROOT = iphoneos4.2;
 			};
 			name = AdHocDistribution;
@@ -3536,7 +3536,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Don't Code Sign";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: John Mahoney (JB2AYRQF9U)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -3545,7 +3545,7 @@
 				OTHER_LDFLAGS = "-lxml2";
 				PREBINDING = NO;
 				PRODUCT_NAME = InfoNgen;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "51B89DF8-32A9-402E-AE8F-2D6B893EDDAD";
 				SDKROOT = iphoneos4.2;
 			};
 			name = Debug;

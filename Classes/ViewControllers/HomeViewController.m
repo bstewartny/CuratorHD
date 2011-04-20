@@ -477,7 +477,7 @@
 
 - (void) configureGridViewCell:(AQGridViewCell*)cell forIndex:(NSUInteger)index inSection:(int)section editing:(BOOL)isEditing
 {
-	UIImage * image;
+	UIImage * image=nil;
 	NSString * itemname;
 	int badgeCount=-1;
 	

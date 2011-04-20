@@ -53,7 +53,7 @@
 
 - (void) displayHtml
 {
-	self.webView.scalesPageToFit=NO;
+	self.webView.scalesPageToFit=YES;
 	
 	if([html length]>0)
 	{

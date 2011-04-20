@@ -30,6 +30,8 @@
 	
 	[queue waitUntilAllOperationsAreFinished];
 	
+	[queue release];
+	
 	return images;  
 }
 
