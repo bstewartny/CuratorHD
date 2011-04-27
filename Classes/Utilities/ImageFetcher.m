@@ -1,11 +1,3 @@
-//
-//  ImageFetcher.m
-//  Curator
-//
-//  Created by Robert Stewart on 3/24/11.
-//  Copyright 2011 InfoNgen. All rights reserved.
-//
-
 #import "ImageFetcher.h"
 #import "ASIHTTPRequest.h"
 #import "ASIDownloadCache.h"
@@ -85,24 +77,26 @@
 				NSLog(@"Got image for url: %@", url);
 				@synchronized(images)
 				{
-					[images setObject:img forKey:url];
+					if([images objectForKey:url]==nil)
+					{
+						[images setObject:img forKey:url];
+					}
 				}
 			}
-			else {
+			else 
+			{
 				NSLog(@"failed to get image from data");
 			}
-
 		}
-		else {
+		else 
+		{
 			NSLog(@"data is null");
 		}
-
 	}
 	else 
 	{
 		NSLog(@"Fetching image url failed: %@: %@",url,[error userInfo]);
 	}
 }
-
 
 @end

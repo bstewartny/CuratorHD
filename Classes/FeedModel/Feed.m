@@ -168,10 +168,10 @@
 	
 	NSError *err;
 	
-	NSDate * start=[NSDate date];
+	//NSDate * start=[NSDate date];
 	NSUInteger count = [moc countForFetchRequest:request error:&err];
-	NSTimeInterval elapsed=[start timeIntervalSinceNow];
-	NSLog(@"entitCount took: %f",-elapsed);
+	//NSTimeInterval elapsed=[start timeIntervalSinceNow];
+	//NSLog(@"entitCount took: %f",-elapsed);
 	
 	if(count == NSNotFound) 
 	{

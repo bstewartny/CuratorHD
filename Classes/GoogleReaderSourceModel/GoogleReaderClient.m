@@ -239,10 +239,7 @@ static NSString * gaeCookie;
 		NSLog(@"getData: %@",url);
 		
 		// attempt to avoid leaking NSData from response?
-		//NSLog(@"clearing cached responses");
 		[[NSURLCache sharedURLCache] removeAllCachedResponses];
-		//NSLog(@"done clearing cached responses");
-		
 		
 		ASIHTTPRequest * request=[ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
 		
@@ -261,7 +258,6 @@ static NSString * gaeCookie;
 				
 				[request addRequestHeader:@"Authorization" value:value];
 				[request addRequestHeader:@"auth" value:auth];
-				
 			}
 		}
 		
@@ -458,7 +454,6 @@ static NSString * gaeCookie;
 	
 }
 
-
 - (NSArray*) getTags
 {
 	/*
@@ -520,10 +515,6 @@ static NSString * gaeCookie;
 	return tagnames;
 }
 
-
-
-
-
 /*
  
  {"crawlTimeMsec":"1283957112668",
@@ -550,8 +541,6 @@ static NSString * gaeCookie;
  "title":"msdn.microsoft.com",
  "htmlUrl":"http://msdn.microsoft.com/"
  }}
- 
- 
  
  */
 
@@ -608,7 +597,6 @@ static NSString * gaeCookie;
 	NSDictionary * dict=[self getJson:url];
 	
 	MarkupStripper * stripper=[[[MarkupStripper alloc] init] autorelease];
-	
 	
 	if(dict)
 	{
@@ -679,7 +667,7 @@ static NSString * gaeCookie;
 						synopsis=[[item objectForKey:@"content"] objectForKey:@"content"];
 					}
 
-					result.origSynopsis=synopsis;//[NSString stringWithFormat:@"@%",synopsis]; ///  [synopsis copy];
+					result.origSynopsis=synopsis;
 					
 					if ([item objectForKey:@"annotations"]) 
 					{
@@ -877,10 +865,8 @@ static NSString * gaeCookie;
 					"htmlUrl":"http://forums.construx.com/blogs/stevemcc/default.aspx"}
 				 */
 				
-				
 				TempFeed * feed=[TempFeed new];
 				
-				//feed.name=[stripper stripMarkup:[subscription objectForKey:@"title"]];
 				feed.name=[subscription objectForKey:@"title"];
 				
 				feed.feedId=[subscription objectForKey:@"id"];
@@ -907,8 +893,6 @@ static NSString * gaeCookie;
 							tmp.name=label;
 							[feedCategories addObject:tmp];
 							[tmp release];
-							
-							
 						}
 					}
 				}
@@ -923,11 +907,7 @@ static NSString * gaeCookie;
 				
 				feed.feedCategory=feedCategories;
 				
-				 
-				
-
 				[feedCategories release];
-				
 				
 				[feeds addObject:feed];
 				

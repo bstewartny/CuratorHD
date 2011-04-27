@@ -146,13 +146,19 @@
 	twitterClient.password=twitterPasswordTextField.text;
 	twitterClient.verifyDelegate=self;
 	
+    [TwitterClient logout];
+    
+    twitterClient.accessToken=nil;
+    
 	if(![twitterClient restoreAccessToken])
 	{
-		[self verifyTwitterFailed];
-		return;
+		//[self verifyTwitterFailed];
+		//return;
 	}
 	
 	[twitterClient tokenAccess];
+    
+    
 }
 
 - (void)didSucceed

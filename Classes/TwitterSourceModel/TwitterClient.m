@@ -1,11 +1,3 @@
-//
-//  TwitterClient.m
-//  Untitled
-//
-//  Created by Robert Stewart on 11/10/10.
-//  Copyright 2010 InfoNgen. All rights reserved.
-//
-
 #import "TwitterClient.h"
 #import "OAMutableURLRequest.h"
 #import "OADataFetcher.h"
@@ -54,7 +46,8 @@
 			return nil;
 		}
 	}
-	@catch (NSException * e) {
+	@catch (NSException * e) 
+	{
 		NSLog(@"Exception in getJson for url: %@: %@",url,[e description]);
 		return nil;
 	}
@@ -247,8 +240,13 @@
 - (NSArray*) getItemsFromJson:(NSArray*)json
 {
 	NSLog(@"getItemsFromJson");
+	if(![json isKindOfClass:[NSArray class]])
+	{
+		NSLog(@"json is not an NSArray!!!");
+		return nil;
+	}
+	
 	NSLog(@"got %d items in json array",[json count]);
-	//NSLog(@"json=%@",[json description]);
 	
 	NSMutableArray * items=[[[NSMutableArray alloc] init] autorelease];
 	
@@ -263,62 +261,60 @@
 	[formatter setDateFormat:@"EEE MMM dd HH:mm:ss ZZ yyyy"];
 	NSMutableDictionary * profile_image_urls=[[NSMutableDictionary alloc] init];
 	
-	//NSMutableDictionary * imageCache=[[[UIApplication sharedApplication] delegate] feedImageCache];
 	MarkupStripper * stripper=[[[MarkupStripper alloc] init] autorelease];
-	if ([json isKindOfClass:[NSArray class]]) 
+	
+	for(NSDictionary * t in json)
 	{
-		for(NSDictionary * t in json)
+		if(![t isKindOfClass:[NSDictionary class]]) continue;
+		
+		NSString * text=[t objectForKey:@"text"];
+		NSString * item_id=[t objectForKey:@"id_str"];
+		NSString * created_at=[t objectForKey:@"created_at"];
+		
+		NSDate * date=[formatter dateFromString:created_at];
+		
+		NSDictionary * user=[t objectForKey:@"user"];
+		
+		if(user==nil)
 		{
-			if(![t isKindOfClass:[NSDictionary class]]) continue;
-			
-			NSString * text=[t objectForKey:@"text"];
-			NSString * item_id=[t objectForKey:@"id_str"];
-			NSString * created_at=[t objectForKey:@"created_at"];
-			
-			NSDate * date=[formatter dateFromString:created_at];
-			
-			NSDictionary * user=[t objectForKey:@"user"];
-			
-			if(user==nil)
-			{
-				user=[t objectForKey:@"sender"]; // for direct messages
-			}
-			
-			TempFeedItem *tmp=[[TempFeedItem alloc] init];
-			
-			NSString * user_name=[user objectForKey:@"name"];
-			NSString * user_id=[user objectForKey:@"id_str"];
-			NSString * user_screenname=[user objectForKey:@"screen_name"];
-			NSString * profile_image_url=[user objectForKey:@"profile_image_url"];
-			tmp.origin=user_name;
-			tmp.imageUrl=profile_image_url;
-			
-			
-			// see if image is already cached, if not download it and add to the cache...
-			if([profile_image_url length]>0)
-			{
-				if([profile_image_urls objectForKey:profile_image_url]==nil)
-				{
-					[profile_image_urls setObject:profile_image_url forKey:profile_image_url];
-				}
-			}
-			
-			tmp.uid=item_id;
-			tmp.originId=@"twitter";
-			tmp.originUrl=user_screenname;
-			tmp.date=date; 		
-			tmp.url=[NSString stringWithFormat:@"http://twitter.com/%@/status/%@",user_id,item_id];
-			
-			tmp.headline=[[stripper stripMarkup:text] stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
-			
-			tmp.origSynopsis=[self getTweetHtml:text];
-			
-			tmp.synopsis=tmp.headline;
-				
-			[items addObject:tmp];
-			
-			[tmp release];
+			user=[t objectForKey:@"sender"]; // for direct messages
 		}
+		
+		TempFeedItem *tmp=[[TempFeedItem alloc] init];
+		
+		NSString * user_name=[user objectForKey:@"name"];
+		NSString * user_id=[user objectForKey:@"id_str"];
+		NSString * user_screenname=[user objectForKey:@"screen_name"];
+		NSString * profile_image_url=[user objectForKey:@"profile_image_url"];
+		
+		tmp.origin=user_name;
+		tmp.imageUrl=profile_image_url;
+		
+		
+		// see if image is already cached, if not download it and add to the cache...
+		if([profile_image_url length]>0)
+		{
+			if([profile_image_urls objectForKey:profile_image_url]==nil)
+			{
+				[profile_image_urls setObject:profile_image_url forKey:profile_image_url];
+			}
+		}
+		
+		tmp.uid=item_id;
+		tmp.originId=@"twitter";
+		tmp.originUrl=user_screenname;
+		tmp.date=date; 		
+		tmp.url=[NSString stringWithFormat:@"http://twitter.com/%@/status/%@",user_id,item_id];
+		
+		tmp.headline=[[stripper stripMarkup:text] stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+		
+		tmp.origSynopsis=[self getTweetHtml:text];
+		
+		tmp.synopsis=tmp.headline;
+			
+		[items addObject:tmp];
+		
+		[tmp release];
 	}
 	
 	[formatter release];
@@ -770,10 +766,6 @@
 	[fetcher start];
 	[oRequest release];
 }
-
-
-
-
 
 - (BOOL) isAuthorized
 {

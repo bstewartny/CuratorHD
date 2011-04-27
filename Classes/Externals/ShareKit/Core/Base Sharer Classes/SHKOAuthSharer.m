@@ -240,6 +240,8 @@
 	NSLog(@"SHKOAuthSharer:tokenAccessTicket:didFailWithError");
 	[[SHKActivityIndicator currentIndicator] hide];
 	
+    self.accessToken=nil;
+    
 	[[[[UIAlertView alloc] initWithTitle:SHKLocalizedString(@"Access Error")
 								 message:error!=nil?[error localizedDescription]:SHKLocalizedString(@"There was an error while sharing")
 								delegate:nil

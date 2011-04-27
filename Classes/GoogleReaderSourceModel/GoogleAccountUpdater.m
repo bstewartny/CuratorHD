@@ -39,7 +39,6 @@
 
 - (BOOL) isAccountValid
 {
-	//NSLog(@"GoogleAccountUpdater.isAccountValid");
 	return ([client isValid]);
 }
 
@@ -58,11 +57,9 @@
 	feed.feedType=@"01GoogleFeed";
 	[feed setSingleCategory:@"_all"];
 	
-	
 	feed.image=[UIImage imageNamed:@"gray_googlreader.png"];
 	feed.imageName=@"gray_googlreader.png";
 	feed.highlightedImageName=@"green_googlreader.png";
-	
 	
 	[feeds addObject:feed];
 	
@@ -458,12 +455,7 @@
 }
 				
 - (BOOL) updateFeedListWithContext:(NSManagedObjectContext*)moc
-{
-	/*if(![self isAccountValid])
-	{
-		return NO;
-	}*/
-	
+{	
 	BOOL updated=NO;
 	
 	if(kUseGoogleAppEngine)

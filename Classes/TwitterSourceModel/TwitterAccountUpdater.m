@@ -1,11 +1,3 @@
-//
-//  TwitterAccountModel.m
-//  Untitled
-//
-//  Created by Robert Stewart on 11/10/10.
-//  Copyright 2010 InfoNgen. All rights reserved.
-//
-
 #import "TwitterAccountUpdater.h"
 #import "Feed.h"
 #import "RssFeed.h"
@@ -34,21 +26,9 @@
 	
 	TempFeed * feed;
 	
-	/*feed=[TempFeed new];
-	feed.url=@"http://twitter.com/statuses/home_timeline.json";
-	feed.name=@"Home Timeline";
-	feed.feedType=@"01TwitterFeed";
-	feed.feedCategory=@"_twitter_home";
-	feed.image=[UIImage imageNamed:@"home_icon.png"];
-	
-	[feeds addObject:feed];
-	
-	[feed release];
-	*/
 	feed=[TempFeed new];
 	
 	feed.url=@"http://twitter.com/statuses/home_timeline.json";
-	//feed.url=@"http://twitter.com/statuses/friends_timeline.json";
 	feed.name=@"Twitter Timeline";
 	feed.feedType=@"02TwitterFeed";
 	[feed setSingleCategory:@"_twitter_home"];
@@ -86,7 +66,7 @@
 	}
 
 	feed.feedType=@"04TwitterFeed";
-	 [feed setSingleCategory:@"_twitter_mentions"];
+	[feed setSingleCategory:@"_twitter_mentions"];
 	feed.image=[UIImage imageNamed:@"gray_person.png"];
 	feed.imageName=@"gray_person.png";
 	feed.highlightedImageName=@"green_person.png";
@@ -121,7 +101,8 @@
 		
 		feed=[TempFeed new];
 		
-		feed.url=[NSString stringWithFormat:@"http://api.twitter.com/1/%@/lists/%@/statuses.json",[client screenName],listId];//[client getUrlForType:GoogleReaderFeedTypeTaggedItems tag:tag];
+		feed.url=[NSString stringWithFormat:@"http://api.twitter.com/1/%@/lists/%@/statuses.json",[client screenName],listId];
+		
 		feed.name=listName;
 		
 		if(ordinal<10)
@@ -149,11 +130,6 @@
 
 - (BOOL) updateFeedListWithContext:(NSManagedObjectContext*)moc
 {
-	/*if(![self isAccountValid])
-	{
-		return NO;
-	}*/
-	
 	BOOL updated=NO;
 	
 	NSMutableDictionary * map=[NSMutableDictionary new];
@@ -394,8 +370,6 @@
 	return [client getMoreOldFavorites:maxItems maxId:[self getMaxIdForFeed:feed]];
 }
 
-
-
 - (NSString*) getMaxIdForFeed:(RssFeed*)feed
 {
 	NSLog(@"getMaxIdForFeed");
@@ -408,11 +382,9 @@
 	
 	[fetchRequest setFetchBatchSize:0];
 	
-	[fetchRequest setPredicate:[NSPredicate predicateWithFormat:
-								@"feed == %@", feed]];
+	[fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"feed == %@", feed]];
 	
-	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"date" 
-																						   ascending:YES] autorelease]]];
+	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"date" ascending:YES] autorelease]]];
 	[fetchRequest setFetchLimit:1];
 	
 	[fetchRequest setPropertiesToFetch:[NSArray arrayWithObject:@"uid"]];
@@ -444,11 +416,9 @@
 	
 	[fetchRequest setFetchBatchSize:0];
 	
-	[fetchRequest setPredicate:[NSPredicate predicateWithFormat:
-									@"feed == %@", feed]];
+	[fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"feed == %@", feed]];
 		
-	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"date" 
-																									  ascending:NO] autorelease]]];
+	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO] autorelease]]];
 	[fetchRequest setFetchLimit:1];
 	
 	[fetchRequest setPropertiesToFetch:[NSArray arrayWithObject:@"uid"]];

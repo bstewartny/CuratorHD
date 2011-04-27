@@ -553,6 +553,8 @@
 
 - (void) done:(id)sender
 {
+	[self cancelOrganize];
+	
 	if(allowComments)
 	{
 		if(self.item)
@@ -582,6 +584,7 @@
 			}
 		}
 	}
+	
 	[[NSNotificationCenter defaultCenter] 
 	 postNotificationName:@"ReloadData"
 	 object:nil];

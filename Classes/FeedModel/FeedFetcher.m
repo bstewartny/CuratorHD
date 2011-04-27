@@ -238,15 +238,6 @@
 	}
 }
 
-/*
-- (NSManagedObject*) newItem
-{
-	NSManagedObject * newObj= [NSEntityDescription insertNewObjectForEntityForName:@"RssFeed" inManagedObjectContext:[self managedObjectContext]];
-	
-	[newObj setAccount:[self accountObject]];
-	return newObj;
-}*/
-
 - (NSManagedObject*) accountObject
 {
 	return [self fetchSingleObject:@"FeedAccount" predicate:[NSPredicate predicateWithFormat:

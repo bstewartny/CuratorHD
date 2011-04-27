@@ -45,13 +45,19 @@
 
 	itemRenderer.newsletter=newsletter;
 	
-	if(pageWidth==0)
-	{
-		pageWidth=700;
+    if(pageWidth==-1)
+    {
+        html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{pageWidth}}" withString:@"95%"];
+    }
+    else
+    {
+        if(pageWidth==0)
+        {
+            pageWidth=700;
+        }
+        
+        html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{pageWidth}}" withString:[NSString stringWithFormat:@"%d",pageWidth]];
 	}
-	
-	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{pageWidth}}" withString:[NSString stringWithFormat:@"%d",pageWidth]];
-	
 	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{newsletter.name}}" withString:newsletter.name];
 	html=[html stringByReplacingOccurrencesOfStringIfExists:@"{{newsletter.summary}}" withString:[newsletter.summary stringByReplacingOccurrencesOfString:@"\n" withString:@"<BR />"]];
 	

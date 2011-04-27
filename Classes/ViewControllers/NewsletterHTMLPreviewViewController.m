@@ -53,7 +53,7 @@
 
 - (void) displayHtml
 {
-	self.webView.scalesPageToFit=YES;
+	self.webView.scalesPageToFit=NO;
 	
 	if([html length]>0)
 	{
@@ -76,7 +76,7 @@
 	
 	NewsletterHTMLRenderer * renderer=[[NewsletterHTMLRenderer alloc] initWithTemplateName:[[[UIApplication sharedApplication] delegate] newsletterTemplateName] maxSynopsisSize:maxSynopsisSize embedImageData:YES];
 	
-	renderer.pageWidth=640;
+	renderer.pageWidth=-1;//640;
 	
 	html = [[renderer getHTMLPreview:self.newsletter maxItems:50] retain];
 	

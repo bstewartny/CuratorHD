@@ -65,12 +65,6 @@
 	 name:@"FeedUpdated"
 	 object:nil];
 	
-	/*[[NSNotificationCenter defaultCenter]
-	 addObserver:self
-	 selector:@selector(handleReloadData:)
-	 name:@"FeedUpdateFinished"
-	 object:nil];*/
-	
 	[[NSNotificationCenter defaultCenter]
 	 addObserver:self
 	 selector:@selector(handleReloadData:)
@@ -246,18 +240,18 @@
 
 -(void)handleReloadDataUI:(NSNotification *)pNotification
 {
-	NSLog(@"handleReloadDataUI: %@",pNotification.name);
+	//NSLog(@"handleReloadDataUI: %@",pNotification.name);
 	
 	if([pNotification.name isEqualToString:@"UpdateFeedsView"])
 	{
-		NSLog(@"FeedsViewControler: UpdateFeedsView revd, perform fetch and reload data...");
+		//NSLog(@"FeedsViewControler: UpdateFeedsView revd, perform fetch and reload data...");
 		[self performFetch];
 		[self reloadTableData];
 		return;
 	}
 	if([pNotification.name isEqualToString:@"ReloadData"])
 	{
-		NSLog(@"FeedsViewControler: ReloadData revd, perform fetch and reload data...");
+		//NSLog(@"FeedsViewControler: ReloadData revd, perform fetch and reload data...");
 		[self performFetch];
 		[self reloadTableData];
 		return;
@@ -268,7 +262,7 @@
 		   [self.fetcher isKindOfClass:[NewsletterSectionFetcher class]] ||
 		   [self.fetcher isKindOfClass:[FolderFetcher class]])
 		{
-			NSLog(@"FeedsViewControler: ReloadActionData revd, perform fetch and reload data...");
+			//NSLog(@"FeedsViewControler: ReloadActionData revd, perform fetch and reload data...");
 			[self performFetch];
 			[self reloadTableData];
 		}
@@ -276,7 +270,7 @@
 	}
 	if([pNotification.name isEqualToString:@"FeedsUpdated"])
 	{
-		NSLog(@"FeedsViewControler: FeedsUpdated revd, perform fetch and reload data...");
+		//NSLog(@"FeedsViewControler: FeedsUpdated revd, perform fetch and reload data...");
 		[self performFetch];
 		[self reloadTableData];
 		return;
@@ -387,46 +381,9 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	//NSLog(@"FeedsViewController.numberOfSectionsInTableView");
 	return 1;
 }
-/*
-- (void) tableView:(UITableView*)tableView
-commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
- forRowAtIndexPath:(NSIndexPath*)indexPath
-{
-	[fetcher deleteItemAtIndex:indexPath.row];
-	[self performFetch];
-	[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-	
-	[[NSNotificationCenter defaultCenter] 
-	 postNotificationName:@"ReloadActionData"
-	 object:nil];
-}
 
-- (BOOL) tableView:(UITableView*)tableView
-canMoveRowAtIndexPath:(NSIndexPath*)indexPath
-{
-	return self.editable;
-}
-
-- (void)tableView:(UITableView*)tableView 
-moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
-	  toIndexPath:(NSIndexPath*)toIndexPath
-{
-	if(!self.editable) return;
-	
-	int fromRow=[fromIndexPath row];
-	int toRow=[toIndexPath row];
-	
-	[fetcher moveItemFromIndex:fromRow toIndex:toRow];
-	[self performFetch];
-	[[NSNotificationCenter defaultCenter] 
-	 postNotificationName:@"ReloadActionData"
-	 object:nil];
-}
-
-*/
 - (CustomCellBackgroundViewPosition) cellPositionForIndexPath:(NSIndexPath*)indexPath
 {
 	int count=[self tableView:tableView numberOfRowsInSection:indexPath.section];
@@ -762,30 +719,6 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 		}
 	}
 }
-/*
-- (void) refreshButtonTouch:(id)sender
-{
-	UIBarButtonItem * button=(UIBarButtonItem*)sender;
-	
-	if([[[UIApplication sharedApplication] delegate] isUpdating])
-	{
-		[[[UIApplication sharedApplication] delegate] cancelUpdate];
-	}
-	else 
-	{
-		// start
-		if([fetcher isKindOfClass:[AccountFeedFetcher class]] ||
-		   [fetcher isKindOfClass:[CategoryFeedFetcher class]])
-		{
-			// just update this account
-			[[[UIApplication sharedApplication] delegate] updateSingleAccount:[fetcher accountName]];
-		}
-		else 
-		{
-			[[[UIApplication sharedApplication] delegate] update];
-		}
-	}
-}*/
 
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -795,7 +728,6 @@ moveRowAtIndexPath:(NSIndexPath*)fromIndexPath
 	 
 - (void)dealloc 
 {
-	NSLog(@"FeedsViewController.dealloc");
 	[items release];
 	[fetcher release];
 	[super dealloc];

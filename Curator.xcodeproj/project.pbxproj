@@ -3500,6 +3500,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: John Mahoney";
 				CURRENT_PROJECT_VERSION = 1.1;
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -3538,6 +3539,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: John Mahoney (JB2AYRQF9U)";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -3556,6 +3558,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: robert stewart (48WE8248AA)";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -3575,6 +3578,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: John Mahoney";
 				CURRENT_PROJECT_VERSION = 1.1;
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -3619,7 +3623,7 @@
 				B055C1121295B659000865A9 /* AdHocDistribution */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Curator" */ = {
 			isa = XCConfigurationList;
@@ -3630,7 +3634,7 @@
 				B055C1111295B659000865A9 /* AdHocDistribution */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

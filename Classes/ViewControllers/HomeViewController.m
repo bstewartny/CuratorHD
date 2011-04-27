@@ -478,7 +478,7 @@
 - (void) configureGridViewCell:(AQGridViewCell*)cell forIndex:(NSUInteger)index inSection:(int)section editing:(BOOL)isEditing
 {
 	UIImage * image=nil;
-	NSString * itemname;
+	NSString * itemname=nil;
 	int badgeCount=-1;
 	
 	BOOL showDeleteButton=isEditing;
