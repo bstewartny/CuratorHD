@@ -90,8 +90,6 @@
 		B055C0EE1295B092000865A9 /* letter_icon.gif in Resources */ = {isa = PBXBuildFile; fileRef = B055C0EB1295B092000865A9 /* letter_icon.gif */; };
 		B055C0EF1295B092000865A9 /* person_icon.gif in Resources */ = {isa = PBXBuildFile; fileRef = B055C0EC1295B092000865A9 /* person_icon.gif */; };
 		B055C0F01295B092000865A9 /* home_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B055C0ED1295B092000865A9 /* home_icon.png */; };
-		B055C1341295B7BF000865A9 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = B055C1331295B7BF000865A9 /* iTunesArtwork */; };
-		B055C1451295B8FA000865A9 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = B055C13C1295B80D000865A9 /* Entitlements.plist */; };
 		B056B21713422A73007B9EA1 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B21613422A73007B9EA1 /* Appirater.m */; };
 		B056B25313422B86007B9EA1 /* UIColor+AQGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B23C13422B86007B9EA1 /* UIColor+AQGridView.m */; };
 		B056B25413422B86007B9EA1 /* NSIndexSet+AQIsSetContiguous.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B23E13422B86007B9EA1 /* NSIndexSet+AQIsSetContiguous.m */; };
@@ -216,6 +214,7 @@
 		B096717712E7D69500BD0B7B /* FolderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B096717612E7D69500BD0B7B /* FolderTableViewCell.m */; };
 		B096717912E7D8F400BD0B7B /* FolderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B096717812E7D8F400BD0B7B /* FolderTableViewCell.xib */; };
 		B09671EB12E7E8A800BD0B7B /* FolderItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = B09671EA12E7E8A800BD0B7B /* FolderItemView.m */; };
+		B09686C11371DB4100C81EB4 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = B09686C01371DB4100C81EB4 /* Entitlements.plist */; };
 		B0A0C4611343AC290003D2EE /* closebutton.png in Resources */ = {isa = PBXBuildFile; fileRef = B0A0C4601343AC290003D2EE /* closebutton.png */; };
 		B0A7EFAC12F0C6C0007CE971 /* FormViewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0A7EFAB12F0C6C0007CE971 /* FormViewTableViewController.m */; };
 		B0A7F00E12F0D17F007CE971 /* FormViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0A7F00D12F0D17F007CE971 /* FormViewController.m */; };
@@ -712,8 +711,6 @@
 		B055C0EB1295B092000865A9 /* letter_icon.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = letter_icon.gif; sourceTree = "<group>"; };
 		B055C0EC1295B092000865A9 /* person_icon.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = person_icon.gif; sourceTree = "<group>"; };
 		B055C0ED1295B092000865A9 /* home_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_icon.png; sourceTree = "<group>"; };
-		B055C1331295B7BF000865A9 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
-		B055C13C1295B80D000865A9 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.entitlements"; sourceTree = "<group>"; };
 		B056B21513422A73007B9EA1 /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appirater.h; sourceTree = "<group>"; };
 		B056B21613422A73007B9EA1 /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appirater.m; sourceTree = "<group>"; };
 		B056B23C13422B86007B9EA1 /* UIColor+AQGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+AQGridView.m"; sourceTree = "<group>"; };
@@ -931,6 +928,7 @@
 		B096717812E7D8F400BD0B7B /* FolderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FolderTableViewCell.xib; sourceTree = "<group>"; };
 		B09671E912E7E8A800BD0B7B /* FolderItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FolderItemView.h; path = ../FolderItemView.h; sourceTree = "<group>"; };
 		B09671EA12E7E8A800BD0B7B /* FolderItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FolderItemView.m; path = ../FolderItemView.m; sourceTree = "<group>"; };
+		B09686C01371DB4100C81EB4 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		B0A0C4601343AC290003D2EE /* closebutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = closebutton.png; sourceTree = "<group>"; };
 		B0A7EFAA12F0C6C0007CE971 /* FormViewTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormViewTableViewController.h; sourceTree = "<group>"; };
 		B0A7EFAB12F0C6C0007CE971 /* FormViewTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormViewTableViewController.m; sourceTree = "<group>"; };
@@ -1473,7 +1471,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				B055C13C1295B80D000865A9 /* Entitlements.plist */,
+				B09686C01371DB4100C81EB4 /* Entitlements.plist */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources-iPad */,
@@ -1500,7 +1498,6 @@
 		29B97317FDCFA39411CA2CEA /* Resources-iPad */ = {
 			isa = PBXGroup;
 			children = (
-				B055C1331295B7BF000865A9 /* iTunesArtwork */,
 				C4B9303011344D9B00AF9B7C /* Default-Landscape.png */,
 				C4B9303111344D9B00AF9B7C /* Default-LandscapeLeft.png */,
 				C4B9303211344D9B00AF9B7C /* Default-LandscapeRight.png */,
@@ -3116,8 +3113,6 @@
 				B055C0EE1295B092000865A9 /* letter_icon.gif in Resources */,
 				B055C0EF1295B092000865A9 /* person_icon.gif in Resources */,
 				B055C0F01295B092000865A9 /* home_icon.png in Resources */,
-				B055C1341295B7BF000865A9 /* iTunesArtwork in Resources */,
-				B055C1451295B8FA000865A9 /* Entitlements.plist in Resources */,
 				B028384D12A42EAF00D01F61 /* NoteEditFormView.xib in Resources */,
 				B028388312A4377900D01F61 /* NoteItem.html in Resources */,
 				B028397212A56DB900D01F61 /* FBDialog.bundle in Resources */,
@@ -3183,6 +3178,7 @@
 				B0A0C4611343AC290003D2EE /* closebutton.png in Resources */,
 				B029B6261344DB590021CD41 /* 44-shoebox.png in Resources */,
 				B029B6271344DB590021CD41 /* 33-cabinet.png in Resources */,
+				B09686C11371DB4100C81EB4 /* Entitlements.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3458,6 +3454,7 @@
 				BUNDLE_IDENTIFIER = com.infongen.NewsletterPublisher.debug;
 				CODE_SIGN_ENTITLEMENTS = "~/Documents/InfoNgen-iPad/Entitlements.plist";
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1.1;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3479,7 +3476,10 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_IDENTIFIER = com.infongen.NewsletterPublisher;
 				CODE_SIGN_ENTITLEMENTS = "~/Documents/InfoNgen-iPad/Entitlements.plist";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: John Mahoney";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: John Mahoney";
 				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 1.1;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Curator_Prefix.pch;
 				INFOPLIST_FILE = "Curator-Info.plist";
@@ -3488,6 +3488,8 @@
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = "Newsletter Publisher";
+				PROVISIONING_PROFILE = "753E0742-6B2D-4E4C-A3FD-9C198E2C28F0";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "753E0742-6B2D-4E4C-A3FD-9C198E2C28F0";
 				TARGETED_DEVICE_FAMILY = 2;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -3537,7 +3539,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: John Mahoney (JB2AYRQF9U)";
+				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1.1;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -3547,7 +3550,7 @@
 				OTHER_LDFLAGS = "-lxml2";
 				PREBINDING = NO;
 				PRODUCT_NAME = InfoNgen;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "51B89DF8-32A9-402E-AE8F-2D6B893EDDAD";
+				"PROVISIONING_PROFILE[sdk=*]" = "";
 				SDKROOT = iphoneos4.2;
 			};
 			name = Debug;
@@ -3557,6 +3560,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: robert stewart (48WE8248AA)";
+				CURRENT_PROJECT_VERSION = 1.1;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -3597,6 +3601,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_IDENTIFIER = com.infongen.NewsletterPublisher;
 				CODE_SIGN_ENTITLEMENTS = "~/Documents/InfoNgen-iPad/Entitlements.plist";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: John Mahoney";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: John Mahoney";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Curator_Prefix.pch;
@@ -3606,6 +3612,8 @@
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = "Newsletter Publisher";
+				PROVISIONING_PROFILE = "753E0742-6B2D-4E4C-A3FD-9C198E2C28F0";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "753E0742-6B2D-4E4C-A3FD-9C198E2C28F0";
 				TARGETED_DEVICE_FAMILY = 2;
 				VALIDATE_PRODUCT = YES;
 			};

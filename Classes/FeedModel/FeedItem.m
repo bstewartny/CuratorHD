@@ -349,4 +349,5 @@
   UIImage *uiImage = [[UIImage alloc] initWithData:value];
   return [uiImage autorelease];
 }					  
-					  
+					
+@end

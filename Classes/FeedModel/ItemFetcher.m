@@ -629,7 +629,8 @@
 	[sortDescriptors release], sortDescriptors = nil;
 	
 	return fetchedResultsController;
-}    
+}
+@end
 @implementation SharedItemFetcher
 @synthesize accountName;
 
@@ -737,13 +738,20 @@
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:
 							  @"feed.account.name == %@ AND feed.feedType == %@", accountName,feedType];
 	
+    
+    //NSPredicate *predicate = [NSPredicate predicateWithFormat:
+	//						  @"feed.feedType == %@ AND feed.account.name == %@", feedType,accountName];
+	//NSPredicate *predicate = [NSPredicate predicateWithFormat:
+	//						  @"feed.account.name == %@",accountName];
+	
 	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" 
 																   ascending:NO];
 	
 	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
 	
 	fetchedResultsController=[self createFetchedResultsController:@"RssFeedItem"  predicate:predicate sortDescriptors:sortDescriptors];
-	
+    
+   
 	[fetchedResultsController.fetchRequest setPropertiesToFetch:[NSArray arrayWithObjects:@"url",@"headline",@"isRead",@"origin",@"originId",@"date",nil]];
 	
 	
