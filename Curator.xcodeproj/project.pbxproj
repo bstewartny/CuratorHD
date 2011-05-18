@@ -107,13 +107,6 @@
 		B056B3BA13424ABC007B9EA1 /* 64-infongen.png in Resources */ = {isa = PBXBuildFile; fileRef = B056B3B613424ABC007B9EA1 /* 64-infongen.png */; };
 		B056B3BB13424ABC007B9EA1 /* 64-twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = B056B3B713424ABC007B9EA1 /* 64-twitter.png */; };
 		B056B3BC13424ABC007B9EA1 /* 64-folderclosed.png in Resources */ = {isa = PBXBuildFile; fileRef = B056B3B813424ABC007B9EA1 /* 64-folderclosed.png */; };
-		B056B3FD134250DC007B9EA1 /* PFGridViewSection+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B3EE134250DC007B9EA1 /* PFGridViewSection+Internal.m */; };
-		B056B3FE134250DC007B9EA1 /* PFGridViewSection.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B3F0134250DC007B9EA1 /* PFGridViewSection.m */; };
-		B056B3FF134250DC007B9EA1 /* PFGridViewLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B3F2134250DC007B9EA1 /* PFGridViewLabelCell.m */; };
-		B056B400134250DC007B9EA1 /* PFGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B3F4134250DC007B9EA1 /* PFGridViewCell.m */; };
-		B056B401134250DC007B9EA1 /* PFGridView+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B3F6134250DC007B9EA1 /* PFGridView+Internal.m */; };
-		B056B402134250DC007B9EA1 /* PFGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B3F8134250DC007B9EA1 /* PFGridView.m */; };
-		B056B403134250DC007B9EA1 /* PFGridIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = B056B3FB134250DC007B9EA1 /* PFGridIndexPath.m */; };
 		B056B470134258DB007B9EA1 /* 64-newsletter.png in Resources */ = {isa = PBXBuildFile; fileRef = B056B46F134258DB007B9EA1 /* 64-newsletter.png */; };
 		B05D909A1338E169004C6032 /* gray_googlreader.png in Resources */ = {isa = PBXBuildFile; fileRef = B05D908C1338E169004C6032 /* gray_googlreader.png */; };
 		B05D909B1338E169004C6032 /* gray_infongen.png in Resources */ = {isa = PBXBuildFile; fileRef = B05D908D1338E169004C6032 /* gray_infongen.png */; };
@@ -744,21 +737,6 @@
 		B056B3B613424ABC007B9EA1 /* 64-infongen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "64-infongen.png"; sourceTree = "<group>"; };
 		B056B3B713424ABC007B9EA1 /* 64-twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "64-twitter.png"; sourceTree = "<group>"; };
 		B056B3B813424ABC007B9EA1 /* 64-folderclosed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "64-folderclosed.png"; sourceTree = "<group>"; };
-		B056B3EE134250DC007B9EA1 /* PFGridViewSection+Internal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PFGridViewSection+Internal.m"; sourceTree = "<group>"; };
-		B056B3EF134250DC007B9EA1 /* PFGridViewSection+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PFGridViewSection+Internal.h"; sourceTree = "<group>"; };
-		B056B3F0134250DC007B9EA1 /* PFGridViewSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFGridViewSection.m; sourceTree = "<group>"; };
-		B056B3F1134250DC007B9EA1 /* PFGridViewSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFGridViewSection.h; sourceTree = "<group>"; };
-		B056B3F2134250DC007B9EA1 /* PFGridViewLabelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFGridViewLabelCell.m; sourceTree = "<group>"; };
-		B056B3F3134250DC007B9EA1 /* PFGridViewLabelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFGridViewLabelCell.h; sourceTree = "<group>"; };
-		B056B3F4134250DC007B9EA1 /* PFGridViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFGridViewCell.m; sourceTree = "<group>"; };
-		B056B3F5134250DC007B9EA1 /* PFGridViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFGridViewCell.h; sourceTree = "<group>"; };
-		B056B3F6134250DC007B9EA1 /* PFGridView+Internal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PFGridView+Internal.m"; sourceTree = "<group>"; };
-		B056B3F7134250DC007B9EA1 /* PFGridView+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PFGridView+Internal.h"; sourceTree = "<group>"; };
-		B056B3F8134250DC007B9EA1 /* PFGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFGridView.m; sourceTree = "<group>"; };
-		B056B3F9134250DC007B9EA1 /* PFGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFGridView.h; sourceTree = "<group>"; };
-		B056B3FA134250DC007B9EA1 /* PFGridView-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PFGridView-Prefix.pch"; sourceTree = "<group>"; };
-		B056B3FB134250DC007B9EA1 /* PFGridIndexPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFGridIndexPath.m; sourceTree = "<group>"; };
-		B056B3FC134250DC007B9EA1 /* PFGridIndexPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFGridIndexPath.h; sourceTree = "<group>"; };
 		B056B46F134258DB007B9EA1 /* 64-newsletter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "64-newsletter.png"; sourceTree = "<group>"; };
 		B05D908C1338E169004C6032 /* gray_googlreader.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gray_googlreader.png; sourceTree = "<group>"; };
 		B05D908D1338E169004C6032 /* gray_infongen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gray_infongen.png; sourceTree = "<group>"; };
@@ -1723,28 +1701,6 @@
 			path = AQGridView;
 			sourceTree = "<group>";
 		};
-		B056B3EC134250BB007B9EA1 /* PFGridView */ = {
-			isa = PBXGroup;
-			children = (
-				B056B3EE134250DC007B9EA1 /* PFGridViewSection+Internal.m */,
-				B056B3EF134250DC007B9EA1 /* PFGridViewSection+Internal.h */,
-				B056B3F0134250DC007B9EA1 /* PFGridViewSection.m */,
-				B056B3F1134250DC007B9EA1 /* PFGridViewSection.h */,
-				B056B3F2134250DC007B9EA1 /* PFGridViewLabelCell.m */,
-				B056B3F3134250DC007B9EA1 /* PFGridViewLabelCell.h */,
-				B056B3F4134250DC007B9EA1 /* PFGridViewCell.m */,
-				B056B3F5134250DC007B9EA1 /* PFGridViewCell.h */,
-				B056B3F6134250DC007B9EA1 /* PFGridView+Internal.m */,
-				B056B3F7134250DC007B9EA1 /* PFGridView+Internal.h */,
-				B056B3F8134250DC007B9EA1 /* PFGridView.m */,
-				B056B3F9134250DC007B9EA1 /* PFGridView.h */,
-				B056B3FA134250DC007B9EA1 /* PFGridView-Prefix.pch */,
-				B056B3FB134250DC007B9EA1 /* PFGridIndexPath.m */,
-				B056B3FC134250DC007B9EA1 /* PFGridIndexPath.h */,
-			);
-			path = PFGridView;
-			sourceTree = "<group>";
-		};
 		B05E6EE7128AFF6F00F00E05 /* TwitterSourceModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -2138,7 +2094,6 @@
 		B0A54EFD12FC58C400913912 /* Externals */ = {
 			isa = PBXGroup;
 			children = (
-				B056B3EC134250BB007B9EA1 /* PFGridView */,
 				B056B21813422ACD007B9EA1 /* AQGridView */,
 				B056B20B13422A49007B9EA1 /* Appirater */,
 				B02A417E133B94DC0089EC47 /* ASIHttpRequest */,
@@ -3420,13 +3375,6 @@
 				B056B25C13422B86007B9EA1 /* AQGridView.m in Sources */,
 				B056B26113422C0B007B9EA1 /* HomeViewController.m in Sources */,
 				B056B2BC134239F5007B9EA1 /* HomeSplitViewController.m in Sources */,
-				B056B3FD134250DC007B9EA1 /* PFGridViewSection+Internal.m in Sources */,
-				B056B3FE134250DC007B9EA1 /* PFGridViewSection.m in Sources */,
-				B056B3FF134250DC007B9EA1 /* PFGridViewLabelCell.m in Sources */,
-				B056B400134250DC007B9EA1 /* PFGridViewCell.m in Sources */,
-				B056B401134250DC007B9EA1 /* PFGridView+Internal.m in Sources */,
-				B056B402134250DC007B9EA1 /* PFGridView.m in Sources */,
-				B056B403134250DC007B9EA1 /* PFGridIndexPath.m in Sources */,
 				B0BA19041346267C0023E857 /* FoldersViewController.m in Sources */,
 				B0BA1907134626A40023E857 /* NewslettersViewController.m in Sources */,
 			);
